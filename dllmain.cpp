@@ -1,5 +1,5 @@
 ﻿// n1ssan-dll / dllmain.cpp
-// v9.0.3 — split into src/ modules.
+// v9.0.4 — split into src/ modules.
 //
 // This file is now a 60-line skeleton. Everything functional lives in
 // src/. The old monolith is preserved in Backup\dllmain.cpp.v9.0.2-*.bak.

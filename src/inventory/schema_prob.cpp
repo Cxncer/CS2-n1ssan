@@ -15,7 +15,7 @@
 // ---------------------------------------------------------------------------
 namespace
 {
-    struct ModuleInfo
+    struct ModuleInfo 
     {
         uintptr_t base = 0;
         size_t    size = 0;
@@ -187,6 +187,87 @@ namespace
                 label, i, key, (void*)pkPtr, pkId, nameBuf);
         }
     }
+
+    void FindTargetPaintKits(uintptr_t mapAddr, const ModuleInfo& mod)
+    {
+        constexpr uint32_t targets[] = { 10037, 10045 };
+        bool found[] = { false, false };
+
+        uint32_t count = 0;
+        uintptr_t elements = 0;
+
+        if (!SafeReadU32(mapAddr + 0x00, count) ||
+            !SafeReadQword(mapAddr + 0x08, elements) ||
+            !IsSaneMap(count, elements, mod))
+        {
+            Log("[paint-target] invalid map header: count=%u elements=0x%p",
+                count, (void*)elements);
+            return;
+        }
+
+        Log("[paint-target] scanning %u entries at 0x%p",
+            count, (void*)elements);
+
+        for (uint32_t i = 0; i < count; ++i)
+        {
+            const uintptr_t node =
+                elements + static_cast<uintptr_t>(i) * 0x20;
+
+            uint32_t key = 0;
+            uintptr_t pk = 0;
+
+            if (!SafeReadU32(node + 0x10, key) ||
+                !SafeReadQword(node + 0x18, pk))
+            {
+                continue;
+            }
+
+            if (!pk || mod.inside(pk))
+                continue;
+
+            uint32_t rawId = 0;
+            if (!SafeReadU32(pk + 0x00, rawId))
+                continue;
+
+            const int32_t paintId = static_cast<int32_t>(rawId);
+
+            for (int t = 0; t < 2; ++t)
+            {
+                if (found[t])
+                    continue;
+
+                if (key != targets[t] &&
+                    paintId != static_cast<int32_t>(targets[t]))
+                {
+                    continue;
+                }
+
+                uintptr_t namePtr = 0;
+                char name[128]{};
+
+                if (SafeReadQword(pk + 0x08, namePtr) &&
+                    namePtr != 0)
+                {
+                    ReadCStrLocal(namePtr, name, sizeof(name));
+                }
+
+                Log("[paint-target] target=%u index=%u key=%u "
+                    "objectId=%d object=0x%p name=\"%s\"",
+                    targets[t], i, key, paintId, (void*)pk, name);
+
+                found[t] = true;
+            }
+
+            if (found[0] && found[1])
+                break;
+        }
+
+        for (int t = 0; t < 2; ++t)
+        {
+            if (!found[t])
+                Log("[paint-target] target=%u NOT FOUND", targets[t]);
+        }
+    }
 }
 
 // ---------------------------------------------------------------------------
@@ -315,6 +396,8 @@ void RunSchemaProbe()
             Log("[verify]   paints[%d] key=%u id=%d name=\"%s\"", i, key, pkId, pkName);
         }
     }
+    // ---- Targeted paint-kit lookup ----
+    FindTargetPaintKits(schema + 0x2A0, mod);
 
     Log("=== [schema-probe] done ===");
 }

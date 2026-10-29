@@ -7,6 +7,7 @@
 #include "config/auto_offsets.h"
 #include "diagnostics/log.h"
 #include "memory/scanner.h"
+#include "skin/gloves.h"
 
 #include <windows.h>
 #include <cstdint>

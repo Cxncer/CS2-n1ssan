@@ -77,6 +77,38 @@ namespace
         FlagGlovesForRebuild(pawn);
     }
 
+    bool ReadPaintKitName(uintptr_t paintKit, char* out, size_t cap)
+    {
+        if (!paintKit || !out || cap < 2)
+            return false;
+
+        out[0] = '\0';
+
+        uintptr_t namePtr = 0;
+        if (!SafeReadQword(paintKit + 0x08, namePtr) || !namePtr)
+            return false;
+
+        __try
+        {
+            for (size_t i = 0; i < cap - 1; ++i)
+            {
+                char c = *reinterpret_cast<const char*>(namePtr + i);
+                out[i] = c;
+
+                if (c == '\0')
+                    return i > 0;
+            }
+
+            out[cap - 1] = '\0';
+            return false;
+        }
+        __except (1)
+        {
+            out[0] = '\0';
+            return false;
+        }
+    }
+
     bool GloveApply(uintptr_t pawn, uintptr_t item, uint16_t def, int pk, int seed, float wear)
     {
         if (!pawn || !item || def == 0)
@@ -104,9 +136,22 @@ namespace
                 post ? post->size : -1,
                 post ? (void*)post->data : nullptr,
                 post ? post->allocationCount : -1);
+
             if (pGloveCreatePaintKit)
             {
-                __try { pGloveCreatePaintKit((void*)item); }
+                __try
+                {
+                    void* result = pGloveCreatePaintKit((void*)item);
+
+                    char name[128]{};
+                    bool nameOk = result && ReadPaintKitName(
+                        reinterpret_cast<uintptr_t>(result),
+                        name, sizeof(name));
+
+                    Log("[glove-paintkit] pk=%d result=%p "
+                        "nameOk=%d name=\"%s\"",
+                        pk, result, nameOk, name);
+                }
                 __except (1)
                 {
                     Log("[glove] apply: GloveCreatePaintKit threw");
@@ -114,6 +159,11 @@ namespace
                     return false;
                 }
             }
+            else
+            {
+                Log("[glove-paintkit] function NULL for pk=%d", pk);
+            }
+
         }
 
         SafeWriteU32(item + g_off.EIV_ItemIDHigh,
