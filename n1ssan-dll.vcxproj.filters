@@ -1,0 +1,177 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Source Files">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;c++;cppm;ixx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="Header Files">
+      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
+      <Extensions>h;hh;hpp;hxx;h++;hm;inl;inc;ipp;xsd</Extensions>
+    </Filter>
+    <Filter Include="Resource Files">
+      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
+      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
+    </Filter>
+    <Filter Include="src">
+      <UniqueIdentifier>{a95107e7-d113-4564-b335-5991751bb2fc}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\config">
+      <UniqueIdentifier>{c069c6d4-7eeb-45b0-b555-5cca4c2587d8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\diagnostics">
+      <UniqueIdentifier>{d60bd520-5881-4cc1-9a1c-342355b04e27}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\memory">
+      <UniqueIdentifier>{fdfac7b8-6eca-4a94-9121-926b20974a0c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\sdk">
+      <UniqueIdentifier>{d3771601-1361-4acf-acfc-a44aee7645f6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\inventory">
+      <UniqueIdentifier>{97ff1613-840e-430f-b35d-c533d6493d81}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\skin">
+      <UniqueIdentifier>{e9261135-c9f4-4bd9-aa5d-f7ed7d391987}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\hooks">
+      <UniqueIdentifier>{0be7c953-e370-4326-8f2c-5e3b1c269fb5}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="dllmain.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\config\offsets.cpp">
+      <Filter>src\config</Filter>
+    </ClCompile>
+    <ClCompile Include="src\diagnostics\log.cpp">
+      <Filter>src\diagnostics</Filter>
+    </ClCompile>
+    <ClCompile Include="src\memory\access.cpp">
+      <Filter>src\memory</Filter>
+    </ClCompile>
+    <ClCompile Include="src\memory\scanner.cpp">
+      <Filter>src\memory</Filter>
+    </ClCompile>
+    <ClCompile Include="src\sdk\entities.cpp">
+      <Filter>src\sdk</Filter>
+    </ClCompile>
+    <ClCompile Include="src\sdk\functions.cpp">
+      <Filter>src\sdk</Filter>
+    </ClCompile>
+    <ClCompile Include="src\sdk\item_view.cpp">
+      <Filter>src\sdk</Filter>
+    </ClCompile>
+    <ClCompile Include="src\sdk\scene_node.cpp">
+      <Filter>src\sdk</Filter>
+    </ClCompile>
+    <ClCompile Include="src\inventory\loadout.cpp">
+      <Filter>src\inventory</Filter>
+    </ClCompile>
+    <ClCompile Include="src\skin\apply.cpp">
+      <Filter>src\skin</Filter>
+    </ClCompile>
+    <ClCompile Include="src\skin\gloves.cpp">
+      <Filter>src\skin</Filter>
+    </ClCompile>
+    <ClCompile Include="src\skin\dispatch.cpp">
+      <Filter>src\skin</Filter>
+    </ClCompile>
+    <ClCompile Include="src\hooks\frame_stage.cpp">
+      <Filter>src\hooks</Filter>
+    </ClCompile>
+    <ClCompile Include="src\hooks\knife_animation.cpp">
+      <Filter>src\hooks</Filter>
+    </ClCompile>
+    <ClCompile Include="src\inventory\schema_prob.cpp">
+      <Filter>src\inventory</Filter>
+    </ClCompile>
+    <ClCompile Include="src\inventory\plan_a.cpp">
+      <Filter>src\inventory</Filter>
+    </ClCompile>
+    <ClCompile Include="src\inventory\loot_socache.cpp">
+      <Filter>src\inventory</Filter>
+    </ClCompile>
+    <ClCompile Include="src\inventory\loot_schema.cpp">
+      <Filter>src\inventory</Filter>
+    </ClCompile>
+    <ClCompile Include="src\config\auto_offsets.cpp">
+      <Filter>src\config</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="src\config\offsets.h">
+      <Filter>src\config</Filter>
+    </ClInclude>
+    <ClInclude Include="src\diagnostics\log.h">
+      <Filter>src\diagnostics</Filter>
+    </ClInclude>
+    <ClInclude Include="src\memory\access.h">
+      <Filter>src\memory</Filter>
+    </ClInclude>
+    <ClInclude Include="src\memory\scanner.h">
+      <Filter>src\memory</Filter>
+    </ClInclude>
+    <ClInclude Include="src\sdk\handles.h">
+      <Filter>src\sdk</Filter>
+    </ClInclude>
+    <ClInclude Include="src\sdk\entities.h">
+      <Filter>src\sdk</Filter>
+    </ClInclude>
+    <ClInclude Include="src\sdk\functions.h">
+      <Filter>src\sdk</Filter>
+    </ClInclude>
+    <ClInclude Include="src\sdk\item_view.h">
+      <Filter>src\sdk</Filter>
+    </ClInclude>
+    <ClInclude Include="src\sdk\scene_node.h">
+      <Filter>src\sdk</Filter>
+    </ClInclude>
+    <ClInclude Include="src\inventory\loadout.h">
+      <Filter>src\inventory</Filter>
+    </ClInclude>
+    <ClInclude Include="src\skin\apply.h">
+      <Filter>src\skin</Filter>
+    </ClInclude>
+    <ClInclude Include="src\skin\gloves.h">
+      <Filter>src\skin</Filter>
+    </ClInclude>
+    <ClInclude Include="src\skin\dispatch.h">
+      <Filter>src\skin</Filter>
+    </ClInclude>
+    <ClInclude Include="src\hooks\frame_stage.h">
+      <Filter>src\hooks</Filter>
+    </ClInclude>
+    <ClInclude Include="src\hooks\weapon_graph.h">
+      <Filter>src\hooks</Filter>
+    </ClInclude>
+    <ClInclude Include="src\hooks\knife_animation.h">
+      <Filter>src\hooks</Filter>
+    </ClInclude>
+    <ClInclude Include="src\inventory\schema_probe.h">
+      <Filter>src\inventory</Filter>
+    </ClInclude>
+    <ClInclude Include="src\inventory\loot_patterns.h">
+      <Filter>src\inventory</Filter>
+    </ClInclude>
+    <ClInclude Include="src\inventory\loot_schema.h">
+      <Filter>src\inventory</Filter>
+    </ClInclude>
+    <ClInclude Include="src\inventory\loot_socache.h">
+      <Filter>src\inventory</Filter>
+    </ClInclude>
+    <ClInclude Include="src\inventory\plan_a.h">
+      <Filter>src\inventory</Filter>
+    </ClInclude>
+    <ClInclude Include="src\hooks\minhook_dynamic.h">
+      <Filter>src\hooks</Filter>
+    </ClInclude>
+    <ClInclude Include="src\config\auto_offsets.h">
+      <Filter>src\config</Filter>
+    </ClInclude>
+  </ItemGroup>
+</Project>
