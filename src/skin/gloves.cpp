@@ -26,6 +26,10 @@ namespace
 
     std::atomic_bool g_gloveForceUpdate{ true };
 
+    uint64_t g_gloveApplySequence = 0;
+    uint64_t g_pendingGloveSequence = 0;
+    bool g_gloveAppliedThisTick = false;
+
     uintptr_t g_lastPawnAddr = 0;
     uint16_t g_lastGloveDef = 0;
     int g_lastGlovePK = -1;
@@ -509,8 +513,42 @@ void LogGloveModelSnapshot(uintptr_t pawn, const char* stage)
 void RunGloves(uintptr_t pawn)
 {
     ++g_gloveFrame;
+    g_gloveAppliedThisTick = false;
 
     if (!pawn) return;
+
+    // Diagnostic: inspect the item on the next RunGloves tick.
+    if (g_pendingGloveSequence != 0)
+    {
+        uintptr_t pendingItem = pawn + g_off.PAWN_EconGloves;
+
+        uint16_t def = 0;
+        uint8_t initialized = 0;
+        uint32_t idHigh = 0;
+
+        SafeReadU16(
+            pendingItem + g_off.EIV_ItemDefIndex, def);
+
+        SafeReadU8(
+            pendingItem + g_off.EIV_Initialized, initialized);
+
+        SafeReadU32(
+            pendingItem + g_off.EIV_ItemIDHigh, idHigh);
+
+        Log("[glove-next-tick] seq=%llu pawn=%p item=%p "
+            "def=%u init=%u idHigh=0x%X",
+            (unsigned long long)g_pendingGloveSequence,
+            (void*)pawn,
+            (void*)pendingItem,
+            def,
+            initialized,
+            idHigh);
+
+        LogGloveAttributeSnapshot(
+            pendingItem, "NEXT-TICK");
+
+        g_pendingGloveSequence = 0;
+    }
 
     int32_t hp = 0;
     if (!SafeReadI32(pawn + g_off.PAWN_Health, hp) || hp <= 0) return;
@@ -708,6 +746,19 @@ void RunGloves(uintptr_t pawn)
         return;
     }
 
+    g_gloveApplySequence++;
+    g_pendingGloveSequence = g_gloveApplySequence;
+    g_gloveAppliedThisTick = true;
+
+    Log("[glove-sequence] applied seq=%llu pawn=%p item=%p "
+        "team=%u def=%u pk=%d",
+        (unsigned long long)g_gloveApplySequence,
+        (void*)pawn,
+        (void*)item,
+        team,
+        desiredDef,
+        pk);
+
     static uint16_t lastLoggedDef = 0;
     static int lastLoggedPK = -1;
 
@@ -763,4 +814,9 @@ void ResetGloves()
     g_followUpSpawnTime = -1.0f;
     g_spawnSeenAt = 0;
     g_followUpIdx = 3;
+}
+
+bool GloveAppliedThisTick()
+{
+    return g_gloveAppliedThisTick;
 }

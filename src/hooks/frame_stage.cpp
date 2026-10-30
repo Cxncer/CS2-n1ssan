@@ -404,8 +404,17 @@ static void __fastcall FsnDetour(void* pClient, int stage)
     // ---- Now apply gloves ----
     RunGloves(pawn);
 
+    const bool gloveUpdate = GloveAppliedThisTick();
+
+    Log("[apply-diagnostic] didUpdate=%d gloveUpdate=%d regenAvailable=%d",
+        (int)didUpdate,
+        (int)gloveUpdate,
+        (int)(pRegenerateSkins != nullptr));
+
     if (didUpdate && pRegenerateSkins) {
-        Log("[skin-regenerate] calling pRegenerateSkins");
+        Log("[skin-regenerate] calling pRegenerateSkins "
+            "reason=weapon-update gloveUpdate=%d",
+            (int)gloveUpdate);
 
         __try {
             pRegenerateSkins();

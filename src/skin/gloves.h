@@ -18,3 +18,5 @@ void ForceGloveUpdate();
 void ResetGloves();
 
 void LogGloveModelSnapshot(uintptr_t pawn, const char* stage);
+
+bool GloveAppliedThisTick();
