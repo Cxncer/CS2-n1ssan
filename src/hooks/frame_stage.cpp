@@ -223,6 +223,50 @@ static uintptr_t MatchdetectGetPawn()
     return 0;
 }
 
+static void ObserveGloveState(uintptr_t pawn)
+{
+    if (!pawn) return;
+
+    static uintptr_t lastPawn = 0;
+    static uint8_t lastFlag = 0xFF;
+    static uint8_t lastChanged = 0xFF;
+    static uint16_t lastDef = 0xFFFF;
+    static uint8_t lastInit = 0xFF;
+    static uint32_t lastIdHigh = 0xFFFFFFFF;
+
+    const uintptr_t item = pawn + g_off.PAWN_EconGloves;
+
+    uint8_t flag = 0, changed = 0, initialized = 0;
+    uint16_t def = 0;
+    uint32_t idHigh = 0;
+
+    if (!SafeReadU8(pawn + g_off.PAWN_NeedReapplyGloves, flag) ||
+        !SafeReadU8(pawn + g_off.PAWN_EconGlovesChanged, changed) ||
+        !SafeReadU16(item + g_off.EIV_ItemDefIndex, def) ||
+        !SafeReadU8(item + g_off.EIV_Initialized, initialized) ||
+        !SafeReadU32(item + g_off.EIV_ItemIDHigh, idHigh))
+        return;
+
+    if (pawn != lastPawn ||
+        flag != lastFlag ||
+        changed != lastChanged ||
+        def != lastDef ||
+        initialized != lastInit ||
+        idHigh != lastIdHigh)
+    {
+        Log("[glove-observe] pawn=%p reapply=%u changed=%u "
+            "def=%u init=%u idHigh=0x%X",
+            (void*)pawn, flag, changed, def, initialized, idHigh);
+
+        lastPawn = pawn;
+        lastFlag = flag;
+        lastChanged = changed;
+        lastDef = def;
+        lastInit = initialized;
+        lastIdHigh = idHigh;
+    }
+}
+
 // ---- FSN detour ----
 static void __fastcall FsnDetour(void* pClient, int stage)
 {
@@ -256,6 +300,10 @@ static void __fastcall FsnDetour(void* pClient, int stage)
 
     if (stage != 6) return;
     if (!g_enabled || g_targets.empty()) return;
+
+    uintptr_t observedPawn = MatchdetectGetPawn();
+    if (observedPawn > 0x10000)
+        ObserveGloveState(observedPawn);
 
     // ---- matchdetect pawn resolution ----
     uintptr_t pawn = MatchdetectGetPawn();
@@ -357,8 +405,18 @@ static void __fastcall FsnDetour(void* pClient, int stage)
     RunGloves(pawn);
 
     if (didUpdate && pRegenerateSkins) {
-        __try { pRegenerateSkins(); }
-        __except (1) {}
+        Log("[skin-regenerate] calling pRegenerateSkins");
+        __try {
+            pRegenerateSkins();
+            Log("[skin-regenerate] returned");
+        }
+        __except (1) {
+            Log("[skin-regenerate] exception");
+        }
+    }
+    else {
+        Log("[skin-regenerate] skipped didUpdate=%d fn=%p",
+            (int)didUpdate, (void*)pRegenerateSkins);
     }
 }
 

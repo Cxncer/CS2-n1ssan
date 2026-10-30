@@ -18,7 +18,7 @@ namespace
     constexpr uint16_t DEFAULT_T_GLOVES = 5028;
     constexpr uint16_t DEFAULT_CT_GLOVES = 5029;
 
-    constexpr int      GLOVE_APPLY_FRAMES = 4;
+    constexpr int      GLOVE_APPLY_FRAMES = 1;
     constexpr int      GLOVE_CLEAR_FRAMES = 2;
     constexpr uint64_t GLOVE_OWN_FLAG_FRAMES = 3;
 
@@ -63,11 +63,30 @@ namespace
         return s == "glove" || s == "gloves";
     }
 
+
     void FlagGlovesForRebuild(uintptr_t pawn)
     {
+        uint8_t beforeReapply = 0;
+        uint8_t beforeChanged = 0;
+
+        SafeReadU8(pawn + g_off.PAWN_NeedReapplyGloves, beforeReapply);
+        SafeReadU8(pawn + g_off.PAWN_EconGlovesChanged, beforeChanged);
+
         SafeWriteU8(pawn + g_off.PAWN_NeedReapplyGloves, 1);
         SafeWriteU8(pawn + g_off.PAWN_EconGlovesChanged, 1);
+
+        uint8_t afterReapply = 0;
+        uint8_t afterChanged = 0;
+
+        SafeReadU8(pawn + g_off.PAWN_NeedReapplyGloves, afterReapply);
+        SafeReadU8(pawn + g_off.PAWN_EconGlovesChanged, afterChanged);
+
+        Log("[glove-flags] pawn=%p reapply=%u->%u changed=%u->%u",
+            (void*)pawn,
+            beforeReapply, afterReapply,
+            beforeChanged, afterChanged);
     }
+
 
     void ClearGloves(uintptr_t pawn, uintptr_t item)
     {
@@ -109,6 +128,55 @@ namespace
         }
     }
 
+
+    static void LogGloveAttributes(uintptr_t item, const char* stage)
+    {
+        AttributeVector_t* vec = GetAttributeVector(item);
+
+        if (!vec || vec->size < 0 || vec->size > 64 ||
+            vec->data < 0x10000)
+        {
+            Log("[glove-attrs] stage=%s item=%p invalid vector "
+                "size=%d data=%p",
+                stage, (void*)item,
+                vec ? vec->size : -1,
+                vec ? (void*)vec->data : nullptr);
+            return;
+        }
+
+        Log("[glove-attrs] stage=%s item=%p size=%d data=%p",
+            stage, (void*)item, vec->size, (void*)vec->data);
+
+        for (int i = 0; i < vec->size; ++i)
+        {
+            uintptr_t entry = vec->data +
+                static_cast<uintptr_t>(i) * sizeof(EconItemAttribute_t);
+
+            uint16_t defIndex = 0;
+            float value = 0.0f;
+            float initialValue = 0.0f;
+
+            if (!SafeReadU16(entry + 0x30, defIndex) ||
+                !SafeReadFloat(entry + 0x34, value) ||
+                !SafeReadFloat(entry + 0x38, initialValue))
+            {
+                Log("[glove-attrs] stage=%s index=%d read failed",
+                    stage, i);
+                continue;
+            }
+
+            if (defIndex == ATTR_PAINT ||
+                defIndex == ATTR_SEED ||
+                defIndex == ATTR_WEAR)
+            {
+                Log("[glove-attrs] stage=%s index=%d def=%u "
+                    "value=%.6f initial=%.6f",
+                    stage, i, defIndex, value, initialValue);
+            }
+        }
+    }
+
+
     bool GloveApply(uintptr_t pawn, uintptr_t item, uint16_t def, int pk, int seed, float wear)
     {
         if (!pawn || !item || def == 0)
@@ -136,6 +204,7 @@ namespace
                 post ? post->size : -1,
                 post ? (void*)post->data : nullptr,
                 post ? post->allocationCount : -1);
+            LogGloveAttributes(item, "after-create");
 
             if (pGloveCreatePaintKit)
             {
@@ -351,13 +420,9 @@ void RunGloves(uintptr_t pawn)
         g_followUpIdx = 0;
     }
 
-    if (customSelection &&
-        g_followUpIdx < 3 &&
-        now - g_spawnSeenAt >= GLOVE_FOLLOWUP_MS[g_followUpIdx])
-    {
-        followUp = true;
-        ++g_followUpIdx;
-    }
+    // TEMP DIAGNOSTIC: disable timed reapplication.
+// We want to observe the engine after the initial glove write.
+    followUp = false;
 
     const bool forced =
         g_gloveForceUpdate.exchange(false, std::memory_order_acq_rel);
