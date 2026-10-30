@@ -62,6 +62,7 @@ static constexpr uintptr_t FB_PAWN_hHudModelArms = 0x1DA8;
 static constexpr uintptr_t FB_PAWN_EconGloves = 0x1770;
 static constexpr uintptr_t FB_PAWN_NeedReapplyGloves = 0x176D;
 static constexpr uintptr_t FB_PAWN_EconGlovesChanged = 0x1D20;
+static constexpr uintptr_t FB_PAWN_MyWearables = 0x1268;
 
 // ---- CCSPlayer_WeaponServices ----
 static constexpr uintptr_t FB_WS_ActiveWeapon = 0x60;
@@ -111,6 +112,7 @@ struct Offsets
     uintptr_t PAWN_EconGloves = 0;
     uintptr_t PAWN_NeedReapplyGloves = 0;
     uintptr_t PAWN_EconGlovesChanged = 0;
+    uintptr_t PAWN_MyWearables = 0;
 
     uintptr_t WS_ActiveWeapon = 0;
 

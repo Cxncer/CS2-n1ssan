@@ -9,6 +9,7 @@
 #include "diagnostics/log.h"
 #include "inventory/loadout.h"
 #include "memory/access.h"
+#include "sdk/scene_node.h"
 
 #include <atomic>
 #include <string>
@@ -266,11 +267,15 @@ namespace
             return false;
         }
 
+        LogGloveModelSnapshot(pawn, "BEFORE-BODYGROUP");
+
         if (!pGloveSetBodyGroup)
         {
             Log("[glove] apply: pGloveSetBodyGroup null");
             return false;
         }
+
+        LogGloveModelSnapshot(pawn, "AFTER-BODYGROUP");
 
         SafeWriteU16(item + g_off.EIV_ItemDefIndex, def);
         SafeWriteI32(item + g_off.EIV_EntityQuality, 3);
@@ -373,6 +378,132 @@ namespace
 
         return true;
     }
+
+    static void DumpPawnWearables(uintptr_t pawn)
+    {
+        if (!pawn)
+            return;
+
+        // C_NetworkUtlVectorBase<CHandle<C_EconWearable>>
+        const uintptr_t vector = pawn + g_off.PAWN_MyWearables;
+
+        int32_t count = 0;
+        uintptr_t data = 0;
+
+        if (!SafeReadI32(vector, count) ||
+            !SafeReadQword(vector + 0x08, data))
+        {
+            Log("[wearable-dump] vector header read failed");
+            return;
+        }
+
+        Log("[wearable-dump] pawn=%p count=%d data=%p",
+            (void*)pawn, count, (void*)data);
+
+        if (count < 0 || count > 32 || (count > 0 && !data))
+        {
+            Log("[wearable-dump] invalid vector; aborting");
+            return;
+        }
+
+        for (int i = 0; i < count; ++i)
+        {
+            uint32_t handle = 0;
+
+            if (!SafeReadU32(
+                data + static_cast<uintptr_t>(i) * sizeof(uint32_t),
+                handle))
+            {
+                Log("[wearable-dump] index=%d handle read failed", i);
+                continue;
+            }
+
+            if (!HandleValid(handle))
+            {
+                Log("[wearable-dump] index=%d invalid handle=0x%08X",
+                    i, handle);
+                continue;
+            }
+
+            uintptr_t entity = GetEntityByHandle(handle);
+
+            if (!entity)
+            {
+                Log("[wearable-dump] index=%d handle=0x%08X unresolved",
+                    i, handle);
+                continue;
+            }
+
+            uintptr_t vtable = 0;
+            uint16_t def = 0;
+            int32_t quality = 0;
+
+            SafeReadQword(entity, vtable);
+
+            // Candidate C_EconEntity -> C_AttributeContainer -> m_Item.
+            uintptr_t item =
+                entity + g_off.EE_AttrManager + g_off.AC_Item;
+
+            SafeReadU16(item + g_off.EIV_ItemDefIndex, def);
+            SafeReadI32(item + g_off.EIV_EntityQuality, quality);
+
+            uintptr_t owner = 0;
+            SafeReadQword(
+                entity + g_off.BE_hOwnerEntity, owner);
+
+            Log("[wearable-dump] index=%d handle=0x%08X "
+                "entity=%p vtable=%p owner=%p item=%p "
+                "def=%u quality=%d",
+                i, handle,
+                (void*)entity, (void*)vtable, (void*)owner,
+                (void*)item, def, quality);
+
+            LogGloveAttributeSnapshot(item, "WEARABLE-ENTITY");
+        }
+    }
+}
+
+void LogGloveModelSnapshot(uintptr_t pawn, const char* stage)
+{
+    if (!pawn)
+        return;
+
+    uint8_t team = 0;
+    SafeReadU8(pawn + g_off.PAWN_TeamNum, team);
+
+    uintptr_t sceneNode = 0;
+    uintptr_t skeleton = 0;
+    uintptr_t modelState = 0;
+    uintptr_t modelHandle = 0;
+
+    const bool sceneOk =
+        SafeReadQword(
+            pawn + g_off.BE_GameSceneNode,
+            sceneNode) && sceneNode >= 0x10000;
+
+    if (sceneOk)
+        skeleton = GetSkeletonInstance(sceneNode);
+
+    if (skeleton >= 0x10000)
+        modelState = skeleton + g_off_CSkeleton_modelState;
+
+    if (modelState >= 0x10000)
+        SafeReadQword(
+            modelState + g_off_CModelState_hModel,
+            modelHandle);
+
+    Log(
+        "[glove-model] stage=%s pawn=%p team=%u "
+        "scene=%p skeleton=%p modelState=%p "
+        "rawHandle=0x%llX",
+        stage,
+        (void*)pawn,
+        team,
+        (void*)sceneNode,
+        (void*)skeleton,
+        (void*)modelState,
+        (unsigned long long)modelHandle
+    );
 }
 
 void RunGloves(uintptr_t pawn)
@@ -385,6 +516,16 @@ void RunGloves(uintptr_t pawn)
     if (!SafeReadI32(pawn + g_off.PAWN_Health, hp) || hp <= 0) return;
 
     uintptr_t item = pawn + g_off.PAWN_EconGloves;
+
+    static uintptr_t lastDumpedPawn = 0;
+
+    if (pawn != lastDumpedPawn)
+    {
+        lastDumpedPawn = pawn;
+
+        LogGloveAttributeSnapshot(item, "PAWN-EMBEDDED");
+        DumpPawnWearables(pawn);
+    }
 
     // ---- diagnostics: once, but not one-shot ----
     static bool g_dumped = false;

@@ -16,3 +16,5 @@ void ForceGloveUpdate();
 
 // Reset all glove state. Called on round transitions.
 void ResetGloves();
+
+void LogGloveModelSnapshot(uintptr_t pawn, const char* stage);

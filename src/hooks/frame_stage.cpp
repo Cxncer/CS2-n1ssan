@@ -406,17 +406,16 @@ static void __fastcall FsnDetour(void* pClient, int stage)
 
     if (didUpdate && pRegenerateSkins) {
         Log("[skin-regenerate] calling pRegenerateSkins");
+
         __try {
             pRegenerateSkins();
             Log("[skin-regenerate] returned");
+
+            LogGloveModelSnapshot(pawn, "AFTER-REGENERATE");
         }
         __except (1) {
             Log("[skin-regenerate] exception");
         }
-    }
-    else {
-        Log("[skin-regenerate] skipped didUpdate=%d fn=%p",
-            (int)didUpdate, (void*)pRegenerateSkins);
     }
 }
 
