@@ -13,34 +13,35 @@
 #include <atomic>
 #include <string>
 
+
 namespace
 {
     constexpr uint16_t DEFAULT_T_GLOVES = 5028;
     constexpr uint16_t DEFAULT_CT_GLOVES = 5029;
 
-    constexpr int      GLOVE_APPLY_FRAMES = 1;
-    constexpr int      GLOVE_CLEAR_FRAMES = 2;
+    constexpr int GLOVE_APPLY_FRAMES = 1;
+    constexpr int GLOVE_CLEAR_FRAMES = 2;
     constexpr uint64_t GLOVE_OWN_FLAG_FRAMES = 3;
 
     std::atomic_bool g_gloveForceUpdate{ true };
 
     uintptr_t g_lastPawnAddr = 0;
-    uint16_t  g_lastGloveDef = 0;
-    int       g_lastGlovePK = -1;
-    int       g_lastGloveSeed = -1;
-    float     g_lastGloveWear = -1.0f;
-    float     g_lastGloveSpawnTime = -1.0f;
-    uint8_t   g_lastGloveTeam = 0xFF;
-    bool      g_appliedCustomGloves = false;
+    uint16_t g_lastGloveDef = 0;
+    int g_lastGlovePK = -1;
+    int g_lastGloveSeed = -1;
+    float g_lastGloveWear = -1.0f;
+    float g_lastGloveSpawnTime = -1.0f;
+    uint8_t g_lastGloveTeam = 0xFF;
+    bool g_appliedCustomGloves = false;
 
-    int       g_gloveUpdateFrames = 0;
-    int       g_gloveClearFrames = 0;
-    uint64_t  g_gloveFrame = 0;
-    uint64_t  g_gloveLastWriteFrame = 0;
+    int g_gloveUpdateFrames = 0;
+    int g_gloveClearFrames = 0;
+    uint64_t g_gloveFrame = 0;
+    uint64_t g_gloveLastWriteFrame = 0;
 
-    float     g_followUpSpawnTime = -1.0f;
-    uint64_t  g_spawnSeenAt = 0;
-    size_t    g_followUpIdx = 3;
+    float g_followUpSpawnTime = -1.0f;
+    uint64_t g_spawnSeenAt = 0;
+    size_t g_followUpIdx = 3;
 
     constexpr uint64_t GLOVE_FOLLOWUP_MS[] = { 400, 1200, 3000 };
 
@@ -63,7 +64,6 @@ namespace
         return s == "glove" || s == "gloves";
     }
 
-
     void FlagGlovesForRebuild(uintptr_t pawn)
     {
         uint8_t beforeReapply = 0;
@@ -73,7 +73,9 @@ namespace
         SafeReadU8(pawn + g_off.PAWN_EconGlovesChanged, beforeChanged);
 
         SafeWriteU8(pawn + g_off.PAWN_NeedReapplyGloves, 1);
-        SafeWriteU8(pawn + g_off.PAWN_EconGlovesChanged, 1);
+        SafeWriteU8(
+            pawn + g_off.PAWN_EconGlovesChanged,
+            static_cast<uint8_t>(beforeChanged + 1u));
 
         uint8_t afterReapply = 0;
         uint8_t afterChanged = 0;
@@ -86,7 +88,6 @@ namespace
             beforeReapply, afterReapply,
             beforeChanged, afterChanged);
     }
-
 
     void ClearGloves(uintptr_t pawn, uintptr_t item)
     {
@@ -127,7 +128,6 @@ namespace
             return false;
         }
     }
-
 
     static void LogGloveAttributes(uintptr_t item, const char* stage)
     {
@@ -176,14 +176,96 @@ namespace
         }
     }
 
+    static void LogAttributeVectorSnapshot(
+        uintptr_t item,
+        uintptr_t offset,
+        const char* label)
+    {
+        if (!item || !offset)
+        {
+            Log("[glove-snapshot] %s unavailable", label);
+            return;
+        }
 
-    bool GloveApply(uintptr_t pawn, uintptr_t item, uint16_t def, int pk, int seed, float wear)
+        uintptr_t vector = item + offset + 0x08;
+
+        int32_t size = 0;
+        uintptr_t data = 0;
+        int32_t allocation = 0;
+
+        if (!SafeReadI32(vector, size) ||
+            !SafeReadQword(vector + 0x08, data) ||
+            !SafeReadI32(vector + 0x10, allocation))
+        {
+            Log("[glove-snapshot] %s header read failed", label);
+            return;
+        }
+
+        Log("[glove-snapshot] %s size=%d data=%p alloc=%d",
+            label, size, (void*)data, allocation);
+
+        if (size < 0 || size > 32 || (size > 0 && !data))
+        {
+            Log("[glove-snapshot] %s invalid vector; entries skipped", label);
+            return;
+        }
+
+        for (int i = 0; i < size; ++i)
+        {
+            uintptr_t entry =
+                data + static_cast<uintptr_t>(i) * sizeof(EconItemAttribute_t);
+
+            uint16_t def = 0;
+            float value = 0.0f;
+            float initial = 0.0f;
+
+            if (!SafeReadU16(entry + 0x30, def) ||
+                !SafeReadFloat(entry + 0x34, value) ||
+                !SafeReadFloat(entry + 0x38, initial))
+            {
+                Log("[glove-snapshot] %s entry=%d read failed", label, i);
+                continue;
+            }
+
+            if (def == ATTR_PAINT ||
+                def == ATTR_SEED ||
+                def == ATTR_WEAR ||
+                def == ATTR_KILL_EATER)
+            {
+                Log("[glove-snapshot] %s entry=%d def=%u "
+                    "value=%.6f initial=%.6f",
+                    label, i, def, value, initial);
+            }
+        }
+    }
+
+    static void LogGloveAttributeSnapshot(uintptr_t item, const char* stage)
+    {
+        Log("[glove-snapshot] ===== %s item=%p =====",
+            stage, (void*)item);
+
+        LogAttributeVectorSnapshot(
+            item, g_off.EIV_AttributeList, "LOCAL");
+
+        LogAttributeVectorSnapshot(
+            item, g_off.EIV_NetworkedAttrs, "NETWORKED");
+    }
+
+    bool GloveApply(
+        uintptr_t pawn,
+        uintptr_t item,
+        uint16_t def,
+        int pk,
+        int seed,
+        float wear)
     {
         if (!pawn || !item || def == 0)
         {
-            Log("[glove] apply: guard fail (pawn=%p item=%p def=%u)", (void*)pawn, (void*)item, def);
+            Log("[glove] apply: guard fail (pawn=%p item=%p def=%u)",
+                (void*)pawn, (void*)item, def);
             return false;
         }
+
         if (!pGloveSetBodyGroup)
         {
             Log("[glove] apply: pGloveSetBodyGroup null");
@@ -193,18 +275,26 @@ namespace
         SafeWriteU16(item + g_off.EIV_ItemDefIndex, def);
         SafeWriteI32(item + g_off.EIV_EntityQuality, 3);
 
+        LogGloveAttributeSnapshot(item, "BEFORE-REMOVE");
+
         EconAttr_Remove(item);
+
+        LogGloveAttributeSnapshot(item, "AFTER-REMOVE");
 
         if (pk > 0)
         {
             EconAttr_Create(item, pk, wear, seed, -1);
+
             AttributeVector_t* post = GetAttributeVector(item);
+
             Log("[glove-post] team item=%p def=%u pk=%d size=%d data=%p alloc=%d",
                 (void*)item, def, pk,
                 post ? post->size : -1,
                 post ? (void*)post->data : nullptr,
                 post ? post->allocationCount : -1);
+
             LogGloveAttributes(item, "after-create");
+            LogGloveAttributeSnapshot(item, "AFTER-CREATE");
 
             if (pGloveCreatePaintKit)
             {
@@ -232,19 +322,22 @@ namespace
             {
                 Log("[glove-paintkit] function NULL for pk=%d", pk);
             }
-
         }
 
         SafeWriteU32(item + g_off.EIV_ItemIDHigh,
             IsDefaultGloveDef(def) ? 0u : 0xFFFFFFFFu);
 
-        uint32_t ctrlHandle = (uint32_t)ReadHandle(pawn, g_off.PAWN_hController);
+        uint32_t ctrlHandle =
+            (uint32_t)ReadHandle(pawn, g_off.PAWN_hController);
+
         if (HandleValid(ctrlHandle))
         {
             uintptr_t ctrl = GetEntityByHandle(ctrlHandle);
+
             if (ctrl)
             {
                 uint64_t steamId = 0;
+
                 if (SafeReadQword(ctrl + g_off.CTRL_SteamID, steamId))
                     SafeWriteU32(item + g_off.EIV_AccountID, (uint32_t)steamId);
             }
@@ -255,9 +348,14 @@ namespace
         SafeWriteU8(item + g_off.EIV_RestoreCustom, 1);
 
         bool bodyGroupOk = false;
+
         __try
         {
-            pGloveSetBodyGroup((void*)pawn, "first_or_third_person", 1);
+            pGloveSetBodyGroup(
+                (void*)pawn,
+                "first_or_third_person",
+                1);
+
             bodyGroupOk = true;
         }
         __except (1)
@@ -265,13 +363,17 @@ namespace
             Log("[glove] apply: GloveSetBodyGroup threw");
             bodyGroupOk = false;
         }
-        if (!bodyGroupOk) return false;
+
+        if (!bodyGroupOk)
+            return false;
 
         FlagGlovesForRebuild(pawn);
+
+        LogGloveAttributeSnapshot(item, "AFTER-REBUILD-FLAGS");
+
         return true;
     }
 }
-
 
 void RunGloves(uintptr_t pawn)
 {
