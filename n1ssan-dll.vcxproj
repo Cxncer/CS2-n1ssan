@@ -165,6 +165,7 @@
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">false</ExcludedFromBuild>
     </ClCompile>
     <ClCompile Include="src\hooks\knife_animation.cpp" />
+    <ClCompile Include="src\inventory\engine_schema_diagnostic.cpp" />
     <ClCompile Include="src\inventory\loadout.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">false</ExcludedFromBuild>
@@ -221,6 +222,7 @@
     <ClInclude Include="src\hooks\knife_animation.h" />
     <ClInclude Include="src\hooks\minhook_dynamic.h" />
     <ClInclude Include="src\hooks\weapon_graph.h" />
+    <ClInclude Include="src\inventory\engine_schema_diagnostic.h" />
     <ClInclude Include="src\inventory\loadout.h" />
     <ClInclude Include="src\inventory\loot_patterns.h" />
     <ClInclude Include="src\inventory\loot_schema.h" />

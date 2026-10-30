@@ -99,6 +99,9 @@
     <ClCompile Include="src\config\auto_offsets.cpp">
       <Filter>src\config</Filter>
     </ClCompile>
+    <ClCompile Include="src\inventory\engine_schema_diagnostic.cpp">
+      <Filter>src\inventory</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
@@ -172,6 +175,9 @@
     </ClInclude>
     <ClInclude Include="src\config\auto_offsets.h">
       <Filter>src\config</Filter>
+    </ClInclude>
+    <ClInclude Include="src\inventory\engine_schema_diagnostic.h">
+      <Filter>src\inventory</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

@@ -1,6 +1,6 @@
 ﻿// n1ssan-dll / dllmain.cpp
 // v10.0.0 — split into src/ modules.
-// beta 1.2 - gloves solver
+// beta 1.3 - gloves solver
 //
 // This file is now a 60-line skeleton. Everything functional lives in
 // src/. The old monolith is preserved in Backup\dllmain.cpp.v9.0.2-*.bak.
@@ -26,6 +26,7 @@
 #include "inventory/plan_a.h"
 #include "hooks/minhook_dynamic.h"
 #include "config/auto_offsets.h"
+#include "inventory/engine_schema_diagnostic.h"
 
 // ---- MinHook ----
 typedef int (WINAPI* MH_Initialize_t)();
@@ -97,6 +98,8 @@ static DWORD WINAPI InjectThread(LPVOID)
 
     // 3. Resolve offsets + functions + schema
     ResolveOffsets();
+
+    RunEngineSchemaDiagnostic();
 
     if (!ResolveFunctions())
     {
