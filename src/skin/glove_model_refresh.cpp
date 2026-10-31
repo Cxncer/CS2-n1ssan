@@ -9,6 +9,7 @@
 #include "memory/scanner.h"
 #include "diagnostics/log.h"
 #include "skin/apply.h"
+#include "skin/gloves.h"
 
 #include <Windows.h>
 #include <atomic>
@@ -717,6 +718,8 @@ namespace
                     g_restoreModel.c_str());
 
                 InvalidateWeaponModelCache();
+                // Reapply gloves after the agent model has been restored.
+                ForceGloveUpdate();
 
                 ClearSwapState();
             }
