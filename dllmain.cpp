@@ -1,6 +1,6 @@
 ﻿// n1ssan-dll / dllmain.cpp
-// v10.0.0 — split into src/ modules.
-// beta 1.4 - gloves solver
+// v10.0.0 — beta 1.5 - Gloves Solver
+// split into src/ modules
 //
 // This file is now a 60-line skeleton. Everything functional lives in
 // src/. The old monolith is preserved in Backup\dllmain.cpp.v9.0.2-*.bak.

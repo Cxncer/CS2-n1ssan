@@ -29,6 +29,7 @@
 #include "inventory/plan_a.h"
 #include "skin/apply.h"
 #include "sdk/scene_node.h"
+#include "skin/glove_model_refresh.h"
 
 #include <windows.h>
 #include <cstdint>
@@ -277,7 +278,24 @@ static void __fastcall FsnDetour(void* pClient, int stage)
         Log("[fsn] first stage call seen");
     }
 
-    if (g_origFsn) { __try { g_origFsn(pClient, stage); } __except (1) {} }
+    // Phase B: restore/swap the player model before the original
+// render-end processing. Do not run this on other stages.
+    if (stage == 6)
+    {
+        GloveModelRefresh::OnRenderEnd();
+    }
+
+    // Preserve exactly one original FrameStageNotify call.
+    if (g_origFsn)
+    {
+        __try
+        {
+            g_origFsn(pClient, stage);
+        }
+        __except (1)
+        {
+        }
+    }
 
     InterlockedIncrement(&g_fsnCount);
     g_lastStage = stage;

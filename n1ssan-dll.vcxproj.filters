@@ -102,6 +102,9 @@
     <ClCompile Include="src\inventory\engine_schema_diagnostic.cpp">
       <Filter>src\inventory</Filter>
     </ClCompile>
+    <ClCompile Include="src\skin\glove_model_refresh.cpp">
+      <Filter>src\skin</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
@@ -178,6 +181,9 @@
     </ClInclude>
     <ClInclude Include="src\inventory\engine_schema_diagnostic.h">
       <Filter>src\inventory</Filter>
+    </ClInclude>
+    <ClInclude Include="src\skin\glove_model_refresh.h">
+      <Filter>src\skin</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

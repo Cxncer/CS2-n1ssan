@@ -10,6 +10,7 @@
 #include "inventory/loadout.h"
 #include "memory/access.h"
 #include "sdk/scene_node.h"
+#include "skin/glove_model_refresh.h"
 
 #include <atomic>
 #include <string>
@@ -660,6 +661,15 @@ void RunGloves(uintptr_t pawn)
 
     const bool teamChanged =
         g_lastGloveTeam != 0xFF && team != g_lastGloveTeam;
+
+    if (teamChanged)
+    {
+        GloveModelRefresh::Request();
+
+        Log("[glove-model-refresh] queued: team %u -> %u",
+            g_lastGloveTeam,
+            team);
+    }
 
     const bool spawnChanged =
         spawnTime != g_lastGloveSpawnTime;
