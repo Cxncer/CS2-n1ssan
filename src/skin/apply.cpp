@@ -621,6 +621,7 @@ bool ApplyWeaponSkin(uintptr_t weaponEnt, uintptr_t pawn, const TargetSkin& t)
         bool hudBuilt = (hudWeapon == 0);
         bool hudModelReady = true;
 
+        // Change the HUD knife model before building its material.
         if (IsKnifeDefinition(t.defIndex))
         {
             std::string modelName;
@@ -641,6 +642,14 @@ bool ApplyWeaponSkin(uintptr_t weaponEnt, uintptr_t pawn, const TargetSkin& t)
                 Log("[knife] schema model missing for def=%u",
                     t.defIndex);
             }
+        }
+
+        if (hudWeapon && hudModelReady)
+        {
+            SetMeshGroup(hudWeapon, mask);
+
+            hudBuilt =
+                CallBuildModernSkin(view, hudWeapon, "hud");
         }
 
         // Only cache a completed rebuild. If a required function
