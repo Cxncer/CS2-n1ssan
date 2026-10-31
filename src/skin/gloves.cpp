@@ -829,10 +829,13 @@ void RunGloves(uintptr_t pawn)
     }
 
     // Lootline: after a kit has been sold, subsequent rounds
-    // on the same pawn also need a model refresh.
+// use a model refresh instead of an ordinary follow-up apply.
+// The engine's reapply flag will trigger the glove apply burst.
     if (followUp &&
         g_gloveKitSoldPawn == pawn)
     {
+        followUp = false;
+
         Log("[glove-kit] post-sale round model refresh");
 
         GloveModelRefresh::Request();
