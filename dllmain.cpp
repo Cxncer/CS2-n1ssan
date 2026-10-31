@@ -1,5 +1,5 @@
 ﻿// n1ssan-dll / dllmain.cpp
-// v10.0.0 — beta 2.1 - Knife Logic
+// v10.0.0 — beta 2.2 - Knife Logic
 // 
 // split into src/ modules
 //

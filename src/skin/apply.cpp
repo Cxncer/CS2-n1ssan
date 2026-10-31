@@ -254,10 +254,40 @@ namespace
     {
         bool usesOldModel = false;
 
-        return GetPaintKitUsesOldModel(paintKitId, usesOldModel) &&
-            usesOldModel
-            ? 2ULL
-            : 1ULL;
+        const bool found =
+            GetPaintKitUsesOldModel(paintKitId, usesOldModel);
+
+        const uint64_t mask =
+            found && usesOldModel ? 2ULL : 1ULL;
+
+        // Log only when the result changes.
+        static bool logged = false;
+        static int lastPaintKit = -1;
+        static bool lastFound = false;
+        static bool lastOldModel = false;
+        static uint64_t lastMask = 0;
+
+        if (paintKitId == 413 &&
+            (!logged ||
+                lastPaintKit != paintKitId ||
+                lastFound != found ||
+                lastOldModel != usesOldModel ||
+                lastMask != mask))
+        {
+            Log("[mesh-diag] pk=%d found=%d usesOldModel=%u mask=%llu",
+                paintKitId,
+                found ? 1 : 0,
+                usesOldModel ? 1 : 0,
+                static_cast<unsigned long long>(mask));
+
+            logged = true;
+            lastPaintKit = paintKitId;
+            lastFound = found;
+            lastOldModel = usesOldModel;
+            lastMask = mask;
+        }
+
+        return mask;
     }
 
 
@@ -520,6 +550,13 @@ bool ApplyWeaponSkin(uintptr_t weaponEnt, uintptr_t pawn, const TargetSkin& t)
             t.paintKit);
 
         // World model.
+        if (t.defIndex == 512)
+        {
+            Log("[mesh-diag] WORLD entity=%p mask=%llu",
+                (void*)weaponEnt,
+                static_cast<unsigned long long>(mask));
+        }
+
         SetMeshGroup(weaponEnt, mask);
 
         const bool worldBuilt =
@@ -557,13 +594,14 @@ bool ApplyWeaponSkin(uintptr_t weaponEnt, uintptr_t pawn, const TargetSkin& t)
                 }
             }
 
-            if (hudModelReady)
+            if (t.defIndex == 512)
             {
-                SetMeshGroup(hudWeapon, mask);
-
-                hudBuilt =
-                    CallBuildModernSkin(view, hudWeapon, "hud");
+                Log("[mesh-diag] HUD entity=%p mask=%llu",
+                    (void*)hudWeapon,
+                    static_cast<unsigned long long>(mask));
             }
+
+            SetMeshGroup(hudWeapon, mask);
         }
 
         // Only cache a completed rebuild. If a required function
@@ -690,6 +728,21 @@ bool KnifeApply(uintptr_t weaponEnt, uintptr_t view, uint16_t targetDef)
     const bool subclassRead =
         SafeReadI32(weaponEnt + g_off.BE_nSubclassID, curSub);
 
+    static unsigned int falchionDiagCount = 0;
+    const bool diag = targetDef == 512 && falchionDiagCount < 12;
+
+    if (diag)
+    {
+        ++falchionDiagCount;
+
+        Log("[subclass-diag] BEFORE weapon=%p offset=0x%llX read=%d value=%u target=%u",
+            (void*)weaponEnt,
+            static_cast<unsigned long long>(g_off.BE_nSubclassID),
+            subclassRead ? 1 : 0,
+            static_cast<unsigned int>(curSub),
+            targetSub);
+    }
+
     if (curDef == targetDef &&
         subclassRead &&
         static_cast<uint32_t>(curSub) == targetSub)
@@ -704,15 +757,38 @@ bool KnifeApply(uintptr_t weaponEnt, uintptr_t view, uint16_t targetDef)
 
     if (!CallSetModel(weaponEnt, it->second.c_str()))
         return false;
-
     // Then subclass.
-    if (!SafeWriteI32(
-        weaponEnt + g_off.BE_nSubclassID,
-        static_cast<int32_t>(targetSub)))
+    const bool subclassWritten =
+        SafeWriteI32(
+            weaponEnt + g_off.BE_nSubclassID,
+            static_cast<int32_t>(targetSub));
+
+    if (diag)
+    {
+        Log("[subclass-diag] WRITE success=%d target=%u",
+            subclassWritten ? 1 : 0,
+            targetSub);
+    }
+
+    if (!subclassWritten)
         return false;
 
     // Finally UpdateSubclass.
-    if (!CallUpdateSubclass(weaponEnt))
+    const bool updateSucceeded = CallUpdateSubclass(weaponEnt);
+
+    int32_t afterSub = 0;
+    const bool afterRead =
+        SafeReadI32(weaponEnt + g_off.BE_nSubclassID, afterSub);
+
+    if (diag)
+    {
+        Log("[subclass-diag] UPDATE success=%d READBACK read=%d value=%u",
+            updateSucceeded ? 1 : 0,
+            afterRead ? 1 : 0,
+            static_cast<unsigned int>(afterSub));
+    }
+
+    if (!updateSucceeded)
         return false;
 
     return true;
