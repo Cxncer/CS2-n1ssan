@@ -766,6 +766,13 @@ void RunGloves(uintptr_t pawn)
     if (g_gloveClearFrames > 0)
     {
         ClearGloves(pawn, item);
+
+        g_gloveLastWriteFrame = g_gloveFrame;
+
+        g_lastGloveDef = 0;
+        g_lastGlovePK = -1;
+        g_lastGloveTeam = team;
+
         --g_gloveClearFrames;
         return;
     }

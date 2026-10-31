@@ -1,5 +1,5 @@
 ﻿// n1ssan-dll / dllmain.cpp
-// v10.0.0 — beta 2.8 - Knife & Gloves Logic
+// v10.0.0 — beta 2.9 - Knife & Gloves Logic
 //
 // split into src/ modules
 //
