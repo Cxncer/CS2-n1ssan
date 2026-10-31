@@ -1,4 +1,3 @@
-
 #include "inventory/engine_schema_diagnostic.h"
 
 #include <windows.h>
@@ -10,6 +9,13 @@
 
 namespace
 {
+    struct InterfaceReg
+    {
+        void* (__cdecl* createFn)();
+        const char* name;
+        InterfaceReg* next;
+    };
+
     struct SchemaClassFieldData
     {
         const char* name;
@@ -58,7 +64,76 @@ namespace
         SchemaClassEntry* classes;
     };
 
-    using CreateInterfaceFn = void* (__cdecl*)(const char*, int*);
+    using FindTypeScopeFn =
+        SchemaTypeScope * (__fastcall*)(
+            void* schemaSystem,
+            const char* moduleName,
+            void* unknown);
+
+    uintptr_t g_cachedSubclassOffset = 0;
+
+    // Lootline's interface-list resolution.
+    void* GetRegisteredInterface(
+        const char* moduleName,
+        const char* partialName)
+    {
+        HMODULE module = GetModuleHandleA(moduleName);
+
+        if (!module || !partialName)
+            return nullptr;
+
+        auto createInterface =
+            reinterpret_cast<std::uint8_t*>(
+                GetProcAddress(module, "CreateInterface"));
+
+        if (!createInterface)
+            return nullptr;
+
+        InterfaceReg* current = nullptr;
+
+        __try
+        {
+            const uintptr_t symbol =
+                reinterpret_cast<uintptr_t>(createInterface);
+
+            const std::int32_t relative =
+                *reinterpret_cast<std::int32_t*>(
+                    createInterface + 3);
+
+            const uintptr_t listAddress =
+                symbol + relative + 7;
+
+            current =
+                *reinterpret_cast<InterfaceReg**>(listAddress);
+        }
+        __except (EXCEPTION_EXECUTE_HANDLER)
+        {
+            return nullptr;
+        }
+
+        while (current)
+        {
+            __try
+            {
+                if (current->name &&
+                    std::strstr(current->name, partialName))
+                {
+                    if (!current->createFn)
+                        return nullptr;
+
+                    return current->createFn();
+                }
+
+                current = current->next;
+            }
+            __except (EXCEPTION_EXECUTE_HANDLER)
+            {
+                return nullptr;
+            }
+        }
+
+        return nullptr;
+    }
 
     SchemaTypeScope* FindTypeScope(
         void* schemaSystem,
@@ -67,16 +142,23 @@ namespace
         if (!schemaSystem)
             return nullptr;
 
-        void** vtable = *reinterpret_cast<void***>(schemaSystem);
+        __try
+        {
+            void** vtable =
+                *reinterpret_cast<void***>(schemaSystem);
 
-        if (!vtable || !vtable[13])
+            if (!vtable || !vtable[13])
+                return nullptr;
+
+            auto fn =
+                reinterpret_cast<FindTypeScopeFn>(vtable[13]);
+
+            return fn(schemaSystem, moduleName, nullptr);
+        }
+        __except (EXCEPTION_EXECUTE_HANDLER)
+        {
             return nullptr;
-
-        using Fn = SchemaTypeScope * (__fastcall*)(
-            void*, const char*, void*);
-
-        return reinterpret_cast<Fn>(vtable[13])(
-            schemaSystem, moduleName, nullptr);
+        }
     }
 
     bool FindFieldOffset(
@@ -85,145 +167,132 @@ namespace
         const char* wantedField,
         std::uint32_t& offset)
     {
-        if (!scope || !scope->classes || scope->classCount == 0)
+        if (!scope || !wantedClass || !wantedField)
             return false;
 
-        for (std::uint16_t i = 0; i < scope->classCount; ++i)
+        __try
         {
-            auto* declaration = scope->classes[i].declaration;
-
-            if (!declaration ||
-                !declaration->name ||
-                std::strcmp(declaration->name, wantedClass) != 0)
-                continue;
-
-            auto* info = declaration->classInfo;
-
-            if (!info || !info->fields || info->fieldCount <= 0)
+            if (!scope->classes || scope->classCount == 0)
                 return false;
 
-            for (std::int16_t j = 0; j < info->fieldCount; ++j)
+            for (std::uint16_t i = 0; i < scope->classCount; ++i)
             {
-                const auto& field = info->fields[j];
+                auto* declaration =
+                    scope->classes[i].declaration;
 
-                if (field.name &&
-                    std::strcmp(field.name, wantedField) == 0)
+                if (!declaration ||
+                    !declaration->name ||
+                    std::strcmp(
+                        declaration->name,
+                        wantedClass) != 0)
                 {
-                    offset = field.singleInheritanceOffset;
-                    return true;
+                    continue;
                 }
-            }
 
+                auto* info = declaration->classInfo;
+
+                if (!info || !info->fields || info->fieldCount <= 0)
+                    return false;
+
+                for (std::int16_t j = 0; j < info->fieldCount; ++j)
+                {
+                    const auto& field = info->fields[j];
+
+                    if (field.name &&
+                        std::strcmp(
+                            field.name,
+                            wantedField) == 0)
+                    {
+                        offset = field.singleInheritanceOffset;
+                        return offset != 0 && offset < 0x10000;
+                    }
+                }
+
+                return false;
+            }
+        }
+        __except (EXCEPTION_EXECUTE_HANDLER)
+        {
             return false;
         }
 
         return false;
     }
+
+    void* GetSchemaSystem()
+    {
+        return GetRegisteredInterface(
+            "schemasystem.dll",
+            "SchemaSystem_00");
+    }
 }
 
-void RunEngineSchemaDiagnostic()
+
+// ============================================================
+// Runtime subclass offset resolver
+// ============================================================
+
+bool ResolveSubclassOffset(uintptr_t& offset)
 {
-    HMODULE module = GetModuleHandleA("schemasystem.dll");
-
-    if (!module)
+    if (g_cachedSubclassOffset)
     {
-        Log("[schema-live] schemasystem.dll not loaded; skipped");
-        return;
+        offset = g_cachedSubclassOffset;
+        return true;
     }
 
-    auto createInterface =
-        reinterpret_cast<CreateInterfaceFn>(
-            GetProcAddress(module, "CreateInterface"));
-
-    if (!createInterface)
-    {
-        Log("[schema-live] CreateInterface export missing");
-        return;
-    }
-
-    int returnCode = 0;
-
-    void* schemaSystem =
-        createInterface("SchemaSystem_00", &returnCode);
+    void* schemaSystem = GetSchemaSystem();
 
     if (!schemaSystem)
-    {
-        Log("[schema-live] SchemaSystem_00 unavailable (code=%d)",
-            returnCode);
-        return;
-    }
+        return false;
 
-    auto* scope =
+    SchemaTypeScope* scope =
         FindTypeScope(schemaSystem, "client.dll");
 
     if (!scope)
-    {
-        Log("[schema-live] client.dll type scope unavailable");
-        return;
-    }
+        return false;
 
     std::uint32_t runtimeOffset = 0;
 
     if (!FindFieldOffset(
         scope,
-        "C_CSPlayerPawn",
-        "m_EconGloves",
+        "C_BaseEntity",
+        "m_nSubclassID",
         runtimeOffset))
     {
-        Log("[schema-live] m_EconGloves not found");
+        return false;
+    }
+
+    g_cachedSubclassOffset = runtimeOffset;
+    offset = runtimeOffset;
+
+    Log(
+        "[schema-live] m_nSubclassID runtime=0x%llX "
+        "hardcoded=0x%llX %s",
+        static_cast<unsigned long long>(runtimeOffset),
+        static_cast<unsigned long long>(FB_BE_nSubclassID),
+        runtimeOffset == FB_BE_nSubclassID
+        ? "MATCH"
+        : "MISMATCH");
+
+    return true;
+}
+
+
+// ============================================================
+// Startup diagnostic
+// ============================================================
+
+void RunEngineSchemaDiagnostic()
+{
+    uintptr_t subclassOffset = 0;
+
+    if (!ResolveSubclassOffset(subclassOffset))
+    {
+        Log("[schema-live] subclass offset not available yet");
         return;
     }
 
     Log(
-        "[schema-live] m_EconGloves runtime=0x%X "
-        "hardcoded=0x%llX %s",
-        runtimeOffset,
-        static_cast<unsigned long long>(FB_PAWN_EconGloves),
-        runtimeOffset == FB_PAWN_EconGloves
-        ? "MATCH" : "MISMATCH");
-
-    std::uint32_t reapplyOffset = 0;
-
-    if (FindFieldOffset(
-        scope,
-        "C_CSPlayerPawn",
-        "m_bNeedToReApplyGloves",
-        reapplyOffset))
-    {
-        Log(
-            "[schema-live] m_bNeedToReApplyGloves "
-            "runtime=0x%X hardcoded=0x%llX %s",
-            reapplyOffset,
-            static_cast<unsigned long long>(
-                FB_PAWN_NeedReapplyGloves),
-            reapplyOffset == FB_PAWN_NeedReapplyGloves
-            ? "MATCH" : "MISMATCH");
-    }
-    else
-    {
-        Log("[schema-live] m_bNeedToReApplyGloves not found");
-    }
-
-    std::uint32_t subclassOffset = 0;
-
-    if (FindFieldOffset(
-        scope,
-        "C_BaseEntity",
-        "m_nSubclassID",
-        subclassOffset))
-    {
-        Log(
-            "[schema-live] m_nSubclassID runtime=0x%X "
-            "hardcoded=0x%llX %s",
-            subclassOffset,
-            static_cast<unsigned long long>(FB_BE_nSubclassID),
-            subclassOffset == FB_BE_nSubclassID
-            ? "MATCH" : "MISMATCH");
-    }
-    else
-    {
-        Log("[schema-live] m_nSubclassID NOT FOUND");
-    }
-
-    // Diagnostic only. Never assign runtime offsets to g_off.
+        "[schema-live] subclass resolver ready: 0x%llX",
+        static_cast<unsigned long long>(subclassOffset));
 }

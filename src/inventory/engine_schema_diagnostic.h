@@ -1,6 +1,10 @@
-
 #pragma once
 
-// Diagnostic-only lookup of live client.dll network-schema field offsets.
-// Does not modify g_off or perform pawn memory reads.
+#include <cstdint>
+
+// Resolve C_BaseEntity->m_nSubclassID from the live engine schema.
+// Returns false until schemasystem.dll and its type scope are available.
+bool ResolveSubclassOffset(uintptr_t& offset);
+
+// Optional startup diagnostic.
 void RunEngineSchemaDiagnostic();

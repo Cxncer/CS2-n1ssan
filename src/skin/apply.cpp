@@ -11,6 +11,7 @@
 #include "config/auto_offsets.h"
 #include "inventory/loot_schema.h"
 #include "memory/scanner.h"
+#include "inventory/engine_schema_diagnostic.h"
 
 #include <windows.h>
 #include <cmath>
@@ -724,12 +725,33 @@ bool KnifeApply(uintptr_t weaponEnt, uintptr_t view, uint16_t targetDef)
         !pKnifeUpdateSubclass)
         return false;
 
+    uintptr_t subclassOffset = 0;
+
+    if (!ResolveSubclassOffset(subclassOffset))
+        return false;
+
     int32_t curSub = 0;
+
     const bool subclassRead =
-        SafeReadI32(weaponEnt + g_off.BE_nSubclassID, curSub);
+        SafeReadI32(weaponEnt + subclassOffset, curSub);
 
     static unsigned int falchionDiagCount = 0;
-    const bool diag = targetDef == 512 && falchionDiagCount < 12;
+    const bool diag =
+        targetDef == 512 && falchionDiagCount < 12;
+
+    if (diag)
+    {
+        ++falchionDiagCount;
+
+        Log(
+            "[subclass-diag] BEFORE weapon=%p "
+            "runtimeOffset=0x%llX read=%d value=%u target=%u",
+            (void*)weaponEnt,
+            static_cast<unsigned long long>(subclassOffset),
+            subclassRead ? 1 : 0,
+            static_cast<unsigned int>(curSub),
+            targetSub);
+    }
 
     if (diag)
     {
@@ -760,7 +782,7 @@ bool KnifeApply(uintptr_t weaponEnt, uintptr_t view, uint16_t targetDef)
     // Then subclass.
     const bool subclassWritten =
         SafeWriteI32(
-            weaponEnt + g_off.BE_nSubclassID,
+            weaponEnt + subclassOffset,
             static_cast<int32_t>(targetSub));
 
     if (diag)
@@ -778,7 +800,7 @@ bool KnifeApply(uintptr_t weaponEnt, uintptr_t view, uint16_t targetDef)
 
     int32_t afterSub = 0;
     const bool afterRead =
-        SafeReadI32(weaponEnt + g_off.BE_nSubclassID, afterSub);
+        SafeReadI32(weaponEnt + subclassOffset, afterSub);
 
     if (diag)
     {
