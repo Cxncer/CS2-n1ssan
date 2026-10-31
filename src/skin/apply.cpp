@@ -522,10 +522,31 @@ bool KnifeApply(uintptr_t weaponEnt, uintptr_t view, uint16_t targetDef)
         Log("[knife] no model name for def=%u", targetDef);
     }
 
+    // Write the target knife subclass.
     SafeWriteI32(weaponEnt + g_off.BE_nSubclassID, (int32_t)targetSub);
 
+    // Verify the subclass immediately after writing.
+    int32_t verifySub = 0;
+    SafeReadI32(weaponEnt + g_off.BE_nSubclassID, verifySub);
+
+    Log("[knife-subclass] def=%u before=0x%08X target=0x%08X after-write=0x%08X",
+        targetDef,
+        (uint32_t)curSub,
+        targetSub,
+        (uint32_t)verifySub);
+
+    // Run the engine subclass update.
     if (pKnifeUpdateSubclass)
+    {
         CallUpdateSubclass(weaponEnt);
+    }
+
+    // Verify again after the engine update.
+    int32_t afterUpdateSub = 0;
+    SafeReadI32(weaponEnt + g_off.BE_nSubclassID, afterUpdateSub);
+
+    Log("[knife-subclass] after-update=0x%08X",
+        (uint32_t)afterUpdateSub);
 
     return true;
 }
