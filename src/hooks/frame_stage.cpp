@@ -57,6 +57,8 @@ static volatile LONG g_stage5Count = 0;
 static volatile LONG g_lastStage = -1;
 static volatile LONG g_stageHistogram[16] = {};
 
+static bool g_gloveUpdatePending = false;
+
 // ---- match state ----
 enum class MatchState { IDLE, IN_MATCH };
 static MatchState g_matchState = MatchState::IDLE;
@@ -287,6 +289,36 @@ static void __fastcall FsnDetour(void* pClient, int stage)
         GloveModelRefresh::OnRenderEnd();
     }
 
+    // Match Lootline: advance glove state once per network-update tick.
+    if (stage == 7 && g_enabled && !g_targets.empty())
+    {
+        const uintptr_t glovePawn = MatchdetectGetPawn();
+        int32_t gloveHp = 0;
+
+        if (glovePawn > 0x10000 &&
+            SafeReadI32(glovePawn + PAWN_OFF_HEALTH, gloveHp) &&
+            gloveHp > 0)
+        {
+            RunGloves(glovePawn);
+        }
+    }
+
+    if (GloveAppliedThisTick())
+    {
+        InvalidateWeaponModelCache();
+
+        if (pRegenerateSkins)
+        {
+            __try
+            {
+                pRegenerateSkins();
+            }
+            __except (1)
+            {
+            }
+        }
+    }
+
     // Preserve exactly one original FrameStageNotify call.
     if (g_origFsn)
     {
@@ -483,10 +515,8 @@ static void __fastcall FsnDetour(void* pClient, int stage)
         }
     }
 
-    // Gloves remain after weapons.
-    RunGloves(pawn);
-
-    const bool gloveUpdate = GloveAppliedThisTick();
+    const bool gloveUpdate = g_gloveUpdatePending;
+    g_gloveUpdatePending = false;
 
     if (gloveUpdate)
     {
