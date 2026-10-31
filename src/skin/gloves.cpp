@@ -582,6 +582,78 @@ void LogGloveModelSnapshot(uintptr_t pawn, const char* stage)
     );
 }
 
+static void DumpGloveHudArms(uintptr_t pawn)
+{
+    if (!pawn)
+        return;
+
+    uint32_t handle = 0;
+    if (!SafeReadU32(
+        pawn + g_off.PAWN_hHudModelArms,
+        handle))
+    {
+        Log("[glove-arms] handle read failed");
+        return;
+    }
+
+    if (!HandleValid(handle))
+    {
+        Log("[glove-arms] invalid handle=0x%08X", handle);
+        return;
+    }
+
+    uintptr_t arms = GetEntityByHandle(handle);
+    if (!arms)
+    {
+        Log("[glove-arms] unresolved handle=0x%08X", handle);
+        return;
+    }
+
+    uintptr_t model = GetModelPtr(arms);
+    uintptr_t namePtr = 0;
+
+    // Lootline C_Model layout:
+    // vtable at +0x00, perm_model_data.name at +0x08.
+    if (model >= 0x10000)
+        SafeReadQword(model + 0x08, namePtr);
+
+    char modelName[256]{};
+
+    if (namePtr >= 0x10000)
+    {
+        __try
+        {
+            for (size_t i = 0; i < sizeof(modelName) - 1; ++i)
+            {
+                modelName[i] =
+                    *reinterpret_cast<const char*>(namePtr + i);
+
+                if (modelName[i] == '\0')
+                    break;
+            }
+        }
+        __except (1)
+        {
+            modelName[0] = '\0';
+        }
+    }
+
+    uintptr_t sceneNode = 0;
+    SafeReadQword(
+        arms + g_off.BE_GameSceneNode,
+        sceneNode);
+
+    Log("[glove-arms] pawn=%p handle=0x%08X "
+        "entity=%p scene=%p model=%p namePtr=%p name=\"%s\"",
+        (void*)pawn,
+        handle,
+        (void*)arms,
+        (void*)sceneNode,
+        (void*)model,
+        (void*)namePtr,
+        modelName);
+}
+
 void RunGloves(uintptr_t pawn)
 {
     ++g_gloveFrame;
@@ -930,6 +1002,8 @@ void RunGloves(uintptr_t pawn)
     {
         Log("[glove] APPLIED def=%u pk=%d team=%u",
             desiredDef, pk, team);
+
+        DumpGloveHudArms(pawn);
 
         lastLoggedDef = desiredDef;
         lastLoggedPK = pk;
