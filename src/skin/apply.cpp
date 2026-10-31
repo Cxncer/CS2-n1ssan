@@ -200,24 +200,13 @@ bool ApplyWeaponSkin(uintptr_t weaponEnt, uintptr_t pawn, const TargetSkin& t)
     uintptr_t hudWeapon = FindHudWeapon(weaponEnt, pawn);
     if (hudWeapon)
     {
-        // For knives, set the model on the HUD weapon BEFORE mesh group / build.
-        // Without this, the CT HUD knife stays the vanilla mesh (invisible/orange).
-        if (IsKnifeDefinition(t.defIndex) && pAgentSetModel)
-        {
-            const auto& models = KnifeModelTable();
-            auto it = models.find(t.defIndex);
-            if (it != models.end())
-            {
-                __try { pAgentSetModel((void*)hudWeapon, it->second.c_str()); }
-                __except (1) {}
-                Log("[knife] HUD SetModel: %s", it->second.c_str());
-            }
-        }
+        // Existing HUD model / mesh / skin rebuild code...
 
         SetMeshGroup(hudWeapon, mask);
         CallBuildModernSkin(view, hudWeapon, "hud");
-        return !alreadyPainted;
     }
+
+    return !alreadyPainted;
 }
 
 // ---- Default ----
