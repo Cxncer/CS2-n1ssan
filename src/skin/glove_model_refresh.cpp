@@ -582,52 +582,19 @@ namespace
                 itemName.substr(
                     std::strlen("customplayer_"));
 
-            const std::string family =
-                AgentFamily(agentName);
-
-            if (!family.empty())
-            {
-                const std::string candidate =
-                    "agents/models/" +
-                    family +
-                    "/" +
-                    agentName +
-                    ".vmdl";
-
-                const std::string compiled =
-                    candidate + "_c";
-
-                if (FileExists(compiled.c_str()))
-                {
-                    ++existingModelCount;
-
-                    if (candidate != currentModel)
-                    {
-                        Log("[glove-model-refresh] candidate selected: %s",
-                            candidate.c_str());
-
-                        return candidate;
-                    }
-                }
-            }
-
-            // Fallback to the canonical model stored in the schema.
+            // Use the canonical model path stored in the item schema.
+// Do not reconstruct agent paths from family/name.
             if (schemaModel.rfind("agents/models/", 0) == 0)
             {
-                const std::string compiled =
-                    schemaModel + "_c";
+                const std::string compiled = schemaModel + "_c";
 
-                if (FileExists(compiled.c_str()))
+                if (FileExists(compiled.c_str()) &&
+                    schemaModel != currentModel)
                 {
-                    ++existingModelCount;
+                    Log("[glove-model-refresh] schema model selected: %s",
+                        schemaModel.c_str());
 
-                    if (schemaModel != currentModel)
-                    {
-                        Log("[glove-model-refresh] schema fallback selected: %s",
-                            schemaModel.c_str());
-
-                        return schemaModel;
-                    }
+                    return schemaModel;
                 }
             }
         }
