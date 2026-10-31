@@ -102,6 +102,165 @@ namespace
             oldState.meshMask == meshMask;
     }
 
+
+    // ============================================================
+    // Lootline parity: paint-kit UsesOldModel -> mesh mask
+    // ============================================================
+
+    uint32_t ReadPaintKitMapOffset()
+    {
+        const ModuleInfo client = GetClientModule();
+        if (!client.valid())
+            return 0;
+
+        // Same function pattern used by Lootline:
+        // Patterns::GloveCreatePaintKit
+        const uintptr_t address = ScanPattern(
+            client,
+            "48 89 5C 24 ? 56 48 83 EC ? 48 8B 01 FF 50");
+
+        if (!address)
+            return 0;
+
+        const auto* getPaintKit =
+            reinterpret_cast<const uint8_t*>(address);
+
+        __try
+        {
+            for (int i = 0; i < 0xC0; ++i)
+            {
+                const uint8_t* p = getPaintKit + i;
+
+                if (p[0] != 0x8B || p[1] != 0xD6 ||
+                    p[2] != 0x48 || p[3] != 0x8B ||
+                    p[4] != 0x5C || p[5] != 0x24 ||
+                    p[7] != 0x48 || p[8] != 0x83 ||
+                    p[9] != 0xC4 || p[11] != 0x5E ||
+                    p[12] != 0xE9)
+                    continue;
+
+                const uint8_t* lookup =
+                    p + 17 + *reinterpret_cast<const int32_t*>(p + 13);
+
+                for (int j = 0; j < 0x40; ++j)
+                {
+                    // cmp r8d, [rbx + disp32]
+                    if (lookup[j] == 0x44 &&
+                        lookup[j + 1] == 0x3B &&
+                        lookup[j + 2] == 0x83)
+                    {
+                        const uint32_t offset =
+                            *reinterpret_cast<const uint32_t*>(lookup + j + 3);
+
+                        return offset >= 0x100 && offset < 0x1000
+                            ? offset
+                            : 0;
+                    }
+                }
+
+                return 0;
+            }
+        }
+        __except (EXCEPTION_EXECUTE_HANDLER)
+        {
+            return 0;
+        }
+
+        return 0;
+    }
+
+    uint32_t PaintKitMapOffset()
+    {
+        static uint32_t cachedOffset = 0;
+
+        if (cachedOffset)
+            return cachedOffset;
+
+        cachedOffset = ReadPaintKitMapOffset();
+
+        // Lootline's CEconItemSchema layout fallback.
+        // m_PaintKits is at 0x2A0.
+        if (!cachedOffset)
+            cachedOffset = 0x2A0;
+
+        return cachedOffset;
+    }
+
+    bool GetPaintKitUsesOldModel(int paintKitId, bool& usesOldModel)
+    {
+        usesOldModel = false;
+
+        if (paintKitId <= 0 || !g_esResolved)
+            return false;
+
+        // g_esResolved points to CEconItemSystem.
+        uintptr_t schema = 0;
+
+        if (!SafeReadQword(g_esResolved + 0x08, schema) ||
+            schema < 0x10000)
+            return false;
+
+        const uintptr_t map =
+            schema + PaintKitMapOffset();
+
+        // C_EconUtlMap<int, CPaintKit*>
+        // count       +0x00
+        // elements    +0x08
+
+        int32_t count = 0;
+        uintptr_t elements = 0;
+
+        if (!SafeReadI32(map, count) ||
+            count <= 0 || count > 10000 ||
+            !SafeReadQword(map + 0x08, elements) ||
+            elements < 0x10000)
+            return false;
+
+        // Lootline's specialized Node_t:
+        // key         +0x10
+        // value       +0x18
+        // stride      0x20
+
+        for (int32_t i = 0; i < count; ++i)
+        {
+            const uintptr_t node =
+                elements + static_cast<uintptr_t>(i) * 0x20;
+
+            int32_t id = 0;
+            uintptr_t paintKit = 0;
+
+            if (!SafeReadI32(node + 0x10, id) ||
+                id != paintKitId)
+                continue;
+
+            if (!SafeReadQword(node + 0x18, paintKit) ||
+                paintKit < 0x10000)
+                return false;
+
+            // CPaintKit::m_UsesOldModel = 0xAE
+            uint8_t oldModel = 0;
+
+            if (!SafeReadU8(paintKit + 0xAE, oldModel))
+                return false;
+
+            usesOldModel = oldModel != 0;
+            return true;
+        }
+
+        return false;
+    }
+
+    uint64_t GetMeshMask(int paintKitId)
+    {
+        bool usesOldModel = false;
+
+        return GetPaintKitUsesOldModel(paintKitId, usesOldModel) &&
+            usesOldModel
+            ? 2ULL
+            : 1ULL;
+    }
+
+
     bool CallSetModel(uintptr_t weaponEnt, const char* modelName)
     {
         if (!weaponEnt || !modelName || !pAgentSetModel)
@@ -118,10 +277,20 @@ namespace
         }
     }
 
-    void CallUpdateSubclass(uintptr_t weaponEnt)
+    bool CallUpdateSubclass(uintptr_t weaponEnt)
     {
-        __try { pKnifeUpdateSubclass((void*)weaponEnt); }
-        __except (1) {}
+        if (!weaponEnt || !pKnifeUpdateSubclass)
+            return false;
+
+        __try
+        {
+            pKnifeUpdateSubclass(reinterpret_cast<void*>(weaponEnt));
+            return true;
+        }
+        __except (EXCEPTION_EXECUTE_HANDLER)
+        {
+            return false;
+        }
     }
 
     bool CallBuildModernSkin(uintptr_t item, uintptr_t entity, const char* which)
@@ -324,10 +493,7 @@ bool ApplyWeaponSkin(uintptr_t weaponEnt, uintptr_t pawn, const TargetSkin& t)
     // World / HUD model rebuild
     // --------------------------------------------------------
 
-    const uint64_t mask =
-        IsKnifeDefinition(t.defIndex)
-        ? 1ULL
-        : (t.legacyModel ? 2ULL : 1ULL);
+    const uint64_t mask = GetMeshMask(t.paintKit);
 
     const uintptr_t hudWeapon =
         FindHudWeapon(weaponEnt, pawn);
@@ -492,40 +658,62 @@ uint32_t GetKnifeSubclassId(uint16_t d)
     }
 }
 
+
 bool KnifeApply(uintptr_t weaponEnt, uintptr_t view, uint16_t targetDef)
 {
-    if (!weaponEnt || !view) return false;
+    if (!weaponEnt || !view)
+        return false;
 
     uint16_t curDef = 0;
-    if (!SafeReadU16(view + g_off.EIV_ItemDefIndex, curDef)) return false;
-    if (!IsKnifeDefinition(curDef) || targetDef < 500) return false;
+
+    if (!SafeReadU16(view + g_off.EIV_ItemDefIndex, curDef))
+        return false;
+
+    if (!IsKnifeDefinition(curDef) || targetDef < 500)
+        return false;
 
     const uint32_t targetSub = GetKnifeSubclassId(targetDef);
-    if (targetSub == 0) return false;
 
-    int32_t curSub = 0;
-    SafeReadI32(weaponEnt + g_off.BE_nSubclassID, curSub);
-    if (curDef == targetDef && (uint32_t)curSub == targetSub) return false;
-
-    SafeWriteI32(view + g_off.EIV_EntityQuality, 3);
-    SafeWriteU16(view + g_off.EIV_ItemDefIndex, targetDef);
+    if (targetSub == 0)
+        return false;
 
     const auto& models = KnifeModelTable();
-    auto it = models.find(targetDef);
-    if (it != models.end() && pAgentSetModel)
-    {
-        Log("[knife] SetModel: %s", it->second.c_str());
-        CallSetModel(weaponEnt, it->second.c_str());
-    }
-    else
-    {
-        Log("[knife] no model name for def=%u", targetDef);
-    }
+    const auto it = models.find(targetDef);
 
-    SafeWriteI32(weaponEnt + g_off.BE_nSubclassID, (int32_t)targetSub);
+    // Lootline requires a valid model and both engine functions.
+    if (it == models.end() ||
+        !pAgentSetModel ||
+        !pKnifeUpdateSubclass)
+        return false;
 
-    if (pKnifeUpdateSubclass)
-        CallUpdateSubclass(weaponEnt);
+    int32_t curSub = 0;
+    const bool subclassRead =
+        SafeReadI32(weaponEnt + g_off.BE_nSubclassID, curSub);
+
+    if (curDef == targetDef &&
+        subclassRead &&
+        static_cast<uint32_t>(curSub) == targetSub)
+        return false;
+
+    if (!SafeWriteI32(view + g_off.EIV_EntityQuality, 3) ||
+        !SafeWriteU16(view + g_off.EIV_ItemDefIndex, targetDef))
+        return false;
+
+    // Lootline order: model first.
+    Log("[knife] SetModel: %s", it->second.c_str());
+
+    if (!CallSetModel(weaponEnt, it->second.c_str()))
+        return false;
+
+    // Then subclass.
+    if (!SafeWriteI32(
+        weaponEnt + g_off.BE_nSubclassID,
+        static_cast<int32_t>(targetSub)))
+        return false;
+
+    // Finally UpdateSubclass.
+    if (!CallUpdateSubclass(weaponEnt))
+        return false;
 
     return true;
 }
