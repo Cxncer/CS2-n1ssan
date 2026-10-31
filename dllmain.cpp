@@ -1,6 +1,6 @@
 ﻿// n1ssan-dll / dllmain.cpp
-// v10.0.0 — beta 1.9 - Skins Cleanup
-// Push to Master
+// v10.0.0 — beta 2.0 - Knife Logic
+// 
 // split into src/ modules
 //
 // This file is now a 60-line skeleton. Everything functional lives in

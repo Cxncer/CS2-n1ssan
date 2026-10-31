@@ -21,7 +21,7 @@ namespace
     constexpr uint16_t DEFAULT_T_GLOVES = 5028;
     constexpr uint16_t DEFAULT_CT_GLOVES = 5029;
 
-    constexpr int GLOVE_APPLY_FRAMES = 1;
+    constexpr int GLOVE_APPLY_FRAMES = 4;
     constexpr int GLOVE_CLEAR_FRAMES = 2;
     constexpr uint64_t GLOVE_OWN_FLAG_FRAMES = 3;
 

@@ -204,5 +204,26 @@ void RunEngineSchemaDiagnostic()
         Log("[schema-live] m_bNeedToReApplyGloves not found");
     }
 
+    std::uint32_t subclassOffset = 0;
+
+    if (FindFieldOffset(
+        scope,
+        "C_BaseEntity",
+        "m_nSubclassID",
+        subclassOffset))
+    {
+        Log(
+            "[schema-live] m_nSubclassID runtime=0x%X "
+            "hardcoded=0x%llX %s",
+            subclassOffset,
+            static_cast<unsigned long long>(FB_BE_nSubclassID),
+            subclassOffset == FB_BE_nSubclassID
+            ? "MATCH" : "MISMATCH");
+    }
+    else
+    {
+        Log("[schema-live] m_nSubclassID NOT FOUND");
+    }
+
     // Diagnostic only. Never assign runtime offsets to g_off.
 }
