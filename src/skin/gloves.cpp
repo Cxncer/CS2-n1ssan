@@ -47,7 +47,7 @@ namespace
 
     float g_followUpSpawnTime = -1.0f;
     uint64_t g_spawnSeenAt = 0;
-    size_t g_followUpIdx = 3;
+    size_t g_followUpIdx = 0;
 
     constexpr uint64_t GLOVE_FOLLOWUP_MS[] = { 400, 1200, 3000 };
 
@@ -684,9 +684,7 @@ void RunGloves(uintptr_t pawn)
 
     if (teamChanged)
     {
-        GloveModelRefresh::Request();
-
-        Log("[glove-model-refresh] queued: team %u -> %u",
+        Log("[glove] team changed: %u -> %u",
             g_lastGloveTeam,
             team);
     }
@@ -731,9 +729,13 @@ void RunGloves(uintptr_t pawn)
         g_followUpIdx = 0;
     }
 
-    // TEMP DIAGNOSTIC: disable timed reapplication.
-// We want to observe the engine after the initial glove write.
-    followUp = false;
+    if (customSelection &&
+        g_followUpIdx < std::size(GLOVE_FOLLOWUP_MS) &&
+        now - g_spawnSeenAt >= GLOVE_FOLLOWUP_MS[g_followUpIdx])
+    {
+        followUp = true;
+        ++g_followUpIdx;
+    }
 
     const bool forced =
         g_gloveForceUpdate.exchange(false, std::memory_order_acq_rel);
@@ -854,7 +856,7 @@ void ResetGloves()
 
     g_followUpSpawnTime = -1.0f;
     g_spawnSeenAt = 0;
-    g_followUpIdx = 3;
+    g_followUpIdx = 0;
 }
 
 bool GloveAppliedThisTick()

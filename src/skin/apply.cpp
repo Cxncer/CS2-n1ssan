@@ -21,31 +21,87 @@
 
 namespace
 {
-    const std::unordered_map<uint16_t, std::string>& KnifeModelTable()
+    bool ReadSchemaString(uintptr_t address, std::string& output)
     {
-        static const std::unordered_map<uint16_t, std::string> table = {
-            {500, "weapons/models/knife/knife_bayonet/weapon_knife_bayonet.vmdl"},
-            {503, "weapons/models/knife/knife_css/weapon_knife_css.vmdl"},
-            {505, "weapons/models/knife/knife_flip/weapon_knife_flip.vmdl"},
-            {506, "weapons/models/knife/knife_gut/weapon_knife_gut.vmdl"},
-            {507, "weapons/models/knife/knife_karambit/weapon_knife_karambit.vmdl"},
-            {508, "weapons/models/knife/knife_m9_bayonet/weapon_knife_m9_bayonet.vmdl"},
-            {509, "weapons/models/knife/knife_tactical/weapon_knife_tactical.vmdl"},
-            {512, "weapons/models/knife/knife_falchion_advanced/weapon_knife_falchion_advanced.vmdl"},
-            {514, "weapons/models/knife/knife_survival_bowie/weapon_knife_survival_bowie.vmdl"},
-            {515, "weapons/models/knife/knife_butterfly/weapon_knife_butterfly.vmdl"},
-            {516, "weapons/models/knife/knife_push/weapon_knife_push.vmdl"},
-            {517, "weapons/models/knife/knife_cord/weapon_knife_cord.vmdl"},
-            {518, "weapons/models/knife/knife_canis/weapon_knife_canis.vmdl"},
-            {519, "weapons/models/knife/knife_ursus/weapon_knife_ursus.vmdl"},
-            {520, "weapons/models/knife/knife_gypsy_jackknife/weapon_knife_gypsy_jackknife.vmdl"},
-            {521, "weapons/models/knife/knife_outdoor/weapon_knife_outdoor.vmdl"},
-            {522, "weapons/models/knife/knife_stiletto/weapon_knife_stiletto.vmdl"},
-            {523, "weapons/models/knife/knife_widowmaker/weapon_knife_widowmaker.vmdl"},
-            {525, "weapons/models/knife/knife_skeleton/weapon_knife_skeleton.vmdl"},
-            {526, "weapons/models/knife/knife_kukri/weapon_knife_kukri.vmdl"},
-        };
-        return table;
+        output.clear();
+
+        if (!address)
+            return false;
+
+        for (size_t i = 0; i < 512; ++i)
+        {
+            uint8_t ch = 0;
+
+            if (!SafeReadU8(address + i, ch))
+            {
+                output.clear();
+                return false;
+            }
+
+            if (ch == 0)
+                return !output.empty();
+
+            output.push_back(static_cast<char>(ch));
+        }
+
+        output.clear();
+        return false;
+    }
+
+    bool GetKnifeModelName(uint16_t definitionIndex, std::string& modelName)
+    {
+        modelName.clear();
+
+        if (!g_esResolved)
+            return false;
+
+        // CEconItemSystem -> CEconItemSchema
+        uintptr_t schema = 0;
+
+        if (!SafeReadQword(g_esResolved + 0x08, schema) ||
+            schema < 0x10000)
+            return false;
+
+        // CEconItemSchema::m_SortedItemDefinitions = +0xF8
+        const uintptr_t map = schema + 0xF8;
+
+        int32_t count = 0;
+        uintptr_t elements = 0;
+
+        if (!SafeReadI32(map, count) ||
+            count <= 0 || count > 10000 ||
+            !SafeReadQword(map + 0x08, elements) ||
+            elements < 0x10000)
+            return false;
+
+        // C_EconUtlMap<int, CEconItemDefinition*>
+        // Node: value +0x08, key +0x14, stride 0x18.
+        for (int32_t i = 0; i < count; ++i)
+        {
+            const uintptr_t node =
+                elements + static_cast<uintptr_t>(i) * 0x18;
+
+            int32_t key = 0;
+            uintptr_t definition = 0;
+
+            if (!SafeReadI32(node + 0x14, key) ||
+                key != definitionIndex)
+                continue;
+
+            if (!SafeReadQword(node + 0x08, definition) ||
+                definition < 0x10000)
+                return false;
+
+            // CEconItemDefinition::m_ModelName = +0x148
+            uintptr_t modelNamePtr = 0;
+
+            if (!SafeReadQword(definition + 0x148, modelNamePtr))
+                return false;
+
+            return ReadSchemaString(modelNamePtr, modelName);
+        }
+
+        return false;
     }
 
     struct WeaponModelCacheEntry
@@ -566,43 +622,26 @@ bool ApplyWeaponSkin(uintptr_t weaponEnt, uintptr_t pawn, const TargetSkin& t)
         bool hudBuilt = (hudWeapon == 0);
         bool hudModelReady = true;
 
-        if (hudWeapon)
+        if (IsKnifeDefinition(t.defIndex))
         {
-            // Restore the original HUD knife model operation.
-            // It MUST happen before mesh-group/material rebuilding.
-            if (IsKnifeDefinition(t.defIndex))
+            std::string modelName;
+
+            if (GetKnifeModelName(t.defIndex, modelName))
             {
-                const auto& models = KnifeModelTable();
-                const auto modelIt = models.find(t.defIndex);
+                hudModelReady =
+                    CallSetModel(hudWeapon, modelName.c_str());
 
-                if (modelIt != models.end())
-                {
-                    hudModelReady =
-                        CallSetModel(hudWeapon, modelIt->second.c_str());
-
-                    if (hudModelReady)
-                    {
-                        Log("[knife] HUD SetModel: %s",
-                            modelIt->second.c_str());
-                    }
-                }
-                else
-                {
-                    hudModelReady = false;
-
-                    Log("[knife] HUD model path missing for def=%u",
-                        t.defIndex);
-                }
+                if (hudModelReady)
+                    Log("[knife] HUD SetModel (schema): %s",
+                        modelName.c_str());
             }
-
-            if (t.defIndex == 512)
+            else
             {
-                Log("[mesh-diag] HUD entity=%p mask=%llu",
-                    (void*)hudWeapon,
-                    static_cast<unsigned long long>(mask));
-            }
+                hudModelReady = false;
 
-            SetMeshGroup(hudWeapon, mask);
+                Log("[knife] schema model missing for def=%u",
+                    t.defIndex);
+            }
         }
 
         // Only cache a completed rebuild. If a required function
@@ -716,14 +755,15 @@ bool KnifeApply(uintptr_t weaponEnt, uintptr_t view, uint16_t targetDef)
     if (targetSub == 0)
         return false;
 
-    const auto& models = KnifeModelTable();
-    const auto it = models.find(targetDef);
+    std::string modelName;
 
-    // Lootline requires a valid model and both engine functions.
-    if (it == models.end() ||
+    if (!GetKnifeModelName(targetDef, modelName) ||
         !pAgentSetModel ||
         !pKnifeUpdateSubclass)
+    {
+        Log("[knife] schema lookup failed for def=%u", targetDef);
         return false;
+    }
 
     uintptr_t subclassOffset = 0;
 
@@ -774,11 +814,11 @@ bool KnifeApply(uintptr_t weaponEnt, uintptr_t view, uint16_t targetDef)
         !SafeWriteU16(view + g_off.EIV_ItemDefIndex, targetDef))
         return false;
 
-    // Lootline order: model first.
-    Log("[knife] SetModel: %s", it->second.c_str());
+    Log("[knife] SetModel (schema): %s", modelName.c_str());
 
-    if (!CallSetModel(weaponEnt, it->second.c_str()))
+    if (!CallSetModel(weaponEnt, modelName.c_str()))
         return false;
+
     // Then subclass.
     const bool subclassWritten =
         SafeWriteI32(
