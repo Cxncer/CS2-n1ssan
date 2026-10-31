@@ -11,7 +11,7 @@
 
 #include <string>
 
-void ProcessWeapon(uintptr_t weaponEnt, uintptr_t pawn)
+bool ProcessWeapon(uintptr_t weaponEnt, uintptr_t pawn)
 {
     const uintptr_t view = GetWeaponItem(weaponEnt);
 
@@ -39,7 +39,7 @@ void ProcessWeapon(uintptr_t weaponEnt, uintptr_t pawn)
 
     uint16_t def = 0;
     if (!SafeReadU16(view + g_off.EIV_ItemDefIndex, def) || def == 0)
-        return;
+        return false;
 
     Log("[pw] weapon 0x%p def=%u", (void*)weaponEnt, def);
 
@@ -70,15 +70,22 @@ void ProcessWeapon(uintptr_t weaponEnt, uintptr_t pawn)
                 break;
             }
         }
-        if (kfound) {
-            Log("[pw] knife: applying %s (pk=%d target def=%u)", kt.skinName.c_str(), kt.paintKit, kt.defIndex);
-            KnifeApply(weaponEnt, view, kt.defIndex);
-            ApplyWeaponSkin(weaponEnt, pawn, kt);
+        if (kfound)
+        {
+            Log("[pw] knife: applying %s (pk=%d target def=%u)",
+                kt.skinName.c_str(), kt.paintKit, kt.defIndex);
+
+            const bool knifeChanged =
+                KnifeApply(weaponEnt, view, kt.defIndex);
+
+            const bool skinChanged =
+                ApplyWeaponSkin(weaponEnt, pawn, kt);
+
+            return knifeChanged || skinChanged;
         }
-        else {
-            Log("[pw] knife: no target for team '%s'", teamStr);
-        }
-        return;
+
+        Log("[pw] knife: no target for team '%s'", teamStr);
+        return false;
     }
 
     // Weapon: strict team lookup, then any-team
@@ -92,8 +99,14 @@ void ProcessWeapon(uintptr_t weaponEnt, uintptr_t pawn)
         if (itAny != g_targets.end()) { t = itAny->second; found = true; Log("[pw] matched any-team"); }
     }
 
-    if (!found) { Log("[pw] NO TARGET def=%u team=%s", def, teamStr); return; }
+    if (!found)
+    {
+        Log("[pw] NO TARGET def=%u team=%s", def, teamStr);
+        return false;
+    }
 
-    Log("[pw] applying %s (pk=%d def=%u)", t.skinName.c_str(), t.paintKit, t.defIndex);
-    ApplyWeaponSkin(weaponEnt, pawn, t);
+    Log("[pw] applying %s (pk=%d def=%u)",
+        t.skinName.c_str(), t.paintKit, t.defIndex);
+
+    return ApplyWeaponSkin(weaponEnt, pawn, t);
 }

@@ -1,5 +1,5 @@
 ﻿// n1ssan-dll / dllmain.cpp
-// v10.0.0 — beta 1.7 - Gloves Solver
+// v10.0.0 — beta 1.8 - Gloves Solver - reduce regeneration time
 // split into src/ modules
 //
 // This file is now a 60-line skeleton. Everything functional lives in

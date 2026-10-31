@@ -8,4 +8,4 @@
 // Look up the target for `weaponEnt`'s def index under the pawn's team.
 // If found: knife → KnifeApply + ApplyWeaponSkin; weapon → ApplyWeaponSkin.
 // If not found: no-op.
-void ProcessWeapon(uintptr_t weaponEnt, uintptr_t pawn);
+bool ProcessWeapon(uintptr_t weaponEnt, uintptr_t pawn);

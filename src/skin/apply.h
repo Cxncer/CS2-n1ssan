@@ -7,10 +7,8 @@
 #include <cstdint>
 #include "inventory/loadout.h"
 
-// Apply the target's paint kit to the weapon entity and its HUD weapon.
-// Writes item identity, fallbacks, attributes, mesh group, then calls
-// BuildModernSkin on both weapon and HUD weapon. Logs each step.
-void ApplyWeaponSkin(uintptr_t weaponEnt, uintptr_t pawn, const TargetSkin& t);
+// Returns true when the weapon's skin identity/fallback data needed updating.
+bool ApplyWeaponSkin(uintptr_t weaponEnt, uintptr_t pawn, const TargetSkin& t);
 
 // Reset a weapon to its default state (no paint, no attributes, no name).
 void ApplyDefault(uintptr_t weaponEnt);

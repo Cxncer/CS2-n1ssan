@@ -45,6 +45,7 @@ static constexpr uintptr_t GES_OFF_CHUNK_STRIDE = 0x70;
 static constexpr uint32_t  CTRL_OFF_PLAYERPAWN = 0x92C;
 static constexpr uintptr_t PAWN_OFF_HEALTH = 0x34C;
 static constexpr int       VT_SOURCE2CLIENT_FSN = 36;
+static constexpr uint64_t SKIN_APPLY_INTERVAL_MS = 250;
 
 // ---- matchdetect state (verbatim) ----
 typedef void(__fastcall* Fsn_t)(void* client, int stage);
@@ -353,8 +354,13 @@ static void __fastcall FsnDetour(void* pClient, int stage)
         return;
     }
 
-    // ---- IN_MATCH: apply cadence 1s ----
-    if (now - g_lastApplyMs < 1000) return;
+    // ---- IN_MATCH: Phase C apply cadence ----
+    if (g_lastApplyMs != 0 &&
+        now - g_lastApplyMs < SKIN_APPLY_INTERVAL_MS)
+    {
+        return;
+    }
+
     g_lastApplyMs = now;
     Log("[apply] tick pawn=0x%p", (void*)pawn);
 
@@ -395,52 +401,96 @@ static void __fastcall FsnDetour(void* pClient, int stage)
     // gloves, the glove pass wipes it out and the knife becomes
     // invisible on HUD.
     // ============================================================
+    // ============================================================
+// Phase C: only report actual skin-state changes.
+// Weapons remain before gloves because glove body-group
+// rebuilding can invalidate the knife HUD meshes.
+// ============================================================
+
     bool didUpdate = false;
 
-    if (HandleValid(activeHandle)) {
+    if (HandleValid(activeHandle))
+    {
         uintptr_t active = GetEntityByHandle(activeHandle);
-        if (active) {
+
+        if (active)
+        {
             Log("[apply] active 0x%p", (void*)active);
-            __try { ProcessWeapon(active, pawn); didUpdate = true; }
-            __except (1) { Log("[apply] exception active"); }
+
+            __try
+            {
+                if (ProcessWeapon(active, pawn))
+                    didUpdate = true;
+            }
+            __except (1)
+            {
+                Log("[apply] exception active");
+            }
         }
     }
 
-    if (wCount > 0 && wCount <= 32 && wData >= 0x10000) {
-        for (int32_t i = 0; i < wCount; ++i) {
+    if (wCount > 0 && wCount <= 32 && wData >= 0x10000)
+    {
+        for (int32_t i = 0; i < wCount; ++i)
+        {
             uint32_t h = 0;
-            if (!SafeReadU32(wData + i * 4, h) || !HandleValid(h)) continue;
-            uintptr_t w = GetEntityByHandle(h);
-            if (!w) continue;
-            if (h == activeHandle) continue;
-            Log("[apply] owned 0x%p (h=0x%08X)", (void*)w, h);
-            __try { ProcessWeapon(w, pawn); didUpdate = true; }
-            __except (1) { Log("[apply] exception owned"); }
+
+            if (!SafeReadU32(wData + i * 4, h) ||
+                !HandleValid(h))
+                continue;
+
+            if (h == activeHandle)
+                continue;
+
+            uintptr_t weapon = GetEntityByHandle(h);
+
+            if (!weapon)
+                continue;
+
+            Log("[apply] owned 0x%p (h=0x%08X)",
+                (void*)weapon, h);
+
+            __try
+            {
+                if (ProcessWeapon(weapon, pawn))
+                    didUpdate = true;
+            }
+            __except (1)
+            {
+                Log("[apply] exception owned");
+            }
         }
     }
 
-    // ---- Now apply gloves ----
+    // Gloves remain after weapons.
     RunGloves(pawn);
 
     const bool gloveUpdate = GloveAppliedThisTick();
 
-    Log("[apply-diagnostic] didUpdate=%d gloveUpdate=%d regenAvailable=%d",
+    Log("[apply-diagnostic] weaponChanged=%d gloveUpdate=%d regenAvailable=%d",
         (int)didUpdate,
         (int)gloveUpdate,
         (int)(pRegenerateSkins != nullptr));
 
-    if (didUpdate && pRegenerateSkins) {
+    // Regenerate only when an actual weapon/knife skin identity changed
+    // or the glove runtime successfully applied a new configuration.
+    if ((didUpdate || gloveUpdate) && pRegenerateSkins)
+    {
         Log("[skin-regenerate] calling pRegenerateSkins "
-            "reason=weapon-update gloveUpdate=%d",
+            "weaponChanged=%d gloveUpdate=%d",
+            (int)didUpdate,
             (int)gloveUpdate);
 
-        __try {
+        __try
+        {
             pRegenerateSkins();
+
             Log("[skin-regenerate] returned");
 
             LogGloveModelSnapshot(pawn, "AFTER-REGENERATE");
         }
-        __except (1) {
+        __except (1)
+        {
             Log("[skin-regenerate] exception");
         }
     }

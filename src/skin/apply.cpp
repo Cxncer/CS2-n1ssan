@@ -167,12 +167,12 @@ namespace
 }
 
 // ---- Weapon ----
-void ApplyWeaponSkin(uintptr_t weaponEnt, uintptr_t pawn, const TargetSkin& t)
+bool ApplyWeaponSkin(uintptr_t weaponEnt, uintptr_t pawn, const TargetSkin& t)
 {
-    if (!weaponEnt || !pawn) return;
+    if (!weaponEnt || !pawn) return false;
 
     const uintptr_t view = GetWeaponItem(weaponEnt);
-    if (!view) return;
+    if (!view) return false;
 
     const int wantQuality = IsKnifeDefinition(t.defIndex) ? 3 : (t.statTrak ? 9 : 0);
     const int wantStatTrak = t.statTrak ? 0 : -1;
@@ -216,6 +216,7 @@ void ApplyWeaponSkin(uintptr_t weaponEnt, uintptr_t pawn, const TargetSkin& t)
 
         SetMeshGroup(hudWeapon, mask);
         CallBuildModernSkin(view, hudWeapon, "hud");
+        return !alreadyPainted;
     }
 }
 
