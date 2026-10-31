@@ -460,25 +460,53 @@ namespace
         if (!pawn)
             return;
 
-        // C_NetworkUtlVectorBase<CHandle<C_EconWearable>>
-        const uintptr_t vector = pawn + g_off.PAWN_MyWearables;
-
-        int32_t count = 0;
-        uintptr_t data = 0;
-
-        if (!SafeReadI32(vector, count) ||
-            !SafeReadQword(vector + 0x08, data))
+        if (!g_off.PAWN_MyWearables)
         {
-            Log("[wearable-dump] vector header read failed");
+            Log("[wearable-dump] PAWN_MyWearables offset is zero");
             return;
         }
 
-        Log("[wearable-dump] pawn=%p count=%d data=%p",
-            (void*)pawn, count, (void*)data);
+        // C_NetworkUtlVectorBase<CHandle<C_EconWearable>>
+        //
+        // Source-style CUtlVector layout begins with the data pointer,
+        // followed by the current element count.
+        const uintptr_t vector =
+            pawn + g_off.PAWN_MyWearables;
 
-        if (count < 0 || count > 32 || (count > 0 && !data))
+        uintptr_t data = 0;
+        int32_t count = 0;
+
+        if (!SafeReadQword(vector, data) ||
+            !SafeReadI32(vector + 0x08, count))
         {
-            Log("[wearable-dump] invalid vector; aborting");
+            Log("[wearable-dump] vector header read failed vector=%p",
+                (void*)vector);
+            return;
+        }
+
+        Log("[wearable-dump] pawn=%p vector=%p data=%p count=%d",
+            (void*)pawn,
+            (void*)vector,
+            (void*)data,
+            count);
+
+        if (count < 0 || count > 32)
+        {
+            Log("[wearable-dump] invalid count=%d; aborting",
+                count);
+            return;
+        }
+
+        if (count == 0)
+        {
+            Log("[wearable-dump] no wearables");
+            return;
+        }
+
+        if (!data)
+        {
+            Log("[wearable-dump] count=%d but data is null",
+                count);
             return;
         }
 
@@ -487,26 +515,31 @@ namespace
             uint32_t handle = 0;
 
             if (!SafeReadU32(
-                data + static_cast<uintptr_t>(i) * sizeof(uint32_t),
+                data +
+                static_cast<uintptr_t>(i) * sizeof(uint32_t),
                 handle))
             {
-                Log("[wearable-dump] index=%d handle read failed", i);
+                Log("[wearable-dump] index=%d handle read failed",
+                    i);
                 continue;
             }
 
             if (!HandleValid(handle))
             {
                 Log("[wearable-dump] index=%d invalid handle=0x%08X",
-                    i, handle);
+                    i,
+                    handle);
                 continue;
             }
 
-            uintptr_t entity = GetEntityByHandle(handle);
+            uintptr_t entity =
+                GetEntityByHandle(handle);
 
             if (!entity)
             {
                 Log("[wearable-dump] index=%d handle=0x%08X unresolved",
-                    i, handle);
+                    i,
+                    handle);
                 continue;
             }
 
@@ -516,25 +549,41 @@ namespace
 
             SafeReadQword(entity, vtable);
 
-            // Candidate C_EconEntity -> C_AttributeContainer -> m_Item.
-            uintptr_t item =
-                entity + g_off.EE_AttrManager + g_off.AC_Item;
+            // C_EconEntity -> C_AttributeContainer -> m_Item
+            const uintptr_t item =
+                entity +
+                g_off.EE_AttrManager +
+                g_off.AC_Item;
 
-            SafeReadU16(item + g_off.EIV_ItemDefIndex, def);
-            SafeReadI32(item + g_off.EIV_EntityQuality, quality);
+            SafeReadU16(
+                item + g_off.EIV_ItemDefIndex,
+                def);
+
+            SafeReadI32(
+                item + g_off.EIV_EntityQuality,
+                quality);
 
             uintptr_t owner = 0;
+
             SafeReadQword(
-                entity + g_off.BE_hOwnerEntity, owner);
+                entity + g_off.BE_hOwnerEntity,
+                owner);
 
             Log("[wearable-dump] index=%d handle=0x%08X "
                 "entity=%p vtable=%p owner=%p item=%p "
                 "def=%u quality=%d",
-                i, handle,
-                (void*)entity, (void*)vtable, (void*)owner,
-                (void*)item, def, quality);
+                i,
+                handle,
+                (void*)entity,
+                (void*)vtable,
+                (void*)owner,
+                (void*)item,
+                def,
+                quality);
 
-            LogGloveAttributeSnapshot(item, "WEARABLE-ENTITY");
+            LogGloveAttributeSnapshot(
+                item,
+                "WEARABLE-ENTITY");
         }
     }
 }
