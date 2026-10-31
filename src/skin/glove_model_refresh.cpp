@@ -8,6 +8,7 @@
 #include "memory/access.h"
 #include "memory/scanner.h"
 #include "diagnostics/log.h"
+#include "skin/apply.h"
 
 #include <Windows.h>
 #include <atomic>
@@ -16,6 +17,7 @@
 #include <cstdlib>
 #include <cstring>
 #include <string>
+#include <utility>
 
 namespace
 {
@@ -714,6 +716,8 @@ namespace
                 Log("[glove-model-refresh] original model restored: %s",
                     g_restoreModel.c_str());
 
+                InvalidateWeaponModelCache();
+
                 ClearSwapState();
             }
             else
@@ -795,6 +799,7 @@ namespace
             g_request.store(true, std::memory_order_release);
             return;
         }
+        InvalidateWeaponModelCache();
 
         // Save the exact model path only after the alternate setter
         // succeeds. The next render-end restores this exact path.

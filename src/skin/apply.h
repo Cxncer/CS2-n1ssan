@@ -21,3 +21,7 @@ uint32_t GetKnifeSubclassId(uint16_t d);
 // Change the weapon's model + subclass to the target knife definition.
 // Returns true if the entity was modified.
 bool KnifeApply(uintptr_t weaponEnt, uintptr_t view, uint16_t targetDef);
+
+// Invalidate cached weapon world/HUD model state.
+// Call after glove body-group changes, pawn changes, or model swaps.
+void InvalidateWeaponModelCache();

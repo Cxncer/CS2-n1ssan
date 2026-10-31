@@ -16,6 +16,7 @@
 #include <cmath>
 #include <string>
 #include <unordered_map>
+#include <utility>
 
 namespace
 {
@@ -46,10 +47,75 @@ namespace
         return table;
     }
 
-    void CallSetModel(uintptr_t weaponEnt, const char* modelName)
+    struct WeaponModelCacheEntry
     {
-        __try { pAgentSetModel((void*)weaponEnt, modelName); }
-        __except (1) {}
+        uintptr_t view = 0;
+        uintptr_t pawn = 0;
+        uintptr_t hudWeapon = 0;
+
+        uint16_t defIndex = 0;
+
+        int paintKit = 0;
+        int seed = 0;
+        int statTrak = 0;
+        int quality = 0;
+
+        float wear = 0.0f;
+
+        bool legacyModel = false;
+        uint64_t meshMask = 0;
+    };
+
+    struct WeaponNameCacheEntry
+    {
+        uintptr_t view = 0;
+        uint16_t defIndex = 0;
+        int paintKit = 0;
+        std::string skinName;
+    };
+
+    static std::unordered_map<uintptr_t, WeaponModelCacheEntry>
+        g_weaponModelCache;
+
+    static std::unordered_map<uintptr_t, WeaponNameCacheEntry>
+        g_weaponNameCache;
+
+    bool SameModelState(
+        const WeaponModelCacheEntry& oldState,
+        uintptr_t view,
+        uintptr_t pawn,
+        uintptr_t hudWeapon,
+        const TargetSkin& t,
+        int wantQuality,
+        uint64_t meshMask)
+    {
+        return oldState.view == view &&
+            oldState.pawn == pawn &&
+            oldState.hudWeapon == hudWeapon &&
+            oldState.defIndex == t.defIndex &&
+            oldState.paintKit == t.paintKit &&
+            oldState.seed == t.resolvedSeed &&
+            oldState.statTrak == (t.statTrak ? 0 : -1) &&
+            oldState.quality == wantQuality &&
+            std::fabsf(oldState.wear - t.wear) < 0.000001f &&
+            oldState.legacyModel == t.legacyModel &&
+            oldState.meshMask == meshMask;
+    }
+
+    bool CallSetModel(uintptr_t weaponEnt, const char* modelName)
+    {
+        if (!weaponEnt || !modelName || !pAgentSetModel)
+            return false;
+
+        __try
+        {
+            pAgentSetModel(reinterpret_cast<void*>(weaponEnt), modelName);
+            return true;
+        }
+        __except (1)
+        {
+            return false;
+        }
     }
 
     void CallUpdateSubclass(uintptr_t weaponEnt)
@@ -58,17 +124,24 @@ namespace
         __except (1) {}
     }
 
-    void CallBuildModernSkin(uintptr_t item, uintptr_t entity, const char* which)
+    bool CallBuildModernSkin(uintptr_t item, uintptr_t entity, const char* which)
     {
-        if (!pBuildModernSkin) return;
+        if (!pBuildModernSkin || !item || !entity)
+            return false;
 
         __try
         {
-            pBuildModernSkin((void*)item, (void*)entity, 0, 2048, 0, 0, nullptr);
+            pBuildModernSkin(
+                reinterpret_cast<void*>(item),
+                reinterpret_cast<void*>(entity),
+                0, 2048, 0, 0, nullptr);
+
+            return true;
         }
         __except (1)
         {
             Log("[apply] %s BuildModernSkin THREW", which);
+            return false;
         }
     }
 
@@ -166,46 +239,195 @@ namespace
     }
 }
 
+void InvalidateWeaponModelCache()
+{
+    g_weaponModelCache.clear();
+
+    Log("[apply-cache] weapon model cache invalidated");
+}
+
 // ---- Weapon ----
 bool ApplyWeaponSkin(uintptr_t weaponEnt, uintptr_t pawn, const TargetSkin& t)
 {
-    if (!weaponEnt || !pawn) return false;
+    if (!weaponEnt || !pawn)
+        return false;
 
     const uintptr_t view = GetWeaponItem(weaponEnt);
-    if (!view) return false;
 
-    const int wantQuality = IsKnifeDefinition(t.defIndex) ? 3 : (t.statTrak ? 9 : 0);
+    if (!view)
+        return false;
+
+    const int wantQuality =
+        IsKnifeDefinition(t.defIndex) ? 3 : (t.statTrak ? 9 : 0);
+
     const int wantStatTrak = t.statTrak ? 0 : -1;
 
-    const bool alreadyPainted = IsAlreadyApplied(weaponEnt, view, t);
+    const bool alreadyPainted =
+        IsAlreadyApplied(weaponEnt, view, t);
+
+    bool viewWritten = false;
 
     if (!alreadyPainted)
     {
-        Log("[apply] enter (weapon=0x%p def=%u pk=%d)", (void*)weaponEnt, t.defIndex, t.paintKit);
+        Log("[apply] enter (weapon=0x%p def=%u pk=%d)",
+            (void*)weaponEnt, t.defIndex, t.paintKit);
 
         SafeWriteI32(weaponEnt + g_off.EE_FallbackPK, t.paintKit);
         SafeWriteI32(weaponEnt + g_off.EE_FallbackSeed, t.resolvedSeed);
         SafeWriteFloat(weaponEnt + g_off.EE_FallbackWear, t.wear);
         SafeWriteI32(weaponEnt + g_off.EE_FallbackStatTrak, wantStatTrak);
 
-        WriteViewSafely(view, t, wantQuality, wantStatTrak, "world");
+        viewWritten = WriteViewSafely(
+            view,
+            t,
+            wantQuality,
+            wantStatTrak,
+            "world");
     }
 
-    // ALWAYS rebuild models — the knife HUD needs every tick.
-    const uint64_t mask = IsKnifeDefinition(t.defIndex) ? 1ULL : (t.legacyModel ? 2ULL : 1ULL);
+    // --------------------------------------------------------
+    // Skin-name / item-description cache
+    // --------------------------------------------------------
 
-    SetMeshGroup(weaponEnt, mask);
-    CallBuildModernSkin(view, weaponEnt, "world");
+    auto nameIt = g_weaponNameCache.find(weaponEnt);
 
-    uintptr_t hudWeapon = FindHudWeapon(weaponEnt, pawn);
-    if (hudWeapon)
+    const bool nameChanged =
+        nameIt == g_weaponNameCache.end() ||
+        nameIt->second.view != view ||
+        nameIt->second.defIndex != t.defIndex ||
+        nameIt->second.paintKit != t.paintKit ||
+        nameIt->second.skinName != t.skinName;
+
+    // WriteViewSafely already invalidates the description when
+    // it successfully writes the item view.
+    //
+    // If it skipped game-owned attributes, or the skin was
+    // already painted but the desired name changed, invalidate
+    // the description explicitly.
+    if (nameChanged && (alreadyPainted || !viewWritten))
     {
-        // Existing HUD model / mesh / skin rebuild code...
-
-        SetMeshGroup(hudWeapon, mask);
-        CallBuildModernSkin(view, hudWeapon, "hud");
+        ClearNameCache(view, "skin-name");
     }
 
+    if (nameChanged)
+    {
+        WeaponNameCacheEntry nameState{};
+        nameState.view = view;
+        nameState.defIndex = t.defIndex;
+        nameState.paintKit = t.paintKit;
+        nameState.skinName = t.skinName;
+
+        g_weaponNameCache[weaponEnt] = std::move(nameState);
+    }
+
+    // --------------------------------------------------------
+    // World / HUD model rebuild
+    // --------------------------------------------------------
+
+    const uint64_t mask =
+        IsKnifeDefinition(t.defIndex)
+        ? 1ULL
+        : (t.legacyModel ? 2ULL : 1ULL);
+
+    const uintptr_t hudWeapon =
+        FindHudWeapon(weaponEnt, pawn);
+
+    auto cacheIt = g_weaponModelCache.find(weaponEnt);
+
+    const bool modelChanged =
+        cacheIt == g_weaponModelCache.end() ||
+        !SameModelState(
+            cacheIt->second,
+            view,
+            pawn,
+            hudWeapon,
+            t,
+            wantQuality,
+            mask);
+
+    if (modelChanged)
+    {
+        Log("[apply-cache] rebuilding weapon=%p hud=%p def=%u pk=%d",
+            (void*)weaponEnt,
+            (void*)hudWeapon,
+            t.defIndex,
+            t.paintKit);
+
+        // World model.
+        SetMeshGroup(weaponEnt, mask);
+
+        const bool worldBuilt =
+            CallBuildModernSkin(view, weaponEnt, "world");
+
+        bool hudBuilt = (hudWeapon == 0);
+        bool hudModelReady = true;
+
+        if (hudWeapon)
+        {
+            // Restore the original HUD knife model operation.
+            // It MUST happen before mesh-group/material rebuilding.
+            if (IsKnifeDefinition(t.defIndex))
+            {
+                const auto& models = KnifeModelTable();
+                const auto modelIt = models.find(t.defIndex);
+
+                if (modelIt != models.end())
+                {
+                    hudModelReady =
+                        CallSetModel(hudWeapon, modelIt->second.c_str());
+
+                    if (hudModelReady)
+                    {
+                        Log("[knife] HUD SetModel: %s",
+                            modelIt->second.c_str());
+                    }
+                }
+                else
+                {
+                    hudModelReady = false;
+
+                    Log("[knife] HUD model path missing for def=%u",
+                        t.defIndex);
+                }
+            }
+
+            if (hudModelReady)
+            {
+                SetMeshGroup(hudWeapon, mask);
+
+                hudBuilt =
+                    CallBuildModernSkin(view, hudWeapon, "hud");
+            }
+        }
+
+        // Only cache a completed rebuild. If a required function
+        // is unavailable or throws, retry on the next apply tick.
+        if (worldBuilt && hudBuilt && hudModelReady)
+        {
+            WeaponModelCacheEntry state{};
+
+            state.view = view;
+            state.pawn = pawn;
+            state.hudWeapon = hudWeapon;
+
+            state.defIndex = t.defIndex;
+
+            state.paintKit = t.paintKit;
+            state.seed = t.resolvedSeed;
+            state.statTrak = wantStatTrak;
+            state.quality = wantQuality;
+
+            state.wear = t.wear;
+
+            state.legacyModel = t.legacyModel;
+            state.meshMask = mask;
+
+            g_weaponModelCache[weaponEnt] = state;
+        }
+    }
+
+    // Keep the original contract: true means skin identity /
+    // fallback state changed, not merely that a model was rebuilt.
     return !alreadyPainted;
 }
 

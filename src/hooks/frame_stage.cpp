@@ -62,6 +62,7 @@ enum class MatchState { IDLE, IN_MATCH };
 static MatchState g_matchState = MatchState::IDLE;
 static uint64_t   g_lastDetectLogMs = 0;
 static uint64_t   g_lastApplyMs = 0;
+static uintptr_t g_lastModelCachePawn = 0;
 
 // ---- global-address helpers: prefer AutoOffsets, fall back to RVA ----
 static uintptr_t CtrlGlobalAddr(const ModuleInfo& client)
@@ -331,6 +332,26 @@ static void __fastcall FsnDetour(void* pClient, int stage)
 
     bool inMatch = (pawn > 0x10000 && hp > 0);
 
+    // A new pawn means its weapon/HUD entities may be different.
+    if (inMatch)
+    {
+        if (g_lastModelCachePawn != pawn)
+        {
+            InvalidateWeaponModelCache();
+            g_lastModelCachePawn = pawn;
+
+            Log("[apply-cache] pawn changed: %p",
+                (void*)pawn);
+        }
+    }
+    else if (g_lastModelCachePawn != 0)
+    {
+        InvalidateWeaponModelCache();
+        g_lastModelCachePawn = 0;
+
+        Log("[apply-cache] left active match pawn");
+    }
+
     // ---- state machine ----
     if (inMatch && g_matchState == MatchState::IDLE)
     {
@@ -466,6 +487,13 @@ static void __fastcall FsnDetour(void* pClient, int stage)
     RunGloves(pawn);
 
     const bool gloveUpdate = GloveAppliedThisTick();
+
+    if (gloveUpdate)
+    {
+        // GloveSetBodyGroup can invalidate the arm's HUD child meshes,
+        // including the first-person knife.
+        InvalidateWeaponModelCache();
+    }
 
     Log("[apply-diagnostic] weaponChanged=%d gloveUpdate=%d regenAvailable=%d",
         (int)didUpdate,
