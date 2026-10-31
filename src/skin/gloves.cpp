@@ -384,6 +384,24 @@ namespace
         return true;
     }
 
+    static void ConstructGlovePaintKit(uintptr_t item, int paintKit)
+    {
+        if (!item || paintKit <= 0 || !pGloveCreatePaintKit)
+            return;
+
+        __try
+        {
+            void* result = pGloveCreatePaintKit(reinterpret_cast<void*>(item));
+
+            if (!result)
+                Log("[glove-construct] NULL result pk=%d", paintKit);
+        }
+        __except (1)
+        {
+            Log("[glove-construct] exception pk=%d", paintKit);
+        }
+    }
+
     static void DumpPawnWearables(uintptr_t pawn)
     {
         if (!pawn)
@@ -647,6 +665,17 @@ void RunGloves(uintptr_t pawn)
 
         desiredDef = GetDefaultGloveDef(team);
         if (desiredDef == 0) return;
+    }
+
+    // Lootline behavior: reconstruct the selected glove paint kit every frame.
+    uint16_t currentItemDef = 0;
+    SafeReadU16(item + g_off.EIV_ItemDefIndex, currentItemDef);
+
+    if (customSelection &&
+        pk > 0 &&
+        currentItemDef == desiredDef)
+    {
+        ConstructGlovePaintKit(item, pk);
     }
 
     // ---- detect changes ----
