@@ -213,6 +213,7 @@
     <ClCompile Include="src\skin\glove_model_refresh.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="2n1ssanlogs.md" />
     <None Include="n1ssanlogs.md" />
     <None Include="packages.config" />
   </ItemGroup>

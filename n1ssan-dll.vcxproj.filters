@@ -109,6 +109,7 @@
   <ItemGroup>
     <None Include="packages.config" />
     <None Include="n1ssanlogs.md" />
+    <None Include="2n1ssanlogs.md" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\config\offsets.h">
