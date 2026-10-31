@@ -1,3 +1,4 @@
+
 #include "skin/glove_model_refresh.h"
 
 #include "sdk/functions.h"
@@ -519,6 +520,83 @@ namespace
                 continue;
             }
 
+            // ----------------------------------------------------
+            // Glove schema diagnostic
+            //
+            // Read the definition index FIRST. Do not let failures
+            // reading the other fields skip these glove entries.
+            // ----------------------------------------------------
+
+            uint16_t definitionIndex = 0;
+
+            const bool hasDefinitionIndex = ReadMemory(
+                reinterpret_cast<uintptr_t>(definition) + 0x10,
+                definitionIndex);
+
+            if (hasDefinitionIndex &&
+                (definitionIndex == 5030 ||
+                    definitionIndex == 5031 ||
+                    definitionIndex == 5033))
+            {
+                const char* gloveTypePtr = nullptr;
+                const char* gloveItemPtr = nullptr;
+                const char* gloveModelPtr = nullptr;
+
+                const bool hasType = ReadMemory(
+                    reinterpret_cast<uintptr_t>(definition) + 0x80,
+                    gloveTypePtr);
+
+                const bool hasItem = ReadMemory(
+                    reinterpret_cast<uintptr_t>(definition) + 0x260,
+                    gloveItemPtr);
+
+                const bool hasModel = ReadMemory(
+                    reinterpret_cast<uintptr_t>(definition) + 0x148,
+                    gloveModelPtr);
+
+                std::string gloveType;
+                std::string gloveItem;
+                std::string gloveModel;
+
+                if (hasType && gloveTypePtr)
+                {
+                    ReadString(
+                        reinterpret_cast<uintptr_t>(gloveTypePtr),
+                        gloveType);
+                }
+
+                if (hasItem && gloveItemPtr)
+                {
+                    ReadString(
+                        reinterpret_cast<uintptr_t>(gloveItemPtr),
+                        gloveItem);
+                }
+
+                if (hasModel && gloveModelPtr)
+                {
+                    ReadString(
+                        reinterpret_cast<uintptr_t>(gloveModelPtr),
+                        gloveModel);
+                }
+
+                Log(
+                    "[glove-schema] def=%u definition=%p "
+                    "type=\"%s\" item=\"%s\" model=\"%s\" "
+                    "typeRead=%d itemRead=%d modelRead=%d",
+                    definitionIndex,
+                    definition,
+                    gloveType.c_str(),
+                    gloveItem.c_str(),
+                    gloveModel.c_str(),
+                    hasType,
+                    hasItem,
+                    hasModel);
+            }
+
+            // ----------------------------------------------------
+            // Original agent discovery logic
+            // ----------------------------------------------------
+
             const char* typeNamePtr = nullptr;
             const char* itemNamePtr = nullptr;
             const char* schemaModelPtr = nullptr;
@@ -534,43 +612,6 @@ namespace
                     schemaModelPtr))
             {
                 continue;
-            }
-
-            // Diagnostic: inspect the actual schema entries for two glove definitions.
-            uint16_t definitionIndex = 0;
-
-            if (ReadMemory(
-                reinterpret_cast<uintptr_t>(definition) + 0x10,
-                definitionIndex) &&
-                (definitionIndex == 5030 || definitionIndex == 5031))
-            {
-                std::string gloveType;
-                std::string gloveItem;
-                std::string gloveModel;
-
-                if (typeNamePtr)
-                    ReadString(
-                        reinterpret_cast<uintptr_t>(typeNamePtr),
-                        gloveType);
-
-                if (itemNamePtr)
-                    ReadString(
-                        reinterpret_cast<uintptr_t>(itemNamePtr),
-                        gloveItem);
-
-                if (schemaModelPtr)
-                    ReadString(
-                        reinterpret_cast<uintptr_t>(schemaModelPtr),
-                        gloveModel);
-
-                Log(
-                    "[glove-schema] def=%u definition=%p "
-                    "type=\"%s\" item=\"%s\" model=\"%s\"",
-                    definitionIndex,
-                    definition,
-                    gloveType.c_str(),
-                    gloveItem.c_str(),
-                    gloveModel.c_str());
             }
 
             std::string typeName;
@@ -620,7 +661,7 @@ namespace
                     std::strlen("customplayer_"));
 
             // Use the canonical model path stored in the item schema.
-// Do not reconstruct agent paths from family/name.
+            // Do not reconstruct agent paths from family/name.
             if (schemaModel.rfind("agents/models/", 0) == 0)
             {
                 const std::string compiled = schemaModel + "_c";
@@ -803,6 +844,7 @@ namespace
             g_request.store(true, std::memory_order_release);
             return;
         }
+
         InvalidateWeaponModelCache();
 
         // Save the exact model path only after the alternate setter
