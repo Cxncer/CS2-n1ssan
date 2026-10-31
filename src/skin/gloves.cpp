@@ -11,6 +11,7 @@
 #include "memory/access.h"
 #include "sdk/scene_node.h"
 #include "skin/glove_model_refresh.h"
+#include "inventory/engine_schema_diagnostic.h"
 
 #include <atomic>
 #include <string>
@@ -50,6 +51,68 @@ namespace
     size_t g_followUpIdx = 0;
 
     constexpr uint64_t GLOVE_FOLLOWUP_MS[] = { 400, 1200, 3000 };
+
+    // Lootline defuse-kit recovery.
+    constexpr uint64_t GLOVE_KIT_SOLD_REFRESH_DELAY_MS = 200;
+
+    bool g_haveDefuserState = false;
+    bool g_lastHasDefuser = false;
+
+    uint64_t g_gloveKitRefreshAt = 0;
+    float g_gloveDefuserSpawnTime = -1.0f;
+
+    // Once a kit is sold, subsequent rounds on this pawn need model refresh.
+    uintptr_t g_gloveKitSoldPawn = 0;
+
+    bool HasDefuser(uintptr_t pawn)
+    {
+        static uintptr_t itemServicesOffset = 0;
+        static uintptr_t hasDefuserOffset = 0;
+
+        if (!pawn)
+            return false;
+
+        // Resolve through the existing live schema resolver.
+        if (!itemServicesOffset)
+        {
+            ResolveEngineSchemaField(
+                "C_BasePlayerPawn",
+                "m_pItemServices",
+                itemServicesOffset);
+        }
+
+        if (!hasDefuserOffset)
+        {
+            ResolveEngineSchemaField(
+                "CCSPlayer_ItemServices",
+                "m_bHasDefuser",
+                hasDefuserOffset);
+        }
+
+        if (!itemServicesOffset || !hasDefuserOffset)
+            return false;
+
+        uintptr_t services = 0;
+
+        if (!SafeReadQword(
+            pawn + itemServicesOffset,
+            services) ||
+            services < 0x10000)
+        {
+            return false;
+        }
+
+        uint8_t hasDefuser = 0;
+
+        if (!SafeReadU8(
+            services + hasDefuserOffset,
+            hasDefuser))
+        {
+            return false;
+        }
+
+        return hasDefuser != 0;
+    }
 
     uint16_t GetDefaultGloveDef(uint8_t team)
     {
@@ -620,6 +683,35 @@ void RunGloves(uintptr_t pawn)
 
     uint64_t now = NowMs();
 
+    // Reset defuser tracking on a new spawn.
+    if (spawnTime != g_gloveDefuserSpawnTime)
+    {
+        g_gloveDefuserSpawnTime = spawnTime;
+        g_haveDefuserState = false;
+        g_gloveKitRefreshAt = 0;
+    }
+
+    const bool hasDefuser = HasDefuser(pawn);
+
+    const bool kitChanged =
+        g_haveDefuserState &&
+        hasDefuser != g_lastHasDefuser;
+
+    g_lastHasDefuser = hasDefuser;
+    g_haveDefuserState = true;
+
+    // Selling the kit: schedule one model refresh, 200 ms later.
+    if (kitChanged && !hasDefuser)
+    {
+        g_gloveKitRefreshAt =
+            now + GLOVE_KIT_SOLD_REFRESH_DELAY_MS;
+
+        g_gloveKitSoldPawn = pawn;
+
+        Log("[glove-kit] sold; model refresh scheduled in %llu ms",
+            (unsigned long long)GLOVE_KIT_SOLD_REFRESH_DELAY_MS);
+    }
+
     // ---- desired state ----
     uint16_t desiredDef = 0;
     int pk = 0, seed = 0;
@@ -736,8 +828,33 @@ void RunGloves(uintptr_t pawn)
         ++g_followUpIdx;
     }
 
+    // Lootline: after a kit has been sold, subsequent rounds
+    // on the same pawn also need a model refresh.
+    if (followUp &&
+        g_gloveKitSoldPawn == pawn)
+    {
+        Log("[glove-kit] post-sale round model refresh");
+
+        GloveModelRefresh::Request();
+    }
+
     const bool forced =
         g_gloveForceUpdate.exchange(false, std::memory_order_acq_rel);
+
+    // Lootline: a sold kit causes the game to rebuild first-person
+    // gloves from its own data. Swap the player model to trigger recovery.
+    if (g_gloveKitRefreshAt != 0 &&
+        now >= g_gloveKitRefreshAt)
+    {
+        g_gloveKitRefreshAt = 0;
+
+        if (customSelection && g_gloveKitSoldPawn == pawn)
+        {
+            Log("[glove-kit] delayed model refresh triggered");
+
+            GloveModelRefresh::Request();
+        }
+    }
 
     static bool lastTriggerState = false;
 
@@ -837,6 +954,13 @@ void ForceGloveUpdate()
 
 void ResetGloves()
 {
+    g_haveDefuserState = false;
+    g_lastHasDefuser = false;
+
+    g_gloveKitRefreshAt = 0;
+    g_gloveDefuserSpawnTime = -1.0f;
+    g_gloveKitSoldPawn = 0;
+
     g_gloveForceUpdate.store(true, std::memory_order_release);
 
     g_lastPawnAddr = 0;
