@@ -75,24 +75,23 @@ namespace
             return false;
 
         // C_EconUtlMap<int, CEconItemDefinition*>
-        // Node: value +0x08, key +0x14, stride 0x18.
+// Node: value +0x08, key +0x14, stride 0x18.
         for (int32_t i = 0; i < count; ++i)
         {
             const uintptr_t node =
                 elements + static_cast<uintptr_t>(i) * 0x18;
 
-            int32_t key = 0;
             uintptr_t definition = 0;
-
-            if (!SafeReadI32(node + 0x14, key) ||
-                key != definitionIndex)
-                continue;
+            uint16_t actualDefinitionIndex = 0;
 
             if (!SafeReadQword(node + 0x08, definition) ||
                 definition < 0x10000)
-                return false;
+                continue;
 
-            // CEconItemDefinition::m_ModelName = +0x148
+            if (!SafeReadU16(definition + 0x10, actualDefinitionIndex) ||
+                actualDefinitionIndex != definitionIndex)
+                continue;
+
             uintptr_t modelNamePtr = 0;
 
             if (!SafeReadQword(definition + 0x148, modelNamePtr))

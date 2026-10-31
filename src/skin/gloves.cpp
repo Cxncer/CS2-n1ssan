@@ -73,26 +73,25 @@ namespace
     void FlagGlovesForRebuild(uintptr_t pawn)
     {
         uint8_t beforeReapply = 0;
-        uint8_t beforeChanged = 0;
 
-        SafeReadU8(pawn + g_off.PAWN_NeedReapplyGloves, beforeReapply);
-        SafeReadU8(pawn + g_off.PAWN_EconGlovesChanged, beforeChanged);
+        SafeReadU8(
+            pawn + g_off.PAWN_NeedReapplyGloves,
+            beforeReapply);
 
-        SafeWriteU8(pawn + g_off.PAWN_NeedReapplyGloves, 1);
         SafeWriteU8(
-            pawn + g_off.PAWN_EconGlovesChanged,
-            static_cast<uint8_t>(beforeChanged + 1u));
+            pawn + g_off.PAWN_NeedReapplyGloves,
+            1);
 
         uint8_t afterReapply = 0;
-        uint8_t afterChanged = 0;
 
-        SafeReadU8(pawn + g_off.PAWN_NeedReapplyGloves, afterReapply);
-        SafeReadU8(pawn + g_off.PAWN_EconGlovesChanged, afterChanged);
+        SafeReadU8(
+            pawn + g_off.PAWN_NeedReapplyGloves,
+            afterReapply);
 
-        Log("[glove-flags] pawn=%p reapply=%u->%u changed=%u->%u",
+        Log("[glove-flags] pawn=%p reapply=%u->%u",
             (void*)pawn,
-            beforeReapply, afterReapply,
-            beforeChanged, afterChanged);
+            beforeReapply,
+            afterReapply);
     }
 
     void ClearGloves(uintptr_t pawn, uintptr_t item)
