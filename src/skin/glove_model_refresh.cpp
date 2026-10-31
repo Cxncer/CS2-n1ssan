@@ -536,6 +536,43 @@ namespace
                 continue;
             }
 
+            // Diagnostic: inspect the actual schema entries for two glove definitions.
+            uint16_t definitionIndex = 0;
+
+            if (ReadMemory(
+                reinterpret_cast<uintptr_t>(definition) + 0x10,
+                definitionIndex) &&
+                (definitionIndex == 5030 || definitionIndex == 5031))
+            {
+                std::string gloveType;
+                std::string gloveItem;
+                std::string gloveModel;
+
+                if (typeNamePtr)
+                    ReadString(
+                        reinterpret_cast<uintptr_t>(typeNamePtr),
+                        gloveType);
+
+                if (itemNamePtr)
+                    ReadString(
+                        reinterpret_cast<uintptr_t>(itemNamePtr),
+                        gloveItem);
+
+                if (schemaModelPtr)
+                    ReadString(
+                        reinterpret_cast<uintptr_t>(schemaModelPtr),
+                        gloveModel);
+
+                Log(
+                    "[glove-schema] def=%u definition=%p "
+                    "type=\"%s\" item=\"%s\" model=\"%s\"",
+                    definitionIndex,
+                    definition,
+                    gloveType.c_str(),
+                    gloveItem.c_str(),
+                    gloveModel.c_str());
+            }
+
             std::string typeName;
             std::string itemName;
             std::string schemaModel;
