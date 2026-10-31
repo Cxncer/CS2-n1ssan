@@ -9,6 +9,7 @@
 #include "diagnostics/log.h"
 #include "memory/access.h"
 #include "memory/scanner.h"
+#include <Windows.h>
 
 InvalidateDescriptionFn pInvalidateDescription = nullptr;
 
@@ -57,12 +58,13 @@ uintptr_t g_off_CModelState_hModel = 0;
 
 void* __fastcall MemAlloc(size_t size)
 {
-    return malloc(size);
+    return pMemAlloc ? pMemAlloc(size) : nullptr;
 }
 
 void __fastcall MemFree(void* p)
 {
-    free(p);
+    if (p && pMemFree)
+        pMemFree(p);
 }
 
 bool ResolveFunctions()
@@ -111,11 +113,20 @@ bool ResolveFunctions()
         logPat("GloveSetBodyGroup", fn);
     }
 
-    pMemAlloc = (MemAllocFn)ScanPattern(client, Pat::MemAlloc);
-    logPat("MemAlloc", (uintptr_t)pMemAlloc);
+    HMODULE tier0 = GetModuleHandleA("tier0.dll");
 
-    pMemFree = (MemFreeFn)ScanPattern(client, Pat::MemFree);
-    logPat("MemFree", (uintptr_t)pMemFree);
+    pMemAlloc = tier0
+        ? reinterpret_cast<MemAllocFn>(
+            GetProcAddress(tier0, "MemAlloc_AllocFunc"))
+        : nullptr;
+
+    pMemFree = tier0
+        ? reinterpret_cast<MemFreeFn>(
+            GetProcAddress(tier0, "MemAlloc_FreeFunc"))
+        : nullptr;
+
+    logPat("MemAlloc", reinterpret_cast<uintptr_t>(pMemAlloc));
+    logPat("MemFree", reinterpret_cast<uintptr_t>(pMemFree));
 
     g_off_CSkeleton_modelState = 0x140;
     g_off_CModelState_hModel = 0xA0;
