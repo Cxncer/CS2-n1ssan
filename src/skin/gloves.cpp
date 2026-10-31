@@ -762,15 +762,13 @@ void RunGloves(uintptr_t pawn)
         g_gloveUpdateFrames = GLOVE_APPLY_FRAMES;
     }
 
-
-    // ---- TEMP TEST: bypass team-switch clearing ----
-    // Preserve the existing glove item during the team transition.
-    // Do not call ClearGloves() or return early here.
+    // ---- team-switch clearing ----
     if (g_gloveClearFrames > 0)
     {
+        ClearGloves(pawn, item);
         --g_gloveClearFrames;
+        return;
     }
-
 
     // ---- apply burst ----
     if (g_gloveUpdateFrames <= 0) return;
