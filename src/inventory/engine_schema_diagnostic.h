@@ -2,9 +2,13 @@
 
 #include <cstdint>
 
-// Resolve C_BaseEntity->m_nSubclassID from the live engine schema.
-// Returns false until schemasystem.dll and its type scope are available.
+bool ResolveEngineSchemaField(
+    const char* className,
+    const char* fieldName,
+    uintptr_t& offset);
+
 bool ResolveSubclassOffset(uintptr_t& offset);
 
-// Optional startup diagnostic.
+bool ResolveGloveSchemaOffsets();
+
 void RunEngineSchemaDiagnostic();

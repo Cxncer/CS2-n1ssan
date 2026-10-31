@@ -1,5 +1,5 @@
 ﻿// n1ssan-dll / dllmain.cpp
-// v10.0.0 — beta 2.6 - Knife & Gloves Logic
+// v10.0.0 — beta 2.7 - Knife & Gloves Logic
 //
 // split into src/ modules
 //
@@ -101,6 +101,12 @@ static DWORD WINAPI InjectThread(LPVOID)
     ResolveOffsets();
 
     RunEngineSchemaDiagnostic();
+
+    if (!ResolveGloveSchemaOffsets())
+    {
+        Log("[fatal] glove schema resolution incomplete");
+        return 0;
+    }
 
     if (!ResolveFunctions())
     {

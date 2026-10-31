@@ -285,11 +285,7 @@ namespace
         SafeWriteU16(item + g_off.EIV_ItemDefIndex, def);
         SafeWriteI32(item + g_off.EIV_EntityQuality, 3);
 
-        LogGloveAttributeSnapshot(item, "BEFORE-REMOVE");
-
         EconAttr_Remove(item);
-
-        LogGloveAttributeSnapshot(item, "AFTER-REMOVE");
 
         if (pk > 0)
         {
@@ -302,9 +298,6 @@ namespace
                 post ? post->size : -1,
                 post ? (void*)post->data : nullptr,
                 post ? post->allocationCount : -1);
-
-            LogGloveAttributes(item, "after-create");
-            LogGloveAttributeSnapshot(item, "AFTER-CREATE");
 
             if (pGloveCreatePaintKit)
             {
@@ -378,8 +371,6 @@ namespace
             return false;
 
         FlagGlovesForRebuild(pawn);
-
-        LogGloveAttributeSnapshot(item, "AFTER-REBUILD-FLAGS");
 
         return true;
     }
@@ -747,13 +738,19 @@ void RunGloves(uintptr_t pawn)
     const bool forced =
         g_gloveForceUpdate.exchange(false, std::memory_order_acq_rel);
 
-    // ---- diagnostic: all trigger variables are now initialized ----
-    Log("[glove-trigger] pawnChanged=%d configChanged=%d teamChanged=%d "
-        "spawnChanged=%d engineReset=%d followUp=%d forced=%d "
-        "frames=%d curDef=%u desiredDef=%u initialized=%u idHigh=0x%X",
-        pawnChanged, configChanged, teamChanged, spawnChanged,
-        engineReset, followUp, forced, g_gloveUpdateFrames,
-        curDef, desiredDef, initialized, idHigh);
+    static bool lastTriggerState = false;
+
+    const bool triggerState =
+        pawnChanged || configChanged || teamChanged ||
+        spawnChanged || engineReset || followUp || forced;
+
+    if (triggerState != lastTriggerState)
+    {
+        Log("[glove-trigger] active=%d curDef=%u desiredDef=%u",
+            triggerState, curDef, desiredDef);
+
+        lastTriggerState = triggerState;
+    }
 
     if (teamChanged)
         g_gloveClearFrames = GLOVE_CLEAR_FRAMES;

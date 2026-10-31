@@ -227,6 +227,35 @@ namespace
     }
 }
 
+bool ResolveEngineSchemaField(
+    const char* className,
+    const char* fieldName,
+    uintptr_t& offset)
+{
+    void* schemaSystem = GetSchemaSystem();
+    if (!schemaSystem)
+        return false;
+
+    SchemaTypeScope* scope =
+        FindTypeScope(schemaSystem, "client.dll");
+
+    if (!scope)
+        return false;
+
+    std::uint32_t resolved = 0;
+
+    if (!FindFieldOffset(
+        scope,
+        className,
+        fieldName,
+        resolved))
+    {
+        return false;
+    }
+
+    offset = resolved;
+    return true;
+}
 
 // ============================================================
 // Runtime subclass offset resolver
@@ -277,6 +306,81 @@ bool ResolveSubclassOffset(uintptr_t& offset)
     return true;
 }
 
+bool ResolveGloveSchemaOffsets()
+{
+    struct Field
+    {
+        const char* className;
+        const char* fieldName;
+        uintptr_t* destination;
+    };
+
+    const Field fields[] =
+    {
+        { "C_CSPlayerPawn", "m_EconGloves",
+            &g_off.PAWN_EconGloves },
+
+        { "C_CSPlayerPawn", "m_bNeedToReApplyGloves",
+            &g_off.PAWN_NeedReapplyGloves },
+
+        { "C_EconItemView", "m_iItemDefinitionIndex",
+            &g_off.EIV_ItemDefIndex },
+
+        { "C_EconItemView", "m_iEntityQuality",
+            &g_off.EIV_EntityQuality },
+
+        { "C_EconItemView", "m_iItemIDHigh",
+            &g_off.EIV_ItemIDHigh },
+
+        { "C_EconItemView", "m_bInitialized",
+            &g_off.EIV_Initialized },
+
+        { "C_EconItemView", "m_bDisallowSOC",
+            &g_off.EIV_DisallowSOC },
+
+        { "C_EconItemView",
+            "m_bRestoreCustomMaterialAfterPrecache",
+            &g_off.EIV_RestoreCustom },
+
+        { "C_EconItemView", "m_AttributeList",
+            &g_off.EIV_AttributeList },
+
+        { "C_EconItemView", "m_NetworkedDynamicAttributes",
+            &g_off.EIV_NetworkedAttrs },
+
+        { "CAttributeList", "m_Attributes",
+            &g_off.AttributeList_Attributes },
+    };
+
+    bool allResolved = true;
+
+    for (const auto& field : fields)
+    {
+        uintptr_t offset = 0;
+
+        if (!ResolveEngineSchemaField(
+            field.className,
+            field.fieldName,
+            offset))
+        {
+            Log("[schema-gloves] FAILED %s->%s",
+                field.className,
+                field.fieldName);
+
+            allResolved = false;
+            continue;
+        }
+
+        *field.destination = offset;
+
+        Log("[schema-gloves] %s->%s = 0x%llX",
+            field.className,
+            field.fieldName,
+            static_cast<unsigned long long>(offset));
+    }
+
+    return allResolved;
+}
 
 // ============================================================
 // Startup diagnostic

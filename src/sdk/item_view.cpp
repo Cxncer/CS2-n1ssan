@@ -9,17 +9,34 @@
 
 #include <bit>
 #include <cstring>
+static AttributeVector_t* GetAttributeVectorAt(
+    uintptr_t item,
+    uintptr_t listOffset)
+{
+    if (!item ||
+        !listOffset ||
+        !g_off.AttributeList_Attributes)
+        return nullptr;
+
+    const uintptr_t list =
+        item + listOffset;
+
+    return reinterpret_cast<AttributeVector_t*>(
+        list + g_off.AttributeList_Attributes);
+}
 
 AttributeVector_t* GetAttributeVector(uintptr_t item)
 {
-    if (!item) return nullptr;
-    return reinterpret_cast<AttributeVector_t*>(item + g_off.EIV_AttributeList + 0x08);
+    return GetAttributeVectorAt(
+        item,
+        g_off.EIV_AttributeList);
 }
 
 AttributeVector_t* GetNetworkedVector(uintptr_t item)
 {
-    if (!item) return nullptr;
-    return reinterpret_cast<AttributeVector_t*>(item + g_off.EIV_NetworkedAttrs + 0x08);
+    return GetAttributeVectorAt(
+        item,
+        g_off.EIV_NetworkedAttrs);
 }
 
 static void SetFloatAttr(EconItemAttribute_t& a, uint16_t def, float v)

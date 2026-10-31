@@ -74,6 +74,9 @@ static constexpr uintptr_t FB_CTRL_hPawn = 0x92C;
 // ---- Struct that holds the runtime offsets (currently = the FB_* above) ----
 struct Offsets
 {
+    // Runtime-resolved glove and econ-item schema fields.
+    uintptr_t AttributeList_Attributes = 0;
+
     uintptr_t EIV_ItemDefIndex = 0;
     uintptr_t EIV_EntityQuality = 0;
     uintptr_t EIV_ItemIDHigh = 0;
