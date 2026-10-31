@@ -60,6 +60,10 @@ void ResolveOffsets()
     g_off.PAWN_EconGloves = FB_PAWN_EconGloves;
     g_off.PAWN_NeedReapplyGloves = FB_PAWN_NeedReapplyGloves;
     g_off.PAWN_EconGlovesChanged = FB_PAWN_EconGlovesChanged;
+    g_off.PAWN_MyWearables = FB_PAWN_MyWearables;
+
+    Log("[off] PAWN_MyWearables = 0x%llX",
+        static_cast<unsigned long long>(g_off.PAWN_MyWearables));
 
     g_off.WS_ActiveWeapon = FB_WS_ActiveWeapon;
 
