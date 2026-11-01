@@ -15,6 +15,7 @@
 
 #include <atomic>
 #include <string>
+#include <algorithm>
 
 
 namespace
@@ -851,8 +852,8 @@ void RunGloves(uintptr_t pawn)
 
         customGloveDef = t.defIndex;
         pk = t.paintKit;
-        seed = t.resolvedSeed;
-        wear = t.wear;
+        seed = (std::clamp)(t.resolvedSeed, 0, 1000);
+        wear = (std::clamp)(t.wear, 0.0001f, 1.0f);
         break;
     }
 

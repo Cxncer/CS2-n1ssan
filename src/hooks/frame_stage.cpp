@@ -283,14 +283,15 @@ static void __fastcall FsnDetour(void* pClient, int stage)
     }
 
     // Phase B: restore/swap the player model before the original
-// render-end processing. Do not run this on other stages.
+    // render-end processing. Do not run this on other stages.
     if (stage == 6)
     {
         GloveModelRefresh::OnRenderEnd();
     }
 
-    // Match Lootline: advance glove state once per network-update tick.
-    if (stage == 7 && g_enabled && !g_targets.empty())
+    // Match Lootline: run glove state handling every network-update tick
+    // while in a match, including when custom gloves are disabled.
+    if (stage == 7 && g_matchState == MatchState::IN_MATCH)
     {
         const uintptr_t glovePawn = MatchdetectGetPawn();
         int32_t gloveHp = 0;
@@ -300,11 +301,11 @@ static void __fastcall FsnDetour(void* pClient, int stage)
             gloveHp > 0)
         {
             RunGloves(glovePawn);
+
+            if (GloveAppliedThisTick())
+                g_gloveUpdatePending = true;
         }
     }
-
-    if (GloveAppliedThisTick())
-        g_gloveUpdatePending = true;
 
     // Preserve exactly one original FrameStageNotify call.
     if (g_origFsn)
