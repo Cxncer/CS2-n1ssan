@@ -72,10 +72,14 @@ static const WeaponEntry kWeapons[] =
     {"stiletto knife", 522, "knife"}, {"talon knife", 523, "knife"},
     {"skeleton knife", 525, "knife"}, {"kukri knife", 526, "knife"},
     // Gloves
-    {"sport gloves", 5030, "glove"}, {"specialist gloves", 5031, "glove"},
-    {"driver gloves", 5032, "glove"}, {"hand wraps", 5033, "glove"},
-    {"moto gloves", 5034, "glove"}, {"hydra gloves", 5035, "glove"},
-    {"broken fang gloves", 5036, "glove"}, {"bloodhound gloves", 5037, "glove"},
+    {"sport gloves", 5030, "glove"},
+    {"driver gloves", 5031, "glove"},
+    {"hand wraps", 5032, "glove"},
+    {"moto gloves", 5033, "glove"},
+    {"specialist gloves", 5034, "glove"},
+    {"hydra gloves", 5035, "glove"},
+    {"broken fang gloves", 4725, "glove"},
+    {"bloodhound gloves", 5027, "glove"},
 };
 
 static std::string ToLower(std::string s)

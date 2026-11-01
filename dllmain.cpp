@@ -1,6 +1,6 @@
 ﻿// n1ssan-dll / dllmain.cpp
-// v10.0.0 — beta 5.1 - Knife & Gloves Logic by ChatGPT
-//
+// v10.0.0 — beta 5.2 - Knife & Gloves Logic by ChatGPT
+// Weapons, Knives and Gloves.
 // split into src/ modules
 //
 // This file is now a 60-line skeleton. Everything functional lives in
