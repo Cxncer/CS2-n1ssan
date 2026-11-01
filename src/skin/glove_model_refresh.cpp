@@ -998,7 +998,7 @@ namespace
     }
 }
 
-namespace GlovesModelRefresh
+namespace GloveModelRefresh
 {
     void Request()
     {
@@ -1013,8 +1013,8 @@ namespace GlovesModelRefresh
         std::uint8_t team = 0;
 
         if (!pawn ||
-            !ReadField(pawn, "C_BaseEntity", "m_iHealth", health) ||
-            !ReadField(pawn, "C_BaseEntity", "m_iTeamNum", team) ||
+            !ReadField(pawn, "C_BaseEntity", "m_iHealth", &health, sizeof(health)) ||
+            !ReadField(pawn, "C_BaseEntity", "m_iTeamNum", &team, sizeof(team)) ||
             health <= 0 || (team != 2 && team != 3))
         {
             ResetSwap();

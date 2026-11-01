@@ -11,9 +11,9 @@
 
 namespace
 {
-    constexpr std::uint16_t ATTR_PAINT = 6;
-    constexpr std::uint16_t ATTR_SEED = 7;
-    constexpr std::uint16_t ATTR_WEAR = 8;
+    constexpr std::uint16_t GLOVE_ATTR_PAINT = 6;
+    constexpr std::uint16_t GLOVE_ATTR_SEED = 7;
+    constexpr std::uint16_t GLOVE_ATTR_WEAR = 8;
     constexpr std::size_t ATTRIBUTE_COUNT = 3;
     constexpr std::size_t EXTRA_CAPACITY = 8;
 
@@ -51,9 +51,9 @@ namespace GloveAttributeManager
             return false;
 
         std::memset(attributes, 0, bytes);
-        SetFloat(attributes[0], ATTR_PAINT, static_cast<float>(paintKit));
-        SetFloat(attributes[1], ATTR_SEED, static_cast<float>((std::max)(0, seed)));
-        SetFloat(attributes[2], ATTR_WEAR, (std::clamp)(wear, 0.0001f, 1.0f));
+        SetFloat(attributes[0], GLOVE_ATTR_PAINT, static_cast<float>(paintKit));
+        SetFloat(attributes[1], GLOVE_ATTR_SEED, static_cast<float>((std::max)(0, seed)));
+        SetFloat(attributes[2], GLOVE_ATTR_WEAR, (std::clamp)(wear, 0.0001f, 1.0f));
 
         try
         {

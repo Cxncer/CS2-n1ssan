@@ -1,6 +1,6 @@
 #pragma once
 
-namespace GlovesModelRefresh
+namespace GloveModelRefresh
 {
     // Queue a one-frame alternate-model swap.
     // The actual work runs on FRAME_RENDER_END.
