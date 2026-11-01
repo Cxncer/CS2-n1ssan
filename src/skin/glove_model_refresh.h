@@ -1,12 +1,11 @@
 #pragma once
 
-#include <cstdint>
-
-namespace GloveModelRefresh
+namespace GlovesModelRefresh
 {
-    // Queue a one-shot model refresh for the next render-end.
+    // Queue a one-frame alternate-model swap.
+    // The actual work runs on FRAME_RENDER_END.
     void Request();
 
-    // Process the pending swap or restore operation.
-    void OnRenderEnd();
+    // Must be called before the original FRAME_RENDER_END.
+    void OnRenderEnd(void* pawn);
 }

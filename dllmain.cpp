@@ -1,5 +1,5 @@
 ﻿// n1ssan-dll / dllmain.cpp
-// v10.0.0 — beta 4.5 - Knife & Gloves Logic
+// v10.0.0 — beta 5.0 - Knife & Gloves Logic by ChatGPT
 //
 // split into src/ modules
 //
@@ -28,6 +28,8 @@
 #include "hooks/minhook_dynamic.h"
 #include "config/auto_offsets.h"
 #include "inventory/engine_schema_diagnostic.h"
+#include "skin/glove_paintkit_schema.h"
+#include "skin/glove_schema.h"
 
 // ---- MinHook ----
 typedef int (WINAPI* MH_Initialize_t)();
@@ -113,6 +115,11 @@ static DWORD WINAPI InjectThread(LPVOID)
         Log("[fatal] function resolution failed");
         return 0;
     }
+
+    Log("[glove-paintkit-schema] %s",
+        GlovePaintKitSchema::Initialize() ? "READY" : "UNAVAILABLE");
+    Log("[glove-schema] %s",
+        GlovesSchema::Initialize("client.dll") ? "READY" : "UNAVAILABLE");
 
     RunSchemaProbe();
 

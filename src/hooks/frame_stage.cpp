@@ -275,6 +275,7 @@ static void ObserveGloveState(uintptr_t pawn)
 // ---- FSN detour ----
 static void __fastcall FsnDetour(void* pClient, int stage)
 {
+    bool gloveUpdate = false;
     static bool g_loggedStages = false;
     if (!g_loggedStages)
     {
@@ -286,7 +287,8 @@ static void __fastcall FsnDetour(void* pClient, int stage)
     // render-end processing. Do not run this on other stages.
     if (stage == 6)
     {
-        GloveModelRefresh::OnRenderEnd();
+        GloveModelRefresh::OnRenderEnd(
+            reinterpret_cast<void*>(MatchdetectGetPawn()));
     }
 
     // Match Lootline: run glove state handling every network-update tick
@@ -317,6 +319,16 @@ static void __fastcall FsnDetour(void* pClient, int stage)
         __except (1)
         {
         }
+    }
+
+    // GloveSetBodyGroup ran at stage 7 and can invalidate HUD/weapon model
+    // references. Consume that signal before the stage-6 weapon/knife pass.
+    if (stage == 6)
+    {
+        gloveUpdate = g_gloveUpdatePending;
+        g_gloveUpdatePending = false;
+        if (gloveUpdate)
+            InvalidateWeaponModelCache();
     }
 
     InterlockedIncrement(&g_fsnCount);
@@ -434,19 +446,7 @@ static void __fastcall FsnDetour(void* pClient, int stage)
         Log("[apply] activeHandle=0x%08X", activeHandle);
     }
 
-    // ============================================================
-    // ORDER MATTERS: weapons FIRST, then gloves.
-    // GloveSetBodyGroup invalidates the arm's HUD child meshes,
-    // which includes the knife. If we rebuild the knife before
-    // gloves, the glove pass wipes it out and the knife becomes
-    // invisible on HUD.
-    // ============================================================
-    // ============================================================
-// Phase C: only report actual skin-state changes.
-// Weapons remain before gloves because glove body-group
-// rebuilding can invalidate the knife HUD meshes.
-// ============================================================
-
+    // Preserve the existing weapon and knife processing pass.
     bool didUpdate = false;
 
     if (HandleValid(activeHandle))
@@ -502,29 +502,17 @@ static void __fastcall FsnDetour(void* pClient, int stage)
         }
     }
 
-    const bool gloveUpdate = g_gloveUpdatePending;
-    g_gloveUpdatePending = false;
-
-    if (gloveUpdate)
-    {
-        // GloveSetBodyGroup can invalidate the arm's HUD child meshes,
-        // including the first-person knife.
-        InvalidateWeaponModelCache();
-    }
-
     Log("[apply-diagnostic] weaponChanged=%d gloveUpdate=%d regenAvailable=%d",
         (int)didUpdate,
         (int)gloveUpdate,
         (int)(pRegenerateSkins != nullptr));
 
-    // Regenerate only when an actual weapon/knife skin identity changed
-    // or the glove runtime successfully applied a new configuration.
-    if ((didUpdate || gloveUpdate) && pRegenerateSkins)
+    // Match Lootline: the shared regenerate pass is driven by weapon/knife
+    // identity changes. Glove rebuilding is handled by its own engine flag.
+    if (didUpdate && pRegenerateSkins)
     {
-        Log("[skin-regenerate] calling pRegenerateSkins "
-            "weaponChanged=%d gloveUpdate=%d",
-            (int)didUpdate,
-            (int)gloveUpdate);
+        Log("[skin-regenerate] calling pRegenerateSkins weaponChanged=%d",
+            (int)didUpdate);
 
         __try
         {
@@ -532,7 +520,6 @@ static void __fastcall FsnDetour(void* pClient, int stage)
 
             Log("[skin-regenerate] returned");
 
-            LogGloveModelSnapshot(pawn, "AFTER-REGENERATE");
         }
         __except (1)
         {
