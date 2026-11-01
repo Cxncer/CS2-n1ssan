@@ -206,4 +206,7 @@
       <Filter>src\skin</Filter>
     </ClInclude>
   </ItemGroup>
+  <ItemGroup>
+    <Text Include="gloveslogs.md" />
+  </ItemGroup>
 </Project>

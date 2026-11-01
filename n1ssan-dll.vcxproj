@@ -250,6 +250,9 @@
     <ClInclude Include="src\skin\glove_paintkit_schema.h" />
     <ClInclude Include="src\skin\glove_schema.h" />
   </ItemGroup>
+  <ItemGroup>
+    <Text Include="gloveslogs.md" />
+  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
     <Import Project="packages\minhook.1.3.3\build\native\minhook.targets" Condition="Exists('packages\minhook.1.3.3\build\native\minhook.targets')" />
