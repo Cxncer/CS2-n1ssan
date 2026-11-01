@@ -18,6 +18,9 @@
 #include <string>
 #include <unordered_map>
 #include <utility>
+#include "sdk/entities.h"
+#include <cstddef>
+#include <cstdint>
 
 namespace
 {
@@ -417,6 +420,123 @@ namespace
         CallInvalidateDesc(view);
     }
 
+    struct HudWeaponSelectionEntry
+    {
+        std::byte unknown00[0x38];
+        std::int32_t weaponHandle;
+        std::byte unknown3C[0x0C];
+    };
+
+    struct HudWeaponSelectionLayout
+    {
+        std::byte unknown00[0x50];
+        std::int32_t count;
+        std::byte unknown54[0x04];
+        HudWeaponSelectionEntry* entries;
+        std::byte unknown60[0x38];
+        void* hudElementVtable;
+    };
+
+    static_assert(
+        offsetof(HudWeaponSelectionLayout, hudElementVtable) == 0x98
+        );
+
+    static bool ClearHudWeaponSelectionEntrySEH(
+        uintptr_t weaponEnt,
+        uintptr_t findHudElementAddress,
+        uintptr_t clearHudWeaponAddress)
+    {
+        __try
+        {
+            using FindHudElementFn =
+                uintptr_t(__fastcall*)(const char*);
+
+            using ClearHudWeaponFn =
+                int64_t(__fastcall*)(uintptr_t, int32_t, int64_t);
+
+            auto findHudElement =
+                reinterpret_cast<FindHudElementFn>(findHudElementAddress);
+
+            auto clearHudWeapon =
+                reinterpret_cast<ClearHudWeaponFn>(clearHudWeaponAddress);
+
+            const uintptr_t hud =
+                findHudElement("HudWeaponSelection");
+
+            if (!hud)
+                return false;
+
+            auto* selection =
+                reinterpret_cast<HudWeaponSelectionLayout*>(
+                    hud - offsetof(
+                        HudWeaponSelectionLayout,
+                        hudElementVtable));
+
+            const int32_t count = selection->count;
+            const auto* entries = selection->entries;
+
+            if (!entries || count <= 0 || count > 64)
+                return false;
+
+            for (int32_t i = count - 1; i >= 0; --i)
+            {
+                const int32_t handle = entries[i].weaponHandle;
+
+                if (handle < 0)
+                    continue;
+
+                const uintptr_t entity =
+                    GetEntityByHandle(static_cast<uint32_t>(handle));
+
+                if (entity == weaponEnt)
+                {
+                    clearHudWeapon(
+                        reinterpret_cast<uintptr_t>(selection),
+                        i,
+                        0);
+
+                    return true;
+                }
+            }
+        }
+        __except (1)
+        {
+            return false;
+        }
+
+        return false;
+    }
+
+    bool ClearHudWeaponSelectionEntry(uintptr_t weaponEnt)
+    {
+        static const uintptr_t findHudElementAddress = []()
+            {
+                return ScanPattern(
+                    GetClientModule(),
+                    "40 53 48 83 EC ? 48 8B 05 ? ? ? ? "
+                    "48 8B D9 48 85 C0 74 ? 48 89 5C 24");
+            }();
+
+        static const uintptr_t clearHudWeaponAddress = []()
+            {
+                uintptr_t call = ScanPattern(
+                    GetClientModule(),
+                    "E8 ? ? ? ? 8B F8 C6 84 24");
+
+                return call ? ResolveCallTarget(call) : 0;
+            }();
+
+        if (!weaponEnt ||
+            !findHudElementAddress ||
+            !clearHudWeaponAddress)
+            return false;
+
+        return ClearHudWeaponSelectionEntrySEH(
+            weaponEnt,
+            findHudElementAddress,
+            clearHudWeaponAddress);
+    }
+
     // Writes identity + paint kit to a given item view. SAFE to call on an
     // empty view. Returns false if the view already has attributes we don't own.
     bool WriteViewSafely(uintptr_t v, const TargetSkin& t,
@@ -678,9 +798,17 @@ bool ApplyWeaponSkin(uintptr_t weaponEnt, uintptr_t pawn, const TargetSkin& t)
         }
     }
 
-    // Keep the original contract: true means skin identity /
-    // fallback state changed, not merely that a model was rebuilt.
-    return !alreadyPainted;
+    const bool identityChanged =
+        !alreadyPainted || nameChanged;
+
+    if (identityChanged)
+    {
+        if (ClearHudWeaponSelectionEntry(weaponEnt))
+            Log("[hud-name] weapon selection entry refreshed: %p",
+                (void*)weaponEnt);
+    }
+
+    return identityChanged;
 }
 
 // ---- Default ----
