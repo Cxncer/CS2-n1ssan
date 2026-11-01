@@ -1,6 +1,6 @@
 
 #include "skin/glove_model_refresh.h"
-
+#include "skin/gloves.h"
 #include "sdk/functions.h"
 #include "sdk/entities.h"
 #include "sdk/scene_node.h"
@@ -753,7 +753,7 @@ namespace
         }
 
         // Restore is always processed before another request.
-        // Keep retrying if SetModel fails instead of losing the path.
+// Keep retrying if SetModel fails instead of losing the path.
         if (g_swapPawn && !g_restoreModel.empty())
         {
             if (SetAgentModel(pawn, g_restoreModel.c_str()))
@@ -761,6 +761,7 @@ namespace
                 Log("[glove-model-refresh] original model restored: %s",
                     g_restoreModel.c_str());
 
+                ForceGloveUpdate();
                 InvalidateWeaponModelCache();
 
                 ClearSwapState();
