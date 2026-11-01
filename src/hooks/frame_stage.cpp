@@ -304,20 +304,7 @@ static void __fastcall FsnDetour(void* pClient, int stage)
     }
 
     if (GloveAppliedThisTick())
-    {
-        InvalidateWeaponModelCache();
-
-        if (pRegenerateSkins)
-        {
-            __try
-            {
-                pRegenerateSkins();
-            }
-            __except (1)
-            {
-            }
-        }
-    }
+        g_gloveUpdatePending = true;
 
     // Preserve exactly one original FrameStageNotify call.
     if (g_origFsn)
@@ -421,7 +408,6 @@ static void __fastcall FsnDetour(void* pClient, int stage)
     uintptr_t ws = 0;
     if (!SafeReadQword(pawn + g_off.PAWN_WeaponServices, ws) || ws < 0x10000) {
         Log("[apply] ws null");
-        RunGloves(pawn);
         return;
     }
 
