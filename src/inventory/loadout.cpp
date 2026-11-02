@@ -289,23 +289,50 @@ static bool LoadJSON(const char* path, std::vector<LoadoutItem>& out, bool& enab
 
 void LoadLoadout()
 {
-    // Candidate paths, tried in order. First successful parse wins.
-    std::vector<std::string> paths;
-
-    // The one you've been using:
-    paths.push_back("E:\\Vibe Coding\\CS2 Lore\\CS2 Lore\\n1ssan\\n1ssan-data.json");
-
-    // Next to the DLL:
+    // Resolve the module containing LoadLoadout(), then look beside the DLL.
+    // GetModuleFileNameA(nullptr, ...) returns the EXE path, not the DLL path.
+    HMODULE dllModule = nullptr;
+    if (!GetModuleHandleExA(
+        GET_MODULE_HANDLE_EX_FLAG_FROM_ADDRESS |
+        GET_MODULE_HANDLE_EX_FLAG_UNCHANGED_REFCOUNT,
+        reinterpret_cast<LPCSTR>(&LoadLoadout),
+        &dllModule))
     {
-        char dir[MAX_PATH]{};
-        GetModuleFileNameA(nullptr, dir, MAX_PATH);
-        char* slash = strrchr(dir, '\\');
-        if (slash) *(slash + 1) = 0;
-
-        char p[MAX_PATH]{};
-        sprintf_s(p, MAX_PATH, "%sn1ssan-data.json", dir);
-        paths.push_back(p);
+        Log("[loadout] FATAL: could not resolve DLL module (error=%lu)", GetLastError());
+        return;
     }
+
+    char dllPath[MAX_PATH]{};
+    DWORD pathLength = GetModuleFileNameA(dllModule, dllPath, MAX_PATH);
+    if (pathLength == 0 || pathLength >= MAX_PATH)
+    {
+        Log("[loadout] FATAL: could not read DLL path (error=%lu)", GetLastError());
+        return;
+    }
+
+    char* slash = strrchr(dllPath, '\\');
+    char* forwardSlash = strrchr(dllPath, '/');
+    if (!slash || (forwardSlash && forwardSlash > slash))
+        slash = forwardSlash;
+
+    if (!slash)
+    {
+        Log("[loadout] FATAL: DLL path has no directory: %s", dllPath);
+        return;
+    }
+
+    *(slash + 1) = 0;
+
+    char loadoutPath[MAX_PATH]{};
+    if (sprintf_s(loadoutPath, MAX_PATH, "%sn1ssan-data.json", dllPath) <= 0)
+    {
+        Log("[loadout] FATAL: could not construct loadout path");
+        return;
+    }
+
+    std::vector<std::string> paths;
+    paths.push_back(loadoutPath);
+    Log("[loadout] searching DLL-relative path: %s", loadoutPath);
 
     std::vector<LoadoutItem> items;
     bool enabled = true;
