@@ -289,8 +289,9 @@ static bool LoadJSON(const char* path, std::vector<LoadoutItem>& out, bool& enab
 
 void LoadLoadout()
 {
-    // Resolve the module containing LoadLoadout(), then look beside the DLL.
-    // GetModuleFileNameA(nullptr, ...) returns the EXE path, not the DLL path.
+    // Resolve the module containing LoadLoadout(), then locate the workspace root.
+    // Expected layout: CS2 Lore/development/CS2-n1ssan/x64/Release/n1ssan.dll.
+    // From the DLL directory, four parent levels lead to the CS2 Lore root.
     HMODULE dllModule = nullptr;
     if (!GetModuleHandleExA(
         GET_MODULE_HANDLE_EX_FLAG_FROM_ADDRESS |
@@ -324,15 +325,19 @@ void LoadLoadout()
     *(slash + 1) = 0;
 
     char loadoutPath[MAX_PATH]{};
-    if (sprintf_s(loadoutPath, MAX_PATH, "%sn1ssan-data.json", dllPath) <= 0)
+    if (sprintf_s(
+        loadoutPath,
+        MAX_PATH,
+        "%s..\\..\\..\\..\\n1ssan-data.json",
+        dllPath) <= 0)
     {
-        Log("[loadout] FATAL: could not construct loadout path");
+        Log("[loadout] FATAL: could not construct workspace-root loadout path");
         return;
     }
 
     std::vector<std::string> paths;
     paths.push_back(loadoutPath);
-    Log("[loadout] searching DLL-relative path: %s", loadoutPath);
+    Log("[loadout] searching workspace-root path: %s", loadoutPath);
 
     WIN32_FILE_ATTRIBUTE_DATA fileInfo{};
     if (!GetFileAttributesExA(loadoutPath, GetFileExInfoStandard, &fileInfo))
