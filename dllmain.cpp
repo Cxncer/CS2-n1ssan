@@ -137,13 +137,17 @@ static DWORD WINAPI InjectThread(LPVOID)
     // 6. Knife animation hooks (MinHook is now live)
     KnifeAnimation::Initialize();
 
-    // 7. FSN hook (last, so all dependencies are ready)
+    // 7. FSN hook installation result
     if (!InstallFSNHook())
     {
         Log("[fatal] FSN hook not installed");
+        Log("[status] INITIALIZATION_FAILED");
+        return 0;
     }
 
-    Log("[ready] v9.0.3 split; targets=%zu", g_targets.size());
+    Log("[status] HOOK_INSTALLATION_SUCCEEDED");
+    Log("[status] INITIALIZATION_NOT_YET_VERIFIED");
+    Log("[diagnostic] targets=%zu", g_targets.size());
 
     while (true) Sleep(10000);
     return 0;
