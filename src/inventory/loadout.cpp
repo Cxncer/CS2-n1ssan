@@ -334,6 +334,28 @@ void LoadLoadout()
     paths.push_back(loadoutPath);
     Log("[loadout] searching DLL-relative path: %s", loadoutPath);
 
+    WIN32_FILE_ATTRIBUTE_DATA fileInfo{};
+    if (!GetFileAttributesExA(loadoutPath, GetFileExInfoStandard, &fileInfo))
+    {
+        Log("[loadout] FATAL: JSON file unavailable (error=%lu)", GetLastError());
+        return;
+    }
+    if (fileInfo.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY)
+    {
+        Log("[loadout] FATAL: JSON path points to a directory");
+        return;
+    }
+
+    ULARGE_INTEGER fileSize{};
+    fileSize.HighPart = fileInfo.nFileSizeHigh;
+    fileSize.LowPart = fileInfo.nFileSizeLow;
+    if (fileSize.QuadPart == 0)
+    {
+        Log("[loadout] FATAL: JSON file is empty");
+        return;
+    }
+    Log("[loadout] JSON file found (%llu bytes)", fileSize.QuadPart);
+
     std::vector<LoadoutItem> items;
     bool enabled = true;
     bool ok = false;
@@ -350,7 +372,7 @@ void LoadLoadout()
 
     if (!ok)
     {
-        Log("[loadout] FATAL: could not load n1ssan-data.json");
+        Log("[loadout] FATAL: could not read or parse n1ssan-data.json (or it contains no entries)");
         return;
     }
 
