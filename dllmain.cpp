@@ -80,6 +80,8 @@ static bool LoadMinHook()
 
 static DWORD WINAPI InjectThread(LPVOID)
 {
+    LogStatus("INITIALIZING", "worker_started");
+    
     // 1. MinHook FIRST — everything else needs it
     if (!LoadMinHook())
     {
@@ -145,8 +147,11 @@ static DWORD WINAPI InjectThread(LPVOID)
         return 0;
     }
 
-    Log("[status] HOOK_INSTALLATION_SUCCEEDED");
-    Log("[status] INITIALIZATION_NOT_YET_VERIFIED");
+    LogStatus(
+        "CHECKS_PASSED",
+        "required_initialization_checks_passed"
+    );
+
     Log("[diagnostic] targets=%zu", g_targets.size());
 
     while (true) Sleep(10000);

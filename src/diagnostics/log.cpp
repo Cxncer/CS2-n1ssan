@@ -53,6 +53,61 @@ void Log(const char* fmt, ...)
     if (g_logFile) { fputs(buf, g_logFile); fputc('\n', g_logFile); fflush(g_logFile); }
 }
 
+static void SanitizeStatusField(
+    const char* input,
+    char* output,
+    size_t capacity)
+{
+    if (!input)
+        input = "none";
+
+    size_t i = 0;
+
+    while (*input && i + 1 < capacity)
+    {
+        char c = *input++;
+
+        if (c == '|' || c == '\r' || c == '\n')
+            c = '_';
+
+        output[i++] = c;
+    }
+
+    output[i] = '\0';
+}
+
+void LogStatus(const char* state, const char* reason)
+{
+    SYSTEMTIME utc{};
+    GetSystemTime(&utc);
+
+    char safeState[64]{};
+    char safeReason[512]{};
+    char record[768]{};
+
+    SanitizeStatusField(
+        state, safeState, sizeof(safeState));
+
+    SanitizeStatusField(
+        reason, safeReason, sizeof(safeReason));
+
+    sprintf_s(
+        record,
+        sizeof(record),
+        "N1SSAN_STATUS|1|%04u-%02u-%02uT%02u:%02u:%02uZ|%s|reason=%s",
+        utc.wYear,
+        utc.wMonth,
+        utc.wDay,
+        utc.wHour,
+        utc.wMinute,
+        utc.wSecond,
+        safeState,
+        safeReason
+    );
+
+    Log("%s", record);
+}
+
 uint64_t NowMs()
 {
     using namespace std::chrono;
