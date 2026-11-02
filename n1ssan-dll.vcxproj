@@ -216,8 +216,6 @@
     <ClCompile Include="src\skin\glove_schema.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="2n1ssanlogs.md" />
-    <None Include="n1ssanlogs.md" />
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
@@ -249,9 +247,6 @@
     <ClInclude Include="src\skin\glove_attribute_manager.h" />
     <ClInclude Include="src\skin\glove_paintkit_schema.h" />
     <ClInclude Include="src\skin\glove_schema.h" />
-  </ItemGroup>
-  <ItemGroup>
-    <Text Include="gloveslogs.md" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

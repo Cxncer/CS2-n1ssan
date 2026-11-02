@@ -1,5 +1,5 @@
 // n1ssan-dll / src/diagnostics/log.cpp
-// Console + file logger. Carried forward from v9.0.2 without changes.
+// Console + file logger. Operation Overdrive
 
 #include "diagnostics/log.h"
 
@@ -30,16 +30,22 @@ void LogInit(const std::string& dllPath)
     strcpy_s(dir, dllPath.c_str());
     char* slash = strrchr(dir, '\\');
     if (slash) *(slash + 1) = 0;
-    sprintf_s(g_logPath, "%sn1ssan-dll.log", dir);
+    sprintf_s(g_logPath, "%sn1ssalogs.md", dir);
     g_logFile = _fsopen(g_logPath, "w", _SH_DENYNO);
     if (!g_logFile)
     {
         char tmp[MAX_PATH]{};
         GetTempPathA(MAX_PATH, tmp);
-        sprintf_s(g_logPath, "%sn1ssan-dll.log", tmp);
+        sprintf_s(g_logPath, "%sn1ssalogs.md", tmp);
         g_logFile = _fsopen(g_logPath, "w", _SH_DENYNO);
     }
     printf("[n1ssan] log: %s\n", g_logPath);
+
+    if (g_logFile)
+    {
+        Log("# n1ssan diagnostic log");
+        Log("");
+    }
 }
 
 void Log(const char* fmt, ...)

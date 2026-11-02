@@ -117,8 +117,6 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
-    <None Include="n1ssanlogs.md" />
-    <None Include="2n1ssanlogs.md" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\config\offsets.h">
@@ -205,8 +203,5 @@
     <ClInclude Include="src\skin\glove_schema.h">
       <Filter>src\skin</Filter>
     </ClInclude>
-  </ItemGroup>
-  <ItemGroup>
-    <Text Include="gloveslogs.md" />
   </ItemGroup>
 </Project>

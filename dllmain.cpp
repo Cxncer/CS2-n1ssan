@@ -1,6 +1,5 @@
 ﻿// n1ssan-dll / dllmain.cpp
-// v10.0.0 — beta 5.3 - Knife & Gloves Logic by ChatGPT
-// Weapons, Knives and Gloves.
+// Operation Overdrive Underway.
 // split into src/ modules
 //
 // This file is now a 60-line skeleton. Everything functional lives in
@@ -86,6 +85,7 @@ static DWORD WINAPI InjectThread(LPVOID)
     if (!LoadMinHook())
     {
         Log("[fatal] MinHook load failed");
+        LogStatus("FAILED", "minhook_load_failed");
         return 0;
     }
 
@@ -98,6 +98,7 @@ static DWORD WINAPI InjectThread(LPVOID)
     if (!GetModuleHandleA("client.dll"))
     {
         Log("[fatal] client.dll not found");
+        LogStatus("FAILED", "minhook_load_failed");
         return 0;
     }
 
@@ -109,12 +110,14 @@ static DWORD WINAPI InjectThread(LPVOID)
     if (!ResolveGloveSchemaOffsets())
     {
         Log("[fatal] glove schema resolution incomplete");
+        LogStatus("FAILED", "glove_schema_resolution_failed");
         return 0;
     }
 
     if (!ResolveFunctions())
     {
         Log("[fatal] function resolution failed");
+        LogStatus("FAILED", "function_resolution_failed");
         return 0;
     }
 
@@ -130,6 +133,7 @@ static DWORD WINAPI InjectThread(LPVOID)
     if (g_targets.empty())
     {
         Log("[fatal] loadout empty");
+        LogStatus("FAILED", "loadout_empty");
         return 0;
     }
 
@@ -143,7 +147,7 @@ static DWORD WINAPI InjectThread(LPVOID)
     if (!InstallFSNHook())
     {
         Log("[fatal] FSN hook not installed");
-        Log("[status] INITIALIZATION_FAILED");
+        LogStatus("FAILED", "fsn_hook_installation_failed");
         return 0;
     }
 
