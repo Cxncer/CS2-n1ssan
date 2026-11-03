@@ -31,6 +31,7 @@ namespace
     std::unordered_map<int, const char*> g_names;
     std::uintptr_t g_schemaAddress = 0;
     std::uint32_t g_paintKitMapOffset = 0;
+    void* g_fileSystem = nullptr;
 
     const char* PermanentCopy(const char* source)
     {
@@ -166,6 +167,29 @@ namespace
 
 namespace GlovePaintKitSchema
 {
+    bool CallFileExists(void* fileSystem, const char* path, bool& exists)
+    {
+        using ExistsFn = bool (__fastcall*)(void*, const char*, const char*);
+
+        exists = false;
+
+        __try
+        {
+            void** vtable = *reinterpret_cast<void***>(fileSystem);
+            if (!vtable || !vtable[21])
+                return false;
+
+            exists = reinterpret_cast<ExistsFn>(vtable[21])(
+                fileSystem, path, "GAME");
+            return true;
+        }
+        __except (EXCEPTION_EXECUTE_HANDLER)
+        {
+            exists = false;
+            return false;
+        }
+    }
+
     bool CallFileOpen(void* fileSystem, const char* path, void*& handle)
     {
         using OpenFn = void* (__fastcall*)(void*, const char*, const char*, const char*);
@@ -431,30 +455,17 @@ namespace GlovePaintKitSchema
         if (!path || !*path)
             return false;
 
-        static void* fileSystem = GetLootInterface(
-            "filesystem_stdio.dll",
-            "VFileSystem017");
+        if (!g_fileSystem)
+        {
+            g_fileSystem = GetLootInterface(
+                "filesystem_stdio.dll",
+                "VFileSystem017");
+        }
 
-        if (!fileSystem)
+        if (!g_fileSystem)
             return false;
 
-        using ExistsFn = bool (__fastcall*)(void*, const char*, const char*);
-
-        __try
-        {
-            void** vtable = *reinterpret_cast<void***>(fileSystem);
-            if (!vtable || !vtable[21])
-                return false;
-
-            exists = reinterpret_cast<ExistsFn>(vtable[21])(
-                fileSystem, path, "GAME");
-            return true;
-        }
-        __except (EXCEPTION_EXECUTE_HANDLER)
-        {
-            exists = false;
-            return false;
-        }
+        return CallFileExists(g_fileSystem, path, exists);
     }
 
     const char* GetName(int paintKitId)
