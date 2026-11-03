@@ -335,7 +335,7 @@ static bool IsRegularFile(const std::string& path)
 static bool IsBridgeRoot(const std::string& path)
 {
     return IsRegularFile(path + "package.json") &&
-        IsRegularFile(path + "bridge\server.ts");
+        IsRegularFile(path + "bridge\\server.ts");
 }
 
 static bool ResolveLoadoutPath(std::string& loadoutPath)
