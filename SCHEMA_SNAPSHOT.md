@@ -31,6 +31,18 @@ The compatibility scan checks each skin-capable live item definition (weapon, kn
 
 The snapshot intentionally contains no process addresses or pointers.
 
+## Runtime loadout preflight
+
+After the loadout is parsed and before Plan A creates any SOCache items, startup reuses the live schema scan to validate every selected target:
+
+- The target definition index must exist in the live item-definition map.
+- The definition must be a skin-capable weapon, knife, or glove with a live `itemName`.
+- The selected paint-kit ID must appear in that definition's generated-material compatibility list. Paint-kit ID 0 is accepted as the default finish.
+
+Each target logs a `[schema-preflight] PASS` or a specific `REJECT` reason. If the live scan is unavailable or any target fails, initialization stops before SOCache creation and before the FrameStageNotify hook is installed. Snapshot file-write failure is logged separately and does not invalidate an otherwise successful in-memory preflight.
+
+This preflight confirms live definition and generated-material compatibility. It still does not prove that SOCache creation, item-view attribute writes, model rebuilding, or final rendering succeeds; those remain the next runtime test stages.
+
 ## Validation workflow
 
 1. Build the DLL and run it in CS2.
