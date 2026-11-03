@@ -11,6 +11,7 @@
 // Rejects unknown weapons (logs "skip unknown weapon").
 
 #include "inventory/loadout.h"
+#include "inventory/armory_contract.h"
 #include "diagnostics/log.h"
 
 #include <fstream>
