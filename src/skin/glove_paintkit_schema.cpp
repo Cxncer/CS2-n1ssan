@@ -424,6 +424,39 @@ namespace GlovePaintKitSchema
         return true;
     }
 
+    bool CheckGameFileExists(const char* path, bool& exists)
+    {
+        exists = false;
+
+        if (!path || !*path)
+            return false;
+
+        static void* fileSystem = GetLootInterface(
+            "filesystem_stdio.dll",
+            "VFileSystem017");
+
+        if (!fileSystem)
+            return false;
+
+        using ExistsFn = bool (__fastcall*)(void*, const char*, const char*);
+
+        __try
+        {
+            void** vtable = *reinterpret_cast<void***>(fileSystem);
+            if (!vtable || !vtable[21])
+                return false;
+
+            exists = reinterpret_cast<ExistsFn>(vtable[21])(
+                fileSystem, path, "GAME");
+            return true;
+        }
+        __except (EXCEPTION_EXECUTE_HANDLER)
+        {
+            exists = false;
+            return false;
+        }
+    }
+
     const char* GetName(int paintKitId)
     {
         const auto it = g_names.find(paintKitId);
