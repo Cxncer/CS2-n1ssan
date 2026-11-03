@@ -819,8 +819,7 @@ namespace
                 << "\",\"weaponName\":\"" << JsonEscape(item.weaponName)
                 << "\",\"simpleWeaponName\":\"" << JsonEscape(item.simpleWeaponName)
                 << "\",\"modelName\":\"" << JsonEscape(item.modelName)
-                << "\"}"<< JsonEscape(item.modelName)
-                << "\",\"compatiblePaintKitIds\":[";
+                << "\",\"compatiblePaintKitIds\":["
             for (std::size_t kitIndex = 0; kitIndex < item.compatiblePaintKitIds.size(); ++kitIndex)
             {
                 if (kitIndex) json << ",";
