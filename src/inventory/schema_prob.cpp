@@ -58,6 +58,7 @@ namespace
         std::string weaponName;
         std::string itemName;
         std::string kind;
+        std::vector<std::int32_t> compatiblePaintKitIds;
     };
 
     struct PaintKitRecord
@@ -572,6 +573,59 @@ namespace
         return !output.empty();
     }
 
+    bool BuildPaintKitCompatibility(
+        std::vector<ItemDefinitionRecord>& items,
+        const std::vector<PaintKitRecord>& paintKits,
+        std::size_t& itemsChecked,
+        std::size_t& pairsChecked,
+        std::size_t& compatiblePairsFound)
+    {
+        itemsChecked = 0;
+        pairsChecked = 0;
+        compatiblePairsFound = 0;
+
+        for (auto& item : items)
+        {
+            if ((item.kind != "weapon" && item.kind != "knife" && item.kind != "glove") ||
+                item.itemName.empty())
+                continue;
+
+            ++itemsChecked;
+            item.compatiblePaintKitIds.clear();
+            item.compatiblePaintKitIds.push_back(0);
+
+            for (const auto& paintKit : paintKits)
+            {
+                if (paintKit.id <= 0 || paintKit.name.empty())
+                    continue;
+
+                std::string path = "panorama/images/econ/default_generated/";
+                path.reserve(path.size() + item.itemName.size() + paintKit.name.size() + 24);
+                path += item.itemName;
+                path += "_";
+                path += paintKit.name;
+                path += "_light_png.vtex_c";
+
+                bool exists = false;
+                if (!GlovePaintKitSchema::CheckGameFileExists(path.c_str(), exists))
+                {
+                    Log("[schema-snapshot] generated-material filesystem check failed for definition=%u",
+                        item.definitionIndex);
+                    return false;
+                }
+
+                ++pairsChecked;
+                if (exists)
+                {
+                    item.compatiblePaintKitIds.push_back(paintKit.id);
+                    ++compatiblePairsFound;
+                }
+            }
+        }
+
+        return itemsChecked > 0 && pairsChecked > 0;
+    }
+
     std::string JsonEscape(const std::string& value)
     {
         std::string escaped;
@@ -729,17 +783,25 @@ namespace
         const ItemsGameData& gameData,
         bool itemsGameLoaded,
         bool paintKitMapAvailable,
+        bool compatibilityScanAvailable,
+        std::size_t compatibilityItemsChecked,
+        std::size_t compatibilityPairsChecked,
+        std::size_t compatiblePairsFound,
         std::uint32_t paintKitMapOffset)
     {
         std::ostringstream json;
 
         json << "{\n"
-            << "\"schemaVersion\":1,\n"
+            << "\"schemaVersion\":2,\n"
             << "\"source\":\"CS2 live CEconItemSchema + scripts/items/items_game.txt\",\n"
             << "\"createdAtUtc\":\"" << CurrentUtcTimestamp() << "\",\n"
             << "\"itemsGameLoaded\":" << (itemsGameLoaded ? "true" : "false") << ",\n"
             << "\"itemsGameFile\":\"scripts/items/items_game.txt\",\n"
             << "\"paintKitMapAvailable\":" << (paintKitMapAvailable ? "true" : "false") << ",\n"
+            << "\"compatibilityScanAvailable\":" << (compatibilityScanAvailable ? "true" : "false") << ",\n"
+            << "\"compatibilityItemsChecked\":" << compatibilityItemsChecked << ",\n"
+            << "\"compatibilityPairsChecked\":" << compatibilityPairsChecked << ",\n"
+            << "\"compatiblePairsFound\":" << compatiblePairsFound << ",\n"
             << "\"paintKitMapOffset\":" << paintKitMapOffset << ",\n";
 
         json << "\"itemDefinitions\":[";
@@ -757,7 +819,14 @@ namespace
                 << "\",\"weaponName\":\"" << JsonEscape(item.weaponName)
                 << "\",\"simpleWeaponName\":\"" << JsonEscape(item.simpleWeaponName)
                 << "\",\"modelName\":\"" << JsonEscape(item.modelName)
-                << "\"}";
+                << "\"}"<< JsonEscape(item.modelName)
+                << "\",\"compatiblePaintKitIds\":[";
+            for (std::size_t kitIndex = 0; kitIndex < item.compatiblePaintKitIds.size(); ++kitIndex)
+            {
+                if (kitIndex) json << ",";
+                json << item.compatiblePaintKitIds[kitIndex];
+            }
+            json << "]}";
         }
         json << "],\n";
 
@@ -815,12 +884,29 @@ void RunSchemaProbe()
     const bool paintKitMapAvailable =
         ReadLivePaintKits(schema, paintMapOffset, gameData, paintKits);
 
+    std::size_t compatibilityItemsChecked = 0;
+    std::size_t compatibilityPairsChecked = 0;
+    std::size_t compatiblePairsFound = 0;
+    const bool compatibilityScanAvailable =
+        itemsGameLoaded &&
+        paintKitMapAvailable &&
+        BuildPaintKitCompatibility(
+            items,
+            paintKits,
+            compatibilityItemsChecked,
+            compatibilityPairsChecked,
+            compatiblePairsFound);
+
     const std::string json = BuildSnapshotJson(
         items,
         paintKits,
         gameData,
         itemsGameLoaded,
         paintKitMapAvailable,
+        compatibilityScanAvailable,
+        compatibilityItemsChecked,
+        compatibilityPairsChecked,
+        compatiblePairsFound,
         paintMapOffset);
 
     std::string outputPath;
@@ -842,6 +928,12 @@ void RunSchemaProbe()
         itemsGameLoaded ? "loaded" : "unavailable",
         paintKitMapAvailable ? "available" : "unavailable",
         paintMapOffset);
+
+    Log("[schema-snapshot] compatibility=%s items=%zu pairs=%zu compatible=%zu",
+        compatibilityScanAvailable ? "available" : "unavailable",
+        compatibilityItemsChecked,
+        compatibilityPairsChecked,
+        compatiblePairsFound);
 
     Log("[schema-snapshot] snapshot written: %s", outputPath.c_str());
     Log("=== [schema-snapshot] done ===");
