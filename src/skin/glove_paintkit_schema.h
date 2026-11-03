@@ -25,5 +25,6 @@ namespace GlovePaintKitSchema
     std::uintptr_t GetSchemaAddress();
     std::uint32_t GetPaintKitMapOffset();
     bool ReadGameFile(const char* path, std::string& output);
+    bool CheckGameFileExists(const char* path, bool& exists);
     bool RepairGeneratedName(GlovePaintKitRecord* generated, int paintKitId);
 }
