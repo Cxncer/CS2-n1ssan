@@ -545,7 +545,8 @@ namespace
                 !SafeReadQword(node + 0x18, paintKit) ||
                 !IsUserPointer(paintKit) ||
                 !SafeReadI32(paintKit, id) ||
-                !SafeReadI32(paintKit + 0x44, rarity))
+                !SafeReadI32(paintKit + 0x44, rarity) ||
+                id < 0)
             {
                 continue;
             }
