@@ -181,7 +181,7 @@ BOOL APIENTRY DllMain(HMODULE hModule, DWORD reason, LPVOID)
         g_dllPath = dllPath;
 
         LogInit(g_dllPath);
-        Log("[build] v10.0.0 beta 5.3 %s %s", __DATE__, __TIME__);
+        Log("[build] Operation Armory x Obsidian Build 3.0 | %s %s", __DATE__, __TIME__);
 
         HANDLE t = CreateThread(nullptr, 0, InjectThread, nullptr, 0, nullptr);
         if (t) CloseHandle(t);
