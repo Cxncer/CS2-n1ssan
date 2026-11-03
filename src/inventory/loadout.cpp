@@ -1,6 +1,6 @@
 // n1ssan-dll / src/inventory/loadout.cpp
 // JSON parser + weapon def-index table.
-// Carried forward from v9.0.2 without changes.
+// Legacy parser retained for the current runtime integration.
 //
 // The JSON format expected by this parser:
 //   { "version": N, "skins": [ { "weapon": "...", "name": "...",
