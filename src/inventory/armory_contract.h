@@ -72,8 +72,8 @@ namespace Armory
 
     struct Charm
     {
-        std::uint32_t kitId = 0;
-        std::uint32_t seed = 0;
+        SafeId kitId = 0;
+        SafeId seed = 0;
         float x = 0.0f;
         float y = 0.0f;
         float z = 0.0f;
@@ -87,6 +87,10 @@ namespace Armory
         SafeId definitionId = 0;
         ItemType type = ItemType::Other;
         std::string name;
+        std::optional<SafeId> quality;
+        std::optional<SafeId> rarity;
+        std::optional<SafeId> origin;
+        std::optional<SafeId> sourceCaseDefinitionId;
         std::optional<Finish> finish;
         StatTrak statTrak;
         std::optional<std::string> customName;
@@ -215,6 +219,11 @@ namespace Armory
                     error(itemPath + ".definitionId: exceeds the JSON safe-integer range");
                 if (item.name.empty())
                     error(itemPath + ".name: expected a non-empty string");
+                if ((item.quality && !IsSafeId(*item.quality)) ||
+                    (item.rarity && !IsSafeId(*item.rarity)) ||
+                    (item.origin && !IsSafeId(*item.origin)) ||
+                    (item.sourceCaseDefinitionId && !IsSafeId(*item.sourceCaseDefinitionId)))
+                    error(itemPath + ": item metadata ID exceeds the JSON safe-integer range");
 
                 if (item.finish)
                 {
