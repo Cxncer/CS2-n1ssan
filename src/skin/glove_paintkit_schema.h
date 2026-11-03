@@ -21,5 +21,7 @@ namespace GlovePaintKitSchema
 {
     bool Initialize();
     const char* GetName(int paintKitId);
+    std::uintptr_t GetSchemaAddress();
+    std::uint32_t GetPaintKitMapOffset();
     bool RepairGeneratedName(GlovePaintKitRecord* generated, int paintKitId);
 }
