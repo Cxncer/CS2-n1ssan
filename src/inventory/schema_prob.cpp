@@ -11,8 +11,6 @@
 #include <cstdint>
 #include <cstdio>
 #include <cstring>
-#include <fstream>
-#include <iterator>
 #include <map>
 #include <sstream>
 #include <string>
@@ -130,34 +128,6 @@ namespace
             return false;
 
         return ReadRemoteString(stringAddress, output);
-    }
-
-    bool ReadItemsGamePath(std::string& path)
-    {
-        HMODULE client = GetModuleHandleA("client.dll");
-
-        if (!client)
-            return false;
-
-        char modulePath[MAX_PATH]{};
-
-        if (!GetModuleFileNameA(client, modulePath, MAX_PATH))
-            return false;
-
-        // client.dll lives at <game>/csgo/bin/win64/client.dll.
-        for (int i = 0; i < 3; ++i)
-        {
-            char* separator = std::strrchr(modulePath, '\\');
-
-            if (!separator)
-                return false;
-
-            *separator = '\0';
-        }
-
-        path = modulePath;
-        path += "\\scripts\\items\\items_game.txt";
-        return true;
     }
 
     class KeyValuesTokenizer
@@ -451,33 +421,18 @@ namespace
 
     bool LoadItemsGame(ItemsGameData& output)
     {
-        std::string path;
+        std::string contents;
 
-        if (!ReadItemsGamePath(path))
-            return false;
-
-        std::ifstream file(path, std::ios::binary);
-
-        if (!file)
+        if (!GlovePaintKitSchema::ReadGameFile(
+            "scripts/items/items_game.txt",
+            contents))
         {
-            Log("[schema-snapshot] unable to open %s", path.c_str());
+            Log("[schema-snapshot] VFileSystem017 could not read scripts/items/items_game.txt");
             return false;
         }
 
-        file.seekg(0, std::ios::end);
-        const std::streamoff size = file.tellg();
-
-        if (size <= 0 || static_cast<std::uint64_t>(size) > MAX_ITEMS_GAME_BYTES)
-        {
-            Log("[schema-snapshot] items_game.txt size is invalid: %lld",
-                static_cast<long long>(size));
+        if (contents.empty() || contents.size() > MAX_ITEMS_GAME_BYTES)
             return false;
-        }
-
-        file.seekg(0, std::ios::beg);
-        std::string contents{
-            std::istreambuf_iterator<char>(file),
-            std::istreambuf_iterator<char>()};
 
         return ParseItemsGame(contents, output);
     }
