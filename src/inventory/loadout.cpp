@@ -141,8 +141,46 @@ public:
         std::string o;
         if (i >= s.size() || s[i] != '"') return o;
         ++i;
-        while (i < s.size() && s[i] != '"') o.push_back(s[i++]);
-        if (i < s.size()) ++i;
+
+        while (i < s.size())
+        {
+            const char c = s[i++];
+            if (c == '"')
+                break;
+
+            if (c != '\\')
+            {
+                o.push_back(c);
+                continue;
+            }
+
+            if (i >= s.size())
+                break;
+
+            const char escaped = s[i++];
+            switch (escaped)
+            {
+            case '"':  o.push_back('"');  break;
+            case '\\': o.push_back('\\'); break;
+            case '/':  o.push_back('/');  break;
+            case 'b':  o.push_back('\b'); break;
+            case 'f':  o.push_back('\f'); break;
+            case 'n':  o.push_back('\n'); break;
+            case 'r':  o.push_back('\r'); break;
+            case 't':  o.push_back('\t'); break;
+            case 'u':
+                // Consume Unicode escape digits so ignored metadata remains
+                // correctly tokenized. Runtime weapon fields are ASCII.
+                if (i + 4 <= s.size())
+                    i += 4;
+                o.push_back('?');
+                break;
+            default:
+                o.push_back(escaped);
+                break;
+            }
+        }
+
         return o;
     }
 
@@ -287,11 +325,88 @@ static bool LoadJSON(const char* path, std::vector<LoadoutItem>& out, bool& enab
     return true;
 }
 
-void LoadLoadout()
+static bool IsRegularFile(const std::string& path)
 {
-    // Resolve the module containing LoadLoadout(), then locate the workspace root.
-    // Expected layout: CS2 Lore/development/CS2-n1ssan/x64/Release/n1ssan.dll.
-    // From the DLL directory, four parent levels lead to the CS2 Lore root.
+    WIN32_FILE_ATTRIBUTE_DATA info{};
+    return GetFileAttributesExA(path.c_str(), GetFileExInfoStandard, &info) &&
+        !(info.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY);
+}
+
+static bool IsBridgeRoot(const std::string& path)
+{
+    return IsRegularFile(path + "package.json") &&
+        IsRegularFile(path + "bridge\server.ts");
+}
+
+static bool ResolveLoadoutPath(std::string& loadoutPath)
+{
+    char configuredDataFile[MAX_PATH]{};
+    const DWORD configuredLength = GetEnvironmentVariableA(
+        "N1SSAN_DATA_FILE", configuredDataFile, MAX_PATH);
+
+    if (configuredLength > 0 && configuredLength < MAX_PATH)
+    {
+        char absolutePath[MAX_PATH]{};
+        const DWORD absoluteLength = GetFullPathNameA(
+            configuredDataFile, MAX_PATH, absolutePath, nullptr);
+
+        if (absoluteLength == 0 || absoluteLength >= MAX_PATH)
+        {
+            Log("[loadout] FATAL: N1SSAN_DATA_FILE could not be resolved (error=%lu)",
+                GetLastError());
+            return false;
+        }
+
+        loadoutPath = absolutePath;
+        Log("[loadout] configured data path: %s", loadoutPath.c_str());
+        return IsRegularFile(loadoutPath);
+    }
+
+    if (configuredLength >= MAX_PATH)
+    {
+        Log("[loadout] FATAL: N1SSAN_DATA_FILE exceeds MAX_PATH");
+        return false;
+    }
+
+    char configuredBridgeDir[MAX_PATH]{};
+    const DWORD bridgeLength = GetEnvironmentVariableA(
+        "N1SSAN_BRIDGE_DIR", configuredBridgeDir, MAX_PATH);
+
+    if (bridgeLength > 0 && bridgeLength < MAX_PATH)
+    {
+        char absoluteBridgeDir[MAX_PATH]{};
+        const DWORD absoluteLength = GetFullPathNameA(
+            configuredBridgeDir, MAX_PATH, absoluteBridgeDir, nullptr);
+
+        if (absoluteLength == 0 || absoluteLength >= MAX_PATH)
+        {
+            Log("[loadout] FATAL: N1SSAN_BRIDGE_DIR could not be resolved (error=%lu)",
+                GetLastError());
+            return false;
+        }
+
+        std::string bridgeRoot = absoluteBridgeDir;
+        if (!bridgeRoot.empty() && bridgeRoot.back() != '\\' && bridgeRoot.back() != '/')
+            bridgeRoot.push_back('\\');
+
+        if (!IsBridgeRoot(bridgeRoot))
+        {
+            Log("[loadout] FATAL: configured Bridge directory is invalid: %s",
+                bridgeRoot.c_str());
+            return false;
+        }
+
+        loadoutPath = bridgeRoot + "n1ssan-data.json";
+        Log("[loadout] Bridge data path: %s", loadoutPath.c_str());
+        return IsRegularFile(loadoutPath);
+    }
+
+    if (bridgeLength >= MAX_PATH)
+    {
+        Log("[loadout] FATAL: N1SSAN_BRIDGE_DIR exceeds MAX_PATH");
+        return false;
+    }
+
     HMODULE dllModule = nullptr;
     if (!GetModuleHandleExA(
         GET_MODULE_HANDLE_EX_FLAG_FROM_ADDRESS |
@@ -300,15 +415,15 @@ void LoadLoadout()
         &dllModule))
     {
         Log("[loadout] FATAL: could not resolve DLL module (error=%lu)", GetLastError());
-        return;
+        return false;
     }
 
     char dllPath[MAX_PATH]{};
-    DWORD pathLength = GetModuleFileNameA(dllModule, dllPath, MAX_PATH);
+    const DWORD pathLength = GetModuleFileNameA(dllModule, dllPath, MAX_PATH);
     if (pathLength == 0 || pathLength >= MAX_PATH)
     {
         Log("[loadout] FATAL: could not read DLL path (error=%lu)", GetLastError());
-        return;
+        return false;
     }
 
     char* slash = strrchr(dllPath, '\\');
@@ -319,35 +434,53 @@ void LoadLoadout()
     if (!slash)
     {
         Log("[loadout] FATAL: DLL path has no directory: %s", dllPath);
-        return;
+        return false;
     }
 
     *(slash + 1) = 0;
+    std::string searchDirectory = dllPath;
 
-    char loadoutPath[MAX_PATH]{};
-    if (sprintf_s(
-        loadoutPath,
-        MAX_PATH,
-        "%s..\\..\\..\\..\\n1ssan-data.json",
-        dllPath) <= 0)
+    // Match BridgeProcessManager.ResolveBridgeRoot(): walk upward from the
+    // DLL directory until the sibling n1ssan-web-bridge project is found.
+    while (!searchDirectory.empty())
     {
-        Log("[loadout] FATAL: could not construct workspace-root loadout path");
-        return;
+        std::string bridgeRoot = searchDirectory + "n1ssan-web-bridge\\";
+        if (IsBridgeRoot(bridgeRoot))
+        {
+            loadoutPath = bridgeRoot + "n1ssan-data.json";
+            Log("[loadout] discovered Bridge data path: %s", loadoutPath.c_str());
+            return IsRegularFile(loadoutPath);
+        }
+
+        while (!searchDirectory.empty() &&
+            (searchDirectory.back() == '\\' || searchDirectory.back() == '/'))
+            searchDirectory.pop_back();
+
+        const std::size_t parentSeparator = searchDirectory.find_last_of("\\/");
+        if (parentSeparator == std::string::npos)
+            break;
+
+        searchDirectory.resize(parentSeparator + 1);
     }
 
-    std::vector<std::string> paths;
-    paths.push_back(loadoutPath);
-    Log("[loadout] searching workspace-root path: %s", loadoutPath);
+    Log("[loadout] FATAL: could not locate n1ssan-web-bridge from DLL directory");
+    return false;
+}
+
+void LoadLoadout()
+{
+    std::string loadoutPath;
+    if (!ResolveLoadoutPath(loadoutPath))
+    {
+        Log("[loadout] FATAL: Bridge loadout file unavailable (error=%lu)", GetLastError());
+        return;
+    }
 
     WIN32_FILE_ATTRIBUTE_DATA fileInfo{};
-    if (!GetFileAttributesExA(loadoutPath, GetFileExInfoStandard, &fileInfo))
+    if (!GetFileAttributesExA(loadoutPath.c_str(), GetFileExInfoStandard, &fileInfo))
     {
-        Log("[loadout] FATAL: JSON file unavailable (error=%lu)", GetLastError());
-        return;
-    }
-    if (fileInfo.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY)
-    {
-        Log("[loadout] FATAL: JSON path points to a directory");
+        Log("[loadout] FATAL: JSON file unavailable: %s (error=%lu)",
+            loadoutPath.c_str(), GetLastError());
         return;
     }
 
@@ -356,31 +489,21 @@ void LoadLoadout()
     fileSize.LowPart = fileInfo.nFileSizeLow;
     if (fileSize.QuadPart == 0)
     {
-        Log("[loadout] FATAL: JSON file is empty");
+        Log("[loadout] FATAL: JSON file is empty: %s", loadoutPath.c_str());
         return;
     }
     Log("[loadout] JSON file found (%llu bytes)", fileSize.QuadPart);
 
     std::vector<LoadoutItem> items;
     bool enabled = true;
-    bool ok = false;
 
-    for (const auto& p : paths)
+    if (!LoadJSON(loadoutPath.c_str(), items, enabled) || items.empty())
     {
-        if (LoadJSON(p.c_str(), items, enabled) && !items.empty())
-        {
-            g_loadoutSource = p;
-            ok = true;
-            break;
-        }
-    }
-
-    if (!ok)
-    {
-        Log("[loadout] FATAL: could not read or parse n1ssan-data.json (or it contains no entries)");
+        Log("[loadout] FATAL: could not read or parse loadout JSON (or it contains no entries)");
         return;
     }
 
+    g_loadoutSource = loadoutPath;
     g_enabled = enabled;
     g_targets.clear();
 
