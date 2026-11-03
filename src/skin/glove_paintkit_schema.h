@@ -2,6 +2,7 @@
 
 #include <cstddef>
 #include <cstdint>
+#include <string>
 
 // Layout used by the tested n1ssan-gloves paint-kit name repair.
 struct GlovePaintKitRecord
@@ -23,5 +24,6 @@ namespace GlovePaintKitSchema
     const char* GetName(int paintKitId);
     std::uintptr_t GetSchemaAddress();
     std::uint32_t GetPaintKitMapOffset();
+    bool ReadGameFile(const char* path, std::string& output);
     bool RepairGeneratedName(GlovePaintKitRecord* generated, int paintKitId);
 }
