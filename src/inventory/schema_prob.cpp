@@ -733,7 +733,7 @@ namespace
         const BOOL flushOk = FlushFileBuffers(file);
         CloseHandle(file);
 
-        if (!writeOk || !flushOk || written != contents.size())
+        if (!writeOk || !flushOk || static_cast<std::size_t>(written) != contents.size())
         {
             DeleteFileA(temporaryPath.c_str());
             return false;
