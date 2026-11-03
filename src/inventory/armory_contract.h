@@ -17,6 +17,8 @@ namespace Armory
 {
     inline constexpr std::uint32_t SCHEMA_VERSION = 1;
     inline constexpr std::size_t MAX_STICKER_SLOTS = 6;
+    inline constexpr std::uint64_t MAX_SAFE_INTEGER = 9007199254740991ULL;
+    using SafeId = std::uint64_t;
 
     enum class Team : std::uint8_t
     {
@@ -46,21 +48,21 @@ namespace Armory
 
     struct Finish
     {
-        std::uint32_t paintKitId = 0;
+        SafeId paintKitId = 0;
         float wear = 0.0f;
-        std::uint32_t seed = 0;
+        SafeId seed = 0;
     };
 
     struct StatTrak
     {
         bool enabled = false;
-        std::optional<std::uint32_t> kills;
+        std::optional<SafeId> kills;
     };
 
     struct Sticker
     {
         std::uint8_t slot = 0;
-        std::uint32_t kitId = 0;
+        SafeId kitId = 0;
         float wear = 0.0f;
         float rotation = 0.0f;
         float offsetX = 0.0f;
@@ -75,14 +77,14 @@ namespace Armory
         float x = 0.0f;
         float y = 0.0f;
         float z = 0.0f;
-        std::optional<std::uint32_t> stickerKitId;
-        std::optional<std::uint32_t> highlightId;
+        std::optional<SafeId> stickerKitId;
+        std::optional<SafeId> highlightId;
     };
 
     struct Item
     {
         std::string instanceId;
-        std::uint32_t definitionId = 0;
+        SafeId definitionId = 0;
         ItemType type = ItemType::Other;
         std::string name;
         std::optional<Finish> finish;
@@ -142,6 +144,11 @@ namespace Armory
         default:
             return false;
         }
+    }
+
+    inline bool IsSafeId(SafeId value)
+    {
+        return value <= MAX_SAFE_INTEGER;
     }
 
     inline bool IsWearValid(float value)
@@ -204,14 +211,23 @@ namespace Armory
 
                 if (!IsValidItemType(item.type))
                     error(itemPath + ".type: unsupported item type");
+                if (!IsSafeId(item.definitionId))
+                    error(itemPath + ".definitionId: exceeds the JSON safe-integer range");
                 if (item.name.empty())
                     error(itemPath + ".name: expected a non-empty string");
 
-                if (item.finish && !IsWearValid(item.finish->wear))
-                    error(itemPath + ".finish.wear: expected a finite number from 0 to 1");
+                if (item.finish)
+                {
+                    if (!IsSafeId(item.finish->paintKitId) || !IsSafeId(item.finish->seed))
+                        error(itemPath + ".finish: ID exceeds the JSON safe-integer range");
+                    if (!IsWearValid(item.finish->wear))
+                        error(itemPath + ".finish.wear: expected a finite number from 0 to 1");
+                }
 
                 if (!item.statTrak.enabled && item.statTrak.kills.has_value())
                     error(itemPath + ".statTrak.kills: must be absent when StatTrak is disabled");
+                if (item.statTrak.kills && !IsSafeId(*item.statTrak.kills))
+                    error(itemPath + ".statTrak.kills: exceeds the JSON safe-integer range");
 
                 if (item.stickers.size() > MAX_STICKER_SLOTS)
                     error(itemPath + ".stickers: maximum of six sticker slots");
@@ -227,6 +243,8 @@ namespace Armory
                     else if (!stickerSlots.insert(sticker.slot).second)
                         error(stickerPath + ".slot: duplicate sticker slot");
 
+                    if (!IsSafeId(sticker.kitId))
+                        error(stickerPath + ".kitId: exceeds the JSON safe-integer range");
                     if (!IsWearValid(sticker.wear))
                         error(stickerPath + ".wear: expected a finite number from 0 to 1");
                     if (!std::isfinite(sticker.rotation) || !std::isfinite(sticker.offsetX) || !std::isfinite(sticker.offsetY))
@@ -235,9 +253,15 @@ namespace Armory
                         error(stickerPath + ".schema: expected an integer greater than or equal to -1");
                 }
 
-                if (item.charm &&
-                    (!std::isfinite(item.charm->x) || !std::isfinite(item.charm->y) || !std::isfinite(item.charm->z)))
-                    error(itemPath + ".charm: placement values must be finite");
+                if (item.charm)
+                {
+                    if (!IsSafeId(item.charm->kitId) || !IsSafeId(item.charm->seed) ||
+                        (item.charm->stickerKitId && !IsSafeId(*item.charm->stickerKitId)) ||
+                        (item.charm->highlightId && !IsSafeId(*item.charm->highlightId)))
+                        error(itemPath + ".charm: ID exceeds the JSON safe-integer range");
+                    if (!std::isfinite(item.charm->x) || !std::isfinite(item.charm->y) || !std::isfinite(item.charm->z))
+                        error(itemPath + ".charm: placement values must be finite");
+                }
 
                 for (const auto& [key, metadataValue] : item.metadata)
                 {
