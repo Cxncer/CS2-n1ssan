@@ -576,6 +576,7 @@ namespace
     bool BuildPaintKitCompatibility(
         std::vector<ItemDefinitionRecord>& items,
         const std::vector<PaintKitRecord>& paintKits,
+        const ItemsGameData& gameData,
         std::size_t& itemsChecked,
         std::size_t& pairsChecked,
         std::size_t& compatiblePairsFound)
@@ -596,14 +597,22 @@ namespace
 
             for (const auto& paintKit : paintKits)
             {
-                if (paintKit.id <= 0 || paintKit.name.empty())
+                if (paintKit.id <= 0)
+                    continue;
+
+                std::string paintKitName = paintKit.name;
+                const auto gameDefinition = gameData.paintKits.find(paintKit.id);
+                if (gameDefinition != gameData.paintKits.end() && !gameDefinition->second.name.empty())
+                    paintKitName = gameDefinition->second.name;
+
+                if (paintKitName.empty())
                     continue;
 
                 std::string path = "panorama/images/econ/default_generated/";
-                path.reserve(path.size() + item.itemName.size() + paintKit.name.size() + 24);
+                path.reserve(path.size() + item.itemName.size() + paintKitName.size() + 24);
                 path += item.itemName;
                 path += "_";
-                path += paintKit.name;
+                path += paintKitName;
                 path += "_light_png.vtex_c";
 
                 bool exists = false;
@@ -892,6 +901,7 @@ void RunSchemaProbe()
         BuildPaintKitCompatibility(
             items,
             paintKits,
+            gameData,
             compatibilityItemsChecked,
             compatibilityPairsChecked,
             compatiblePairsFound);
