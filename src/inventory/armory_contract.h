@@ -4,6 +4,7 @@
 // Data-only application model. This header does not access CS2 or mutate runtime state.
 
 #include <cmath>
+#include <cstddef>
 #include <cstdint>
 #include <optional>
 #include <string>
@@ -120,6 +121,29 @@ namespace Armory
         std::vector<std::string> errors;
     };
 
+    inline bool IsValidItemType(ItemType type)
+    {
+        switch (type)
+        {
+        case ItemType::Weapon:
+        case ItemType::Knife:
+        case ItemType::Gloves:
+        case ItemType::Agent:
+        case ItemType::Zeus:
+        case ItemType::Sticker:
+        case ItemType::Charm:
+        case ItemType::Case:
+        case ItemType::Container:
+        case ItemType::MusicKit:
+        case ItemType::Patch:
+        case ItemType::Graffiti:
+        case ItemType::Other:
+            return true;
+        default:
+            return false;
+        }
+    }
+
     inline bool IsWearValid(float value)
     {
         return std::isfinite(value) && value >= 0.0f && value <= 1.0f;
@@ -149,6 +173,7 @@ namespace Armory
             error("catalogueVersion: expected a non-empty string");
 
         std::unordered_set<std::string> profileIds;
+        std::unordered_set<std::string> documentInstanceIds;
         for (std::size_t profileIndex = 0; profileIndex < document.profiles.size(); ++profileIndex)
         {
             const auto& profile = document.profiles[profileIndex];
@@ -170,9 +195,15 @@ namespace Armory
 
                 if (item.instanceId.empty())
                     error(itemPath + ".instanceId: expected a non-empty string");
-                else if (!itemsById.emplace(item.instanceId, &item).second)
-                    error(itemPath + ".instanceId: duplicate instance ID");
+                else
+                {
+                    if (!documentInstanceIds.insert(item.instanceId).second)
+                        error(itemPath + ".instanceId: duplicate instance ID within document");
+                    itemsById.emplace(item.instanceId, &item);
+                }
 
+                if (!IsValidItemType(item.type))
+                    error(itemPath + ".type: unsupported item type");
                 if (item.name.empty())
                     error(itemPath + ".name: expected a non-empty string");
 
@@ -207,6 +238,13 @@ namespace Armory
                 if (item.charm &&
                     (!std::isfinite(item.charm->x) || !std::isfinite(item.charm->y) || !std::isfinite(item.charm->z)))
                     error(itemPath + ".charm: placement values must be finite");
+
+                for (const auto& [key, metadataValue] : item.metadata)
+                {
+                    const auto number = std::get_if<double>(&metadataValue);
+                    if (number && !std::isfinite(*number))
+                        error(itemPath + ".metadata." + key + ": numeric value must be finite");
+                }
             }
 
             std::unordered_set<std::string> occupiedSlots;
