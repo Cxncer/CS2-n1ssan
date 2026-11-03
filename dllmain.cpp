@@ -3,7 +3,7 @@
 // split into src/ modules
 //
 // This file is now a 60-line skeleton. Everything functional lives in
-// src/. The old monolith is preserved in Backup\dllmain.cpp.v9.0.2-*.bak.
+// src/. The old monolith is preserved in Backup\dllmain.cpp.*.bak.
 //
 // InjectThread sequence:
 //   1. LoadLoadout()        (src/inventory/loadout.cpp)
