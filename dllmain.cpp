@@ -126,8 +126,6 @@ static DWORD WINAPI InjectThread(LPVOID)
     Log("[glove-schema] %s",
         GlovesSchema::Initialize("client.dll") ? "READY" : "UNAVAILABLE");
 
-    RunSchemaProbe();
-
     // 4. Loadout
     LoadLoadout();
     if (g_targets.empty())
@@ -137,13 +135,21 @@ static DWORD WINAPI InjectThread(LPVOID)
         return 0;
     }
 
-    // 5. Plan A (SOCache) — optional, disable by commenting this line later
+    // 5. Validate every selected definition/paint-kit pair against the live game.
+    if (!RunSchemaProbe())
+    {
+        Log("[fatal] loadout compatibility preflight failed");
+        LogStatus("FAILED", "loadout_compatibility_failed");
+        return 0;
+    }
+
+    // 6. Plan A (SOCache) — only after the live compatibility preflight passes.
     PlanA::Start();
 
-    // 6. Knife animation hooks (MinHook is now live)
+    // 7. Knife animation hooks (MinHook is now live)
     KnifeAnimation::Initialize();
 
-    // 7. FSN hook installation result
+    // 8. FSN hook installation result
     if (!InstallFSNHook())
     {
         Log("[fatal] FSN hook not installed");
