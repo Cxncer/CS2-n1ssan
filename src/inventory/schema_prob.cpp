@@ -7,6 +7,7 @@
 #include <Windows.h>
 #include <algorithm>
 #include <charconv>
+#include <cctype>
 #include <cstdint>
 #include <cstdio>
 #include <cstring>
@@ -16,6 +17,7 @@
 #include <sstream>
 #include <string>
 #include <string_view>
+#include <utility>
 #include <vector>
 
 namespace
@@ -447,14 +449,12 @@ namespace
         return !output.paintKits.empty() || !output.stickerKits.empty() || !output.keychains.empty();
     }
 
-    bool LoadItemsGame(ItemsGameData& output, std::string& relativePath)
+    bool LoadItemsGame(ItemsGameData& output)
     {
         std::string path;
 
         if (!ReadItemsGamePath(path))
             return false;
-
-        relativePath = "scripts/items/items_game.txt";
 
         std::ifstream file(path, std::ios::binary);
 
@@ -475,9 +475,9 @@ namespace
         }
 
         file.seekg(0, std::ios::beg);
-        std::string contents(
+        std::string contents{
             std::istreambuf_iterator<char>(file),
-            std::istreambuf_iterator<char>());
+            std::istreambuf_iterator<char>()};
 
         return ParseItemsGame(contents, output);
     }
@@ -537,6 +537,7 @@ namespace
             if (record.typeName == "#CSGO_Type_Knife") record.kind = "knife";
             else if (record.typeName == "#Type_Hands") record.kind = "glove";
             else if (record.typeName == "#Type_CustomPlayer") record.kind = "agent";
+            else if (record.definitionIndex <= 70 && !record.itemName.empty()) record.kind = "weapon";
             else if (!record.itemName.empty()) record.kind = "item";
             else record.kind = "unknown";
 
@@ -715,6 +716,13 @@ namespace
         if (file == INVALID_HANDLE_VALUE)
             return false;
 
+        if (contents.size() > MAXDWORD)
+        {
+            CloseHandle(file);
+            DeleteFileA(temporaryPath.c_str());
+            return false;
+        }
+
         DWORD written = 0;
         const BOOL writeOk = WriteFile(
             file,
@@ -774,6 +782,7 @@ namespace
             << "\"source\":\"CS2 live CEconItemSchema + scripts/items/items_game.txt\",\n"
             << "\"createdAtUtc\":\"" << CurrentUtcTimestamp() << "\",\n"
             << "\"itemsGameLoaded\":" << (itemsGameLoaded ? "true" : "false") << ",\n"
+            << "\"itemsGameFile\":\"scripts/items/items_game.txt\",\n"
             << "\"paintKitMapAvailable\":" << (paintKitMapAvailable ? "true" : "false") << ",\n"
             << "\"paintKitMapOffset\":" << paintKitMapOffset << ",\n";
 
@@ -843,8 +852,7 @@ void RunSchemaProbe()
     }
 
     ItemsGameData gameData;
-    std::string itemsGameRelativePath;
-    const bool itemsGameLoaded = LoadItemsGame(gameData, itemsGameRelativePath);
+    const bool itemsGameLoaded = LoadItemsGame(gameData);
 
     const std::uint32_t paintMapOffset = GlovePaintKitSchema::GetPaintKitMapOffset();
     std::vector<PaintKitRecord> paintKits;
