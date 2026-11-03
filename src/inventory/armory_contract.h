@@ -277,6 +277,8 @@ namespace Armory
                 const auto& assignment = profile.equipment[assignmentIndex];
                 const auto assignmentPath = profilePath + ".equipment[" + std::to_string(assignmentIndex) + "]";
 
+                if (assignment.team != Team::T && assignment.team != Team::CT)
+                    error(assignmentPath + ".team: expected T or CT");
                 if (assignment.slot.empty())
                 {
                     error(assignmentPath + ".slot: expected a non-empty string");
