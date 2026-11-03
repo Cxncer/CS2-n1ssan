@@ -29,6 +29,8 @@ namespace
     };
 
     std::unordered_map<int, const char*> g_names;
+    std::uintptr_t g_schemaAddress = 0;
+    std::uint32_t g_paintKitMapOffset = 0;
 
     const char* PermanentCopy(const char* source)
     {
@@ -167,6 +169,8 @@ namespace GlovePaintKitSchema
     bool Initialize()
     {
         g_names.clear();
+        g_schemaAddress = 0;
+        g_paintKitMapOffset = 0;
 
         HMODULE client = GetModuleHandleA("client.dll");
 
@@ -222,6 +226,8 @@ namespace GlovePaintKitSchema
         if (!schema)
             return false;
 
+        g_schemaAddress = reinterpret_cast<std::uintptr_t>(schema);
+
         const std::uint32_t offset = ResolveMapOffset();
 
         if (!offset)
@@ -229,6 +235,8 @@ namespace GlovePaintKitSchema
             printf("[paintkit-schema] Map offset resolution FAILED\n");
             return false;
         }
+
+        g_paintKitMapOffset = offset;
 
         PaintKitMap* map = nullptr;
 
@@ -273,6 +281,16 @@ namespace GlovePaintKitSchema
             g_names.size());
 
         return !g_names.empty();
+    }
+
+    std::uintptr_t GetSchemaAddress()
+    {
+        return g_schemaAddress;
+    }
+
+    std::uint32_t GetPaintKitMapOffset()
+    {
+        return g_paintKitMapOffset;
     }
 
     const char* GetName(int paintKitId)
