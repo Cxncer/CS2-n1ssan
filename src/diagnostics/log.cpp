@@ -22,7 +22,7 @@ void LogInit(const std::string& dllPath)
     freopen_s(reinterpret_cast<FILE**>(stdin), "CONIN$", "r", stdin);
     freopen_s(reinterpret_cast<FILE**>(stdout), "CONOUT$", "w", stdout);
     freopen_s(reinterpret_cast<FILE**>(stderr), "CONOUT$", "w", stderr);
-    SetConsoleTitleA("n1ssan-dll v10.0.0 beta 5.3");
+    SetConsoleTitleA("Operation Armory x Obsidian Build 3.0");
     setvbuf(stdout, nullptr, _IONBF, 0);
     printf("[n1ssan] console attached\n");
 
