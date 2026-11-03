@@ -647,8 +647,9 @@ namespace
         bool allCompatible = true;
         std::size_t checked = 0;
 
-        for (const auto& [key, target] : g_targets)
+        for (const auto& targetEntry : g_targets)
         {
+            const TargetSkin& target = targetEntry.second;
             const auto item = std::lower_bound(
                 items.begin(),
                 items.end(),
