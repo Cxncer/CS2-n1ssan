@@ -166,6 +166,85 @@ namespace
 
 namespace GlovePaintKitSchema
 {
+    bool CallFileOpen(void* fileSystem, const char* path, void*& handle)
+    {
+        using OpenFn = void* (__fastcall*)(void*, const char*, const char*, const char*);
+        void** vtable = *reinterpret_cast<void***>(fileSystem);
+
+        if (!vtable || !vtable[13])
+            return false;
+
+        __try
+        {
+            handle = reinterpret_cast<OpenFn>(vtable[13])(
+                fileSystem, path, "rb", "GAME");
+            return handle != nullptr;
+        }
+        __except (EXCEPTION_EXECUTE_HANDLER)
+        {
+            handle = nullptr;
+            return false;
+        }
+    }
+
+    bool CallFileSize(void* fileSystem, void* handle, std::uint64_t& size)
+    {
+        using SizeFn = std::uint64_t (__fastcall*)(void*, void*);
+        void** vtable = *reinterpret_cast<void***>(fileSystem);
+
+        if (!vtable || !vtable[18])
+            return false;
+
+        __try
+        {
+            size = reinterpret_cast<SizeFn>(vtable[18])(fileSystem, handle);
+            return true;
+        }
+        __except (EXCEPTION_EXECUTE_HANDLER)
+        {
+            size = 0;
+            return false;
+        }
+    }
+
+    bool CallFileRead(void* fileSystem, void* handle, char* destination, int size, int& bytesRead)
+    {
+        using ReadFn = int (__fastcall*)(void*, void*, int, void*);
+        void** vtable = *reinterpret_cast<void***>(fileSystem);
+
+        if (!vtable || !vtable[11])
+            return false;
+
+        __try
+        {
+            bytesRead = reinterpret_cast<ReadFn>(vtable[11])(
+                fileSystem, destination, size, handle);
+            return true;
+        }
+        __except (EXCEPTION_EXECUTE_HANDLER)
+        {
+            bytesRead = 0;
+            return false;
+        }
+    }
+
+    void CallFileClose(void* fileSystem, void* handle)
+    {
+        using CloseFn = void (__fastcall*)(void*, void*);
+        void** vtable = *reinterpret_cast<void***>(fileSystem);
+
+        if (!vtable || !vtable[14])
+            return;
+
+        __try
+        {
+            reinterpret_cast<CloseFn>(vtable[14])(fileSystem, handle);
+        }
+        __except (EXCEPTION_EXECUTE_HANDLER)
+        {
+        }
+    }
+
     bool Initialize()
     {
         g_names.clear();
@@ -291,6 +370,58 @@ namespace GlovePaintKitSchema
     std::uint32_t GetPaintKitMapOffset()
     {
         return g_paintKitMapOffset;
+    }
+
+    bool ReadGameFile(const char* path, std::string& output)
+    {
+        output.clear();
+
+        if (!path || !*path)
+            return false;
+
+        void* fileSystem = GetLootInterface(
+            "filesystem_stdio.dll",
+            "VFileSystem017");
+
+        if (!fileSystem)
+        {
+            printf("[schema-snapshot] VFileSystem017 unavailable\n");
+            return false;
+        }
+
+        void* handle = nullptr;
+
+        if (!CallFileOpen(fileSystem, path, handle))
+            return false;
+
+        std::uint64_t size = 0;
+
+        if (!CallFileSize(fileSystem, handle, size) ||
+            size == 0 ||
+            size > 64ULL * 1024ULL * 1024ULL)
+        {
+            CallFileClose(fileSystem, handle);
+            return false;
+        }
+
+        output.resize(static_cast<std::size_t>(size));
+        int bytesRead = 0;
+        const bool readCallSucceeded = CallFileRead(
+            fileSystem,
+            handle,
+            output.data(),
+            static_cast<int>(size),
+            bytesRead);
+
+        CallFileClose(fileSystem, handle);
+
+        if (!readCallSucceeded || bytesRead != static_cast<int>(size))
+        {
+            output.clear();
+            return false;
+        }
+
+        return true;
     }
 
     const char* GetName(int paintKitId)
