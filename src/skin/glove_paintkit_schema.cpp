@@ -169,13 +169,13 @@ namespace GlovePaintKitSchema
     bool CallFileOpen(void* fileSystem, const char* path, void*& handle)
     {
         using OpenFn = void* (__fastcall*)(void*, const char*, const char*, const char*);
-        void** vtable = *reinterpret_cast<void***>(fileSystem);
-
-        if (!vtable || !vtable[13])
-            return false;
 
         __try
         {
+            void** vtable = *reinterpret_cast<void***>(fileSystem);
+            if (!vtable || !vtable[13])
+                return false;
+
             handle = reinterpret_cast<OpenFn>(vtable[13])(
                 fileSystem, path, "rb", "GAME");
             return handle != nullptr;
@@ -190,13 +190,13 @@ namespace GlovePaintKitSchema
     bool CallFileSize(void* fileSystem, void* handle, std::uint64_t& size)
     {
         using SizeFn = std::uint64_t (__fastcall*)(void*, void*);
-        void** vtable = *reinterpret_cast<void***>(fileSystem);
-
-        if (!vtable || !vtable[18])
-            return false;
 
         __try
         {
+            void** vtable = *reinterpret_cast<void***>(fileSystem);
+            if (!vtable || !vtable[18])
+                return false;
+
             size = reinterpret_cast<SizeFn>(vtable[18])(fileSystem, handle);
             return true;
         }
@@ -210,13 +210,13 @@ namespace GlovePaintKitSchema
     bool CallFileRead(void* fileSystem, void* handle, char* destination, int size, int& bytesRead)
     {
         using ReadFn = int (__fastcall*)(void*, void*, int, void*);
-        void** vtable = *reinterpret_cast<void***>(fileSystem);
-
-        if (!vtable || !vtable[11])
-            return false;
 
         __try
         {
+            void** vtable = *reinterpret_cast<void***>(fileSystem);
+            if (!vtable || !vtable[11])
+                return false;
+
             bytesRead = reinterpret_cast<ReadFn>(vtable[11])(
                 fileSystem, destination, size, handle);
             return true;
@@ -231,13 +231,13 @@ namespace GlovePaintKitSchema
     void CallFileClose(void* fileSystem, void* handle)
     {
         using CloseFn = void (__fastcall*)(void*, void*);
-        void** vtable = *reinterpret_cast<void***>(fileSystem);
-
-        if (!vtable || !vtable[14])
-            return;
 
         __try
         {
+            void** vtable = *reinterpret_cast<void***>(fileSystem);
+            if (!vtable || !vtable[14])
+                return;
+
             reinterpret_cast<CloseFn>(vtable[14])(fileSystem, handle);
         }
         __except (EXCEPTION_EXECUTE_HANDLER)
