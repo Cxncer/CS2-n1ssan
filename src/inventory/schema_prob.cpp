@@ -3,6 +3,7 @@
 #include "diagnostics/log.h"
 #include "memory/access.h"
 #include "skin/glove_paintkit_schema.h"
+#include "inventory/loadout.h"
 
 #include <Windows.h>
 #include <algorithm>
@@ -635,6 +636,72 @@ namespace
         return itemsChecked > 0 && pairsChecked > 0;
     }
 
+    bool ValidateLoadoutCompatibility(const std::vector<ItemDefinitionRecord>& items)
+    {
+        if (g_targets.empty())
+        {
+            Log("[schema-preflight] REJECT: loadout contains no targets");
+            return false;
+        }
+
+        bool allCompatible = true;
+        std::size_t checked = 0;
+
+        for (const auto& [key, target] : g_targets)
+        {
+            const auto item = std::lower_bound(
+                items.begin(),
+                items.end(),
+                target.defIndex,
+                [](const ItemDefinitionRecord& candidate, std::uint16_t definitionIndex)
+                {
+                    return candidate.definitionIndex < definitionIndex;
+                });
+
+            if (item == items.end() || item->definitionIndex != target.defIndex)
+            {
+                Log("[schema-preflight] REJECT slot=%s team=%s weapon=%s def=%u pk=%d reason=definition_missing",
+                    target.slot.c_str(), target.team.c_str(), target.weaponName.c_str(),
+                    target.defIndex, target.paintKit);
+                allCompatible = false;
+                continue;
+            }
+
+            if ((item->kind != "weapon" && item->kind != "knife" && item->kind != "glove") ||
+                item->itemName.empty())
+            {
+                Log("[schema-preflight] REJECT slot=%s team=%s weapon=%s def=%u pk=%d reason=not_skin_capable",
+                    target.slot.c_str(), target.team.c_str(), target.weaponName.c_str(),
+                    target.defIndex, target.paintKit);
+                allCompatible = false;
+                continue;
+            }
+
+            if (std::find(
+                item->compatiblePaintKitIds.begin(),
+                item->compatiblePaintKitIds.end(),
+                target.paintKit) == item->compatiblePaintKitIds.end())
+            {
+                Log("[schema-preflight] REJECT slot=%s team=%s weapon=%s def=%u itemName=%s pk=%d reason=generated_material_missing",
+                    target.slot.c_str(), target.team.c_str(), target.weaponName.c_str(),
+                    target.defIndex, item->itemName.c_str(), target.paintKit);
+                allCompatible = false;
+                continue;
+            }
+
+            ++checked;
+            Log("[schema-preflight] PASS slot=%s team=%s weapon=%s def=%u itemName=%s pk=%d skin=%s",
+                target.slot.c_str(), target.team.c_str(), target.weaponName.c_str(),
+                target.defIndex, item->itemName.c_str(), target.paintKit, target.skinName.c_str());
+        }
+
+        Log("[schema-preflight] checked=%zu targets=%zu result=%s",
+            checked, g_targets.size(),
+            allCompatible && checked == g_targets.size() ? "PASS" : "REJECT");
+
+        return allCompatible && checked == g_targets.size();
+    }
+
     std::string JsonEscape(const std::string& value)
     {
         std::string escaped;
@@ -864,7 +931,7 @@ namespace
     }
 }
 
-void RunSchemaProbe()
+bool RunSchemaProbe()
 {
     Log("=== [schema-snapshot] start ===");
 
@@ -873,7 +940,8 @@ void RunSchemaProbe()
     if (!IsUserPointer(schema))
     {
         Log("[schema-snapshot] live CEconItemSchema pointer unavailable; snapshot not written");
-        return;
+        Log("[schema-preflight] unavailable: live schema pointer missing");
+        return false;
     }
 
     std::vector<ItemDefinitionRecord> items;
@@ -881,7 +949,8 @@ void RunSchemaProbe()
     if (!ReadItemDefinitions(schema, items))
     {
         Log("[schema-snapshot] live item definitions could not be read; snapshot not written");
-        return;
+        Log("[schema-preflight] unavailable: live item definitions could not be read");
+        return false;
     }
 
     ItemsGameData gameData;
@@ -906,6 +975,12 @@ void RunSchemaProbe()
             compatibilityPairsChecked,
             compatiblePairsFound);
 
+    const bool loadoutCompatibilityPassed =
+        compatibilityScanAvailable && ValidateLoadoutCompatibility(items);
+
+    if (!compatibilityScanAvailable)
+        Log("[schema-preflight] unavailable: generated-material compatibility scan incomplete");
+
     const std::string json = BuildSnapshotJson(
         items,
         paintKits,
@@ -920,11 +995,10 @@ void RunSchemaProbe()
 
     std::string outputPath;
 
-    if (!WriteSnapshotFile(json, outputPath))
-    {
+    const bool snapshotWritten = WriteSnapshotFile(json, outputPath);
+
+    if (!snapshotWritten)
         Log("[schema-snapshot] failed to write snapshot file");
-        return;
-    }
 
     Log("[schema-snapshot] itemDefinitions=%zu livePaintKits=%zu paintKitDefinitions=%zu stickerKits=%zu keychains=%zu",
         items.size(),
@@ -944,6 +1018,12 @@ void RunSchemaProbe()
         compatibilityPairsChecked,
         compatiblePairsFound);
 
-    Log("[schema-snapshot] snapshot written: %s", outputPath.c_str());
+    if (snapshotWritten)
+        Log("[schema-snapshot] snapshot written: %s", outputPath.c_str());
+
+    Log("[schema-preflight] result=%s",
+        loadoutCompatibilityPassed ? "PASS" : "REJECT");
     Log("=== [schema-snapshot] done ===");
+
+    return loadoutCompatibilityPassed;
 }
