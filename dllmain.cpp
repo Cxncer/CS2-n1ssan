@@ -169,7 +169,7 @@ BOOL APIENTRY DllMain(HMODULE hModule, DWORD reason, LPVOID)
 
         HANDLE t = CreateThread(nullptr, 0, InjectThread, nullptr, 0, nullptr);
         if (t) CloseHandle(t);
-        else LogStatus("FAILED", "initialization_worker_creation_failed");
+        else OutputDebugStringA("[n1ssan] initialization worker creation failed\\n");
     }
     else if (reason == DLL_PROCESS_DETACH)
     {
