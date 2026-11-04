@@ -71,6 +71,9 @@ static bool LoadMinHook()
 
 static DWORD WINAPI InjectThread(LPVOID)
 {
+    // Keep filesystem and console initialization out of DllMain/loader lock.
+    LogInit(g_dllPath);
+    Log("[build] Operation Armory x Obsidian Build 3.0 | %s %s", __DATE__, __TIME__);
     LogStatus("INITIALIZING", "worker_started");
 
     if (!LoadMinHook())
@@ -171,9 +174,6 @@ BOOL APIENTRY DllMain(HMODULE hModule, DWORD reason, LPVOID)
         char dllPath[MAX_PATH]{};
         GetModuleFileNameA(hModule, dllPath, MAX_PATH);
         g_dllPath = dllPath;
-
-        LogInit(g_dllPath);
-        Log("[build] Operation Armory x Obsidian Build 3.0 | %s %s", __DATE__, __TIME__);
 
         HANDLE t = CreateThread(nullptr, 0, InjectThread, nullptr, 0, nullptr);
         if (t) CloseHandle(t);
