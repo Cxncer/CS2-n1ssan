@@ -109,10 +109,13 @@ static DWORD WINAPI InjectThread(LPVOID)
         return 0;
     }
 
-    Log("[glove-paintkit-schema] %s",
-        GlovePaintKitSchema::Initialize() ? "READY" : "UNAVAILABLE");
-    Log("[glove-schema] %s",
-        GlovesSchema::Initialize("client.dll") ? "READY" : "UNAVAILABLE");
+    const bool glovePaintKitReady = GlovePaintKitSchema::Initialize();
+    const bool gloveSchemaReady = GlovesSchema::Initialize("client.dll");
+    Log("[glove-paintkit-schema] %s", glovePaintKitReady ? "READY" : "UNAVAILABLE");
+    Log("[glove-schema] %s", gloveSchemaReady ? "READY" : "UNAVAILABLE");
+
+    const bool optionalFeaturesDegraded =
+        !glovePaintKitReady || !gloveSchemaReady;
 
     LoadLoadout();
     if (g_targets.empty())
@@ -142,12 +145,17 @@ static DWORD WINAPI InjectThread(LPVOID)
     LogStatus("CHECKS_PASSED", "required_initialization_checks_passed");
     Log("[diagnostic] targets=%zu", g_targets.size());
 
-    // READY means the required startup sequence completed and this worker
-    // remains alive. The periodic record is a worker heartbeat, not proof
-    // that every game-side feature is independently healthy.
+    // READY means required startup checks passed. DEGRADED is used when an
+    // optional glove schema feature did not initialize. Both states heartbeat
+    // while the worker remains alive; neither proves every feature is healthy.
+    const char* runtimeState = optionalFeaturesDegraded ? "DEGRADED" : "READY";
+    const char* runtimeReason = optionalFeaturesDegraded
+        ? "optional_glove_schema_unavailable"
+        : "runtime_worker_heartbeat";
+
     while (true)
     {
-        LogStatus("READY", "runtime_worker_heartbeat");
+        LogStatus(runtimeState, runtimeReason);
         Sleep(10000);
     }
 
