@@ -3,15 +3,7 @@
 // split into src/ modules
 //
 // This file is now a 60-line skeleton. Everything functional lives in
-// src/. The old monolith is preserved in Backup\dllmain.cpp.*.bak.
-//
-// InjectThread sequence:
-//   1. LoadLoadout()        (src/inventory/loadout.cpp)
-//   2. LoadMinHook()        (this file)
-//   3. Wait for client.dll
-//   4. ResolveOffsets()     (src/config/offsets.cpp)
-//   5. ResolveFunctions()   (src/sdk/functions.cpp)
-//   6. InstallFSNHook()     (src/hooks/frame_stage.cpp)
+// src/. The old monolith is preserved in Backup\\dllmain.cpp.*.bak.
 
 #include <windows.h>
 #include <string>
@@ -75,13 +67,12 @@ static bool LoadMinHook()
         && MH_Initialize_p() == 0;
 }
 
-// ---- Inject thread ----
+// ---- Initialization worker ----
 
 static DWORD WINAPI InjectThread(LPVOID)
 {
     LogStatus("INITIALIZING", "worker_started");
-    
-    // 1. MinHook FIRST — everything else needs it
+
     if (!LoadMinHook())
     {
         Log("[fatal] MinHook load failed");
@@ -89,7 +80,6 @@ static DWORD WINAPI InjectThread(LPVOID)
         return 0;
     }
 
-    // 2. Wait for client.dll
     for (int i = 0; i < 300; ++i)
     {
         if (GetModuleHandleA("client.dll")) break;
@@ -102,9 +92,7 @@ static DWORD WINAPI InjectThread(LPVOID)
         return 0;
     }
 
-    // 3. Resolve offsets + functions + schema
     ResolveOffsets();
-
     RunEngineSchemaDiagnostic();
 
     if (!ResolveGloveSchemaOffsets())
@@ -126,7 +114,6 @@ static DWORD WINAPI InjectThread(LPVOID)
     Log("[glove-schema] %s",
         GlovesSchema::Initialize("client.dll") ? "READY" : "UNAVAILABLE");
 
-    // 4. Loadout
     LoadLoadout();
     if (g_targets.empty())
     {
@@ -135,7 +122,6 @@ static DWORD WINAPI InjectThread(LPVOID)
         return 0;
     }
 
-    // 5. Validate every selected definition/paint-kit pair against the live game.
     if (!RunSchemaProbe())
     {
         Log("[fatal] loadout compatibility preflight failed");
@@ -143,13 +129,9 @@ static DWORD WINAPI InjectThread(LPVOID)
         return 0;
     }
 
-    // 6. Plan A (SOCache) — only after the live compatibility preflight passes.
     PlanA::Start();
-
-    // 7. Knife animation hooks (MinHook is now live)
     KnifeAnimation::Initialize();
 
-    // 8. FSN hook installation result
     if (!InstallFSNHook())
     {
         Log("[fatal] FSN hook not installed");
@@ -157,18 +139,20 @@ static DWORD WINAPI InjectThread(LPVOID)
         return 0;
     }
 
-    LogStatus(
-        "CHECKS_PASSED",
-        "required_initialization_checks_passed"
-    );
-
+    LogStatus("CHECKS_PASSED", "required_initialization_checks_passed");
     Log("[diagnostic] targets=%zu", g_targets.size());
 
-    while (true) Sleep(10000);
+    // READY means the required startup sequence completed and this worker
+    // remains alive. The periodic record is a worker heartbeat, not proof
+    // that every game-side feature is independently healthy.
+    while (true)
+    {
+        LogStatus("READY", "runtime_worker_heartbeat");
+        Sleep(10000);
+    }
+
     return 0;
 }
-
-// ---- DllMain ----
 
 BOOL APIENTRY DllMain(HMODULE hModule, DWORD reason, LPVOID)
 {
@@ -185,6 +169,7 @@ BOOL APIENTRY DllMain(HMODULE hModule, DWORD reason, LPVOID)
 
         HANDLE t = CreateThread(nullptr, 0, InjectThread, nullptr, 0, nullptr);
         if (t) CloseHandle(t);
+        else LogStatus("FAILED", "initialization_worker_creation_failed");
     }
     else if (reason == DLL_PROCESS_DETACH)
     {
