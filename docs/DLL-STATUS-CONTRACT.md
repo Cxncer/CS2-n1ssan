@@ -21,6 +21,7 @@ Fields containing pipes or line breaks are sanitized to underscores. The snapsho
 - `INITIALIZING`: worker has started.
 - `CHECKS_PASSED`: required initialization checks completed.
 - `READY`: required startup sequence completed; the worker emits a heartbeat every 10 seconds.
+- `DEGRADED`: required initialization passed, but an optional glove schema feature is unavailable; `reason` identifies the limitation. The worker continues to heartbeat.
 - `FAILED`: required initialization failed; `reason` identifies the failure.
 
 The heartbeat proves only that the initialization worker is still running. It is not a guarantee that every game-side feature is independently healthy. Consumers should treat a missing or older-than-30-seconds heartbeat as unknown/stale, never as READY.
