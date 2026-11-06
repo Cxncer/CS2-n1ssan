@@ -8,12 +8,15 @@
 #include <windows.h>
 #include <cstdint>
 #include <cstring>
+#include <vector>
 
 namespace
 {
     using CreateTypeCacheFn = void* (__fastcall*)(void* soCache, int classId);
     using AddObjectFn = bool(__fastcall*)(void* typeCache, void* object);
+    using RemoveObjectFn = void* (__fastcall*)(void* typeCache, void* object);
     using ListenerFn = void(__fastcall*)(void* inventory, const void* owner, void* object, int event);
+    using DestructItemFn = void(__fastcall*)(void* item, bool freeMemory);
 
     struct EconItem
     {
@@ -36,6 +39,9 @@ namespace
 
     constexpr int CLASS_ECON_ITEM = 1;
     constexpr int VFUNC_SO_CREATED = 0;
+    constexpr int VFUNC_SO_DESTROYED = 2;
+    constexpr int VFUNC_TYPECACHE_REMOVE = 3;
+    constexpr int VFUNC_ITEM_DESTRUCT = 1;
     constexpr int SO_EVENT_INCREMENTAL = 4;
 
     constexpr int ATTR_PAINT_KIT = 6;
@@ -119,13 +125,15 @@ namespace
             elements = *reinterpret_cast<void** const*>(static_cast<const uint8_t*>(tc) + 0x10);
         }
         __except (EXCEPTION_EXECUTE_HANDLER) { return false; }
-        if (count <= 0 || count > 200000 || !elements) return false;
+        if (count < 0 || count > 200000) return false;
+        if (count == 0) return true;
+        if (!elements) return false;
         for (int i = 0; i < count; ++i)
         {
             void* item = nullptr; uint64_t id = 0;
             __try { item = elements[i]; if (item) id = static_cast<EconItem*>(item)->id; }
             __except (EXCEPTION_EXECUTE_HANDLER) { return false; }
-            if (item && !visit(item, id, user)) return true;
+            if (item && !visit(item, id, user)) return false;
         }
         return true;
     }
@@ -137,9 +145,35 @@ namespace
         return value;
     }
 
-    bool HasItemVisitor(void* item, uint64_t id, void* user)
+    struct FindItemContext
     {
-        return id != *static_cast<uint64_t*>(user);
+        uint64_t target = 0;
+        void* item = nullptr;
+    };
+
+    bool FindItemVisitor(void* item, uint64_t id, void* user)
+    {
+        auto* context = static_cast<FindItemContext*>(user);
+        if (id != context->target)
+            return true;
+
+        context->item = item;
+        return false;
+    }
+
+    struct CollectIdsContext
+    {
+        uint64_t prefix = 0;
+        uint64_t mask = 0;
+        std::vector<uint64_t> ids;
+    };
+
+    bool CollectIdsVisitor(void*, uint64_t id, void* user)
+    {
+        auto* context = static_cast<CollectIdsContext*>(user);
+        if ((id & context->mask) == context->prefix)
+            context->ids.push_back(id);
+        return true;
     }
 }
 
@@ -169,7 +203,97 @@ namespace LootSOCache
     {
         void* tc = ItemTypeCache(LocalInventory());
         if (!tc) return false;
-        return !ForEachItem(tc, HasItemVisitor, &id);
+
+        FindItemContext context{};
+        context.target = id;
+        ForEachItem(tc, FindItemVisitor, &context);
+        return context.item != nullptr;
+    }
+
+    std::vector<uint64_t> GetIdsByPrefix(uint64_t prefix, uint64_t mask)
+    {
+        std::vector<uint64_t> result;
+        void* tc = ItemTypeCache(LocalInventory());
+        if (!tc) return result;
+
+        CollectIdsContext context{};
+        context.prefix = prefix;
+        context.mask = mask;
+        if (ForEachItem(tc, CollectIdsVisitor, &context))
+            result = std::move(context.ids);
+        return result;
+    }
+
+    bool Remove(uint64_t id)
+    {
+        if (!id)
+            return false;
+
+        void* inv = LocalInventory();
+        void* tc = ItemTypeCache(inv);
+        SOID owner{};
+        if (!inv || !tc || !ReadOwner(inv, owner))
+            return false;
+
+        FindItemContext context{};
+        context.target = id;
+        ForEachItem(tc, FindItemVisitor, &context);
+        void* item = context.item;
+        if (!item)
+            return true; // Already absent is a successful reconciliation result.
+
+        __try
+        {
+            void** inventoryVtable = *reinterpret_cast<void***>(inv);
+            auto notifyDestroyed = reinterpret_cast<ListenerFn>(
+                inventoryVtable[VFUNC_SO_DESTROYED]);
+            if (!notifyDestroyed)
+                return false;
+
+            // Match the engine's normal shared-object lifecycle: notify first,
+            // remove from the type cache second, destruct the object last.
+            notifyDestroyed(inv, &owner, item, SO_EVENT_INCREMENTAL);
+
+            void** typeCacheVtable = *reinterpret_cast<void***>(tc);
+            auto removeObject = reinterpret_cast<RemoveObjectFn>(
+                typeCacheVtable[VFUNC_TYPECACHE_REMOVE]);
+            if (!removeObject)
+                return false;
+
+            removeObject(tc, item);
+        }
+        __except (EXCEPTION_EXECUTE_HANDLER)
+        {
+            Log("[socache] RemoveObject threw for id=%llu",
+                static_cast<unsigned long long>(id));
+            return false;
+        }
+
+        // Do not destruct memory while the cache still references it.
+        if (HasItem(id))
+        {
+            Log("[socache] RemoveObject did not detach id=%llu",
+                static_cast<unsigned long long>(id));
+            return false;
+        }
+
+        __try
+        {
+            void** itemVtable = *reinterpret_cast<void***>(item);
+            auto destruct = reinterpret_cast<DestructItemFn>(
+                itemVtable[VFUNC_ITEM_DESTRUCT]);
+            if (!destruct)
+                return false;
+            destruct(item, true);
+        }
+        __except (EXCEPTION_EXECUTE_HANDLER)
+        {
+            Log("[socache] item destructor threw for id=%llu",
+                static_cast<unsigned long long>(id));
+            return false;
+        }
+
+        return true;
     }
 
     uint32_t NextPosition()
