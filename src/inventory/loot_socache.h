@@ -24,6 +24,6 @@ namespace LootSOCache
     CreateResult Create(const NewItem& item);
     bool HasItem(uint64_t id);
     bool Remove(uint64_t id);
-    std::vector<uint64_t> GetIdsByPrefix(uint64_t prefix, uint64_t mask);
+    bool GetIdsByPrefix(uint64_t prefix, uint64_t mask, std::vector<uint64_t>& ids);
     uint32_t NextPosition();
 }
