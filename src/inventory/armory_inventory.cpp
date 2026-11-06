@@ -192,9 +192,9 @@ namespace ArmoryInventory
 {
     void StartWatcher()
     {
-        if (g_loadoutSource.empty())
+        if (g_bridgeDirectory.empty())
         {
-            Log("[armory-inventory] no bridge path; watcher not started");
+            Log("[armory-inventory] no bridge directory; watcher not started");
             return;
         }
 
@@ -202,7 +202,7 @@ namespace ArmoryInventory
         if (started.exchange(true))
             return;
 
-        g_path = DirectoryOf(g_loadoutSource) + "armory-inventory.json";
+        g_path = g_bridgeDirectory + "armory-inventory.json";
         Log("[armory-inventory] watching for inventory changes: %s", g_path.c_str());
 
         std::thread([]()
