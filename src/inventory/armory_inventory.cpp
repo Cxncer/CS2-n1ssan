@@ -34,6 +34,9 @@ namespace
         int         seed = 0;
         float       wear = 0.001f;
         int         statTrak = -1; // -1 none, 0 enabled with 0 kills
+        int         stickerKit = 0;
+        int         keychain = 0;
+        int         keychainSeed = 0;
     };
 
     std::mutex g_mutex;
@@ -164,6 +167,9 @@ namespace
             if (ExtractNumber(object, "paintKit", number)) item.paintKit = static_cast<int>(number);
             if (ExtractNumber(object, "seed", number)) item.seed = static_cast<int>(number);
             if (ExtractNumber(object, "float", number)) item.wear = static_cast<float>(number);
+            if (ExtractNumber(object, "stickerKit", number)) item.stickerKit = static_cast<int>(number);
+            if (ExtractNumber(object, "keychain", number)) item.keychain = static_cast<int>(number);
+            if (ExtractNumber(object, "keychainSeed", number)) item.keychainSeed = static_cast<int>(number);
 
             bool statTrak = false;
             if (ExtractBool(object, "statTrak", statTrak))
@@ -304,6 +310,9 @@ namespace ArmoryInventory
             request.seed = item.seed;
             request.wear = item.wear;
             request.statTrak = item.statTrak;
+            request.stickerKit = item.stickerKit;
+            request.keychain = item.keychain;
+            request.keychainSeed = item.keychainSeed;
 
             switch (LootSOCache::Create(request))
             {
