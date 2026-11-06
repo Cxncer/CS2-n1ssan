@@ -46,7 +46,7 @@ namespace
 
 
 
-    uint64_t StableIdFor(const std::string& instanceId)
+    uint64_t StableIdFor(const std::string& instanceId, uint64_t generation)
     {
         uint64_t hash = 1469598103934665603ull;
         for (unsigned char c : instanceId)
@@ -54,6 +54,15 @@ namespace
             hash ^= c;
             hash *= 1099511628211ull;
         }
+
+        // A new projection gets a fresh managed ID namespace. This lets us
+        // stage the complete replacement set before removing the previous set.
+        for (unsigned int shift = 0; shift < 64; shift += 8)
+        {
+            hash ^= static_cast<uint8_t>(generation >> shift);
+            hash *= 1099511628211ull;
+        }
+
         return 0x9000000000000000ull | (hash & 0x0FFFFFFFFFFFFFFFull);
     }
 
@@ -120,6 +129,13 @@ namespace
         const size_t arrayStart = text.find('[', itemsKey);
         if (arrayStart == std::string::npos) return false;
 
+        FILETIME writtenAt{};
+        GetSystemTimeAsFileTime(&writtenAt);
+        ULARGE_INTEGER generationValue{};
+        generationValue.LowPart = writtenAt.dwLowDateTime;
+        generationValue.HighPart = writtenAt.dwHighDateTime;
+        const uint64_t generation = generationValue.QuadPart;
+
         size_t i = arrayStart + 1;
 
         while (i < text.size())
@@ -171,11 +187,11 @@ namespace
             if (ExtractBool(object, "statTrak", statTrak))
                 item.statTrak = statTrak ? 0 : -1;
 
-            item.id = StableIdFor(item.instanceId);
+            item.id = StableIdFor(item.instanceId, generation);
             out.push_back(std::move(item));
         }
 
-        return !out.empty();
+        return i < text.size() && text[i] == ']';
     }
 
     bool ReadFileText(const std::string& path, std::string& out)
@@ -251,7 +267,7 @@ namespace ArmoryInventory
                 std::vector<ArmoryItem> items;
                 if (!ParseItems(text, items))
                 {
-                    Log("[armory-inventory] reload skipped: no items");
+                    Log("[armory-inventory] reload skipped: malformed inventory document");
                     continue;
                 }
 
@@ -282,18 +298,17 @@ namespace ArmoryInventory
         if (!g_pending.load(std::memory_order_acquire))
             return;
 
-        if (g_staged.empty())
-        {
-            g_pending.store(false, std::memory_order_release);
-            return;
-        }
+        Log("[armory-inventory] preparing replacement set: %zu items", g_staged.size());
 
-        Log("[armory-inventory] adopting %zu items", g_staged.size());
+        // Snapshot the old managed set. New projection IDs are generation-scoped,
+        // so the complete new set can be created before any old item is removed.
+        const std::vector<uint64_t> previousIds = LootSOCache::GetIdsByPrefix(
+            0x9000000000000000ull, 0xF000000000000000ull);
 
-        int created = 0;
-        int existed = 0;
-        int failed = 0;
-        int notReady = 0;
+        std::vector<uint64_t> createdIds;
+        createdIds.reserve(g_staged.size());
+        bool failed = false;
+        bool notReady = false;
 
         for (const ArmoryItem& item : g_staged)
         {
@@ -312,23 +327,60 @@ namespace ArmoryInventory
 
             switch (LootSOCache::Create(request))
             {
-            case LootSOCache::CreateResult::Ok:               ++created; break;
-            case LootSOCache::CreateResult::AlreadyExists:    ++existed; break;
-            case LootSOCache::CreateResult::InventoryNotReady: ++notReady; break;
-            default:                                          ++failed; break;
+            case LootSOCache::CreateResult::Ok:
+                createdIds.push_back(item.id);
+                break;
+            case LootSOCache::CreateResult::InventoryNotReady:
+                notReady = true;
+                failed = true;
+                break;
+            case LootSOCache::CreateResult::AlreadyExists:
+                Log("[armory-inventory] unexpected managed ID collision: %llu",
+                    static_cast<unsigned long long>(item.id));
+                failed = true;
+                break;
+            default:
+                failed = true;
+                break;
             }
+
+            if (failed)
+                break;
         }
 
-        if (created || existed || failed || notReady)
+        if (failed)
         {
-            Log("[armory-inventory] created=%d existed=%d failed=%d notReady=%d",
-                created, existed, failed, notReady);
+            int rolledBack = 0;
+            int rollbackFailed = 0;
+            for (uint64_t id : createdIds)
+            {
+                if (LootSOCache::Remove(id)) ++rolledBack;
+                else ++rollbackFailed;
+            }
+
+            Log("[armory-inventory] replacement aborted; staged=%zu created=%zu rollback=%d rollbackFailed=%d",
+                g_staged.size(), createdIds.size(), rolledBack, rollbackFailed);
+
+            if (!notReady)
+            {
+                g_staged.clear();
+                g_pending.store(false, std::memory_order_release);
+            }
+            return;
         }
 
-        if (notReady == 0)
+        int removed = 0;
+        int removeFailed = 0;
+        for (uint64_t id : previousIds)
         {
-            g_staged.clear();
-            g_pending.store(false, std::memory_order_release);
+            if (LootSOCache::Remove(id)) ++removed;
+            else ++removeFailed;
         }
+
+        Log("[armory-inventory] replacement committed: created=%zu removed=%d removeFailed=%d",
+            createdIds.size(), removed, removeFailed);
+
+        g_staged.clear();
+        g_pending.store(false, std::memory_order_release);
     }
 }
