@@ -36,11 +36,7 @@ MH_DisableHook_t MH_DisableHook_p = nullptr;
 static HMODULE g_hMinHook = nullptr;
 static std::string g_dllPath;
 
-static std::string DirectoryOf(const std::string& path)
-{
-    const size_t slash = path.find_last_of("\\/");
-    return slash == std::string::npos ? std::string() : path.substr(0, slash + 1);
-}
+
 
 static bool LoadMinHook()
 {
