@@ -175,6 +175,17 @@ namespace
             context->ids.push_back(id);
         return true;
     }
+
+    bool FindItemInCache(void* typeCache, uint64_t id, void*& item)
+    {
+        FindItemContext context{};
+        context.target = id;
+        const bool completed = ForEachItem(typeCache, FindItemVisitor, &context);
+        item = context.item;
+        // A match intentionally stops iteration; otherwise a successful full
+        // traversal is required before absence can be trusted.
+        return item != nullptr || completed;
+    }
 }
 
 namespace LootSOCache
@@ -204,10 +215,10 @@ namespace LootSOCache
         void* tc = ItemTypeCache(LocalInventory());
         if (!tc) return false;
 
-        FindItemContext context{};
-        context.target = id;
-        ForEachItem(tc, FindItemVisitor, &context);
-        return context.item != nullptr;
+        void* item = nullptr;
+        if (!FindItemInCache(tc, id, item))
+            return false;
+        return item != nullptr;
     }
 
     bool GetIdsByPrefix(uint64_t prefix, uint64_t mask, std::vector<uint64_t>& ids)
@@ -237,10 +248,9 @@ namespace LootSOCache
         if (!inv || !tc || !ReadOwner(inv, owner))
             return false;
 
-        FindItemContext context{};
-        context.target = id;
-        ForEachItem(tc, FindItemVisitor, &context);
-        void* item = context.item;
+        void* item = nullptr;
+        if (!FindItemInCache(tc, id, item))
+            return false;
         if (!item)
             return true; // Already absent is a successful reconciliation result.
 
@@ -272,9 +282,10 @@ namespace LootSOCache
         }
 
         // Do not destruct memory while the cache still references it.
-        if (HasItem(id))
+        void* stillPresent = nullptr;
+        if (!FindItemInCache(tc, id, stillPresent) || stillPresent)
         {
-            Log("[socache] RemoveObject did not detach id=%llu",
+            Log("[socache] RemoveObject did not safely detach id=%llu",
                 static_cast<unsigned long long>(id));
             return false;
         }
