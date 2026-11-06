@@ -78,13 +78,7 @@ namespace RuntimeModeState
             return;
         }
 
-        RuntimeMode initialMode = ReadFile(bridgeDirectory);
-        if (initialMode == RuntimeMode::Unknown)
-        {
-            initialMode = RuntimeMode::Loadout;
-            Log("[runtime-mode] no valid selection found; defaulting to Loadout");
-        }
-
+        const RuntimeMode initialMode = ReadFile(bridgeDirectory);
         g_mode.store(static_cast<int>(initialMode), std::memory_order_release);
         Log("[runtime-mode] initial mode: %s", ModeName(Current()));
 
