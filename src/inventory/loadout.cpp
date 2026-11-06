@@ -384,6 +384,37 @@ bool ResolveBridgeDirectory(std::string& bridgeDirectory)
         return false;
     }
 
+    // A configured data file may be the only path supplied by an older
+    // launcher. In Armory mode we still derive its containing Bridge root
+    // without opening or validating the Loadout JSON itself.
+    char configuredDataFile[MAX_PATH]{};
+    const DWORD dataLength = GetEnvironmentVariableA(
+        "N1SSAN_DATA_FILE", configuredDataFile, MAX_PATH);
+    if (dataLength > 0 && dataLength < MAX_PATH)
+    {
+        char absoluteDataFile[MAX_PATH]{};
+        const DWORD absoluteLength = GetFullPathNameA(
+            configuredDataFile, MAX_PATH, absoluteDataFile, nullptr);
+
+        if (absoluteLength > 0 && absoluteLength < MAX_PATH)
+        {
+            const std::string candidate = DirectoryOf(absoluteDataFile);
+            if (IsBridgeRoot(candidate))
+            {
+                bridgeDirectory = candidate;
+                Log("[bridge] resolved from configured data-file directory: %s",
+                    bridgeDirectory.c_str());
+                return true;
+            }
+        }
+    }
+
+    if (dataLength >= MAX_PATH)
+    {
+        Log("[bridge] FATAL: N1SSAN_DATA_FILE exceeds MAX_PATH");
+        return false;
+    }
+
     HMODULE dllModule = nullptr;
     if (!GetModuleHandleExA(
         GET_MODULE_HANDLE_EX_FLAG_FROM_ADDRESS |
