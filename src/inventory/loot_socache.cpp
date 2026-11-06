@@ -145,6 +145,25 @@ namespace
         return value;
     }
 
+    void DestroyUncachedItem(void* item)
+    {
+        if (!item)
+            return;
+
+        __try
+        {
+            void** itemVtable = *reinterpret_cast<void***>(item);
+            auto destruct = reinterpret_cast<DestructItemFn>(
+                itemVtable[VFUNC_ITEM_DESTRUCT]);
+            if (destruct)
+                destruct(item, true);
+        }
+        __except (EXCEPTION_EXECUTE_HANDLER)
+        {
+            Log("[socache] failed to destruct an item that was not added");
+        }
+    }
+
     struct FindItemContext
     {
         uint64_t target = 0;
@@ -342,14 +361,14 @@ namespace LootSOCache
         it->rarity = static_cast<uint16_t>(req.rarity & 0xF);
         if (req.paintKit > 0)
         {
-            if (!LootSchema::SetAttributeFloat(item, ATTR_PAINT_KIT, static_cast<float>(req.paintKit))) { Log("[socache] FAIL at paintKit def=%u pk=%d", req.definition, req.paintKit); return CreateResult::Failed; }
-            if (!LootSchema::SetAttributeFloat(item, ATTR_PAINT_SEED, static_cast<float>(req.seed))) { Log("[socache] FAIL at seed def=%u", req.definition); return CreateResult::Failed; }
-            if (!LootSchema::SetAttributeFloat(item, ATTR_PAINT_WEAR, req.wear)) { Log("[socache] FAIL at wear def=%u", req.definition); return CreateResult::Failed; }
+            if (!LootSchema::SetAttributeFloat(item, ATTR_PAINT_KIT, static_cast<float>(req.paintKit))) { Log("[socache] FAIL at paintKit def=%u pk=%d", req.definition, req.paintKit); DestroyUncachedItem(item); return CreateResult::Failed; }
+            if (!LootSchema::SetAttributeFloat(item, ATTR_PAINT_SEED, static_cast<float>(req.seed))) { Log("[socache] FAIL at seed def=%u", req.definition); DestroyUncachedItem(item); return CreateResult::Failed; }
+            if (!LootSchema::SetAttributeFloat(item, ATTR_PAINT_WEAR, req.wear)) { Log("[socache] FAIL at wear def=%u", req.definition); DestroyUncachedItem(item); return CreateResult::Failed; }
         }
         if (req.statTrak >= 0)
         {
-            if (!LootSchema::SetAttributeInt(item, ATTR_KILL_EATER, req.statTrak))     return CreateResult::Failed;
-            if (!LootSchema::SetAttributeInt(item, ATTR_KILL_EATER_TYPE, 0))            return CreateResult::Failed;
+            if (!LootSchema::SetAttributeInt(item, ATTR_KILL_EATER, req.statTrak)) { DestroyUncachedItem(item); return CreateResult::Failed; }
+            if (!LootSchema::SetAttributeInt(item, ATTR_KILL_EATER_TYPE, 0)) { DestroyUncachedItem(item); return CreateResult::Failed; }
         }
 
         if (req.stickerKit > 0)
@@ -358,6 +377,7 @@ namespace LootSOCache
             if (!LootSchema::SetAttributeFloatByName(item, "sticker slot 0 id", stickerId))
             {
                 Log("[socache] FAIL at sticker slot 0 id=%d", req.stickerKit);
+                DestroyUncachedItem(item);
                 return CreateResult::Failed;
             }
         }
@@ -372,6 +392,7 @@ namespace LootSOCache
             {
                 Log("[socache] FAIL at keychain id=%d seed=%d",
                     req.keychain, req.keychainSeed);
+                DestroyUncachedItem(item);
                 return CreateResult::Failed;
             }
         }
@@ -379,10 +400,18 @@ namespace LootSOCache
         __try
         {
             auto addFn = reinterpret_cast<AddObjectFn>((*reinterpret_cast<void***>(tc))[1]);
-            if (!addFn) { Log("[socache] AddObject vfunc null"); return CreateResult::Failed; }
-            if (!addFn(tc, item)) { Log("[socache] AddObject returned false def=%u", req.definition); return CreateResult::Failed; }
+            if (!addFn) { Log("[socache] AddObject vfunc null"); DestroyUncachedItem(item); return CreateResult::Failed; }
+            if (!addFn(tc, item)) {
+                Log("[socache] AddObject returned false def=%u", req.definition);
+                if (!HasItem(req.id)) DestroyUncachedItem(item);
+                return CreateResult::Failed;
+            }
         }
-        __except (EXCEPTION_EXECUTE_HANDLER) { Log("[socache] AddObject threw"); return CreateResult::Failed; }
+        __except (EXCEPTION_EXECUTE_HANDLER) {
+            Log("[socache] AddObject threw");
+            if (!HasItem(req.id)) DestroyUncachedItem(item);
+            return CreateResult::Failed;
+        }
 
         __try
         {
