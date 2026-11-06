@@ -102,18 +102,29 @@ static DWORD WINAPI InjectThread(LPVOID)
         return 0;
     }
 
-    // 3. Resolve offsets + functions + schema
+    // 3. Resolve baseline offsets, then load the selected data before
+    // optional glove/schema capabilities are initialized. This ensures a
+    // glove-schema problem cannot prevent weapon loadout data from loading.
     ResolveOffsets();
 
-    RunEngineSchemaDiagnostic();
-
-    if (!ResolveGloveSchemaOffsets())
+    LoadLoadout();
+    if (g_targets.empty())
     {
-        Log("[fatal] glove schema resolution incomplete");
-        LogStatus("FAILED", "glove_schema_resolution_failed");
+        Log("[fatal] loadout empty");
+        LogStatus("FAILED", "loadout_empty");
         return 0;
     }
 
+    RunEngineSchemaDiagnostic();
+
+    // Glove offsets are an optional capability. Resolve what is available;
+    // fields that fail resolution retain the verified fallback values set
+    // by ResolveOffsets().
+    const bool gloveOffsetsReady = ResolveGloveSchemaOffsets();
+    Log("[schema-gloves] %s",
+        gloveOffsetsReady ? "READY" : "PARTIAL/UNAVAILABLE - using fallback offsets");
+
+    // Weapon skin application still requires its essential functions.
     if (!ResolveFunctions())
     {
         Log("[fatal] function resolution failed");
@@ -126,16 +137,7 @@ static DWORD WINAPI InjectThread(LPVOID)
     Log("[glove-schema] %s",
         GlovesSchema::Initialize("client.dll") ? "READY" : "UNAVAILABLE");
 
-    // 4. Loadout
-    LoadLoadout();
-    if (g_targets.empty())
-    {
-        Log("[fatal] loadout empty");
-        LogStatus("FAILED", "loadout_empty");
-        return 0;
-    }
-
-    // 5. Validate every selected definition/paint-kit pair against the live game.
+    // 4. Validate every selected definition/paint-kit pair against the live game.
     if (!RunSchemaProbe())
     {
         Log("[fatal] loadout compatibility preflight failed");
