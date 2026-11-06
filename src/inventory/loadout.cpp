@@ -32,6 +32,12 @@ bool        g_enabled = true;
 std::string g_loadoutSource;
 std::string g_bridgeDirectory;
 
+static std::string DirectoryOf(const std::string& path)
+{
+    const size_t slash = path.find_last_of("\\\\/");
+    return slash == std::string::npos ? std::string() : path.substr(0, slash + 1);
+}
+
 // ---- Weapon def-index table ----
 
 struct WeaponEntry
