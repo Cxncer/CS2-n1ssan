@@ -1,19 +1,10 @@
-﻿// n1ssan-dll / dllmain.cpp
-// Operation Overdrive Underway.
-// split into src/ modules
-//
-// This file is now a 60-line skeleton. Everything functional lives in
-// src/. The old monolith is preserved in Backup\dllmain.cpp.*.bak.
-//
-// InjectThread sequence:
-//   1. LoadMinHook()        (this file)
-//   2. Wait for client.dll
-//   3. ResolveOffsets()     (src/config/offsets.cpp)
-//   4. LoadLoadout()        (src/inventory/loadout.cpp)
-//   5. Resolve optional glove capabilities + essential weapon functions
-//   6. Run compatibility preflight and install hooks
+// n1ssan-dll / dllmain.cpp
+// Runtime entry point. Loadout and Armory share the inventory runtime but
+// initialize only the data source selected by DOMINATE.
 
 #include <windows.h>
+#include <cstdio>
+#include <cstring>
 #include <string>
 
 #include "diagnostics/log.h"
@@ -27,6 +18,8 @@
 #include "hooks/minhook_dynamic.h"
 #include "config/auto_offsets.h"
 #include "inventory/engine_schema_diagnostic.h"
+#include "inventory/armory_inventory.h"
+#include "inventory/runtime_mode.h"
 #include "skin/glove_paintkit_schema.h"
 #include "skin/glove_schema.h"
 
@@ -42,6 +35,12 @@ MH_DisableHook_t MH_DisableHook_p = nullptr;
 
 static HMODULE g_hMinHook = nullptr;
 static std::string g_dllPath;
+
+static std::string DirectoryOf(const std::string& path)
+{
+    const size_t slash = path.find_last_of("\\/");
+    return slash == std::string::npos ? std::string() : path.substr(0, slash + 1);
+}
 
 static bool LoadMinHook()
 {
@@ -75,13 +74,15 @@ static bool LoadMinHook()
         && MH_Initialize_p() == 0;
 }
 
-// ---- Inject thread ----
+// ---- Initialization worker ----
 
 static DWORD WINAPI InjectThread(LPVOID)
 {
+    // Keep filesystem and console initialization out of DllMain/loader lock.
+    LogInit(g_dllPath);
+    Log("[build] Operation Armory x Obsidian Build 3.0 | %s %s", __DATE__, __TIME__);
     LogStatus("INITIALIZING", "worker_started");
-    
-    // 1. MinHook FIRST — everything else needs it
+
     if (!LoadMinHook())
     {
         Log("[fatal] MinHook load failed");
@@ -89,7 +90,6 @@ static DWORD WINAPI InjectThread(LPVOID)
         return 0;
     }
 
-    // 2. Wait for client.dll
     for (int i = 0; i < 300; ++i)
     {
         if (GetModuleHandleA("client.dll")) break;
@@ -102,29 +102,35 @@ static DWORD WINAPI InjectThread(LPVOID)
         return 0;
     }
 
-    // 3. Resolve baseline offsets, then load the selected data before
-    // optional glove/schema capabilities are initialized. This ensures a
-    // glove-schema problem cannot prevent weapon loadout data from loading.
     ResolveOffsets();
 
-    LoadLoadout();
-    if (g_targets.empty())
+    // Resolve the Bridge independently of n1ssan-data.json. Armory mode must
+    // remain usable even when Loadout has no saved profile or data file.
+    std::string bridgeDirectory;
+    if (!ResolveBridgeDirectory(bridgeDirectory))
     {
-        Log("[fatal] loadout empty");
-        LogStatus("FAILED", "loadout_empty");
+        Log("[fatal] Bridge directory unavailable");
+        LogStatus("FAILED", "bridge_directory_unavailable");
         return 0;
     }
 
+    g_bridgeDirectory = bridgeDirectory;
+    RuntimeModeState::StartWatcher(bridgeDirectory);
+
+    const RuntimeMode runtimeMode = RuntimeModeState::Current();
+    const bool loadoutMode = runtimeMode == RuntimeMode::Loadout;
+
+    Log("[runtime-mode] selected=%s",
+        loadoutMode ? "loadout" : "armory");
+
     RunEngineSchemaDiagnostic();
 
-    // Glove offsets are an optional capability. Resolve what is available;
-    // fields that fail resolution retain the verified fallback values set
-    // by ResolveOffsets().
+    // Glove schema is an optional capability. Keep fallback offsets populated
+    // by ResolveOffsets() when live schema resolution is incomplete.
     const bool gloveOffsetsReady = ResolveGloveSchemaOffsets();
     Log("[schema-gloves] %s",
         gloveOffsetsReady ? "READY" : "PARTIAL/UNAVAILABLE - using fallback offsets");
 
-    // Weapon skin application still requires its essential functions.
     if (!ResolveFunctions())
     {
         Log("[fatal] function resolution failed");
@@ -132,26 +138,57 @@ static DWORD WINAPI InjectThread(LPVOID)
         return 0;
     }
 
+    const bool glovePaintKitReady = GlovePaintKitSchema::Initialize();
+    const bool gloveSchemaReady = GlovesSchema::Initialize("client.dll");
     Log("[glove-paintkit-schema] %s",
-        GlovePaintKitSchema::Initialize() ? "READY" : "UNAVAILABLE");
+        glovePaintKitReady ? "READY" : "UNAVAILABLE");
     Log("[glove-schema] %s",
-        GlovesSchema::Initialize("client.dll") ? "READY" : "UNAVAILABLE");
+        gloveSchemaReady ? "READY" : "UNAVAILABLE");
 
-    // 5. Validate every selected definition/paint-kit pair against the live game.
-    if (!RunSchemaProbe())
+    const bool optionalFeaturesDegraded =
+        !gloveOffsetsReady || !glovePaintKitReady || !gloveSchemaReady;
+
+    if (loadoutMode)
     {
-        Log("[fatal] loadout compatibility preflight failed");
-        LogStatus("FAILED", "loadout_compatibility_failed");
+        LoadLoadout();
+        if (g_targets.empty())
+        {
+            Log("[fatal] selected Loadout mode but no valid Loadout targets were loaded");
+            LogStatus("FAILED", "loadout_empty");
+            return 0;
+        }
+
+        if (!RunSchemaProbe())
+        {
+            Log("[fatal] loadout compatibility preflight failed");
+            LogStatus("FAILED", "loadout_compatibility_failed");
+            return 0;
+        }
+    }
+    else
+    {
+        Log("[runtime-mode] Armory selected: Loadout JSON and compatibility preflight skipped");
+    }
+
+    // PlanA owns the shared CEconItemSystem / SOCache initialization. It only
+    // injects Loadout items when Loadout is the selected runtime source.
+    if (!PlanA::Start(loadoutMode))
+    {
+        Log("[fatal] shared inventory runtime initialization failed");
+        LogStatus("FAILED", "inventory_runtime_initialization_failed");
         return 0;
     }
 
-    // 6. Plan A (SOCache) — only after the live compatibility preflight passes.
-    PlanA::Start();
+    if (loadoutMode)
+    {
+        KnifeAnimation::Initialize();
+        StartLoadoutWatcher();
+    }
 
-    // 7. Knife animation hooks (MinHook is now live)
-    KnifeAnimation::Initialize();
+    // Armory inventory is independent of Loadout and can be watched even when
+    // n1ssan-data.json does not exist.
+    ArmoryInventory::StartWatcher();
 
-    // 8. FSN hook installation result
     if (!InstallFSNHook())
     {
         Log("[fatal] FSN hook not installed");
@@ -159,18 +196,23 @@ static DWORD WINAPI InjectThread(LPVOID)
         return 0;
     }
 
-    LogStatus(
-        "CHECKS_PASSED",
-        "required_initialization_checks_passed"
-    );
+    LogStatus("CHECKS_PASSED", "required_initialization_checks_passed");
+    Log("[diagnostic] runtime=%s targets=%zu",
+        loadoutMode ? "loadout" : "armory", g_targets.size());
 
-    Log("[diagnostic] targets=%zu", g_targets.size());
+    const char* runtimeState = optionalFeaturesDegraded ? "DEGRADED" : "READY";
+    const char* runtimeReason = optionalFeaturesDegraded
+        ? "optional_glove_schema_unavailable"
+        : "runtime_worker_heartbeat";
 
-    while (true) Sleep(10000);
+    while (true)
+    {
+        LogStatus(runtimeState, runtimeReason);
+        Sleep(10000);
+    }
+
     return 0;
 }
-
-// ---- DllMain ----
 
 BOOL APIENTRY DllMain(HMODULE hModule, DWORD reason, LPVOID)
 {
@@ -182,11 +224,9 @@ BOOL APIENTRY DllMain(HMODULE hModule, DWORD reason, LPVOID)
         GetModuleFileNameA(hModule, dllPath, MAX_PATH);
         g_dllPath = dllPath;
 
-        LogInit(g_dllPath);
-        Log("[build] Operation Armory x Obsidian Build 3.0 | %s %s", __DATE__, __TIME__);
-
         HANDLE t = CreateThread(nullptr, 0, InjectThread, nullptr, 0, nullptr);
         if (t) CloseHandle(t);
+        else OutputDebugStringA("[n1ssan] initialization worker creation failed\n");
     }
     else if (reason == DLL_PROCESS_DETACH)
     {

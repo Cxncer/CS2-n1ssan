@@ -18,6 +18,9 @@
 #include <sstream>
 #include <string>
 #include <vector>
+#include <atomic>
+#include <mutex>
+#include <thread>
 #include <cctype>
 #include <cstdlib>
 #include <cstring>
@@ -27,6 +30,13 @@
 std::unordered_map<uint32_t, TargetSkin> g_targets;
 bool        g_enabled = true;
 std::string g_loadoutSource;
+std::string g_bridgeDirectory;
+
+static std::string DirectoryOf(const std::string& path)
+{
+    const size_t slash = path.find_last_of("\\\\/");
+    return slash == std::string::npos ? std::string() : path.substr(0, slash + 1);
+}
 
 // ---- Weapon def-index table ----
 
@@ -339,6 +349,136 @@ static bool IsBridgeRoot(const std::string& path)
         IsRegularFile(path + "bridge\\server.ts");
 }
 
+bool ResolveBridgeDirectory(std::string& bridgeDirectory)
+{
+    char configuredBridgeDir[MAX_PATH]{};
+    const DWORD bridgeLength = GetEnvironmentVariableA(
+        "N1SSAN_BRIDGE_DIR", configuredBridgeDir, MAX_PATH);
+
+    if (bridgeLength > 0 && bridgeLength < MAX_PATH)
+    {
+        char absoluteBridgeDir[MAX_PATH]{};
+        const DWORD absoluteLength = GetFullPathNameA(
+            configuredBridgeDir, MAX_PATH, absoluteBridgeDir, nullptr);
+
+        if (absoluteLength == 0 || absoluteLength >= MAX_PATH)
+        {
+            Log("[bridge] FATAL: N1SSAN_BRIDGE_DIR could not be resolved (error=%lu)",
+                GetLastError());
+            return false;
+        }
+
+        bridgeDirectory = absoluteBridgeDir;
+        if (!bridgeDirectory.empty() &&
+            bridgeDirectory.back() != '\\' &&
+            bridgeDirectory.back() != '/')
+            bridgeDirectory.push_back('\\');
+
+        if (!IsBridgeRoot(bridgeDirectory))
+        {
+            Log("[bridge] FATAL: configured Bridge directory is invalid: %s",
+                bridgeDirectory.c_str());
+            return false;
+        }
+
+        return true;
+    }
+
+    if (bridgeLength >= MAX_PATH)
+    {
+        Log("[bridge] FATAL: N1SSAN_BRIDGE_DIR exceeds MAX_PATH");
+        return false;
+    }
+
+    // A configured data file may be the only path supplied by an older
+    // launcher. In Armory mode we still derive its containing Bridge root
+    // without opening or validating the Loadout JSON itself.
+    char configuredDataFile[MAX_PATH]{};
+    const DWORD dataLength = GetEnvironmentVariableA(
+        "N1SSAN_DATA_FILE", configuredDataFile, MAX_PATH);
+    if (dataLength > 0 && dataLength < MAX_PATH)
+    {
+        char absoluteDataFile[MAX_PATH]{};
+        const DWORD absoluteLength = GetFullPathNameA(
+            configuredDataFile, MAX_PATH, absoluteDataFile, nullptr);
+
+        if (absoluteLength > 0 && absoluteLength < MAX_PATH)
+        {
+            const std::string candidate = DirectoryOf(absoluteDataFile);
+            if (IsBridgeRoot(candidate))
+            {
+                bridgeDirectory = candidate;
+                Log("[bridge] resolved from configured data-file directory: %s",
+                    bridgeDirectory.c_str());
+                return true;
+            }
+        }
+    }
+
+    if (dataLength >= MAX_PATH)
+    {
+        Log("[bridge] FATAL: N1SSAN_DATA_FILE exceeds MAX_PATH");
+        return false;
+    }
+
+    HMODULE dllModule = nullptr;
+    if (!GetModuleHandleExA(
+        GET_MODULE_HANDLE_EX_FLAG_FROM_ADDRESS |
+        GET_MODULE_HANDLE_EX_FLAG_UNCHANGED_REFCOUNT,
+        reinterpret_cast<LPCSTR>(&ResolveBridgeDirectory),
+        &dllModule))
+    {
+        Log("[bridge] FATAL: could not resolve DLL module (error=%lu)", GetLastError());
+        return false;
+    }
+
+    char dllPath[MAX_PATH]{};
+    const DWORD pathLength = GetModuleFileNameA(dllModule, dllPath, MAX_PATH);
+    if (pathLength == 0 || pathLength >= MAX_PATH)
+    {
+        Log("[bridge] FATAL: could not read DLL path (error=%lu)", GetLastError());
+        return false;
+    }
+
+    char* slash = strrchr(dllPath, '\\');
+    char* forwardSlash = strrchr(dllPath, '/');
+    if (!slash || (forwardSlash && forwardSlash > slash))
+        slash = forwardSlash;
+
+    if (!slash)
+    {
+        Log("[bridge] FATAL: DLL path has no directory: %s", dllPath);
+        return false;
+    }
+
+    *(slash + 1) = 0;
+    std::string searchDirectory = dllPath;
+
+    while (!searchDirectory.empty())
+    {
+        std::string candidate = searchDirectory + "n1ssan-web-bridge\\";
+        if (IsBridgeRoot(candidate))
+        {
+            bridgeDirectory = candidate;
+            Log("[bridge] discovered Bridge directory: %s", bridgeDirectory.c_str());
+            return true;
+        }
+
+        while (!searchDirectory.empty() &&
+            (searchDirectory.back() == '\\' || searchDirectory.back() == '/'))
+            searchDirectory.pop_back();
+
+        const std::size_t parentSeparator = searchDirectory.find_last_of("\\/");
+        if (parentSeparator == std::string::npos)
+            break;
+
+        searchDirectory.resize(parentSeparator + 1);
+    }
+
+    Log("[bridge] FATAL: could not locate n1ssan-web-bridge from DLL directory");
+    return false;
+}
+
 static bool ResolveLoadoutPath(std::string& loadoutPath)
 {
     char configuredDataFile[MAX_PATH]{};
@@ -359,6 +499,7 @@ static bool ResolveLoadoutPath(std::string& loadoutPath)
         }
 
         loadoutPath = absolutePath;
+        g_bridgeDirectory = DirectoryOf(loadoutPath);
         Log("[loadout] configured data path: %s", loadoutPath.c_str());
         return IsRegularFile(loadoutPath);
     }
@@ -369,103 +510,68 @@ static bool ResolveLoadoutPath(std::string& loadoutPath)
         return false;
     }
 
-    char configuredBridgeDir[MAX_PATH]{};
-    const DWORD bridgeLength = GetEnvironmentVariableA(
-        "N1SSAN_BRIDGE_DIR", configuredBridgeDir, MAX_PATH);
+    if (!ResolveBridgeDirectory(g_bridgeDirectory))
+        return false;
 
-    if (bridgeLength > 0 && bridgeLength < MAX_PATH)
+    loadoutPath = g_bridgeDirectory + "n1ssan-data.json";
+    Log("[loadout] Bridge data path: %s", loadoutPath.c_str());
+    return IsRegularFile(loadoutPath);
+}
+
+static int BuildTargets(
+    const std::vector<LoadoutItem>& items,
+    std::unordered_map<uint32_t, TargetSkin>& out,
+    bool verbose)
+{
+    int count = 0;
+
+    for (const auto& it : items)
     {
-        char absoluteBridgeDir[MAX_PATH]{};
-        const DWORD absoluteLength = GetFullPathNameA(
-            configuredBridgeDir, MAX_PATH, absoluteBridgeDir, nullptr);
-
-        if (absoluteLength == 0 || absoluteLength >= MAX_PATH)
+        const WeaponEntry* w = FindWeapon(it.weapon);
+        if (!w)
         {
-            Log("[loadout] FATAL: N1SSAN_BRIDGE_DIR could not be resolved (error=%lu)",
-                GetLastError());
-            return false;
+            if (verbose)
+                Log("[loadout] skip unknown weapon: %s", it.weapon.c_str());
+            continue;
         }
 
-        std::string bridgeRoot = absoluteBridgeDir;
-        if (!bridgeRoot.empty() && bridgeRoot.back() != '\\' && bridgeRoot.back() != '/')
-            bridgeRoot.push_back('\\');
+        TargetSkin t;
+        t.paintKit = it.paintKit;
+        t.resolvedSeed = it.seed;
+        t.wear = it.floatVal;
+        t.legacyModel = false;
+        t.statTrak = false;
+        t.skinName = it.skinName;
+        t.weaponName = it.weapon;
+        t.team = it.team;
+        t.slot = it.slot;
+        t.defIndex = w->defIndex;
 
-        if (!IsBridgeRoot(bridgeRoot))
+        out[TargetKey(w->defIndex, it.team)] = t;
+        ++count;
+
+        if (verbose)
         {
-            Log("[loadout] FATAL: configured Bridge directory is invalid: %s",
-                bridgeRoot.c_str());
-            return false;
+            Log("[loadout] %s/%s: %s (%s) pk=%d def=%u",
+                t.team.c_str(), t.slot.c_str(),
+                t.weaponName.c_str(), t.skinName.c_str(),
+                t.paintKit, t.defIndex);
         }
-
-        loadoutPath = bridgeRoot + "n1ssan-data.json";
-        Log("[loadout] Bridge data path: %s", loadoutPath.c_str());
-        return IsRegularFile(loadoutPath);
     }
 
-    if (bridgeLength >= MAX_PATH)
-    {
-        Log("[loadout] FATAL: N1SSAN_BRIDGE_DIR exceeds MAX_PATH");
-        return false;
-    }
+    return count;
+}
 
-    HMODULE dllModule = nullptr;
-    if (!GetModuleHandleExA(
-        GET_MODULE_HANDLE_EX_FLAG_FROM_ADDRESS |
-        GET_MODULE_HANDLE_EX_FLAG_UNCHANGED_REFCOUNT,
-        reinterpret_cast<LPCSTR>(&LoadLoadout),
-        &dllModule))
-    {
-        Log("[loadout] FATAL: could not resolve DLL module (error=%lu)", GetLastError());
-        return false;
-    }
-
-    char dllPath[MAX_PATH]{};
-    const DWORD pathLength = GetModuleFileNameA(dllModule, dllPath, MAX_PATH);
-    if (pathLength == 0 || pathLength >= MAX_PATH)
-    {
-        Log("[loadout] FATAL: could not read DLL path (error=%lu)", GetLastError());
-        return false;
-    }
-
-    char* slash = strrchr(dllPath, '\\');
-    char* forwardSlash = strrchr(dllPath, '/');
-    if (!slash || (forwardSlash && forwardSlash > slash))
-        slash = forwardSlash;
-
-    if (!slash)
-    {
-        Log("[loadout] FATAL: DLL path has no directory: %s", dllPath);
-        return false;
-    }
-
-    *(slash + 1) = 0;
-    std::string searchDirectory = dllPath;
-
-    // Match BridgeProcessManager.ResolveBridgeRoot(): walk upward from the
-    // DLL directory until the sibling n1ssan-web-bridge project is found.
-    while (!searchDirectory.empty())
-    {
-        std::string bridgeRoot = searchDirectory + "n1ssan-web-bridge\\";
-        if (IsBridgeRoot(bridgeRoot))
-        {
-            loadoutPath = bridgeRoot + "n1ssan-data.json";
-            Log("[loadout] discovered Bridge data path: %s", loadoutPath.c_str());
-            return IsRegularFile(loadoutPath);
-        }
-
-        while (!searchDirectory.empty() &&
-            (searchDirectory.back() == '\\' || searchDirectory.back() == '/'))
-            searchDirectory.pop_back();
-
-        const std::size_t parentSeparator = searchDirectory.find_last_of("\\/");
-        if (parentSeparator == std::string::npos)
-            break;
-
-        searchDirectory.resize(parentSeparator + 1);
-    }
-
-    Log("[loadout] FATAL: could not locate n1ssan-web-bridge from DLL directory");
-    return false;
+// Staged runtime configuration, filled by the watcher thread and adopted on the
+// game thread. Only the watcher touches g_stagedTargets under g_stageMutex;
+// g_targets itself is only ever replaced from FrameStageNotify.
+namespace
+{
+    std::mutex g_stageMutex;
+    std::unordered_map<uint32_t, TargetSkin> g_stagedTargets;
+    bool g_stagedEnabled = true;
+    bool g_stageReady = false;
+    std::atomic<bool> g_stagePending{ false };
 }
 
 void LoadLoadout()
@@ -505,39 +611,12 @@ void LoadLoadout()
     }
 
     g_loadoutSource = loadoutPath;
+    if (g_bridgeDirectory.empty())
+        g_bridgeDirectory = DirectoryOf(loadoutPath);
     g_enabled = enabled;
     g_targets.clear();
 
-    int count = 0;
-    for (const auto& it : items)
-    {
-        const WeaponEntry* w = FindWeapon(it.weapon);
-        if (!w)
-        {
-            Log("[loadout] skip unknown weapon: %s", it.weapon.c_str());
-            continue;
-        }
-
-        TargetSkin t;
-        t.paintKit = it.paintKit;
-        t.resolvedSeed = it.seed;
-        t.wear = it.floatVal;
-        t.legacyModel = false;
-        t.statTrak = false;
-        t.skinName = it.skinName;
-        t.weaponName = it.weapon;
-        t.team = it.team;
-        t.slot = it.slot;
-        t.defIndex = w->defIndex;
-
-        g_targets[TargetKey(w->defIndex, it.team)] = t;
-
-        ++count;
-        Log("[loadout] %s/%s: %s (%s) pk=%d def=%u",
-            t.team.c_str(), t.slot.c_str(),
-            t.weaponName.c_str(), t.skinName.c_str(),
-            t.paintKit, t.defIndex);
-    }
+    const int count = BuildTargets(items, g_targets, true);
 
     Log("[loadout] %d items from %s", count, g_loadoutSource.c_str());
 }
@@ -548,4 +627,118 @@ uint32_t TargetKey(uint16_t def, const std::string& team)
     if (team == "T")  teamBit = 0;
     else if (team == "CT") teamBit = 1;
     return ((uint32_t)def << 8) | teamBit;
+}
+
+void StartLoadoutWatcher()
+{
+    if (g_loadoutSource.empty())
+        return;
+
+    static std::atomic<bool> started{ false };
+    bool expected = false;
+    if (!started.compare_exchange_strong(expected, true))
+        return;
+
+    std::thread([]()
+    {
+        const std::string source = g_loadoutSource;
+        Log("[loadout] watching for runtime changes: %s", source.c_str());
+
+        FILETIME lastWrite{};
+        ULONGLONG lastSize = 0;
+        bool haveBaseline = false;
+
+        WIN32_FILE_ATTRIBUTE_DATA baseline{};
+        if (GetFileAttributesExA(source.c_str(), GetFileExInfoStandard, &baseline))
+        {
+            lastWrite = baseline.ftLastWriteTime;
+            ULARGE_INTEGER size{};
+            size.HighPart = baseline.nFileSizeHigh;
+            size.LowPart = baseline.nFileSizeLow;
+            lastSize = size.QuadPart;
+            haveBaseline = true;
+        }
+
+        for (;;)
+        {
+            Sleep(2000);
+
+            WIN32_FILE_ATTRIBUTE_DATA info{};
+            if (!GetFileAttributesExA(source.c_str(), GetFileExInfoStandard, &info))
+                continue;
+
+            ULARGE_INTEGER size{};
+            size.HighPart = info.nFileSizeHigh;
+            size.LowPart = info.nFileSizeLow;
+
+            if (size.QuadPart == 0)
+                continue;
+
+            if (haveBaseline &&
+                CompareFileTime(&info.ftLastWriteTime, &lastWrite) == 0 &&
+                size.QuadPart == lastSize)
+            {
+                continue;
+            }
+
+            lastWrite = info.ftLastWriteTime;
+            lastSize = size.QuadPart;
+            haveBaseline = true;
+
+            std::vector<LoadoutItem> items;
+            bool enabled = true;
+
+            if (!LoadJSON(source.c_str(), items, enabled) || items.empty())
+            {
+                Log("[loadout] reload skipped: file unreadable or empty");
+                continue;
+            }
+
+            std::unordered_map<uint32_t, TargetSkin> staged;
+            const int count = BuildTargets(items, staged, false);
+
+            if (count == 0)
+            {
+                Log("[loadout] reload skipped: no known weapons in the file");
+                continue;
+            }
+
+            {
+                std::lock_guard<std::mutex> lock(g_stageMutex);
+                g_stagedTargets = std::move(staged);
+                g_stagedEnabled = enabled;
+                g_stageReady = true;
+            }
+
+            g_stagePending.store(true, std::memory_order_release);
+            Log("[loadout] reload staged: %d targets (applies outside an active match)", count);
+        }
+    }).detach();
+}
+
+bool HasStagedLoadout()
+{
+    return g_stagePending.load(std::memory_order_acquire);
+}
+
+bool AdoptStagedLoadout()
+{
+    if (!g_stagePending.load(std::memory_order_acquire))
+        return false;
+
+    std::lock_guard<std::mutex> lock(g_stageMutex);
+
+    if (!g_stageReady)
+    {
+        g_stagePending.store(false, std::memory_order_release);
+        return false;
+    }
+
+    g_targets = std::move(g_stagedTargets);
+    g_enabled = g_stagedEnabled;
+    g_stageReady = false;
+    g_stagePending.store(false, std::memory_order_release);
+
+    Log("[loadout] runtime loadout adopted (%zu targets)", g_targets.size());
+    return true;
 }

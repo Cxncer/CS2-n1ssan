@@ -130,6 +130,13 @@ namespace
         return true;
     }
 
+    float FloatFromBits(uint32_t bits)
+    {
+        float value = 0.0f;
+        std::memcpy(&value, &bits, sizeof(value));
+        return value;
+    }
+
     bool HasItemVisitor(void* item, uint64_t id, void* user)
     {
         return id != *static_cast<uint64_t*>(user);
@@ -206,6 +213,30 @@ namespace LootSOCache
         {
             if (!LootSchema::SetAttributeInt(item, ATTR_KILL_EATER, req.statTrak))     return CreateResult::Failed;
             if (!LootSchema::SetAttributeInt(item, ATTR_KILL_EATER_TYPE, 0))            return CreateResult::Failed;
+        }
+
+        if (req.stickerKit > 0)
+        {
+            const float stickerId = FloatFromBits(static_cast<uint32_t>(req.stickerKit));
+            if (!LootSchema::SetAttributeFloatByName(item, "sticker slot 0 id", stickerId))
+            {
+                Log("[socache] FAIL at sticker slot 0 id=%d", req.stickerKit);
+                return CreateResult::Failed;
+            }
+        }
+
+        if (req.keychain > 0)
+        {
+            const float keychainId = FloatFromBits(static_cast<uint32_t>(req.keychain));
+            const float keychainSeed = FloatFromBits(static_cast<uint32_t>(req.keychainSeed));
+
+            if (!LootSchema::SetAttributeFloatByName(item, "keychain slot 0 id", keychainId) ||
+                !LootSchema::SetAttributeFloatByName(item, "keychain slot 0 seed", keychainSeed))
+            {
+                Log("[socache] FAIL at keychain id=%d seed=%d",
+                    req.keychain, req.keychainSeed);
+                return CreateResult::Failed;
+            }
         }
 
         __try

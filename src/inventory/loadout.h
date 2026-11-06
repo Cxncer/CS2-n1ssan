@@ -22,7 +22,7 @@ struct TargetSkin
     uint16_t    defIndex = 0;
 };
 
-// (defIndex << 8) | teamBit — teamBit: 0=T, 1=CT, 2=any.
+// (defIndex << 8) | teamBit Â— teamBit: 0=T, 1=CT, 2=any.
 uint32_t TargetKey(uint16_t def, const std::string& team);
 
 // Populated by LoadLoadout(). Read by dispatch/apply code.
@@ -31,9 +31,27 @@ extern std::unordered_map<uint32_t, TargetSkin> g_targets;
 // Global enable flag. Parsed from JSON's top-level "enabled" boolean.
 extern bool g_enabled;
 
-// Resolved once during InjectThread — the JSON path that actually loaded.
+// Resolved once during InjectThread Â— the JSON path that actually loaded.
 extern std::string g_loadoutSource;
+
+// Resolved Bridge directory, independent of whether Loadout data exists.
+extern std::string g_bridgeDirectory;
+
+// Locate the Bridge root without requiring n1ssan-data.json.
+bool ResolveBridgeDirectory(std::string& bridgeDirectory);
 
 // Try the standard candidate paths, parse the first one that works,
 // and populate g_targets. Logs every item imported.
 void LoadLoadout();
+
+// ---- Runtime reload (profile switching without reinjection) ----
+// Watches the resolved loadout file. A changed file is parsed on a worker
+// thread and staged; the game thread adopts it outside an active match.
+void StartLoadoutWatcher();
+
+// True while a parsed loadout is waiting to be adopted.
+bool HasStagedLoadout();
+
+// Game-thread only: replace g_targets/g_enabled with the staged loadout.
+// Returns true when a new loadout was adopted.
+bool AdoptStagedLoadout();
