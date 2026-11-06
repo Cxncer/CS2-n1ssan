@@ -302,8 +302,13 @@ namespace ArmoryInventory
 
         // Snapshot the old managed set. New projection IDs are generation-scoped,
         // so the complete new set can be created before any old item is removed.
-        const std::vector<uint64_t> previousIds = LootSOCache::GetIdsByPrefix(
-            0x9000000000000000ull, 0xF000000000000000ull);
+        std::vector<uint64_t> previousIds;
+        if (!LootSOCache::GetIdsByPrefix(
+                0x9000000000000000ull, 0xF000000000000000ull, previousIds))
+        {
+            Log("[armory-inventory] replacement deferred: SOCache enumeration failed");
+            return;
+        }
 
         std::vector<uint64_t> createdIds;
         createdIds.reserve(g_staged.size());
