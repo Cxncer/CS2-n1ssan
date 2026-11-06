@@ -74,7 +74,7 @@ namespace RuntimeModeState
     {
         if (bridgeDirectory.empty())
         {
-            Log("[runtime-mode] bridge directory unavailable; defaulting to Loadout");
+            Log("[runtime-mode] bridge directory unavailable; staying in neutral mode");
             return;
         }
 
