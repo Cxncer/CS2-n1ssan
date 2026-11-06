@@ -90,7 +90,7 @@ namespace PlanA
 
     bool Start(bool injectLoadout)
     {
-        if (g_started) return;
+        if (g_started) return g_initialized;
         g_started = true;
 
         if (!ResolveEconSystem())
