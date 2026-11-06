@@ -88,7 +88,7 @@ namespace PlanA
         return FAKE_ID_PREFIX | (uint64_t)defIndex;
     }
 
-    void Start()
+    void Start(bool injectLoadout)
     {
         if (g_started) return;
         g_started = true;
@@ -104,8 +104,15 @@ namespace PlanA
             return;
         }
         g_initialized = true;
-        Log("[plan-a] ready, will inject on first stage-6");
-        InjectAll();
+        if (injectLoadout)
+        {
+            Log("[plan-a] ready, injecting Loadout items");
+            InjectAll();
+        }
+        else
+        {
+            Log("[plan-a] shared inventory runtime ready; Loadout injection disabled");
+        }
     }
 
     void EnsureAllItems()
