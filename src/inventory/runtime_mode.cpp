@@ -95,7 +95,7 @@ namespace RuntimeModeState
                 Sleep(1000);
 
                 const RuntimeMode mode = ReadFile(bridgeDirectory);
-                if (mode == RuntimeMode::Unknown || mode == last)
+                if (mode == last)
                     continue;
 
                 g_mode.store(static_cast<int>(mode), std::memory_order_release);
