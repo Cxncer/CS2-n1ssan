@@ -210,18 +210,20 @@ namespace LootSOCache
         return context.item != nullptr;
     }
 
-    std::vector<uint64_t> GetIdsByPrefix(uint64_t prefix, uint64_t mask)
+    bool GetIdsByPrefix(uint64_t prefix, uint64_t mask, std::vector<uint64_t>& ids)
     {
-        std::vector<uint64_t> result;
+        ids.clear();
         void* tc = ItemTypeCache(LocalInventory());
-        if (!tc) return result;
+        if (!tc) return false;
 
         CollectIdsContext context{};
         context.prefix = prefix;
         context.mask = mask;
-        if (ForEachItem(tc, CollectIdsVisitor, &context))
-            result = std::move(context.ids);
-        return result;
+        if (!ForEachItem(tc, CollectIdsVisitor, &context))
+            return false;
+
+        ids = std::move(context.ids);
+        return true;
     }
 
     bool Remove(uint64_t id)
