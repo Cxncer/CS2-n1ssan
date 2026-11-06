@@ -120,8 +120,11 @@ static DWORD WINAPI InjectThread(LPVOID)
     const RuntimeMode runtimeMode = RuntimeModeState::Current();
     const bool loadoutMode = runtimeMode == RuntimeMode::Loadout;
 
-    Log("[runtime-mode] selected=%s",
-        loadoutMode ? "loadout" : "armory");
+    const char* runtimeModeName =
+        runtimeMode == RuntimeMode::Loadout ? "loadout" :
+        runtimeMode == RuntimeMode::Armory ? "armory" : "pending";
+
+    Log("[runtime-mode] selected=%s", runtimeModeName);
 
     RunEngineSchemaDiagnostic();
 
@@ -167,7 +170,7 @@ static DWORD WINAPI InjectThread(LPVOID)
     }
     else
     {
-        Log("[runtime-mode] Armory selected: Loadout JSON and compatibility preflight skipped");
+        Log("[runtime-mode] %s selected: Loadout JSON and compatibility preflight skipped", runtimeModeName);
     }
 
     // PlanA owns the shared CEconItemSystem / SOCache initialization. It only
@@ -179,11 +182,14 @@ static DWORD WINAPI InjectThread(LPVOID)
         return 0;
     }
 
-    if (loadoutMode)
-    {
-        KnifeAnimation::Initialize();
-        StartLoadoutWatcher();
-    }
+    // Initialize the animation hook and both file watchers once. The selected
+    // workspace may be opened after injection, so the DLL must be ready to
+    // adopt either dataset when DOMINATE writes runtime-mode.json.
+    KnifeAnimation::Initialize();
+
+    if (g_loadoutSource.empty())
+        g_loadoutSource = bridgeDirectory + "n1ssan-data.json";
+    StartLoadoutWatcher();
 
     // Armory inventory is independent of Loadout and can be watched even when
     // n1ssan-data.json does not exist.
