@@ -1,5 +1,6 @@
 ﻿#pragma once
 #include <cstdint>
+#include <vector>
 
 namespace LootSOCache
 {
@@ -22,5 +23,7 @@ namespace LootSOCache
     bool WaitForInventory(int timeoutMs = 2000);
     CreateResult Create(const NewItem& item);
     bool HasItem(uint64_t id);
+    bool Remove(uint64_t id);
+    std::vector<uint64_t> GetIdsByPrefix(uint64_t prefix, uint64_t mask);
     uint32_t NextPosition();
 }
