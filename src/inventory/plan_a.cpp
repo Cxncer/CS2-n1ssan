@@ -96,7 +96,7 @@ namespace PlanA
         if (!ResolveEconSystem())
         {
             Log("[plan-a] CEconItemSystem* not resolved  abort");
-            return;
+            return false;
         }
         if (!LootSchema::Init())
         {
