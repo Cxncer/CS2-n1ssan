@@ -44,11 +44,7 @@ namespace
     std::atomic<bool> g_pending{ false };
     std::string g_path;
 
-    std::string DirectoryOf(const std::string& path)
-    {
-        const size_t slash = path.find_last_of("\\/");
-        return slash == std::string::npos ? std::string() : path.substr(0, slash + 1);
-    }
+
 
     uint64_t StableIdFor(const std::string& instanceId)
     {
