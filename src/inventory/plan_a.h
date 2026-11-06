@@ -9,7 +9,7 @@ namespace PlanA
 
     // One-shot: resolve LootSchema + LootSOCache, inject all g_targets entries into SOCache.
     // Safe to call from InjectThread after LoadLoadout(). No-op if already started successfully.
-    void Start(bool injectLoadout = true);
+    bool Start(bool injectLoadout = true);
 
     // Called from FrameStageNotify stage 6 before ProcessWeapon. Idempotent  re-injects any
     // items that were wiped by a server join.
