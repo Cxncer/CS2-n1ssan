@@ -1,4 +1,4 @@
-﻿// n1ssan-dll / dllmain.cpp
+// n1ssan-dll / dllmain.cpp
 // Operation Overdrive Underway.
 // split into src/ modules
 //
@@ -19,6 +19,8 @@
 #include "hooks/minhook_dynamic.h"
 #include "config/auto_offsets.h"
 #include "inventory/engine_schema_diagnostic.h"
+#include "inventory/armory_inventory.h"
+#include "inventory/runtime_mode.h"
 #include "skin/glove_paintkit_schema.h"
 #include "skin/glove_schema.h"
 
@@ -34,6 +36,12 @@ MH_DisableHook_t MH_DisableHook_p = nullptr;
 
 static HMODULE g_hMinHook = nullptr;
 static std::string g_dllPath;
+
+static std::string DirectoryOf(const std::string& path)
+{
+    const size_t slash = path.find_last_of("\\/");
+    return slash == std::string::npos ? std::string() : path.substr(0, slash + 1);
+}
 
 static bool LoadMinHook()
 {
@@ -135,7 +143,20 @@ static DWORD WINAPI InjectThread(LPVOID)
         return 0;
     }
 
-    PlanA::Start();
+    // Runtime mode decides which single dataset is active. Read it before
+    // PlanA so Armory mode never creates Loadout SOCache items.
+    const std::string bridgeDirectory = DirectoryOf(g_loadoutSource);
+    RuntimeModeState::StartWatcher(bridgeDirectory);
+
+    if (RuntimeModeState::Current() == RuntimeMode::Armory)
+    {
+        Log("[runtime-mode] Armory mode: Loadout SOCache injection skipped");
+    }
+    else
+    {
+        PlanA::Start();
+    }
+
     KnifeAnimation::Initialize();
 
     if (!InstallFSNHook())
@@ -144,6 +165,14 @@ static DWORD WINAPI InjectThread(LPVOID)
         LogStatus("FAILED", "fsn_hook_installation_failed");
         return 0;
     }
+
+    // Profile switching: watch the bridge loadout file and stage changes for
+    // the game thread. The DLL is injected once; no reinjection is required.
+    StartLoadoutWatcher();
+
+    // Armory inventory: separate from Loadout; recreates the owned collection
+    // inside CS2 when the player is outside an active match.
+    ArmoryInventory::StartWatcher();
 
     LogStatus("CHECKS_PASSED", "required_initialization_checks_passed");
     Log("[diagnostic] targets=%zu", g_targets.size());

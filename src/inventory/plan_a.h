@@ -11,7 +11,11 @@ namespace PlanA
     // Safe to call from InjectThread after LoadLoadout(). No-op if already started successfully.
     void Start();
 
-    // Called from FrameStageNotify stage 6 before ProcessWeapon. Idempotent — re-injects any
+    // Called from FrameStageNotify stage 6 before ProcessWeapon. Idempotent Â— re-injects any
     // items that were wiped by a server join.
     void EnsureAllItems();
+
+    // Reconciles SOCache items against the current g_targets after a runtime
+    // loadout change. Idempotent: existing items report AlreadyExists.
+    void ReconcileAllItems();
 }

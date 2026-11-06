@@ -95,7 +95,7 @@ namespace PlanA
 
         if (!ResolveEconSystem())
         {
-            Log("[plan-a] CEconItemSystem* not resolved — abort");
+            Log("[plan-a] CEconItemSystem* not resolved Â— abort");
             return;
         }
         if (!LootSchema::Init())
@@ -112,6 +112,12 @@ namespace PlanA
     {
         if (!g_initialized) return;
         if (LootSOCache::HasItem(FakeIdForDef(4))) return;
+        InjectAll();
+    }
+
+    void ReconcileAllItems()
+    {
+        if (!g_initialized) return;
         InjectAll();
     }
 }

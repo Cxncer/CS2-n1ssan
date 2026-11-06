@@ -1,4 +1,4 @@
-﻿#include "inventory/loot_schema.h"
+#include "inventory/loot_schema.h"
 #include "inventory/loot_patterns.h"
 #include "config/offsets.h"
 #include "diagnostics/log.h"
@@ -150,6 +150,52 @@ namespace
         __except (EXCEPTION_EXECUTE_HANDLER) { Log("[loot-schema] CallSetAttribute: threw"); return false; }
     }
 
+    // The game registers several attribute types; SetDynamicAttributeValue<T> silently does
+    // nothing when the type does not match the setter passed. Read the type from the
+    // attribute definition's RTTI (definition + 0x18 -> vtable[-1] -> type name).
+    enum class AttributeKind { Float, Uint32, Default, Other };
+
+    AttributeKind AttributeKindOf(void* definition)
+    {
+        if (!definition) return AttributeKind::Other;
+
+        uintptr_t type = 0;
+        if (!SafeReadQword(reinterpret_cast<uintptr_t>(definition) + 0x18, type) || type < 0x10000)
+            return AttributeKind::Other;
+
+        uintptr_t vtable = 0;
+        if (!SafeReadQword(type, vtable) || vtable < 0x10000)
+            return AttributeKind::Other;
+
+        uintptr_t locator = 0;
+        if (!SafeReadQword(vtable - 8, locator) || locator < 0x10000)
+            return AttributeKind::Other;
+
+        int32_t signature = 0;
+        int32_t nameRva = 0;
+        int32_t selfRva = 0;
+
+        if (!SafeReadI32(locator, signature) || signature != 1) return AttributeKind::Other;
+        if (!SafeReadI32(locator + 12, nameRva)) return AttributeKind::Other;
+        if (!SafeReadI32(locator + 20, selfRva)) return AttributeKind::Other;
+
+        const uintptr_t imageBase = locator - static_cast<uintptr_t>(static_cast<intptr_t>(selfRva));
+        const char* name = reinterpret_cast<const char*>(imageBase + nameRva + 0x10);
+
+        __try
+        {
+            if (std::strcmp(name, ".?AVCSchemaAttributeType_Float@@") == 0) return AttributeKind::Float;
+            if (std::strcmp(name, ".?AVCSchemaAttributeType_Uint32@@") == 0) return AttributeKind::Uint32;
+            if (std::strcmp(name, ".?AVCSchemaAttributeType_Default@@") == 0) return AttributeKind::Default;
+        }
+        __except (EXCEPTION_EXECUTE_HANDLER)
+        {
+            return AttributeKind::Other;
+        }
+
+        return AttributeKind::Other;
+    }
+
     // Attribute names as registered in the game's schema (items_game.txt names).
     const char* AttrNameFromIndex(int idx)
     {
@@ -267,17 +313,53 @@ namespace LootSchema
     {
         void* def = GetCachedAttrDef(idx);
         if (!def) { Log("[loot-schema] SetAttributeInt(%d): def null", idx); return false; }
-        return CallSetAttribute(g_setUint32, item, def, &value);
+
+        const AttributeKind kind = AttributeKindOf(def);
+
+        if (kind == AttributeKind::Float)
+        {
+            float asFloat = static_cast<float>(value);
+            return CallSetAttribute(g_setFloat, item, def, &asFloat);
+        }
+
+        if (kind == AttributeKind::Other)
+        {
+            Log("[loot-schema] SetAttributeInt(%d): unsupported attribute type", idx);
+            return false;
+        }
+
+        const uint32_t raw = static_cast<uint32_t>(value);
+        return CallSetAttribute(g_setUint32, item, def, &raw);
     }
 
     bool SetAttributeFloat(void* item, int idx, float value)
     {
         void* def = GetCachedAttrDef(idx);
         if (!def) { Log("[loot-schema] SetAttributeFloat(%d): def null", idx); return false; }
-        // Paint kit / seed / wear are all float-typed in items_game.
-        if (CallSetAttribute(g_setFloat, item, def, &value)) return true;
-        // Fall back to uint32 setter with raw float bits (some builds register them as uint).
-        uint32_t raw = 0; std::memcpy(&raw, &value, 4);
+
+        const AttributeKind kind = AttributeKindOf(def);
+
+        static bool loggedKind[128] = {};
+        if (idx >= 0 && idx < 128 && !loggedKind[idx])
+        {
+            loggedKind[idx] = true;
+            Log("[loot-schema] attr %d kind=%d (0=float,1=uint32,2=default,3=other)",
+                idx, static_cast<int>(kind));
+        }
+
+        if (kind == AttributeKind::Float)
+            return CallSetAttribute(g_setFloat, item, def, &value);
+
+        if (kind == AttributeKind::Other)
+        {
+            Log("[loot-schema] SetAttributeFloat(%d): unsupported attribute type", idx);
+            return false;
+        }
+
+        // Paint kit / seed / wear are "float_floor_to_integer": the game stores the
+        // 32 bits of the float through the uint32/default setter.
+        uint32_t raw = 0;
+        std::memcpy(&raw, &value, sizeof(raw));
         return CallSetAttribute(g_setUint32, item, def, &raw);
     }
 

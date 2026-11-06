@@ -18,6 +18,9 @@
 #include <sstream>
 #include <string>
 #include <vector>
+#include <atomic>
+#include <mutex>
+#include <thread>
 #include <cctype>
 #include <cstdlib>
 #include <cstring>
@@ -468,6 +471,62 @@ static bool ResolveLoadoutPath(std::string& loadoutPath)
     return false;
 }
 
+static int BuildTargets(
+    const std::vector<LoadoutItem>& items,
+    std::unordered_map<uint32_t, TargetSkin>& out,
+    bool verbose)
+{
+    int count = 0;
+
+    for (const auto& it : items)
+    {
+        const WeaponEntry* w = FindWeapon(it.weapon);
+        if (!w)
+        {
+            if (verbose)
+                Log("[loadout] skip unknown weapon: %s", it.weapon.c_str());
+            continue;
+        }
+
+        TargetSkin t;
+        t.paintKit = it.paintKit;
+        t.resolvedSeed = it.seed;
+        t.wear = it.floatVal;
+        t.legacyModel = false;
+        t.statTrak = false;
+        t.skinName = it.skinName;
+        t.weaponName = it.weapon;
+        t.team = it.team;
+        t.slot = it.slot;
+        t.defIndex = w->defIndex;
+
+        out[TargetKey(w->defIndex, it.team)] = t;
+        ++count;
+
+        if (verbose)
+        {
+            Log("[loadout] %s/%s: %s (%s) pk=%d def=%u",
+                t.team.c_str(), t.slot.c_str(),
+                t.weaponName.c_str(), t.skinName.c_str(),
+                t.paintKit, t.defIndex);
+        }
+    }
+
+    return count;
+}
+
+// Staged runtime configuration, filled by the watcher thread and adopted on the
+// game thread. Only the watcher touches g_stagedTargets under g_stageMutex;
+// g_targets itself is only ever replaced from FrameStageNotify.
+namespace
+{
+    std::mutex g_stageMutex;
+    std::unordered_map<uint32_t, TargetSkin> g_stagedTargets;
+    bool g_stagedEnabled = true;
+    bool g_stageReady = false;
+    std::atomic<bool> g_stagePending{ false };
+}
+
 void LoadLoadout()
 {
     std::string loadoutPath;
@@ -508,36 +567,7 @@ void LoadLoadout()
     g_enabled = enabled;
     g_targets.clear();
 
-    int count = 0;
-    for (const auto& it : items)
-    {
-        const WeaponEntry* w = FindWeapon(it.weapon);
-        if (!w)
-        {
-            Log("[loadout] skip unknown weapon: %s", it.weapon.c_str());
-            continue;
-        }
-
-        TargetSkin t;
-        t.paintKit = it.paintKit;
-        t.resolvedSeed = it.seed;
-        t.wear = it.floatVal;
-        t.legacyModel = false;
-        t.statTrak = false;
-        t.skinName = it.skinName;
-        t.weaponName = it.weapon;
-        t.team = it.team;
-        t.slot = it.slot;
-        t.defIndex = w->defIndex;
-
-        g_targets[TargetKey(w->defIndex, it.team)] = t;
-
-        ++count;
-        Log("[loadout] %s/%s: %s (%s) pk=%d def=%u",
-            t.team.c_str(), t.slot.c_str(),
-            t.weaponName.c_str(), t.skinName.c_str(),
-            t.paintKit, t.defIndex);
-    }
+    const int count = BuildTargets(items, g_targets, true);
 
     Log("[loadout] %d items from %s", count, g_loadoutSource.c_str());
 }
@@ -548,4 +578,118 @@ uint32_t TargetKey(uint16_t def, const std::string& team)
     if (team == "T")  teamBit = 0;
     else if (team == "CT") teamBit = 1;
     return ((uint32_t)def << 8) | teamBit;
+}
+
+void StartLoadoutWatcher()
+{
+    if (g_loadoutSource.empty())
+        return;
+
+    static std::atomic<bool> started{ false };
+    bool expected = false;
+    if (!started.compare_exchange_strong(expected, true))
+        return;
+
+    std::thread([]()
+    {
+        const std::string source = g_loadoutSource;
+        Log("[loadout] watching for runtime changes: %s", source.c_str());
+
+        FILETIME lastWrite{};
+        ULONGLONG lastSize = 0;
+        bool haveBaseline = false;
+
+        WIN32_FILE_ATTRIBUTE_DATA baseline{};
+        if (GetFileAttributesExA(source.c_str(), GetFileExInfoStandard, &baseline))
+        {
+            lastWrite = baseline.ftLastWriteTime;
+            ULARGE_INTEGER size{};
+            size.HighPart = baseline.nFileSizeHigh;
+            size.LowPart = baseline.nFileSizeLow;
+            lastSize = size.QuadPart;
+            haveBaseline = true;
+        }
+
+        for (;;)
+        {
+            Sleep(2000);
+
+            WIN32_FILE_ATTRIBUTE_DATA info{};
+            if (!GetFileAttributesExA(source.c_str(), GetFileExInfoStandard, &info))
+                continue;
+
+            ULARGE_INTEGER size{};
+            size.HighPart = info.nFileSizeHigh;
+            size.LowPart = info.nFileSizeLow;
+
+            if (size.QuadPart == 0)
+                continue;
+
+            if (haveBaseline &&
+                CompareFileTime(&info.ftLastWriteTime, &lastWrite) == 0 &&
+                size.QuadPart == lastSize)
+            {
+                continue;
+            }
+
+            lastWrite = info.ftLastWriteTime;
+            lastSize = size.QuadPart;
+            haveBaseline = true;
+
+            std::vector<LoadoutItem> items;
+            bool enabled = true;
+
+            if (!LoadJSON(source.c_str(), items, enabled) || items.empty())
+            {
+                Log("[loadout] reload skipped: file unreadable or empty");
+                continue;
+            }
+
+            std::unordered_map<uint32_t, TargetSkin> staged;
+            const int count = BuildTargets(items, staged, false);
+
+            if (count == 0)
+            {
+                Log("[loadout] reload skipped: no known weapons in the file");
+                continue;
+            }
+
+            {
+                std::lock_guard<std::mutex> lock(g_stageMutex);
+                g_stagedTargets = std::move(staged);
+                g_stagedEnabled = enabled;
+                g_stageReady = true;
+            }
+
+            g_stagePending.store(true, std::memory_order_release);
+            Log("[loadout] reload staged: %d targets (applies outside an active match)", count);
+        }
+    }).detach();
+}
+
+bool HasStagedLoadout()
+{
+    return g_stagePending.load(std::memory_order_acquire);
+}
+
+bool AdoptStagedLoadout()
+{
+    if (!g_stagePending.load(std::memory_order_acquire))
+        return false;
+
+    std::lock_guard<std::mutex> lock(g_stageMutex);
+
+    if (!g_stageReady)
+    {
+        g_stagePending.store(false, std::memory_order_release);
+        return false;
+    }
+
+    g_targets = std::move(g_stagedTargets);
+    g_enabled = g_stagedEnabled;
+    g_stageReady = false;
+    g_stagePending.store(false, std::memory_order_release);
+
+    Log("[loadout] runtime loadout adopted (%zu targets)", g_targets.size());
+    return true;
 }
