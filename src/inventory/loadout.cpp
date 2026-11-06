@@ -30,6 +30,7 @@
 std::unordered_map<uint32_t, TargetSkin> g_targets;
 bool        g_enabled = true;
 std::string g_loadoutSource;
+std::string g_bridgeDirectory;
 
 // ---- Weapon def-index table ----
 
@@ -342,6 +343,105 @@ static bool IsBridgeRoot(const std::string& path)
         IsRegularFile(path + "bridge\\server.ts");
 }
 
+bool ResolveBridgeDirectory(std::string& bridgeDirectory)
+{
+    char configuredBridgeDir[MAX_PATH]{};
+    const DWORD bridgeLength = GetEnvironmentVariableA(
+        "N1SSAN_BRIDGE_DIR", configuredBridgeDir, MAX_PATH);
+
+    if (bridgeLength > 0 && bridgeLength < MAX_PATH)
+    {
+        char absoluteBridgeDir[MAX_PATH]{};
+        const DWORD absoluteLength = GetFullPathNameA(
+            configuredBridgeDir, MAX_PATH, absoluteBridgeDir, nullptr);
+
+        if (absoluteLength == 0 || absoluteLength >= MAX_PATH)
+        {
+            Log("[bridge] FATAL: N1SSAN_BRIDGE_DIR could not be resolved (error=%lu)",
+                GetLastError());
+            return false;
+        }
+
+        bridgeDirectory = absoluteBridgeDir;
+        if (!bridgeDirectory.empty() &&
+            bridgeDirectory.back() != '\\\\' &&
+            bridgeDirectory.back() != '/')
+            bridgeDirectory.push_back('\\\\');
+
+        if (!IsBridgeRoot(bridgeDirectory))
+        {
+            Log("[bridge] FATAL: configured Bridge directory is invalid: %s",
+                bridgeDirectory.c_str());
+            return false;
+        }
+
+        return true;
+    }
+
+    if (bridgeLength >= MAX_PATH)
+    {
+        Log("[bridge] FATAL: N1SSAN_BRIDGE_DIR exceeds MAX_PATH");
+        return false;
+    }
+
+    HMODULE dllModule = nullptr;
+    if (!GetModuleHandleExA(
+        GET_MODULE_HANDLE_EX_FLAG_FROM_ADDRESS |
+        GET_MODULE_HANDLE_EX_FLAG_UNCHANGED_REFCOUNT,
+        reinterpret_cast<LPCSTR>(&ResolveBridgeDirectory),
+        &dllModule))
+    {
+        Log("[bridge] FATAL: could not resolve DLL module (error=%lu)", GetLastError());
+        return false;
+    }
+
+    char dllPath[MAX_PATH]{};
+    const DWORD pathLength = GetModuleFileNameA(dllModule, dllPath, MAX_PATH);
+    if (pathLength == 0 || pathLength >= MAX_PATH)
+    {
+        Log("[bridge] FATAL: could not read DLL path (error=%lu)", GetLastError());
+        return false;
+    }
+
+    char* slash = strrchr(dllPath, '\\\\');
+    char* forwardSlash = strrchr(dllPath, '/');
+    if (!slash || (forwardSlash && forwardSlash > slash))
+        slash = forwardSlash;
+
+    if (!slash)
+    {
+        Log("[bridge] FATAL: DLL path has no directory: %s", dllPath);
+        return false;
+    }
+
+    *(slash + 1) = 0;
+    std::string searchDirectory = dllPath;
+
+    while (!searchDirectory.empty())
+    {
+        std::string candidate = searchDirectory + "n1ssan-web-bridge\\\\";
+        if (IsBridgeRoot(candidate))
+        {
+            bridgeDirectory = candidate;
+            Log("[bridge] discovered Bridge directory: %s", bridgeDirectory.c_str());
+            return true;
+        }
+
+        while (!searchDirectory.empty() &&
+            (searchDirectory.back() == '\\\\' || searchDirectory.back() == '/'))
+            searchDirectory.pop_back();
+
+        const std::size_t parentSeparator = searchDirectory.find_last_of("\\\\/");
+        if (parentSeparator == std::string::npos)
+            break;
+
+        searchDirectory.resize(parentSeparator + 1);
+    }
+
+    Log("[bridge] FATAL: could not locate n1ssan-web-bridge from DLL directory");
+    return false;
+}
+
 static bool ResolveLoadoutPath(std::string& loadoutPath)
 {
     char configuredDataFile[MAX_PATH]{};
@@ -362,6 +462,7 @@ static bool ResolveLoadoutPath(std::string& loadoutPath)
         }
 
         loadoutPath = absolutePath;
+        g_bridgeDirectory = DirectoryOf(loadoutPath);
         Log("[loadout] configured data path: %s", loadoutPath.c_str());
         return IsRegularFile(loadoutPath);
     }
@@ -372,103 +473,12 @@ static bool ResolveLoadoutPath(std::string& loadoutPath)
         return false;
     }
 
-    char configuredBridgeDir[MAX_PATH]{};
-    const DWORD bridgeLength = GetEnvironmentVariableA(
-        "N1SSAN_BRIDGE_DIR", configuredBridgeDir, MAX_PATH);
-
-    if (bridgeLength > 0 && bridgeLength < MAX_PATH)
-    {
-        char absoluteBridgeDir[MAX_PATH]{};
-        const DWORD absoluteLength = GetFullPathNameA(
-            configuredBridgeDir, MAX_PATH, absoluteBridgeDir, nullptr);
-
-        if (absoluteLength == 0 || absoluteLength >= MAX_PATH)
-        {
-            Log("[loadout] FATAL: N1SSAN_BRIDGE_DIR could not be resolved (error=%lu)",
-                GetLastError());
-            return false;
-        }
-
-        std::string bridgeRoot = absoluteBridgeDir;
-        if (!bridgeRoot.empty() && bridgeRoot.back() != '\\' && bridgeRoot.back() != '/')
-            bridgeRoot.push_back('\\');
-
-        if (!IsBridgeRoot(bridgeRoot))
-        {
-            Log("[loadout] FATAL: configured Bridge directory is invalid: %s",
-                bridgeRoot.c_str());
-            return false;
-        }
-
-        loadoutPath = bridgeRoot + "n1ssan-data.json";
-        Log("[loadout] Bridge data path: %s", loadoutPath.c_str());
-        return IsRegularFile(loadoutPath);
-    }
-
-    if (bridgeLength >= MAX_PATH)
-    {
-        Log("[loadout] FATAL: N1SSAN_BRIDGE_DIR exceeds MAX_PATH");
+    if (!ResolveBridgeDirectory(g_bridgeDirectory))
         return false;
-    }
 
-    HMODULE dllModule = nullptr;
-    if (!GetModuleHandleExA(
-        GET_MODULE_HANDLE_EX_FLAG_FROM_ADDRESS |
-        GET_MODULE_HANDLE_EX_FLAG_UNCHANGED_REFCOUNT,
-        reinterpret_cast<LPCSTR>(&LoadLoadout),
-        &dllModule))
-    {
-        Log("[loadout] FATAL: could not resolve DLL module (error=%lu)", GetLastError());
-        return false;
-    }
-
-    char dllPath[MAX_PATH]{};
-    const DWORD pathLength = GetModuleFileNameA(dllModule, dllPath, MAX_PATH);
-    if (pathLength == 0 || pathLength >= MAX_PATH)
-    {
-        Log("[loadout] FATAL: could not read DLL path (error=%lu)", GetLastError());
-        return false;
-    }
-
-    char* slash = strrchr(dllPath, '\\');
-    char* forwardSlash = strrchr(dllPath, '/');
-    if (!slash || (forwardSlash && forwardSlash > slash))
-        slash = forwardSlash;
-
-    if (!slash)
-    {
-        Log("[loadout] FATAL: DLL path has no directory: %s", dllPath);
-        return false;
-    }
-
-    *(slash + 1) = 0;
-    std::string searchDirectory = dllPath;
-
-    // Match BridgeProcessManager.ResolveBridgeRoot(): walk upward from the
-    // DLL directory until the sibling n1ssan-web-bridge project is found.
-    while (!searchDirectory.empty())
-    {
-        std::string bridgeRoot = searchDirectory + "n1ssan-web-bridge\\";
-        if (IsBridgeRoot(bridgeRoot))
-        {
-            loadoutPath = bridgeRoot + "n1ssan-data.json";
-            Log("[loadout] discovered Bridge data path: %s", loadoutPath.c_str());
-            return IsRegularFile(loadoutPath);
-        }
-
-        while (!searchDirectory.empty() &&
-            (searchDirectory.back() == '\\' || searchDirectory.back() == '/'))
-            searchDirectory.pop_back();
-
-        const std::size_t parentSeparator = searchDirectory.find_last_of("\\/");
-        if (parentSeparator == std::string::npos)
-            break;
-
-        searchDirectory.resize(parentSeparator + 1);
-    }
-
-    Log("[loadout] FATAL: could not locate n1ssan-web-bridge from DLL directory");
-    return false;
+    loadoutPath = g_bridgeDirectory + "n1ssan-data.json";
+    Log("[loadout] Bridge data path: %s", loadoutPath.c_str());
+    return IsRegularFile(loadoutPath);
 }
 
 static int BuildTargets(
@@ -564,6 +574,8 @@ void LoadLoadout()
     }
 
     g_loadoutSource = loadoutPath;
+    if (g_bridgeDirectory.empty())
+        g_bridgeDirectory = DirectoryOf(loadoutPath);
     g_enabled = enabled;
     g_targets.clear();
 
