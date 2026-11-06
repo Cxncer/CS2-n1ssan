@@ -370,9 +370,9 @@ bool ResolveBridgeDirectory(std::string& bridgeDirectory)
 
         bridgeDirectory = absoluteBridgeDir;
         if (!bridgeDirectory.empty() &&
-            bridgeDirectory.back() != '\\\\' &&
+            bridgeDirectory.back() != '\\' &&
             bridgeDirectory.back() != '/')
-            bridgeDirectory.push_back('\\\\');
+            bridgeDirectory.push_back('\\');
 
         if (!IsBridgeRoot(bridgeDirectory))
         {
@@ -440,7 +440,7 @@ bool ResolveBridgeDirectory(std::string& bridgeDirectory)
         return false;
     }
 
-    char* slash = strrchr(dllPath, '\\\\');
+    char* slash = strrchr(dllPath, '\\');
     char* forwardSlash = strrchr(dllPath, '/');
     if (!slash || (forwardSlash && forwardSlash > slash))
         slash = forwardSlash;
@@ -456,7 +456,7 @@ bool ResolveBridgeDirectory(std::string& bridgeDirectory)
 
     while (!searchDirectory.empty())
     {
-        std::string candidate = searchDirectory + "n1ssan-web-bridge\\\\";
+        std::string candidate = searchDirectory + "n1ssan-web-bridge\\";
         if (IsBridgeRoot(candidate))
         {
             bridgeDirectory = candidate;
@@ -465,10 +465,10 @@ bool ResolveBridgeDirectory(std::string& bridgeDirectory)
         }
 
         while (!searchDirectory.empty() &&
-            (searchDirectory.back() == '\\\\' || searchDirectory.back() == '/'))
+            (searchDirectory.back() == '\\' || searchDirectory.back() == '/'))
             searchDirectory.pop_back();
 
-        const std::size_t parentSeparator = searchDirectory.find_last_of("\\\\/");
+        const std::size_t parentSeparator = searchDirectory.find_last_of("\\/");
         if (parentSeparator == std::string::npos)
             break;
 
