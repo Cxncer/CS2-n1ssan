@@ -1,11 +1,10 @@
 // n1ssan-dll / dllmain.cpp
-// Operation Overdrive Underway.
-// split into src/ modules
-//
-// This file is now a 60-line skeleton. Everything functional lives in
-// src/. The old monolith is preserved in Backup\\dllmain.cpp.*.bak.
+// Runtime entry point. Loadout and Armory share the inventory runtime but
+// initialize only the data source selected by DOMINATE.
 
 #include <windows.h>
+#include <cstdio>
+#include <cstring>
 #include <string>
 
 #include "diagnostics/log.h"
@@ -104,14 +103,33 @@ static DWORD WINAPI InjectThread(LPVOID)
     }
 
     ResolveOffsets();
-    RunEngineSchemaDiagnostic();
 
-    if (!ResolveGloveSchemaOffsets())
+    // Resolve the Bridge independently of n1ssan-data.json. Armory mode must
+    // remain usable even when Loadout has no saved profile or data file.
+    std::string bridgeDirectory;
+    if (!ResolveBridgeDirectory(bridgeDirectory))
     {
-        Log("[fatal] glove schema resolution incomplete");
-        LogStatus("FAILED", "glove_schema_resolution_failed");
+        Log("[fatal] Bridge directory unavailable");
+        LogStatus("FAILED", "bridge_directory_unavailable");
         return 0;
     }
+
+    g_bridgeDirectory = bridgeDirectory;
+    RuntimeModeState::StartWatcher(bridgeDirectory);
+
+    const RuntimeMode runtimeMode = RuntimeModeState::Current();
+    const bool loadoutMode = runtimeMode == RuntimeMode::Loadout;
+
+    Log("[runtime-mode] selected=%s",
+        loadoutMode ? "loadout" : "armory");
+
+    RunEngineSchemaDiagnostic();
+
+    // Glove schema is an optional capability. Keep fallback offsets populated
+    // by ResolveOffsets() when live schema resolution is incomplete.
+    const bool gloveOffsetsReady = ResolveGloveSchemaOffsets();
+    Log("[schema-gloves] %s",
+        gloveOffsetsReady ? "READY" : "PARTIAL/UNAVAILABLE - using fallback offsets");
 
     if (!ResolveFunctions())
     {
@@ -122,42 +140,54 @@ static DWORD WINAPI InjectThread(LPVOID)
 
     const bool glovePaintKitReady = GlovePaintKitSchema::Initialize();
     const bool gloveSchemaReady = GlovesSchema::Initialize("client.dll");
-    Log("[glove-paintkit-schema] %s", glovePaintKitReady ? "READY" : "UNAVAILABLE");
-    Log("[glove-schema] %s", gloveSchemaReady ? "READY" : "UNAVAILABLE");
+    Log("[glove-paintkit-schema] %s",
+        glovePaintKitReady ? "READY" : "UNAVAILABLE");
+    Log("[glove-schema] %s",
+        gloveSchemaReady ? "READY" : "UNAVAILABLE");
 
     const bool optionalFeaturesDegraded =
-        !glovePaintKitReady || !gloveSchemaReady;
+        !gloveOffsetsReady || !glovePaintKitReady || !gloveSchemaReady;
 
-    LoadLoadout();
-    if (g_targets.empty())
+    if (loadoutMode)
     {
-        Log("[fatal] loadout empty");
-        LogStatus("FAILED", "loadout_empty");
-        return 0;
-    }
+        LoadLoadout();
+        if (g_targets.empty())
+        {
+            Log("[fatal] selected Loadout mode but no valid Loadout targets were loaded");
+            LogStatus("FAILED", "loadout_empty");
+            return 0;
+        }
 
-    if (!RunSchemaProbe())
-    {
-        Log("[fatal] loadout compatibility preflight failed");
-        LogStatus("FAILED", "loadout_compatibility_failed");
-        return 0;
-    }
-
-    // Runtime mode decides which single dataset is active. Read it before
-    // PlanA so Armory mode never creates Loadout SOCache items.
-    const std::string bridgeDirectory = DirectoryOf(g_loadoutSource);
-    RuntimeModeState::StartWatcher(bridgeDirectory);
-
-    if (RuntimeModeState::Current() == RuntimeMode::Armory)
-    {
-        Log("[runtime-mode] Armory mode: Loadout SOCache injection skipped");
+        if (!RunSchemaProbe())
+        {
+            Log("[fatal] loadout compatibility preflight failed");
+            LogStatus("FAILED", "loadout_compatibility_failed");
+            return 0;
+        }
     }
     else
     {
-        PlanA::Start();
+        Log("[runtime-mode] Armory selected: Loadout JSON and compatibility preflight skipped");
     }
 
-    KnifeAnimation::Initialize();
+    // PlanA owns the shared CEconItemSystem / SOCache initialization. It only
+    // injects Loadout items when Loadout is the selected runtime source.
+    if (!PlanA::Start(loadoutMode))
+    {
+        Log("[fatal] shared inventory runtime initialization failed");
+        LogStatus("FAILED", "inventory_runtime_initialization_failed");
+        return 0;
+    }
+
+    if (loadoutMode)
+    {
+        KnifeAnimation::Initialize();
+        StartLoadoutWatcher();
+    }
+
+    // Armory inventory is independent of Loadout and can be watched even when
+    // n1ssan-data.json does not exist.
+    ArmoryInventory::StartWatcher();
 
     if (!InstallFSNHook())
     {
@@ -166,20 +196,10 @@ static DWORD WINAPI InjectThread(LPVOID)
         return 0;
     }
 
-    // Profile switching: watch the bridge loadout file and stage changes for
-    // the game thread. The DLL is injected once; no reinjection is required.
-    StartLoadoutWatcher();
-
-    // Armory inventory: separate from Loadout; recreates the owned collection
-    // inside CS2 when the player is outside an active match.
-    ArmoryInventory::StartWatcher();
-
     LogStatus("CHECKS_PASSED", "required_initialization_checks_passed");
-    Log("[diagnostic] targets=%zu", g_targets.size());
+    Log("[diagnostic] runtime=%s targets=%zu",
+        loadoutMode ? "loadout" : "armory", g_targets.size());
 
-    // READY means required startup checks passed. DEGRADED is used when an
-    // optional glove schema feature did not initialize. Both states heartbeat
-    // while the worker remains alive; neither proves every feature is healthy.
     const char* runtimeState = optionalFeaturesDegraded ? "DEGRADED" : "READY";
     const char* runtimeReason = optionalFeaturesDegraded
         ? "optional_glove_schema_unavailable"
