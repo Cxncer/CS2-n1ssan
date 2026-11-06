@@ -363,6 +363,35 @@ namespace LootSchema
         return CallSetAttribute(g_setUint32, item, def, &raw);
     }
 
+    bool SetAttributeFloatByName(void* item, const char* attributeName, float value)
+    {
+        if (!item || !attributeName || !*attributeName)
+            return false;
+
+        void* definition = GetAttrDefByName(attributeName);
+        if (!definition)
+        {
+            Log("[loot-schema] attribute not found by name: %s", attributeName);
+            return false;
+        }
+
+        const AttributeKind kind = AttributeKindOf(definition);
+        if (kind == AttributeKind::Float)
+            return CallSetAttribute(g_setFloat, item, definition, &value);
+
+        if (kind == AttributeKind::Other)
+        {
+            Log("[loot-schema] unsupported attribute type: %s", attributeName);
+            return false;
+        }
+
+        // CS2 econ item IDs and other float_floor_to_integer values are
+        // represented as the raw 32-bit payload of a float.
+        uint32_t raw = 0;
+        std::memcpy(&raw, &value, sizeof(raw));
+        return CallSetAttribute(g_setUint32, item, definition, &raw);
+    }
+
     bool IsAttributeUint(int idx)
     {
         return idx == 80 || idx == 81;
