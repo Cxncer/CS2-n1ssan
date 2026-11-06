@@ -34,6 +34,12 @@ extern bool g_enabled;
 // Resolved once during InjectThread  the JSON path that actually loaded.
 extern std::string g_loadoutSource;
 
+// Resolved Bridge directory, independent of whether Loadout data exists.
+extern std::string g_bridgeDirectory;
+
+// Locate the Bridge root without requiring n1ssan-data.json.
+bool ResolveBridgeDirectory(std::string& bridgeDirectory);
+
 // Try the standard candidate paths, parse the first one that works,
 // and populate g_targets. Logs every item imported.
 void LoadLoadout();
