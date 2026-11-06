@@ -137,6 +137,7 @@ namespace
         const uint64_t generation = generationValue.QuadPart;
 
         size_t i = arrayStart + 1;
+        size_t objectCount = 0;
 
         while (i < text.size())
         {
@@ -147,8 +148,9 @@ namespace
             }
 
             if (i >= text.size() || text[i] == ']') break;
-            if (text[i] != '{') { ++i; continue; }
+            if (text[i] != '{') return false;
 
+            ++objectCount;
             const size_t start = i;
             int depth = 0;
 
@@ -191,7 +193,7 @@ namespace
             out.push_back(std::move(item));
         }
 
-        return i < text.size() && text[i] == ']';
+        return i < text.size() && text[i] == ']' && objectCount == out.size();
     }
 
     bool ReadFileText(const std::string& path, std::string& out)
