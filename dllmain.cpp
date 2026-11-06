@@ -204,7 +204,7 @@ static DWORD WINAPI InjectThread(LPVOID)
 
     LogStatus("CHECKS_PASSED", "required_initialization_checks_passed");
     Log("[diagnostic] runtime=%s targets=%zu",
-        loadoutMode ? "loadout" : "armory", g_targets.size());
+        runtimeModeName, g_targets.size());
 
     const char* runtimeState = optionalFeaturesDegraded ? "DEGRADED" : "READY";
     const char* runtimeReason = optionalFeaturesDegraded
