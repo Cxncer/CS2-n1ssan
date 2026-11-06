@@ -88,7 +88,7 @@ namespace PlanA
         return FAKE_ID_PREFIX | (uint64_t)defIndex;
     }
 
-    void Start(bool injectLoadout)
+    bool Start(bool injectLoadout)
     {
         if (g_started) return;
         g_started = true;
@@ -101,7 +101,7 @@ namespace PlanA
         if (!LootSchema::Init())
         {
             Log("[plan-a] LootSchema init failed: %s", LootSchema::LastError());
-            return;
+            return false;
         }
         g_initialized = true;
         if (injectLoadout)
@@ -113,6 +113,8 @@ namespace PlanA
         {
             Log("[plan-a] shared inventory runtime ready; Loadout injection disabled");
         }
+
+        return true;
     }
 
     void EnsureAllItems()
