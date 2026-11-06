@@ -6,12 +6,12 @@
 // src/. The old monolith is preserved in Backup\dllmain.cpp.*.bak.
 //
 // InjectThread sequence:
-//   1. LoadLoadout()        (src/inventory/loadout.cpp)
-//   2. LoadMinHook()        (this file)
-//   3. Wait for client.dll
-//   4. ResolveOffsets()     (src/config/offsets.cpp)
-//   5. ResolveFunctions()   (src/sdk/functions.cpp)
-//   6. InstallFSNHook()     (src/hooks/frame_stage.cpp)
+//   1. LoadMinHook()        (this file)
+//   2. Wait for client.dll
+//   3. ResolveOffsets()     (src/config/offsets.cpp)
+//   4. LoadLoadout()        (src/inventory/loadout.cpp)
+//   5. Resolve optional glove capabilities + essential weapon functions
+//   6. Run compatibility preflight and install hooks
 
 #include <windows.h>
 #include <string>
@@ -137,7 +137,7 @@ static DWORD WINAPI InjectThread(LPVOID)
     Log("[glove-schema] %s",
         GlovesSchema::Initialize("client.dll") ? "READY" : "UNAVAILABLE");
 
-    // 4. Validate every selected definition/paint-kit pair against the live game.
+    // 5. Validate every selected definition/paint-kit pair against the live game.
     if (!RunSchemaProbe())
     {
         Log("[fatal] loadout compatibility preflight failed");
