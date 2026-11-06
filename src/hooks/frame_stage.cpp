@@ -23,6 +23,7 @@
 #include "config/auto_offsets.h"
 #include "diagnostics/log.h"
 #include "inventory/loadout.h"
+#include "inventory/schema_probe.h"
 #include "memory/access.h"
 #include "memory/scanner.h"
 #include "hooks/knife_animation.h"
@@ -410,7 +411,7 @@ static void __fastcall FsnDetour(void* pClient, int stage)
     if (stage != 6) return;
 
     const RuntimeMode runtimeMode = RuntimeModeState::Current();
-    const bool loadoutMode = runtimeMode != RuntimeMode::Armory;
+    const bool loadoutMode = runtimeMode == RuntimeMode::Loadout;
 
     uintptr_t observedPawn = MatchdetectGetPawn();
     if (observedPawn > 0x10000)
@@ -533,7 +534,17 @@ static void __fastcall FsnDetour(void* pClient, int stage)
         }
         else if (AdoptStagedLoadout())
         {
-            PlanA::ReconcileAllItems();
+            // Loadout may be selected after DLL injection. Run its compatibility
+            // preflight only after the first selected profile has been staged.
+            if (RunSchemaProbe())
+            {
+                PlanA::ReconcileAllItems();
+            }
+            else
+            {
+                g_targets.clear();
+                Log("[loadout] staged profile rejected by compatibility preflight");
+            }
         }
     }
 
