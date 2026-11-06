@@ -14,6 +14,9 @@ namespace LootSOCache
         int      seed;
         float    wear;
         int      statTrak;  // -1 = none
+        int      stickerKit = 0;
+        int      keychain = 0;
+        int      keychainSeed = 0;
     };
 
     bool WaitForInventory(int timeoutMs = 2000);
