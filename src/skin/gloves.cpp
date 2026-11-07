@@ -197,10 +197,10 @@ void RunGloves(std::uintptr_t pawn)
         !SafeReadFloat(pawn + g_off.PAWN_SpawnTime, spawnTime))
         return;
 
-    // Resolve the active runtime source without mixing Armory and Loadout.
+    // In Armory mode, the glove item's native EconItemView ID identifies
+    // the exact owned instance equipped through CS2's own Loadout UI.
     const bool armoryMode =
         RuntimeModeState::Current() == RuntimeMode::Armory;
-    const std::string teamName = team == 2 ? "T" : team == 3 ? "CT" : "";
 
     std::uint16_t definition = 0;
     int paintKit = 0;
@@ -209,8 +209,16 @@ void RunGloves(std::uintptr_t pawn)
 
     if (armoryMode)
     {
+        std::uint32_t itemIdLow = 0, itemIdHigh = 0;
         TargetSkin target{};
-        if (ArmoryInventory::GetEquippedGloveTarget(teamName, target))
+        const bool hasItemId =
+            SafeReadU32(item + g_off.EIV_ItemIDLow, itemIdLow) &&
+            SafeReadU32(item + g_off.EIV_ItemIDHigh, itemIdHigh);
+        const std::uint64_t equippedItemId =
+            (static_cast<std::uint64_t>(itemIdHigh) << 32) | itemIdLow;
+
+        if (hasItemId &&
+            ArmoryInventory::GetTargetForItemId(equippedItemId, target))
         {
             definition = target.defIndex;
             paintKit = target.paintKit;
