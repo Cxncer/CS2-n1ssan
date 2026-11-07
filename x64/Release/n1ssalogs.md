@@ -36336,3 +36336,1497 @@ N1SSAN_STATUS|1|2026-11-07T05:23:44Z|28388|armory-obsidian-3.0|READY|reason=runt
 [pw] weapon 0x0000042E4555A000 def=61
 [armory-apply] no unambiguous owned Armory item for entity def=61 id=0000000C194D1E34
 [apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[status-path] selected=C:\Users\mirac\AppData\Local\n1ssan\status\cs2-7856.status source=LOCALAPPDATA
+
+# n1ssan diagnostic session
+[build] armory-obsidian-3.0
+[build] Operation Armory x Obsidian Build 3.0 | Nov  7 2026 12:42:19
+N1SSAN_STATUS|1|2026-11-07T05:42:54Z|7856|armory-obsidian-3.0|INITIALIZING|reason=worker_started
+[status-write] begin state=INITIALIZING path=C:\Users\mirac\AppData\Local\n1ssan\status\cs2-7856.status
+[status-write] success state=INITIALIZING error=0
+[off] PAWN_MyWearables = 0x1268
+[off] field offsets populated
+[auto-off] dwEntityList                 hit 0x00007FF89FDE93CB -> rva 0x271FBB8 (val=000002D957469000)
+[auto-off] dwLocalPlayerController      hit 0x00007FF89FD05750 -> rva 0x2542548 (val=000002D9E7F73000)
+[auto-off] dwLocalPlayerPawn            hit 0x00007FF89F521615 -> rva 0x27391E0 (val=000002D957B12200)
+[auto-off] summary: matched=3/3
+[off] RVA_ENTITY_LIST           = 0x00007FF8A1AEFBB8
+[off] RVA_LOCALPLAYERCONTROLLER = 0x00007FF8A1912548
+[off] RVA_LOCALPLAYERPAWN       = 0x00007FF8A1B091E0
+[bridge] discovered Bridge directory: E:\Vibe Coding\CS2 Lore\CS2 n1ssan\development\n1ssan-web-bridge\
+[runtime-mode] no valid selection yet; waiting for launcher
+[runtime-mode] initialized in neutral mode; waiting for DOMINATE selection
+[schema-live] m_nSubclassID runtime=0x380 hardcoded=0x38C MISMATCH
+[schema-live] subclass resolver ready: 0x380
+[schema-gloves] C_CSPlayerPawn->m_EconGloves = 0x1770
+[schema-gloves] C_CSPlayerPawn->m_bNeedToReApplyGloves = 0x176D
+[schema-gloves] C_EconItemView->m_iItemDefinitionIndex = 0x1BA
+[schema-gloves] C_EconItemView->m_iEntityQuality = 0x1BC
+[schema-gloves] C_EconItemView->m_iItemIDHigh = 0x1D0
+[schema-gloves] C_EconItemView->m_bInitialized = 0x1E8
+[schema-gloves] C_EconItemView->m_bDisallowSOC = 0x1E9
+[schema-gloves] C_EconItemView->m_bRestoreCustomMaterialAfterPrecache = 0x1B8
+[schema-gloves] C_EconItemView->m_AttributeList = 0x208
+[schema-gloves] C_EconItemView->m_NetworkedDynamicAttributes = 0x280
+[schema-gloves] CAttributeList->m_Attributes = 0x8
+[schema-gloves] READY
+[resolve] InvalidateDescription          @ 0x00007FF8A0571350
+[resolve] BuildModernSkin                @ 0x00007FF8A0215B10
+[resolve] SetMeshGroupMask               @ 0x00007FF89FE95A90
+[resolve] RegenerateSkins                @ 0x00007FF89FBFB4B0
+[resolve] ReleaseCompositeMaterials      @ 0x00007FF8A08BC4A0
+[resolve] GloveCreatePaintKit            @ 0x00007FF8A05613D0
+[resolve] AgentSetModel                  @ 0x00007FF89FD35C90
+[resolve] KnifeUpdateSubclass            @ 0x00007FF89F5D9000
+[resolve] GloveSetBodyGroup              @ 0x00007FF89FD34BB0
+[resolve] MemAlloc                       @ 0x00007FF8B5D4DD30
+[resolve] MemFree                        @ 0x00007FF8B5D4DD70
+[resolve] CSkeletonInstance->m_modelState = 0x140 (hardcoded)
+[resolve] CModelState->m_hModel = 0xA0 (hardcoded)
+[resolve] entityList @ 0x00007FF8A1AEFBB8 -> 0x000002D957469000
+[glove-paintkit-schema] READY
+[glove-schema] READY
+[plan-a] CEconItemSystem* = 0x000002D8CBB32FC0 (stored)
+[loot-schema] GetAttributeDefinitionByName @ 0x00007FF8A05030F0
+[loot-schema] OK (invOffset=0x528D0, setUint=00007FF8A04B8E70, setFloat=00007FF8A04B9080)
+[socache] CreateBaseTypeCache initialized @ 00007FF8A09FB820
+[plan-a] shared inventory runtime ready; Loadout injection disabled
+[armory-inventory] watching for inventory changes: E:\Vibe Coding\CS2 Lore\CS2 n1ssan\development\n1ssan-web-bridge\armory-inventory.json
+[fsn] pClient=0x00007FF8A1934620 vtable=0x00007FF8A1038230 fn=0x00007FF89FF3EFE0 slot=36
+[fsn] hooked (vtable overwrite)
+[fsn] first stage call seen
+
+=== SNAPSHOT ===
+[snap] fsnCount=1 lastStage=0 stage5Count=0
+[snap] stage histogram:
+[snap]   stage  0: 1 frames
+[snap] dwLocalPlayerController @ 0x00007FF8A1912548 -> 0x000002D9E7F73000 
+[snap] dwLocalPlayerPawn       @ 0x00007FF8A1B091E0 -> 0x000002D957B12200 
+[snap] pawn: vtable=0x00007FF8A9733740 inClient=0 health=729
+[snap] ctrl: vtable=0x00007FF8A0FE1680 inClient=1 m_hPlayerPawn@0x92C = 0x006B000B (idx=11)
+[snap] entitySystem @ 0x00007FF8A1AEFBB8 = 0x000002D957469000 highestEntityIndex=13
+[snap] entity resolution: 12/16 of indices 1..16 valid
+[snap] ctrl->pawn handle resolve: 0x006B000B -> 0x000002D9E7DC0800
+[snap] ----------------------------------------
+N1SSAN_STATUS|1|2026-11-07T05:42:55Z|7856|armory-obsidian-3.0|CHECKS_PASSED|reason=required_initialization_checks_passed
+[status-write] begin state=CHECKS_PASSED path=C:\Users\mirac\AppData\Local\n1ssan\status\cs2-7856.status
+[status-write] success state=CHECKS_PASSED error=0
+[knife-anim] stage=6 reached
+[diagnostic] runtime=unknown targets=0; awaiting DOMINATE selection
+N1SSAN_STATUS|1|2026-11-07T05:42:55Z|7856|armory-obsidian-3.0|READY|reason=runtime_worker_heartbeat
+[glove-observe] pawn=000002D9E7DC0800 reapply=0 changed=0 def=0 init=0 idHigh=0x0
+[status-write] begin state=READY path=C:\Users\mirac\AppData\Local\n1ssan\status\cs2-7856.status
+[match] network signOn=6 maxClients=1 backgroundMap=0 connected=0 alive=0
+[status-write] success state=READY error=0
+[knife-anim] stage=6 reached
+[knife-anim] stage=6 reached
+[armory-inventory] staged 14 items (applies outside an active match)
+
+=== SNAPSHOT ===
+[snap] fsnCount=2686 lastStage=0 stage5Count=223
+[snap] stage histogram:
+[snap]   stage  0: 340 frames
+[snap]   stage  1: 223 frames
+[snap]   stage  2: 223 frames
+[snap]   stage  3: 223 frames
+[snap]   stage  5: 223 frames
+[snap]   stage  6: 223 frames
+[snap]   stage  7: 223 frames
+[snap]   stage  8: 223 frames
+[snap]   stage 10: 223 frames
+[snap]   stage 11: 321 frames
+[snap]   stage 12: 241 frames
+[snap] dwLocalPlayerController @ 0x00007FF8A1912548 -> 0x000002D9E7F73000 
+[snap] dwLocalPlayerPawn       @ 0x00007FF8A1B091E0 -> 0x000002D957B12200 
+[snap] pawn: vtable=0x00007FF8A9733740 inClient=0 health=729
+[snap] ctrl: vtable=0x00007FF8A0FE1680 inClient=1 m_hPlayerPawn@0x92C = 0x006B000B (idx=11)
+[snap] entitySystem @ 0x00007FF8A1AEFBB8 = 0x000002D957469000 highestEntityIndex=13
+[snap] entity resolution: 12/16 of indices 1..16 valid
+[snap] ctrl->pawn handle resolve: 0x006B000B -> 0x000002D9E7DC0800
+[snap] ----------------------------------------
+[runtime-mode] switched to armory
+[runtime-mode] preparing requested mode: armory
+[runtime-mode] active mode: armory
+[socache-diag] SOCache resolved inv=000002D9577CF000 offset=0x68 cache=000002D93F32A440 typeCache=000002D93F4A14E0
+[plan-a] Loadout cleanup: found=0 removed=0 failed=0
+[armory-inventory] preparing replacement set: 14 items
+[loot-schema] attr 'set item texture prefab' (idx 6) -> 0x000002D9BDE9E640
+[loot-schema] attr 6 kind=2 (0=float,1=uint32,2=default,3=other)
+[loot-schema] attr 'set item texture seed' (idx 7) -> 0x000002D9BDE9E6E0
+[loot-schema] attr 7 kind=2 (0=float,1=uint32,2=default,3=other)
+[loot-schema] attr 'set item texture wear' (idx 8) -> 0x000002D9BDE9E780
+[loot-schema] attr 8 kind=2 (0=float,1=uint32,2=default,3=other)
+[loot-schema] attr 'kill eater' (idx 80) -> 0x000002D9BE3F1340
+[loot-schema] attr 'kill eater score type' (idx 81) -> 0x000002D9BE3F13E0
+[armory-inventory] replacement committed: desired=14 created=14 retained=0 removed=0 removeFailed=0
+[detect] pawn=0x000002D9E7DC0800 hp=100 signOn=6 bg=0
+[armory-inventory] staged 14 items (applies outside an active match)
+[armory-inventory] preparing replacement set: 14 items
+[armory-inventory] retained item id=95A9B496DD0863FF def=5404
+[armory-inventory] retained item id=9716366248F075D7 def=5034
+[armory-inventory] retained item id=9502E287D965BBF2 def=5034
+[armory-inventory] retained item id=99E1BAF01502BE2C def=61
+[armory-inventory] retained item id=985A3F279B62E8B7 def=515
+[armory-inventory] retained item id=93F6DB09F3D56591 def=5502
+[armory-inventory] retained item id=94D37271449A4D93 def=7
+[armory-inventory] retained item id=977AA887CD1B96DE def=4
+[armory-inventory] retained item id=9AF567D70D34A997 def=525
+[armory-inventory] retained item id=97AF86D31CBA8FDC def=5030
+[armory-inventory] retained item id=9879654D0B275492 def=5405
+[armory-inventory] retained item id=9928CB3A6CE76E73 def=16
+[armory-inventory] retained item id=9A15AE7E0C8A436C def=16
+[armory-inventory] retained item id=916BBFE2596513DA def=9
+[armory-inventory] replacement committed: desired=14 created=0 retained=14 removed=0 removeFailed=0
+
+=== SNAPSHOT ===
+[snap] fsnCount=5270 lastStage=0 stage5Count=439
+[snap] stage histogram:
+[snap]   stage  0: 660 frames
+[snap]   stage  1: 439 frames
+[snap]   stage  2: 439 frames
+[snap]   stage  3: 439 frames
+[snap]   stage  5: 439 frames
+[snap]   stage  6: 439 frames
+[snap]   stage  7: 439 frames
+[snap]   stage  8: 439 frames
+[snap]   stage 10: 439 frames
+[snap]   stage 11: 641 frames
+[snap]   stage 12: 457 frames
+[snap] dwLocalPlayerController @ 0x00007FF8A1912548 -> 0x000002D9E7F73000 
+[snap] dwLocalPlayerPawn       @ 0x00007FF8A1B091E0 -> 0x000002D957B12200 
+[snap] pawn: vtable=0x00007FF8A9733740 inClient=0 health=729
+[snap] ctrl: vtable=0x00007FF8A0FE1680 inClient=1 m_hPlayerPawn@0x92C = 0x006B000B (idx=11)
+[snap] entitySystem @ 0x00007FF8A1AEFBB8 = 0x000002D957469000 highestEntityIndex=13
+[snap] entity resolution: 12/16 of indices 1..16 valid
+[snap] ctrl->pawn handle resolve: 0x006B000B -> 0x000002D9E7DC0800
+[snap] ----------------------------------------
+N1SSAN_STATUS|1|2026-11-07T05:43:05Z|7856|armory-obsidian-3.0|READY|reason=runtime_worker_heartbeat
+[status-write] begin state=READY path=C:\Users\mirac\AppData\Local\n1ssan\status\cs2-7856.status
+[status-write] success state=READY error=0
+[armory-inventory] staged 14 items (applies outside an active match)
+[armory-inventory] preparing replacement set: 14 items
+[armory-inventory] retained item id=95A9B496DD0863FF def=5404
+[armory-inventory] retained item id=9716366248F075D7 def=5034
+[armory-inventory] retained item id=9502E287D965BBF2 def=5034
+[armory-inventory] retained item id=99E1BAF01502BE2C def=61
+[armory-inventory] retained item id=985A3F279B62E8B7 def=515
+[armory-inventory] retained item id=93F6DB09F3D56591 def=5502
+[armory-inventory] retained item id=94D37271449A4D93 def=7
+[armory-inventory] retained item id=977AA887CD1B96DE def=4
+[armory-inventory] retained item id=9AF567D70D34A997 def=525
+[armory-inventory] retained item id=97AF86D31CBA8FDC def=5030
+[armory-inventory] retained item id=9879654D0B275492 def=5405
+[armory-inventory] retained item id=9928CB3A6CE76E73 def=16
+[armory-inventory] retained item id=9A15AE7E0C8A436C def=16
+[armory-inventory] retained item id=916BBFE2596513DA def=9
+[armory-inventory] replacement committed: desired=14 created=0 retained=14 removed=0 removeFailed=0
+
+=== SNAPSHOT ===
+[snap] fsnCount=7884 lastStage=12 stage5Count=658
+[snap] stage histogram:
+[snap]   stage  0: 981 frames
+[snap]   stage  1: 658 frames
+[snap]   stage  2: 658 frames
+[snap]   stage  3: 658 frames
+[snap]   stage  5: 658 frames
+[snap]   stage  6: 658 frames
+[snap]   stage  7: 658 frames
+[snap]   stage  8: 658 frames
+[snap]   stage 10: 658 frames
+[snap]   stage 11: 963 frames
+[snap]   stage 12: 676 frames
+[snap] dwLocalPlayerController @ 0x00007FF8A1912548 -> 0x000002D9E7F73000 
+[snap] dwLocalPlayerPawn       @ 0x00007FF8A1B091E0 -> 0x000002D957B12200 
+[snap] pawn: vtable=0x00007FF8A9733740 inClient=0 health=729
+[snap] ctrl: vtable=0x00007FF8A0FE1680 inClient=1 m_hPlayerPawn@0x92C = 0x006B000B (idx=11)
+[snap] entitySystem @ 0x00007FF8A1AEFBB8 = 0x000002D957469000 highestEntityIndex=13
+[snap] entity resolution: 12/16 of indices 1..16 valid
+[snap] ctrl->pawn handle resolve: 0x006B000B -> 0x000002D9E7DC0800
+[snap] ----------------------------------------
+[detect] pawn=0x000002D9E7DC0800 hp=100 signOn=6 bg=0
+
+=== SNAPSHOT ===
+[snap] fsnCount=11569 lastStage=0 stage5Count=922
+[snap] stage histogram:
+[snap]   stage  0: 1636 frames
+[snap]   stage  1: 922 frames
+[snap]   stage  2: 922 frames
+[snap]   stage  3: 922 frames
+[snap]   stage  5: 922 frames
+[snap]   stage  6: 922 frames
+[snap]   stage  7: 922 frames
+[snap]   stage  8: 922 frames
+[snap]   stage 10: 922 frames
+[snap]   stage 11: 1278 frames
+[snap]   stage 12: 1279 frames
+[snap] dwLocalPlayerController @ 0x00007FF8A1912548 -> 0x000002D9E7F73000 
+[snap] dwLocalPlayerPawn       @ 0x00007FF8A1B091E0 -> 0x000002D957B12200 
+[snap] pawn: vtable=0x00007FF8A9733740 inClient=0 health=729
+[snap] ctrl: vtable=0x00007FF8A0FE1680 inClient=1 m_hPlayerPawn@0x92C = 0x006B000B (idx=11)
+[snap] entitySystem @ 0x00007FF8A1AEFBB8 = 0x000002D957469000 highestEntityIndex=13
+[snap] entity resolution: 12/16 of indices 1..16 valid
+[snap] ctrl->pawn handle resolve: 0x006B000B -> 0x000002D9E7DC0800
+[snap] ----------------------------------------
+N1SSAN_STATUS|1|2026-11-07T05:43:15Z|7856|armory-obsidian-3.0|READY|reason=runtime_worker_heartbeat
+[status-write] begin state=READY path=C:\Users\mirac\AppData\Local\n1ssan\status\cs2-7856.status
+[status-write] success state=READY error=0
+
+=== SNAPSHOT ===
+[snap] fsnCount=15816 lastStage=0 stage5Count=1241
+[snap] stage histogram:
+[snap]   stage  0: 2324 frames
+[snap]   stage  1: 1241 frames
+[snap]   stage  2: 1241 frames
+[snap]   stage  3: 1241 frames
+[snap]   stage  5: 1241 frames
+[snap]   stage  6: 1241 frames
+[snap]   stage  7: 1241 frames
+[snap]   stage  8: 1241 frames
+[snap]   stage 10: 1241 frames
+[snap]   stage 11: 1598 frames
+[snap]   stage 12: 1966 frames
+[snap] dwLocalPlayerController @ 0x00007FF8A1912548 -> 0x000002D9E7F73000 
+[snap] dwLocalPlayerPawn       @ 0x00007FF8A1B091E0 -> 0x000002D957B12200 
+[snap] pawn: vtable=0x00007FF8A9733740 inClient=0 health=729
+[snap] ctrl: vtable=0x00007FF8A0FE1680 inClient=1 m_hPlayerPawn@0x92C = 0x006B000B (idx=11)
+[snap] entitySystem @ 0x00007FF8A1AEFBB8 = 0x000002D957469000 highestEntityIndex=13
+[snap] entity resolution: 12/16 of indices 1..16 valid
+[snap] ctrl->pawn handle resolve: 0x006B000B -> 0x000002D9E7DC0800
+[snap] ----------------------------------------
+[detect] pawn=0x000002D9E7DC0800 hp=100 signOn=6 bg=0
+
+=== SNAPSHOT ===
+[snap] fsnCount=20071 lastStage=0 stage5Count=1560
+[snap] stage histogram:
+[snap]   stage  0: 3016 frames
+[snap]   stage  1: 1560 frames
+[snap]   stage  2: 1560 frames
+[snap]   stage  3: 1560 frames
+[snap]   stage  5: 1560 frames
+[snap]   stage  6: 1560 frames
+[snap]   stage  7: 1560 frames
+[snap]   stage  8: 1560 frames
+[snap]   stage 10: 1560 frames
+[snap]   stage 11: 1918 frames
+[snap]   stage 12: 2657 frames
+[snap] dwLocalPlayerController @ 0x00007FF8A1912548 -> 0x000002D9E7F73000 
+[snap] dwLocalPlayerPawn       @ 0x00007FF8A1B091E0 -> 0x000002D957B12200 
+[snap] pawn: vtable=0x00007FF8A9733740 inClient=0 health=729
+[snap] ctrl: vtable=0x00007FF8A0FE1680 inClient=1 m_hPlayerPawn@0x92C = 0x006B000B (idx=11)
+[snap] entitySystem @ 0x00007FF8A1AEFBB8 = 0x000002D957469000 highestEntityIndex=13
+[snap] entity resolution: 12/16 of indices 1..16 valid
+[snap] ctrl->pawn handle resolve: 0x006B000B -> 0x000002D9E7DC0800
+[snap] ----------------------------------------
+N1SSAN_STATUS|1|2026-11-07T05:43:25Z|7856|armory-obsidian-3.0|READY|reason=runtime_worker_heartbeat
+[status-write] begin state=READY path=C:\Users\mirac\AppData\Local\n1ssan\status\cs2-7856.status
+[status-write] success state=READY error=0
+
+=== SNAPSHOT ===
+[snap] fsnCount=24314 lastStage=0 stage5Count=1881
+[snap] stage histogram:
+[snap]   stage  0: 3693 frames
+[snap]   stage  1: 1881 frames
+[snap]   stage  2: 1881 frames
+[snap]   stage  3: 1881 frames
+[snap]   stage  5: 1881 frames
+[snap]   stage  6: 1881 frames
+[snap]   stage  7: 1881 frames
+[snap]   stage  8: 1881 frames
+[snap]   stage 10: 1881 frames
+[snap]   stage 11: 2239 frames
+[snap]   stage 12: 3334 frames
+[snap] dwLocalPlayerController @ 0x00007FF8A1912548 -> 0x000002D9E7F73000 
+[snap] dwLocalPlayerPawn       @ 0x00007FF8A1B091E0 -> 0x000002D957B12200 
+[snap] pawn: vtable=0x00007FF8A9733740 inClient=0 health=729
+[snap] ctrl: vtable=0x00007FF8A0FE1680 inClient=1 m_hPlayerPawn@0x92C = 0x006B000B (idx=11)
+[snap] entitySystem @ 0x00007FF8A1AEFBB8 = 0x000002D957469000 highestEntityIndex=13
+[snap] entity resolution: 12/16 of indices 1..16 valid
+[snap] ctrl->pawn handle resolve: 0x006B000B -> 0x000002D9E7DC0800
+[snap] ----------------------------------------
+[detect] pawn=0x000002D9E7DC0800 hp=100 signOn=6 bg=0
+
+=== SNAPSHOT ===
+[snap] fsnCount=28510 lastStage=0 stage5Count=2199
+[snap] stage histogram:
+[snap]   stage  0: 4360 frames
+[snap]   stage  1: 2199 frames
+[snap]   stage  2: 2199 frames
+[snap]   stage  3: 2199 frames
+[snap]   stage  5: 2199 frames
+[snap]   stage  6: 2199 frames
+[snap]   stage  7: 2199 frames
+[snap]   stage  8: 2199 frames
+[snap]   stage 10: 2199 frames
+[snap]   stage 11: 2559 frames
+[snap]   stage 12: 3999 frames
+[snap] dwLocalPlayerController @ 0x00007FF8A1912548 -> 0x000002D9E7F73000 
+[snap] dwLocalPlayerPawn       @ 0x00007FF8A1B091E0 -> 0x000002D957B12200 
+[snap] pawn: vtable=0x00007FF8A9733740 inClient=0 health=729
+[snap] ctrl: vtable=0x00007FF8A0FE1680 inClient=1 m_hPlayerPawn@0x92C = 0x006B000B (idx=11)
+[snap] entitySystem @ 0x00007FF8A1AEFBB8 = 0x000002D957469000 highestEntityIndex=13
+[snap] entity resolution: 12/16 of indices 1..16 valid
+[snap] ctrl->pawn handle resolve: 0x006B000B -> 0x000002D9E7DC0800
+[snap] ----------------------------------------
+N1SSAN_STATUS|1|2026-11-07T05:43:35Z|7856|armory-obsidian-3.0|READY|reason=runtime_worker_heartbeat
+[status-write] begin state=READY path=C:\Users\mirac\AppData\Local\n1ssan\status\cs2-7856.status
+[status-write] success state=READY error=0
+
+=== SNAPSHOT ===
+[snap] fsnCount=33011 lastStage=0 stage5Count=2516
+[snap] stage histogram:
+[snap]   stage  0: 5184 frames
+[snap]   stage  1: 2516 frames
+[snap]   stage  2: 2516 frames
+[snap]   stage  3: 2516 frames
+[snap]   stage  5: 2516 frames
+[snap]   stage  6: 2516 frames
+[snap]   stage  7: 2516 frames
+[snap]   stage  8: 2516 frames
+[snap]   stage 10: 2516 frames
+[snap]   stage 11: 2879 frames
+[snap]   stage 12: 4820 frames
+[snap] dwLocalPlayerController @ 0x00007FF8A1912548 -> 0x000002D9E7F73000 
+[snap] dwLocalPlayerPawn       @ 0x00007FF8A1B091E0 -> 0x000002D957B12200 
+[snap] pawn: vtable=0x00007FF8A9733740 inClient=0 health=729
+[snap] ctrl: vtable=0x00007FF8A0FE1680 inClient=1 m_hPlayerPawn@0x92C = 0x006B000B (idx=11)
+[snap] entitySystem @ 0x00007FF8A1AEFBB8 = 0x000002D957469000 highestEntityIndex=13
+[snap] entity resolution: 12/16 of indices 1..16 valid
+[snap] ctrl->pawn handle resolve: 0x006B000B -> 0x000002D9E7DC0800
+[snap] ----------------------------------------
+[detect] pawn=0x000002D9E7DC0800 hp=100 signOn=6 bg=0
+
+=== SNAPSHOT ===
+[snap] fsnCount=37488 lastStage=0 stage5Count=2835
+[snap] stage histogram:
+[snap]   stage  0: 5987 frames
+[snap]   stage  1: 2835 frames
+[snap]   stage  2: 2835 frames
+[snap]   stage  3: 2835 frames
+[snap]   stage  5: 2835 frames
+[snap]   stage  6: 2835 frames
+[snap]   stage  7: 2835 frames
+[snap]   stage  8: 2835 frames
+[snap]   stage 10: 2835 frames
+[snap]   stage 11: 3199 frames
+[snap]   stage 12: 5622 frames
+[snap] dwLocalPlayerController @ 0x00007FF8A1912548 -> 0x000002D9E7F73000 
+[snap] dwLocalPlayerPawn       @ 0x00007FF8A1B091E0 -> 0x000002D957B12200 
+[snap] pawn: vtable=0x00007FF8A9733740 inClient=0 health=729
+[snap] ctrl: vtable=0x00007FF8A0FE1680 inClient=1 m_hPlayerPawn@0x92C = 0x006B000B (idx=11)
+[snap] entitySystem @ 0x00007FF8A1AEFBB8 = 0x000002D957469000 highestEntityIndex=13
+[snap] entity resolution: 12/16 of indices 1..16 valid
+[snap] ctrl->pawn handle resolve: 0x006B000B -> 0x000002D9E7DC0800
+[snap] ----------------------------------------
+N1SSAN_STATUS|1|2026-11-07T05:43:45Z|7856|armory-obsidian-3.0|READY|reason=runtime_worker_heartbeat
+[status-write] begin state=READY path=C:\Users\mirac\AppData\Local\n1ssan\status\cs2-7856.status
+[status-write] success state=READY error=0
+[glove-observe] pawn=000002D957B12200 reapply=114 changed=48 def=24948 init=115 idHigh=0x726F482C
+[glove-observe] pawn=000002D9A8D85000 reapply=0 changed=0 def=0 init=0 idHigh=0x0
+
+=== SNAPSHOT ===
+[snap] fsnCount=40848 lastStage=0 stage5Count=3018
+[snap] stage histogram:
+[snap]   stage  0: 6703 frames
+[snap]   stage  1: 3100 frames
+[snap]   stage  2: 3100 frames
+[snap]   stage  3: 3096 frames
+[snap]   stage  4: 1 frames
+[snap]   stage  5: 3018 frames
+[snap]   stage  6: 3018 frames
+[snap]   stage  7: 3018 frames
+[snap]   stage  8: 3018 frames
+[snap]   stage 10: 3018 frames
+[snap]   stage 11: 3390 frames
+[snap]   stage 12: 6368 frames
+[snap] dwLocalPlayerController @ 0x00007FF8A1912548 -> 0x000002D93FA9F400 
+[snap] dwLocalPlayerPawn       @ 0x00007FF8A1B091E0 -> 0x000002D957B12200 
+[snap] pawn: vtable=0x00007FF8A9733740 inClient=0 health=729
+[snap] ctrl: vtable=0x00007FF8A0FE1680 inClient=1 m_hPlayerPawn@0x92C = 0x007A01A1 (idx=417)
+[snap] entitySystem @ 0x00007FF8A1AEFBB8 = 0x000002D957469000 highestEntityIndex=205
+[snap] entity resolution: 1/16 of indices 1..16 valid
+[snap] ctrl->pawn handle resolve: 0x007A01A1 -> 0x000002D9A8D85000
+[snap] ----------------------------------------
+[detect] pawn=0x000002D9A8D85000 hp=100 signOn=6 bg=0
+
+=== SNAPSHOT ===
+[snap] fsnCount=46721 lastStage=0 stage5Count=3337
+[snap] stage histogram:
+[snap]   stage  0: 8204 frames
+[snap]   stage  1: 3419 frames
+[snap]   stage  2: 3419 frames
+[snap]   stage  3: 3415 frames
+[snap]   stage  4: 1 frames
+[snap]   stage  5: 3337 frames
+[snap]   stage  6: 3337 frames
+[snap]   stage  7: 3337 frames
+[snap]   stage  8: 3337 frames
+[snap]   stage 10: 3337 frames
+[snap]   stage 11: 3710 frames
+[snap]   stage 12: 7868 frames
+[snap] dwLocalPlayerController @ 0x00007FF8A1912548 -> 0x000002D93FA9F400 
+[snap] dwLocalPlayerPawn       @ 0x00007FF8A1B091E0 -> 0x000002D957B12200 
+[snap] pawn: vtable=0x00007FF8A9733740 inClient=0 health=729
+[snap] ctrl: vtable=0x00007FF8A0FE1680 inClient=1 m_hPlayerPawn@0x92C = 0x007A01A1 (idx=417)
+[snap] entitySystem @ 0x00007FF8A1AEFBB8 = 0x000002D957469000 highestEntityIndex=205
+[snap] entity resolution: 1/16 of indices 1..16 valid
+[snap] ctrl->pawn handle resolve: 0x007A01A1 -> 0x000002D9A8D85000
+[snap] ----------------------------------------
+N1SSAN_STATUS|1|2026-11-07T05:43:55Z|7856|armory-obsidian-3.0|READY|reason=runtime_worker_heartbeat
+[status-write] begin state=READY path=C:\Users\mirac\AppData\Local\n1ssan\status\cs2-7856.status
+[status-write] success state=READY error=0
+
+=== SNAPSHOT ===
+[snap] fsnCount=52520 lastStage=0 stage5Count=3656
+[snap] stage histogram:
+[snap]   stage  0: 9668 frames
+[snap]   stage  1: 3738 frames
+[snap]   stage  2: 3738 frames
+[snap]   stage  3: 3734 frames
+[snap]   stage  4: 1 frames
+[snap]   stage  5: 3656 frames
+[snap]   stage  6: 3656 frames
+[snap]   stage  7: 3656 frames
+[snap]   stage  8: 3656 frames
+[snap]   stage 10: 3656 frames
+[snap]   stage 11: 4030 frames
+[snap]   stage 12: 9331 frames
+[snap] dwLocalPlayerController @ 0x00007FF8A1912548 -> 0x000002D93FA9F400 
+[snap] dwLocalPlayerPawn       @ 0x00007FF8A1B091E0 -> 0x000002D957B12200 
+[snap] pawn: vtable=0x00007FF8A9733740 inClient=0 health=729
+[snap] ctrl: vtable=0x00007FF8A0FE1680 inClient=1 m_hPlayerPawn@0x92C = 0x007A01A1 (idx=417)
+[snap] entitySystem @ 0x00007FF8A1AEFBB8 = 0x000002D957469000 highestEntityIndex=205
+[snap] entity resolution: 1/16 of indices 1..16 valid
+[snap] ctrl->pawn handle resolve: 0x007A01A1 -> 0x000002D9A8D85000
+[snap] ----------------------------------------
+[detect] pawn=0x000002D9A8D85000 hp=100 signOn=6 bg=0
+[apply-cache] weapon model cache invalidated
+[apply-cache] pawn changed: 000002D9A8D85000
+[match] FOUND pawn=0x000002D9A8D85000 hp=100 signOn=6 bg=0 connected=0
+[apply] tick pawn=0x000002D9A8D85000
+[apply] wData=0x0000000000000002 count=602204256
+[apply] activeHandle=0x016580EC
+[apply] active 0x000002D9C226E000
+[pw] weapon=0x000002D9C226E000 view=0x000002D9C226F2E0
+[pw]   view+0x00 = 0xA10E55F0
+[pw]   view+0x04 = 0x00007FF8
+[pw]   view+0x08 = 0x00000000
+[pw]   view+0x0C = 0x00000000
+[pw]   view+0x10 = 0xFFFFFFFE
+[pw]   view+0x14 = 0x00000000
+[pw]   view+0x18 = 0x00000000
+[pw]   view+0x1C = 0x00000000
+[pw]   view+0x20 = 0x00000000
+[pw]   view+0x24 = 0x00000000
+[pw]   view+0x28 = 0x00000000
+[pw]   view+0x2C = 0x00000000
+[pw]   view+0x30 = 0x00000000
+[pw]   view+0x34 = 0x00000000
+[pw]   view+0x38 = 0x00000000
+[pw]   view+0x3C = 0x00000000
+[pw] weapon+0x1290..0x12F0:
+[pw]   +0x1290 = 0x00007FF8A10E5790
+[pw]   +0x1298 = 0x0000000000000000
+[pw]   +0x12A0 = 0x0000000000000000
+[pw]   +0x12A8 = 0x0000000000000000
+[pw]   +0x12B0 = 0x016580EC00000001
+[pw]   +0x12B8 = 0x0000000100000000
+[pw]   +0x12C0 = 0x0000000000000000
+[pw]   +0x12C8 = 0x0000000000000000
+[pw]   +0x12D0 = 0x0000000000000000
+[pw]   +0x12D8 = 0x0000000000000000
+[pw]   +0x12E0 = 0x00007FF8A10E55F0
+[pw]   +0x12E8 = 0x0000000000000000
+[pw] weapon 0x000002D9C226E000 def=32
+[team] pawn=0x000002D9A8D85000, scanning +0x380..0x400:
+[team]   pawn+0x3BC (u8)  = 1
+[armory-apply] no unique Armory target for live weapon def=32
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000002D9A8D85000
+[apply] active 0x000002D9C226E000
+[pw] weapon 0x000002D9C226E000 def=32
+[armory-apply] no unique Armory target for live weapon def=32
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000002D9A8D85000
+[apply] active 0x000002D9C226E000
+[pw] weapon 0x000002D9C226E000 def=32
+[armory-apply] no unique Armory target for live weapon def=32
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000002D9A8D85000
+[apply] active 0x000002D9C226E000
+[pw] weapon 0x000002D9C226E000 def=32
+[armory-apply] no unique Armory target for live weapon def=32
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000002D9A8D85000
+[apply] active 0x000002D9C226E000
+[pw] weapon 0x000002D9C226E000 def=32
+[armory-apply] no unique Armory target for live weapon def=32
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000002D9A8D85000
+[apply] active 0x000002D9C226E000
+[pw] weapon 0x000002D9C226E000 def=32
+[armory-apply] no unique Armory target for live weapon def=32
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000002D9A8D85000
+[apply] active 0x000002D9C226E000
+[pw] weapon 0x000002D9C226E000 def=32
+[armory-apply] no unique Armory target for live weapon def=32
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000002D9A8D85000
+[apply] active 0x000002D9C226E000
+[pw] weapon 0x000002D9C226E000 def=32
+[armory-apply] no unique Armory target for live weapon def=32
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000002D9A8D85000
+[apply] active 0x000002D9C226E000
+[pw] weapon 0x000002D9C226E000 def=32
+[armory-apply] no unique Armory target for live weapon def=32
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000002D9A8D85000
+[apply] active 0x000002D9C226E000
+[pw] weapon 0x000002D9C226E000 def=32
+[armory-apply] no unique Armory target for live weapon def=32
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000002D9A8D85000
+[apply] active 0x000002D9C226E000
+[pw] weapon 0x000002D9C226E000 def=32
+[armory-apply] no unique Armory target for live weapon def=32
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000002D9A8D85000
+[apply] active 0x000002D9C226E000
+[pw] weapon 0x000002D9C226E000 def=32
+[armory-apply] no unique Armory target for live weapon def=32
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+
+=== SNAPSHOT ===
+[snap] fsnCount=58283 lastStage=12 stage5Count=3970
+[snap] stage histogram:
+[snap]   stage  0: 11136 frames
+[snap]   stage  1: 4052 frames
+[snap]   stage  2: 4052 frames
+[snap]   stage  3: 4048 frames
+[snap]   stage  4: 1 frames
+[snap]   stage  5: 3970 frames
+[snap]   stage  6: 3970 frames
+[snap]   stage  7: 3970 frames
+[snap]   stage  8: 3970 frames
+[snap]   stage 10: 3970 frames
+[snap]   stage 11: 4350 frames
+[snap]   stage 12: 10794 frames
+[snap] dwLocalPlayerController @ 0x00007FF8A1912548 -> 0x000002D93FA9F400 
+[snap] dwLocalPlayerPawn       @ 0x00007FF8A1B091E0 -> 0x000002D957B12200 
+[snap] pawn: vtable=0x00007FF8A9733740 inClient=0 health=729
+[snap] ctrl: vtable=0x00007FF8A0FE1680 inClient=1 m_hPlayerPawn@0x92C = 0x007A01A1 (idx=417)
+[snap] entitySystem @ 0x00007FF8A1AEFBB8 = 0x000002D957469000 highestEntityIndex=211
+[snap] entity resolution: 1/16 of indices 1..16 valid
+[snap] ctrl->pawn handle resolve: 0x007A01A1 -> 0x000002D9A8D85000
+[snap] ----------------------------------------
+N1SSAN_STATUS|1|2026-11-07T05:44:05Z|7856|armory-obsidian-3.0|READY|reason=runtime_worker_heartbeat
+[status-write] begin state=READY path=C:\Users\mirac\AppData\Local\n1ssan\status\cs2-7856.status
+[status-write] success state=READY error=0
+[apply] tick pawn=0x000002D9A8D85000
+[apply] active 0x000002D9C226E000
+[pw] weapon 0x000002D9C226E000 def=32
+[armory-apply] no unique Armory target for live weapon def=32
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000002D9A8D85000
+[apply] active 0x000002D9C226E000
+[pw] weapon 0x000002D9C226E000 def=32
+[armory-apply] no unique Armory target for live weapon def=32
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000002D9A8D85000
+[apply] active 0x000002D9C226E000
+[pw] weapon 0x000002D9C226E000 def=32
+[armory-apply] no unique Armory target for live weapon def=32
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000002D9A8D85000
+[apply] active 0x000002D9C226E000
+[pw] weapon 0x000002D9C226E000 def=32
+[armory-apply] no unique Armory target for live weapon def=32
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000002D9A8D85000
+[apply] active 0x000002D9C226E000
+[pw] weapon 0x000002D9C226E000 def=32
+[armory-apply] no unique Armory target for live weapon def=32
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000002D9A8D85000
+[apply] active 0x000002D9C226E000
+[pw] weapon 0x000002D9C226E000 def=32
+[armory-apply] no unique Armory target for live weapon def=32
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000002D9A8D85000
+[apply] active 0x000002D9C226E000
+[pw] weapon 0x000002D9C226E000 def=32
+[armory-apply] no unique Armory target for live weapon def=32
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000002D9A8D85000
+[apply] active 0x000002D9C226E000
+[pw] weapon 0x000002D9C226E000 def=32
+[armory-apply] no unique Armory target for live weapon def=32
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000002D9A8D85000
+[apply] active 0x000002D9C226E000
+[pw] weapon 0x000002D9C226E000 def=32
+[armory-apply] no unique Armory target for live weapon def=32
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000002D9A8D85000
+[apply] active 0x000002D9C226E000
+[pw] weapon 0x000002D9C226E000 def=32
+[armory-apply] no unique Armory target for live weapon def=32
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000002D9A8D85000
+[apply] active 0x000002D9C226E000
+[pw] weapon 0x000002D9C226E000 def=32
+[armory-apply] no unique Armory target for live weapon def=32
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000002D9A8D85000
+[apply] active 0x000002D9C226E000
+[pw] weapon 0x000002D9C226E000 def=32
+[armory-apply] no unique Armory target for live weapon def=32
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000002D9A8D85000
+[apply] active 0x000002D9C226E000
+[pw] weapon 0x000002D9C226E000 def=32
+[armory-apply] no unique Armory target for live weapon def=32
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000002D9A8D85000
+[apply] active 0x000002D9C226E000
+[pw] weapon 0x000002D9C226E000 def=32
+[armory-apply] no unique Armory target for live weapon def=32
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000002D9A8D85000
+[apply] active 0x000002D9C226E000
+[pw] weapon 0x000002D9C226E000 def=32
+[armory-apply] no unique Armory target for live weapon def=32
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000002D9A8D85000
+[apply] active 0x000002D9C226E000
+[pw] weapon 0x000002D9C226E000 def=32
+[armory-apply] no unique Armory target for live weapon def=32
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000002D9A8D85000
+[apply] active 0x000002D9C226E000
+[pw] weapon 0x000002D9C226E000 def=32
+[armory-apply] no unique Armory target for live weapon def=32
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000002D9A8D85000
+[apply] active 0x000002D9C226E000
+[pw] weapon 0x000002D9C226E000 def=32
+[armory-apply] no unique Armory target for live weapon def=32
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000002D9A8D85000
+[apply] active 0x000002D9C226E000
+[pw] weapon 0x000002D9C226E000 def=32
+[armory-apply] no unique Armory target for live weapon def=32
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+
+=== SNAPSHOT ===
+[snap] fsnCount=63616 lastStage=12 stage5Count=4289
+[snap] stage histogram:
+[snap]   stage  0: 12367 frames
+[snap]   stage  1: 4371 frames
+[snap]   stage  2: 4371 frames
+[snap]   stage  3: 4367 frames
+[snap]   stage  4: 1 frames
+[snap]   stage  5: 4289 frames
+[snap]   stage  6: 4289 frames
+[snap]   stage  7: 4289 frames
+[snap]   stage  8: 4289 frames
+[snap]   stage 10: 4289 frames
+[snap]   stage 11: 4670 frames
+[snap]   stage 12: 12024 frames
+[snap] dwLocalPlayerController @ 0x00007FF8A1912548 -> 0x000002D93FA9F400 
+[snap] dwLocalPlayerPawn       @ 0x00007FF8A1B091E0 -> 0x000002D957B12200 
+[snap] pawn: vtable=0x00007FF8A9733740 inClient=0 health=729
+[snap] ctrl: vtable=0x00007FF8A0FE1680 inClient=1 m_hPlayerPawn@0x92C = 0x007A01A1 (idx=417)
+[snap] entitySystem @ 0x00007FF8A1AEFBB8 = 0x000002D957469000 highestEntityIndex=211
+[snap] entity resolution: 1/16 of indices 1..16 valid
+[snap] ctrl->pawn handle resolve: 0x007A01A1 -> 0x000002D9A8D85000
+[snap] ----------------------------------------
+[apply] tick pawn=0x000002D9A8D85000
+[apply] active 0x000002D9C226E000
+[pw] weapon 0x000002D9C226E000 def=32
+[armory-apply] no unique Armory target for live weapon def=32
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000002D9A8D85000
+[apply] active 0x000002D9C226E000
+[pw] weapon 0x000002D9C226E000 def=32
+[armory-apply] no unique Armory target for live weapon def=32
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000002D9A8D85000
+[apply] active 0x000002D9C226E000
+[pw] weapon 0x000002D9C226E000 def=32
+[armory-apply] no unique Armory target for live weapon def=32
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000002D9A8D85000
+[apply] active 0x000002D9C226E000
+[pw] weapon 0x000002D9C226E000 def=32
+[armory-apply] no unique Armory target for live weapon def=32
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000002D9A8D85000
+[apply] active 0x000002D9C226E000
+[pw] weapon 0x000002D9C226E000 def=32
+[armory-apply] no unique Armory target for live weapon def=32
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000002D9A8D85000
+[apply] active 0x000002D9C226E000
+[pw] weapon 0x000002D9C226E000 def=32
+[armory-apply] no unique Armory target for live weapon def=32
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000002D9A8D85000
+[apply] active 0x000002D9C226E000
+[pw] weapon 0x000002D9C226E000 def=32
+[armory-apply] no unique Armory target for live weapon def=32
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000002D9A8D85000
+[apply] active 0x000002D9C226E000
+[pw] weapon 0x000002D9C226E000 def=32
+[armory-apply] no unique Armory target for live weapon def=32
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000002D9A8D85000
+[apply] active 0x000002D9C226E000
+[pw] weapon 0x000002D9C226E000 def=32
+[armory-apply] no unique Armory target for live weapon def=32
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000002D9A8D85000
+[apply] active 0x000002D9C226E000
+[pw] weapon 0x000002D9C226E000 def=32
+[armory-apply] no unique Armory target for live weapon def=32
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000002D9A8D85000
+[apply] active 0x000002D9C226E000
+[pw] weapon 0x000002D9C226E000 def=32
+[armory-apply] no unique Armory target for live weapon def=32
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000002D9A8D85000
+[apply] active 0x000002D9C226E000
+[pw] weapon 0x000002D9C226E000 def=32
+[armory-apply] no unique Armory target for live weapon def=32
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000002D9A8D85000
+[apply] active 0x000002D9C226E000
+[pw] weapon 0x000002D9C226E000 def=32
+[armory-apply] no unique Armory target for live weapon def=32
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000002D9A8D85000
+[apply] active 0x000002D9C226E000
+[pw] weapon 0x000002D9C226E000 def=32
+[armory-apply] no unique Armory target for live weapon def=32
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000002D9A8D85000
+[apply] active 0x000002D9C226E000
+[pw] weapon 0x000002D9C226E000 def=32
+[armory-apply] no unique Armory target for live weapon def=32
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000002D9A8D85000
+[apply] active 0x000002D9C226E000
+[pw] weapon 0x000002D9C226E000 def=32
+[armory-apply] no unique Armory target for live weapon def=32
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000002D9A8D85000
+[apply] active 0x000002D9C226E000
+[pw] weapon 0x000002D9C226E000 def=32
+[armory-apply] no unique Armory target for live weapon def=32
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000002D9A8D85000
+[apply] active 0x000002D9C226E000
+[pw] weapon 0x000002D9C226E000 def=32
+[armory-apply] no unique Armory target for live weapon def=32
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000002D9A8D85000
+[apply] active 0x000002D9C226E000
+[pw] weapon 0x000002D9C226E000 def=32
+[armory-apply] no unique Armory target for live weapon def=32
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000002D9A8D85000
+[apply] active 0x000002D9C226E000
+[pw] weapon 0x000002D9C226E000 def=32
+[armory-apply] no unique Armory target for live weapon def=32
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+
+=== SNAPSHOT ===
+[snap] fsnCount=68840 lastStage=0 stage5Count=4608
+[snap] stage histogram:
+[snap]   stage  0: 13544 frames
+[snap]   stage  1: 4690 frames
+[snap]   stage  2: 4690 frames
+[snap]   stage  3: 4686 frames
+[snap]   stage  4: 1 frames
+[snap]   stage  5: 4608 frames
+[snap]   stage  6: 4608 frames
+[snap]   stage  7: 4608 frames
+[snap]   stage  8: 4608 frames
+[snap]   stage 10: 4608 frames
+[snap]   stage 11: 4990 frames
+[snap]   stage 12: 13199 frames
+[snap] dwLocalPlayerController @ 0x00007FF8A1912548 -> 0x000002D93FA9F400 
+[snap] dwLocalPlayerPawn       @ 0x00007FF8A1B091E0 -> 0x000002D957B12200 
+[snap] pawn: vtable=0x00007FF8A9733740 inClient=0 health=729
+[snap] ctrl: vtable=0x00007FF8A0FE1680 inClient=1 m_hPlayerPawn@0x92C = 0x007A01A1 (idx=417)
+[snap] entitySystem @ 0x00007FF8A1AEFBB8 = 0x000002D957469000 highestEntityIndex=211
+[snap] entity resolution: 1/16 of indices 1..16 valid
+[snap] ctrl->pawn handle resolve: 0x007A01A1 -> 0x000002D9A8D85000
+[snap] ----------------------------------------
+N1SSAN_STATUS|1|2026-11-07T05:44:15Z|7856|armory-obsidian-3.0|READY|reason=runtime_worker_heartbeat
+[status-write] begin state=READY path=C:\Users\mirac\AppData\Local\n1ssan\status\cs2-7856.status
+[status-write] success state=READY error=0
+[apply] tick pawn=0x000002D9A8D85000
+[apply] active 0x000002D9C226E000
+[pw] weapon 0x000002D9C226E000 def=32
+[armory-apply] no unique Armory target for live weapon def=32
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000002D9A8D85000
+[apply] active 0x000002D9C226E000
+[pw] weapon 0x000002D9C226E000 def=32
+[armory-apply] no unique Armory target for live weapon def=32
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000002D9A8D85000
+[apply] active 0x000002D9C226E000
+[pw] weapon 0x000002D9C226E000 def=32
+[armory-apply] no unique Armory target for live weapon def=32
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000002D9A8D85000
+[apply] active 0x000002D9C226E000
+[pw] weapon 0x000002D9C226E000 def=32
+[armory-apply] no unique Armory target for live weapon def=32
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000002D9A8D85000
+[apply] active 0x000002D9C226E000
+[pw] weapon 0x000002D9C226E000 def=32
+[armory-apply] no unique Armory target for live weapon def=32
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000002D9A8D85000
+[apply] active 0x000002D9C226E000
+[pw] weapon 0x000002D9C226E000 def=32
+[armory-apply] no unique Armory target for live weapon def=32
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000002D9A8D85000
+[apply] active 0x000002D9C226E000
+[pw] weapon 0x000002D9C226E000 def=32
+[armory-apply] no unique Armory target for live weapon def=32
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000002D9A8D85000
+[apply] active 0x000002D9C226E000
+[pw] weapon 0x000002D9C226E000 def=32
+[armory-apply] no unique Armory target for live weapon def=32
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000002D9A8D85000
+[apply] active 0x000002D9C226E000
+[pw] weapon 0x000002D9C226E000 def=32
+[armory-apply] no unique Armory target for live weapon def=32
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000002D9A8D85000
+[apply] active 0x000002D9C226E000
+[pw] weapon 0x000002D9C226E000 def=32
+[armory-apply] no unique Armory target for live weapon def=32
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000002D9A8D85000
+[apply] active 0x000002D9C226E000
+[pw] weapon 0x000002D9C226E000 def=32
+[armory-apply] no unique Armory target for live weapon def=32
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000002D9A8D85000
+[apply] active 0x000002D9C226E000
+[pw] weapon 0x000002D9C226E000 def=32
+[armory-apply] no unique Armory target for live weapon def=32
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000002D9A8D85000
+[apply] active 0x000002D9C226E000
+[pw] weapon 0x000002D9C226E000 def=32
+[armory-apply] no unique Armory target for live weapon def=32
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000002D9A8D85000
+[apply] active 0x000002D9C226E000
+[pw] weapon 0x000002D9C226E000 def=32
+[armory-apply] no unique Armory target for live weapon def=32
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000002D9A8D85000
+[apply] active 0x000002D9C226E000
+[pw] weapon 0x000002D9C226E000 def=32
+[armory-apply] no unique Armory target for live weapon def=32
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000002D9A8D85000
+[apply] active 0x000002D9C226E000
+[pw] weapon 0x000002D9C226E000 def=32
+[armory-apply] no unique Armory target for live weapon def=32
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000002D9A8D85000
+[apply] active 0x000002D9C226E000
+[pw] weapon 0x000002D9C226E000 def=32
+[armory-apply] no unique Armory target for live weapon def=32
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000002D9A8D85000
+[apply] active 0x000002D9C226E000
+[pw] weapon 0x000002D9C226E000 def=32
+[armory-apply] no unique Armory target for live weapon def=32
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000002D9A8D85000
+[apply] active 0x000002D9C226E000
+[pw] weapon 0x000002D9C226E000 def=32
+[armory-apply] no unique Armory target for live weapon def=32
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+
+=== SNAPSHOT ===
+[snap] fsnCount=74064 lastStage=0 stage5Count=4926
+[snap] stage histogram:
+[snap]   stage  0: 14725 frames
+[snap]   stage  1: 5008 frames
+[snap]   stage  2: 5008 frames
+[snap]   stage  3: 5004 frames
+[snap]   stage  4: 1 frames
+[snap]   stage  5: 4926 frames
+[snap]   stage  6: 4926 frames
+[snap]   stage  7: 4926 frames
+[snap]   stage  8: 4926 frames
+[snap]   stage 10: 4926 frames
+[snap]   stage 11: 5310 frames
+[snap]   stage 12: 14378 frames
+[snap] dwLocalPlayerController @ 0x00007FF8A1912548 -> 0x000002D93FA9F400 
+[snap] dwLocalPlayerPawn       @ 0x00007FF8A1B091E0 -> 0x000002D957B12200 
+[snap] pawn: vtable=0x00007FF8A9733740 inClient=0 health=729
+[snap] ctrl: vtable=0x00007FF8A0FE1680 inClient=1 m_hPlayerPawn@0x92C = 0x007A01A1 (idx=417)
+[snap] entitySystem @ 0x00007FF8A1AEFBB8 = 0x000002D957469000 highestEntityIndex=211
+[snap] entity resolution: 1/16 of indices 1..16 valid
+[snap] ctrl->pawn handle resolve: 0x007A01A1 -> 0x000002D9A8D85000
+[snap] ----------------------------------------
+[apply] tick pawn=0x000002D9A8D85000
+[apply] active 0x000002D9C226E000
+[pw] weapon 0x000002D9C226E000 def=32
+[armory-apply] no unique Armory target for live weapon def=32
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000002D9A8D85000
+[apply] active 0x000002D9C226E000
+[pw] weapon 0x000002D9C226E000 def=32
+[armory-apply] no unique Armory target for live weapon def=32
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000002D9A8D85000
+[apply] active 0x000002D9C226E000
+[pw] weapon 0x000002D9C226E000 def=32
+[armory-apply] no unique Armory target for live weapon def=32
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000002D9A8D85000
+[apply] active 0x000002D9C226E000
+[pw] weapon 0x000002D9C226E000 def=32
+[armory-apply] no unique Armory target for live weapon def=32
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000002D9A8D85000
+[apply] active 0x000002D9C226E000
+[pw] weapon 0x000002D9C226E000 def=32
+[armory-apply] no unique Armory target for live weapon def=32
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000002D9A8D85000
+[apply] active 0x000002D9C226E000
+[pw] weapon 0x000002D9C226E000 def=32
+[armory-apply] no unique Armory target for live weapon def=32
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000002D9A8D85000
+[apply] active 0x000002D9C226E000
+[pw] weapon 0x000002D9C226E000 def=32
+[armory-apply] no unique Armory target for live weapon def=32
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000002D9A8D85000
+[apply] active 0x000002D9C226E000
+[pw] weapon 0x000002D9C226E000 def=32
+[armory-apply] no unique Armory target for live weapon def=32
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000002D9A8D85000
+[apply] active 0x000002D9C226E000
+[pw] weapon 0x000002D9C226E000 def=32
+[armory-apply] no unique Armory target for live weapon def=32
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000002D9A8D85000
+[apply] active 0x000002D9C226E000
+[pw] weapon 0x000002D9C226E000 def=32
+[armory-apply] no unique Armory target for live weapon def=32
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000002D9A8D85000
+[apply] active 0x000002D9C226E000
+[pw] weapon 0x000002D9C226E000 def=32
+[armory-apply] no unique Armory target for live weapon def=32
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000002D9A8D85000
+[apply] active 0x000002D9C226E000
+[pw] weapon 0x000002D9C226E000 def=32
+[armory-apply] no unique Armory target for live weapon def=32
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000002D9A8D85000
+[apply] active 0x000002D9C226E000
+[pw] weapon 0x000002D9C226E000 def=32
+[armory-apply] no unique Armory target for live weapon def=32
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000002D9A8D85000
+[apply] active 0x000002D9C226E000
+[pw] weapon 0x000002D9C226E000 def=32
+[armory-apply] no unique Armory target for live weapon def=32
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000002D9A8D85000
+[apply] active 0x000002D9C226E000
+[pw] weapon 0x000002D9C226E000 def=32
+[armory-apply] no unique Armory target for live weapon def=32
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000002D9A8D85000
+[apply] active 0x000002D9C226E000
+[pw] weapon 0x000002D9C226E000 def=32
+[armory-apply] no unique Armory target for live weapon def=32
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000002D9A8D85000
+[apply] active 0x000002D9C226E000
+[pw] weapon 0x000002D9C226E000 def=32
+[armory-apply] no unique Armory target for live weapon def=32
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000002D9A8D85000
+[apply] active 0x000002D9C226E000
+[pw] weapon 0x000002D9C226E000 def=32
+[armory-apply] no unique Armory target for live weapon def=32
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000002D9A8D85000
+[apply] active 0x000002D9C226E000
+[pw] weapon 0x000002D9C226E000 def=32
+[armory-apply] no unique Armory target for live weapon def=32
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000002D9A8D85000
+[apply] active 0x000002D9C226E000
+[pw] weapon 0x000002D9C226E000 def=32
+[armory-apply] no unique Armory target for live weapon def=32
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+
+=== SNAPSHOT ===
+[snap] fsnCount=79187 lastStage=7 stage5Count=5245
+[snap] stage histogram:
+[snap]   stage  0: 15852 frames
+[snap]   stage  1: 5327 frames
+[snap]   stage  2: 5327 frames
+[snap]   stage  3: 5322 frames
+[snap]   stage  4: 1 frames
+[snap]   stage  5: 5245 frames
+[snap]   stage  6: 5245 frames
+[snap]   stage  7: 5245 frames
+[snap]   stage  8: 5244 frames
+[snap]   stage 10: 5245 frames
+[snap]   stage 11: 5630 frames
+[snap]   stage 12: 15504 frames
+[snap] dwLocalPlayerController @ 0x00007FF8A1912548 -> 0x000002D93FA9F400 
+[snap] dwLocalPlayerPawn       @ 0x00007FF8A1B091E0 -> 0x000002D957B12200 
+[snap] pawn: vtable=0x00007FF8A9733740 inClient=0 health=729
+[snap] ctrl: vtable=0x00007FF8A0FE1680 inClient=1 m_hPlayerPawn@0x92C = 0x007A01A1 (idx=417)
+[snap] entitySystem @ 0x00007FF8A1AEFBB8 = 0x000002D957469000 highestEntityIndex=211
+[snap] entity resolution: 1/16 of indices 1..16 valid
+[snap] ctrl->pawn handle resolve: 0x007A01A1 -> 0x000002D9A8D85000
+[snap] ----------------------------------------
+N1SSAN_STATUS|1|2026-11-07T05:44:25Z|7856|armory-obsidian-3.0|READY|reason=runtime_worker_heartbeat
+[status-write] begin state=READY path=C:\Users\mirac\AppData\Local\n1ssan\status\cs2-7856.status
+[status-write] success state=READY error=0
+[apply] tick pawn=0x000002D9A8D85000
+[apply] active 0x000002D9C226E000
+[pw] weapon 0x000002D9C226E000 def=32
+[armory-apply] no unique Armory target for live weapon def=32
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000002D9A8D85000
+[apply] active 0x000002D9C226E000
+[pw] weapon 0x000002D9C226E000 def=32
+[armory-apply] no unique Armory target for live weapon def=32
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000002D9A8D85000
+[apply] active 0x000002D9C226E000
+[pw] weapon 0x000002D9C226E000 def=32
+[armory-apply] no unique Armory target for live weapon def=32
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000002D9A8D85000
+[apply] active 0x000002D9C226E000
+[pw] weapon 0x000002D9C226E000 def=32
+[armory-apply] no unique Armory target for live weapon def=32
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000002D9A8D85000
+[apply] active 0x000002D9C226E000
+[pw] weapon 0x000002D9C226E000 def=32
+[armory-apply] no unique Armory target for live weapon def=32
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000002D9A8D85000
+[apply] active 0x000002D9C226E000
+[pw] weapon 0x000002D9C226E000 def=32
+[armory-apply] no unique Armory target for live weapon def=32
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000002D9A8D85000
+[apply] active 0x000002D9C226E000
+[pw] weapon 0x000002D9C226E000 def=32
+[armory-apply] no unique Armory target for live weapon def=32
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000002D9A8D85000
+[apply] active 0x000002D9C226E000
+[pw] weapon 0x000002D9C226E000 def=32
+[armory-apply] no unique Armory target for live weapon def=32
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000002D9A8D85000
+[apply] active 0x000002D9C226E000
+[pw] weapon 0x000002D9C226E000 def=32
+[armory-apply] no unique Armory target for live weapon def=32
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000002D9A8D85000
+[apply] active 0x000002D9C226E000
+[pw] weapon 0x000002D9C226E000 def=32
+[armory-apply] no unique Armory target for live weapon def=32
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000002D9A8D85000
+[apply] active 0x000002D9C226E000
+[pw] weapon 0x000002D9C226E000 def=32
+[armory-apply] no unique Armory target for live weapon def=32
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000002D9A8D85000
+[apply] active 0x000002D9C226E000
+[pw] weapon 0x000002D9C226E000 def=32
+[armory-apply] no unique Armory target for live weapon def=32
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000002D9A8D85000
+[apply] active 0x000002D9C226E000
+[pw] weapon 0x000002D9C226E000 def=32
+[armory-apply] no unique Armory target for live weapon def=32
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000002D9A8D85000
+[apply] active 0x000002D9C226E000
+[pw] weapon 0x000002D9C226E000 def=32
+[armory-apply] no unique Armory target for live weapon def=32
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000002D9A8D85000
+[apply] active 0x000002D9C226E000
+[pw] weapon 0x000002D9C226E000 def=32
+[armory-apply] no unique Armory target for live weapon def=32
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000002D9A8D85000
+[apply] active 0x000002D9C226E000
+[pw] weapon 0x000002D9C226E000 def=32
+[armory-apply] no unique Armory target for live weapon def=32
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000002D9A8D85000
+[apply] active 0x000002D9C226E000
+[pw] weapon 0x000002D9C226E000 def=32
+[armory-apply] no unique Armory target for live weapon def=32
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000002D9A8D85000
+[apply] active 0x000002D9C226E000
+[pw] weapon 0x000002D9C226E000 def=32
+[armory-apply] no unique Armory target for live weapon def=32
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000002D9A8D85000
+[apply] active 0x000002D9C226E000
+[pw] weapon 0x000002D9C226E000 def=32
+[armory-apply] no unique Armory target for live weapon def=32
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+
+=== SNAPSHOT ===
+[snap] fsnCount=84661 lastStage=0 stage5Count=5563
+[snap] stage histogram:
+[snap]   stage  0: 17157 frames
+[snap]   stage  1: 5645 frames
+[snap]   stage  2: 5645 frames
+[snap]   stage  3: 5641 frames
+[snap]   stage  4: 1 frames
+[snap]   stage  5: 5563 frames
+[snap]   stage  6: 5563 frames
+[snap]   stage  7: 5563 frames
+[snap]   stage  8: 5563 frames
+[snap]   stage 10: 5563 frames
+[snap]   stage 11: 5950 frames
+[snap]   stage 12: 16807 frames
+[snap] dwLocalPlayerController @ 0x00007FF8A1912548 -> 0x000002D93FA9F400 
+[snap] dwLocalPlayerPawn       @ 0x00007FF8A1B091E0 -> 0x000002D957B12200 
+[snap] pawn: vtable=0x00007FF8A9733740 inClient=0 health=729
+[snap] ctrl: vtable=0x00007FF8A0FE1680 inClient=1 m_hPlayerPawn@0x92C = 0x007A01A1 (idx=417)
+[snap] entitySystem @ 0x00007FF8A1AEFBB8 = 0x000002D957469000 highestEntityIndex=211
+[snap] entity resolution: 1/16 of indices 1..16 valid
+[snap] ctrl->pawn handle resolve: 0x007A01A1 -> 0x000002D9A8D85000
+[snap] ----------------------------------------
+[apply] tick pawn=0x000002D9A8D85000
+[apply] active 0x000002D9C226E000
+[pw] weapon 0x000002D9C226E000 def=32
+[armory-apply] no unique Armory target for live weapon def=32
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000002D9A8D85000
+[apply] active 0x000002D9C226E000
+[pw] weapon 0x000002D9C226E000 def=32
+[armory-apply] no unique Armory target for live weapon def=32
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000002D9A8D85000
+[apply] active 0x000002D9C226E000
+[pw] weapon 0x000002D9C226E000 def=32
+[armory-apply] no unique Armory target for live weapon def=32
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000002D9A8D85000
+[apply] active 0x000002D9C226E000
+[pw] weapon 0x000002D9C226E000 def=32
+[armory-apply] no unique Armory target for live weapon def=32
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000002D9A8D85000
+[apply] active 0x000002D9C226E000
+[pw] weapon 0x000002D9C226E000 def=32
+[armory-apply] no unique Armory target for live weapon def=32
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000002D9A8D85000
+[apply] active 0x000002D9C226E000
+[pw] weapon 0x000002D9C226E000 def=32
+[armory-apply] no unique Armory target for live weapon def=32
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000002D9A8D85000
+[apply] active 0x000002D9C226E000
+[pw] weapon 0x000002D9C226E000 def=32
+[armory-apply] no unique Armory target for live weapon def=32
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000002D9A8D85000
+[apply] active 0x000002D9C226E000
+[pw] weapon 0x000002D9C226E000 def=32
+[armory-apply] no unique Armory target for live weapon def=32
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000002D9A8D85000
+[apply] active 0x000002D9C226E000
+[pw] weapon 0x000002D9C226E000 def=32
+[armory-apply] no unique Armory target for live weapon def=32
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000002D9A8D85000
+[apply] active 0x000002D9C226E000
+[pw] weapon 0x000002D9C226E000 def=32
+[armory-apply] no unique Armory target for live weapon def=32
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000002D9A8D85000
+[apply] active 0x000002D9C226E000
+[pw] weapon 0x000002D9C226E000 def=32
+[armory-apply] no unique Armory target for live weapon def=32
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000002D9A8D85000
+[apply] active 0x000002D9C226E000
+[pw] weapon 0x000002D9C226E000 def=32
+[armory-apply] no unique Armory target for live weapon def=32
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000002D9A8D85000
+[apply] active 0x000002D9C226E000
+[pw] weapon 0x000002D9C226E000 def=32
+[armory-apply] no unique Armory target for live weapon def=32
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000002D9A8D85000
+[apply] active 0x000002D9C226E000
+[pw] weapon 0x000002D9C226E000 def=32
+[armory-apply] no unique Armory target for live weapon def=32
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000002D9A8D85000
+[apply] active 0x000002D9C226E000
+[pw] weapon 0x000002D9C226E000 def=32
+[armory-apply] no unique Armory target for live weapon def=32
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000002D9A8D85000
+[apply] active 0x000002D9C226E000
+[pw] weapon 0x000002D9C226E000 def=32
+[armory-apply] no unique Armory target for live weapon def=32
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000002D9A8D85000
+[apply] active 0x000002D9C226E000
+[pw] weapon 0x000002D9C226E000 def=32
+[armory-apply] no unique Armory target for live weapon def=32
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000002D9A8D85000
+[apply] active 0x000002D9C226E000
+[pw] weapon 0x000002D9C226E000 def=32
+[armory-apply] no unique Armory target for live weapon def=32
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000002D9A8D85000
+[apply] active 0x000002D9C226E000
+[pw] weapon 0x000002D9C226E000 def=32
+[armory-apply] no unique Armory target for live weapon def=32
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+
+=== SNAPSHOT ===
+[snap] fsnCount=90387 lastStage=12 stage5Count=5882
+[snap] stage histogram:
+[snap]   stage  0: 18584 frames
+[snap]   stage  1: 5964 frames
+[snap]   stage  2: 5964 frames
+[snap]   stage  3: 5960 frames
+[snap]   stage  4: 1 frames
+[snap]   stage  5: 5882 frames
+[snap]   stage  6: 5882 frames
+[snap]   stage  7: 5882 frames
+[snap]   stage  8: 5882 frames
+[snap]   stage 10: 5882 frames
+[snap]   stage 11: 6270 frames
+[snap]   stage 12: 18234 frames
+[snap] dwLocalPlayerController @ 0x00007FF8A1912548 -> 0x000002D93FA9F400 
+[snap] dwLocalPlayerPawn       @ 0x00007FF8A1B091E0 -> 0x000002D957B12200 
+[snap] pawn: vtable=0x00007FF8A9733740 inClient=0 health=729
+[snap] ctrl: vtable=0x00007FF8A0FE1680 inClient=1 m_hPlayerPawn@0x92C = 0x007A01A1 (idx=417)
+[snap] entitySystem @ 0x00007FF8A1AEFBB8 = 0x000002D957469000 highestEntityIndex=211
+[snap] entity resolution: 1/16 of indices 1..16 valid
+[snap] ctrl->pawn handle resolve: 0x007A01A1 -> 0x000002D9A8D85000
+[snap] ----------------------------------------
+[apply] tick pawn=0x000002D9A8D85000
+[apply] active 0x000002D9C226E000
+[pw] weapon 0x000002D9C226E000 def=32
+[armory-apply] no unique Armory target for live weapon def=32
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+N1SSAN_STATUS|1|2026-11-07T05:44:35Z|7856|armory-obsidian-3.0|READY|reason=runtime_worker_heartbeat
+[status-write] begin state=READY path=C:\Users\mirac\AppData\Local\n1ssan\status\cs2-7856.status
+[status-write] success state=READY error=0
+[apply] tick pawn=0x000002D9A8D85000
+[apply] active 0x000002D9C226E000
+[pw] weapon 0x000002D9C226E000 def=32
+[armory-apply] no unique Armory target for live weapon def=32
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000002D9A8D85000
+[apply] active 0x000002D9C226E000
+[pw] weapon 0x000002D9C226E000 def=32
+[armory-apply] no unique Armory target for live weapon def=32
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000002D9A8D85000
+[apply] active 0x000002D9C226E000
+[pw] weapon 0x000002D9C226E000 def=32
+[armory-apply] no unique Armory target for live weapon def=32
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000002D9A8D85000
+[apply] active 0x000002D9C226E000
+[pw] weapon 0x000002D9C226E000 def=32
+[armory-apply] no unique Armory target for live weapon def=32
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000002D9A8D85000
+[apply] active 0x000002D9C226E000
+[pw] weapon 0x000002D9C226E000 def=32
+[armory-apply] no unique Armory target for live weapon def=32
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000002D9A8D85000
+[apply] active 0x000002D9C226E000
+[pw] weapon 0x000002D9C226E000 def=32
+[armory-apply] no unique Armory target for live weapon def=32
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000002D9A8D85000
+[apply] active 0x000002D9C226E000
+[pw] weapon 0x000002D9C226E000 def=32
+[armory-apply] no unique Armory target for live weapon def=32
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000002D9A8D85000
+[apply] active 0x000002D9C226E000
+[pw] weapon 0x000002D9C226E000 def=32
+[armory-apply] no unique Armory target for live weapon def=32
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000002D9A8D85000
+[apply] active 0x000002D9C226E000
+[pw] weapon 0x000002D9C226E000 def=32
+[armory-apply] no unique Armory target for live weapon def=32
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000002D9A8D85000
+[apply] active 0x000002D9C226E000
+[pw] weapon 0x000002D9C226E000 def=32
+[armory-apply] no unique Armory target for live weapon def=32
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000002D9A8D85000
+[apply] active 0x000002D9C226E000
+[pw] weapon 0x000002D9C226E000 def=32
+[armory-apply] no unique Armory target for live weapon def=32
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000002D9A8D85000
+[apply] active 0x000002D9C226E000
+[pw] weapon 0x000002D9C226E000 def=32
+[armory-apply] no unique Armory target for live weapon def=32
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000002D9A8D85000
+[apply] active 0x000002D9C226E000
+[pw] weapon 0x000002D9C226E000 def=32
+[armory-apply] no unique Armory target for live weapon def=32
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000002D9A8D85000
+[apply] active 0x000002D9C226E000
+[pw] weapon 0x000002D9C226E000 def=32
+[armory-apply] no unique Armory target for live weapon def=32
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000002D9A8D85000
+[apply] active 0x000002D9C226E000
+[pw] weapon 0x000002D9C226E000 def=32
+[armory-apply] no unique Armory target for live weapon def=32
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000002D9A8D85000
+[apply] active 0x000002D9C226E000
+[pw] weapon 0x000002D9C226E000 def=32
+[armory-apply] no unique Armory target for live weapon def=32
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000002D9A8D85000
+[apply] active 0x000002D9C226E000
+[pw] weapon 0x000002D9C226E000 def=32
+[armory-apply] no unique Armory target for live weapon def=32
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000002D9A8D85000
+[apply] active 0x000002D9C226E000
+[pw] weapon 0x000002D9C226E000 def=32
+[armory-apply] no unique Armory target for live weapon def=32
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000002D9A8D85000
+[apply] active 0x000002D9C226E000
+[pw] weapon 0x000002D9C226E000 def=32
+[armory-apply] no unique Armory target for live weapon def=32
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+
+=== SNAPSHOT ===
+[snap] fsnCount=95625 lastStage=0 stage5Count=6201
+[snap] stage histogram:
+[snap]   stage  0: 19768 frames
+[snap]   stage  1: 6283 frames
+[snap]   stage  2: 6283 frames
+[snap]   stage  3: 6279 frames
+[snap]   stage  4: 1 frames
+[snap]   stage  5: 6201 frames
+[snap]   stage  6: 6201 frames
+[snap]   stage  7: 6201 frames
+[snap]   stage  8: 6201 frames
+[snap]   stage 10: 6201 frames
+[snap]   stage 11: 6590 frames
+[snap]   stage 12: 19416 frames
+[snap] dwLocalPlayerController @ 0x00007FF8A1912548 -> 0x000002D93FA9F400 
+[snap] dwLocalPlayerPawn       @ 0x00007FF8A1B091E0 -> 0x000002D957B12200 
+[snap] pawn: vtable=0x00007FF8A9733740 inClient=0 health=729
+[snap] ctrl: vtable=0x00007FF8A0FE1680 inClient=1 m_hPlayerPawn@0x92C = 0x007A01A1 (idx=417)
+[snap] entitySystem @ 0x00007FF8A1AEFBB8 = 0x000002D957469000 highestEntityIndex=211
+[snap] entity resolution: 1/16 of indices 1..16 valid
+[snap] ctrl->pawn handle resolve: 0x007A01A1 -> 0x000002D9A8D85000
+[snap] ----------------------------------------
+[apply] tick pawn=0x000002D9A8D85000
+[apply] active 0x000002D9C226E000
+[pw] weapon 0x000002D9C226E000 def=32
+[armory-apply] no unique Armory target for live weapon def=32
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000002D9A8D85000
+[apply] active 0x000002D9C226E000
+[pw] weapon 0x000002D9C226E000 def=32
+[armory-apply] no unique Armory target for live weapon def=32
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000002D9A8D85000
+[apply] active 0x000002D9C226E000
+[pw] weapon 0x000002D9C226E000 def=32
+[armory-apply] no unique Armory target for live weapon def=32
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000002D9A8D85000
+[apply] active 0x000002D9C226E000
+[pw] weapon 0x000002D9C226E000 def=32
+[armory-apply] no unique Armory target for live weapon def=32
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000002D9A8D85000
+[apply] active 0x000002D9C226E000
+[pw] weapon 0x000002D9C226E000 def=32
+[armory-apply] no unique Armory target for live weapon def=32
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000002D9A8D85000
+[apply] active 0x000002D9C226E000
+[pw] weapon 0x000002D9C226E000 def=32
+[armory-apply] no unique Armory target for live weapon def=32
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000002D9A8D85000
+[apply] active 0x000002D9C226E000
+[pw] weapon 0x000002D9C226E000 def=32
+[armory-apply] no unique Armory target for live weapon def=32
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000002D9A8D85000
+[apply] active 0x000002D9C226E000
+[pw] weapon 0x000002D9C226E000 def=32
+[armory-apply] no unique Armory target for live weapon def=32
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000002D9A8D85000
+[apply] active 0x000002D9C226E000
+[pw] weapon 0x000002D9C226E000 def=32
+[armory-apply] no unique Armory target for live weapon def=32
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000002D9A8D85000
+[apply] active 0x000002D9C226E000
+[pw] weapon 0x000002D9C226E000 def=32
+[armory-apply] no unique Armory target for live weapon def=32
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
