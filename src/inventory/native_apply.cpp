@@ -1106,7 +1106,7 @@ namespace NativeApply
                     static_cast<unsigned long long>(job.toolId), toolRemoved ? "SUCCESS" : "FAILED");
                 if (toolRemoved) RememberConsumed(job.toolId);
                 Attachments::RecordApplied(
-                    job.targetId, job.toolInstanceId, false, slot, toolRemoved);
+                    job.targetId, next, job.toolInstanceId, false, slot, toolRemoved);
             }
 
             const bool notified = written &&
@@ -1160,7 +1160,7 @@ namespace NativeApply
                     static_cast<unsigned long long>(job.toolId), toolRemoved ? "SUCCESS" : "FAILED");
                 if (toolRemoved) RememberConsumed(job.toolId);
                 Attachments::RecordApplied(
-                    job.targetId, job.toolInstanceId, true, -1, toolRemoved);
+                    job.targetId, next, job.toolInstanceId, true, -1, toolRemoved);
             }
 
             const bool notified = written &&
