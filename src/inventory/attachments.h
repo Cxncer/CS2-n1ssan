@@ -65,6 +65,7 @@ namespace Attachments
     // attribute list could not be read at all; `out` is then fully cleared and
     // the caller must treat the read as inconclusive.
     bool Read(void* econItem, Set& out);
+    bool ReadStickerSlotsViaItemView(std::uint64_t itemId, Set& out);
 
     // Appends `set`'s attributes into a freshly allocated attribute array.
     // Used when a weapon view's attribute list is built from scratch.
