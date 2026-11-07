@@ -84,4 +84,13 @@ namespace Attachments
     // changed in game has settled, queues it for the Bridge to persist. Called
     // on the game thread while the inventory is open; Armory mode only.
     void ObserveAndPersist();
+
+    // Immediately persist an attachment applied through CS2's UseTool flow.
+    // This avoids relying on the observer having captured a pre-apply baseline.
+    void RecordApplied(
+        std::uint64_t itemId,
+        const char* sourceToolInstanceId,
+        bool charm,
+        int stickerSlot,
+        bool sourceToolConsumed);
 }
