@@ -6,6 +6,8 @@
 #include "sdk/item_view.h"
 #include "config/offsets.h"
 #include "inventory/loadout.h"
+#include "inventory/armory_inventory.h"
+#include "inventory/runtime_mode.h"
 #include "memory/access.h"
 #include "diagnostics/log.h"
 
@@ -62,12 +64,19 @@ bool ProcessWeapon(uintptr_t weaponEnt, uintptr_t pawn)
     if (IsKnifeDefinition(def)) {
         TargetSkin kt;
         bool kfound = false;
-        for (auto& [k, tgt] : g_targets) {
-            if (tgt.slot == "knife" &&
-                ((tgt.team == "T" && team == 2) || (tgt.team == "CT" && team == 3))) {
-                kt = tgt;
-                kfound = true;
-                break;
+        if (RuntimeModeState::Current() == RuntimeMode::Armory)
+        {
+            kfound = ArmoryInventory::GetEquippedKnifeTarget(teamStr, kt);
+        }
+        else
+        {
+            for (auto& [k, tgt] : g_targets) {
+                if (tgt.slot == "knife" &&
+                    ((tgt.team == "T" && team == 2) || (tgt.team == "CT" && team == 3))) {
+                    kt = tgt;
+                    kfound = true;
+                    break;
+                }
             }
         }
         if (kfound)
@@ -92,11 +101,19 @@ bool ProcessWeapon(uintptr_t weaponEnt, uintptr_t pawn)
     TargetSkin t;
     bool found = false;
 
-    auto it = g_targets.find(TargetKey(def, teamStr));
-    if (it != g_targets.end()) { t = it->second; found = true; Log("[pw] matched team '%s'", teamStr); }
-    else {
-        auto itAny = g_targets.find(TargetKey(def, ""));
-        if (itAny != g_targets.end()) { t = itAny->second; found = true; Log("[pw] matched any-team"); }
+    if (RuntimeModeState::Current() == RuntimeMode::Armory)
+    {
+        found = ArmoryInventory::GetEquippedTarget(def, teamStr, t);
+        if (found) Log("[pw] matched equipped Armory item for team '%s'", teamStr);
+    }
+    else
+    {
+        auto it = g_targets.find(TargetKey(def, teamStr));
+        if (it != g_targets.end()) { t = it->second; found = true; Log("[pw] matched team '%s'", teamStr); }
+        else {
+            auto itAny = g_targets.find(TargetKey(def, ""));
+            if (itAny != g_targets.end()) { t = itAny->second; found = true; Log("[pw] matched any-team"); }
+        }
     }
 
     if (!found)
