@@ -24,6 +24,7 @@
 // position in the game's own UI. Nothing here starts an apply of its own.
 
 #include "inventory/native_apply.h"
+#include "inventory/hde64.h"
 
 #include "diagnostics/log.h"
 #include "hooks/minhook_dynamic.h"
@@ -391,300 +392,37 @@ namespace NativeApply
         bool Decode(const uint8_t* code, size_t available, Decoded& out)
         {
             out = Decoded{};
-            unsigned at = 0;
-            bool operand16 = false;
 
-            const auto need = [&](unsigned count) { return at + count <= available; };
-
-            for (unsigned i = 0; i < 9; ++i)
-            {
-                if (!need(1))
-                    return false;
-
-                const uint8_t b = code[at];
-
-                if (b == 0x66) { operand16 = true; ++at; continue; }
-                if (b == 0x67) { ++at; continue; }
-                if (b == 0xF0 || b == 0xF2 || b == 0xF3) { ++at; continue; }
-                if (b == 0x2E || b == 0x36 || b == 0x3E || b == 0x26 ||
-                    b == 0x64 || b == 0x65) { ++at; continue; }
-                if (b >= 0x40 && b <= 0x4F)
-                {
-                    out.rexW = (b & 0x08) != 0;
-                    out.rexB = (b & 0x01) != 0;
-                    ++at;
-                    continue;
-                }
-                break;
-            }
-
-            const auto modrm = [&]() -> bool
-            {
-                if (!need(1))
-                    return false;
-
-                const uint8_t byte = code[at++];
-                out.hasModrm = true;
-                out.mod = static_cast<uint8_t>(byte >> 6);
-                out.reg = static_cast<uint8_t>((byte >> 3) & 7);
-                out.rm = static_cast<uint8_t>(byte & 7);
-
-                if (out.mod == 3)
-                    return true;
-
-                uint8_t base = out.rm;
-
-                if (out.rm == 4)
-                {
-                    if (!need(1))
-                        return false;
-                    base = static_cast<uint8_t>(code[at++] & 7);
-                }
-
-                if (out.mod == 0)
-                {
-                    if (out.rm == 5)                 // rip-relative
-                    {
-                        if (!need(4))
-                            return false;
-                        std::memcpy(&out.disp32, code + at, sizeof(out.disp32));
-                        out.hasDisp32 = true;
-                        out.ripRelative = true;
-                        at += 4;
-                        return true;
-                    }
-
-                    if (out.rm == 4 && base == 5)    // absolute
-                    {
-                        if (!need(4))
-                            return false;
-                        std::memcpy(&out.disp32, code + at, sizeof(out.disp32));
-                        out.hasDisp32 = true;
-                        at += 4;
-                    }
-
-                    return true;
-                }
-
-                if (out.mod == 1)
-                {
-                    if (!need(1))
-                        return false;
-                    at += 1;
-                    return true;
-                }
-
-                if (!need(4))
-                    return false;
-                std::memcpy(&out.disp32, code + at, sizeof(out.disp32));
-                out.hasDisp32 = true;
-                at += 4;
-                return true;
-            };
-
-            if (!need(1))
+            // HDE64 is the same instruction-length decoder used by Lootline's
+            // working notification resolver. It understands the full x64
+            // instruction set encountered in current CS2 reply handlers.
+            // HDE may inspect up to 15 bytes, so never call it near the scan
+            // window boundary without a complete instruction buffer.
+            if (!code || available < 15)
                 return false;
 
-            out.opcode = code[at++];
-
-            bool twoByte = false;
-
-            if (out.opcode == 0x0F)
-            {
-                if (!need(1))
-                    return false;
-                out.opcode2 = code[at++];
-                twoByte = true;
-            }
-
-            bool needsModrm = false;
-            unsigned immediate = 0;
-
-            if (twoByte)
-            {
-                const uint8_t op2 = out.opcode2;
-
-                if (op2 >= 0x80 && op2 <= 0x8F)
-                {
-                    immediate = 4;                              // jcc rel32
-                }
-                else if (op2 == 0x05 || op2 == 0x06 || op2 == 0x07 || op2 == 0x08 ||
-                    op2 == 0x09 || op2 == 0x0B || op2 == 0x0E || op2 == 0x30 ||
-                    op2 == 0x31 || op2 == 0x32 || op2 == 0x33 || op2 == 0x34 ||
-                    op2 == 0x35 || op2 == 0x77 || op2 == 0xA0 || op2 == 0xA1 ||
-                    op2 == 0xA2 || op2 == 0xA8 || op2 == 0xA9 || op2 == 0xAA ||
-                    (op2 >= 0xC8 && op2 <= 0xCF))
-                {
-                }
-                else if (op2 == 0x70 || op2 == 0x71 || op2 == 0x72 || op2 == 0x73 ||
-                    op2 == 0x38 || op2 == 0x3A || op2 == 0xA4 || op2 == 0xAC ||
-                    op2 == 0xBA || op2 == 0xC2 || op2 == 0xC4 || op2 == 0xC5 ||
-                    op2 == 0xC6)
-                {
-                    needsModrm = true;
-                    immediate = 1;
-                }
-                else
-                {
-                    needsModrm = true;
-                }
-            }
-            else if (out.opcode < 0x40)
-            {
-                const uint8_t low = static_cast<uint8_t>(out.opcode & 7);
-
-                if (low == 6 || low == 7)
-                    return false;
-
-                needsModrm = true;
-
-                if (low == 4)
-                    immediate = 1;
-                else if (low == 5)
-                    immediate = operand16 ? 2u : 4u;
-            }
-            else if (out.opcode >= 0x50 && out.opcode <= 0x5F) { }
-            else if (out.opcode == 0x62 || out.opcode == 0x63)
-            {
-                needsModrm = true;
-            }
-            else if (out.opcode == 0x68)
-            {
-                immediate = operand16 ? 2u : 4u;
-            }
-            else if (out.opcode == 0x69)
-            {
-                needsModrm = true;
-                immediate = operand16 ? 2u : 4u;
-            }
-            else if (out.opcode == 0x6A)
-            {
-                immediate = 1;
-            }
-            else if (out.opcode == 0x6B)
-            {
-                needsModrm = true;
-                immediate = 1;
-            }
-            else if (out.opcode >= 0x70 && out.opcode <= 0x7F)
-            {
-                immediate = 1;                                   // jcc rel8
-            }
-            else if (out.opcode >= 0x80 && out.opcode <= 0x8F)
-            {
-                needsModrm = true;
-
-                if (out.opcode == 0x81)
-                    immediate = operand16 ? 2u : 4u;
-                else if (out.opcode != 0x8C && out.opcode != 0x8D &&
-                    out.opcode != 0x8E && out.opcode != 0x8F)
-                    immediate = 1;
-            }
-            else if (out.opcode == 0x9A)
-            {
-                return false;
-            }
-            else if (out.opcode < 0xB0)
-            {
-                if (out.opcode >= 0xA0 && out.opcode <= 0xA3)
-                    immediate = out.rexW ? 8u : (operand16 ? 2u : 4u);
-                else if (out.opcode == 0xA8)
-                    immediate = 1;
-                else if (out.opcode == 0xA9)
-                    immediate = operand16 ? 2u : 4u;
-            }
-            else if (out.opcode >= 0xB0 && out.opcode <= 0xB7)
-            {
-                immediate = 1;
-            }
-            else if (out.opcode >= 0xB8 && out.opcode <= 0xBF)
-            {
-                immediate = out.rexW ? 8u : (operand16 ? 2u : 4u);
-            }
-            else if (out.opcode == 0xC0 || out.opcode == 0xC1)
-            {
-                needsModrm = true;
-                immediate = 1;
-            }
-            else if (out.opcode == 0xC2 || out.opcode == 0xCA)
-            {
-                immediate = 2;
-            }
-            else if (out.opcode == 0xC4 || out.opcode == 0xC5 || out.opcode == 0xCE ||
-                out.opcode == 0xD6 || out.opcode == 0xEA)
-            {
-                return false;                                    // VEX / invalid in 64-bit
-            }
-            else if (out.opcode == 0xC6)
-            {
-                needsModrm = true;
-                immediate = 1;
-            }
-            else if (out.opcode == 0xC7)
-            {
-                needsModrm = true;
-                immediate = operand16 ? 2u : 4u;
-            }
-            else if (out.opcode == 0xC8)
-            {
-                immediate = 3;
-            }
-            else if (out.opcode == 0xCD)
-            {
-                immediate = 1;
-            }
-            else if (out.opcode >= 0xD0 && out.opcode <= 0xD3)
-            {
-                needsModrm = true;
-            }
-            else if (out.opcode == 0xD4 || out.opcode == 0xD5)
-            {
-                immediate = 1;
-            }
-            else if (out.opcode >= 0xD8 && out.opcode <= 0xDF)
-            {
-                needsModrm = true;
-            }
-            else if (out.opcode >= 0xE0 && out.opcode <= 0xE7)
-            {
-                immediate = 1;
-            }
-            else if (out.opcode == 0xE8 || out.opcode == 0xE9)
-            {
-                immediate = 4;
-            }
-            else if (out.opcode == 0xEB)
-            {
-                immediate = 1;
-            }
-            else if (out.opcode >= 0xF1 && out.opcode <= 0xFF)
-            {
-                if (out.opcode == 0xF6 || out.opcode == 0xF7 ||
-                    out.opcode == 0xFE || out.opcode == 0xFF)
-                    needsModrm = true;
-            }
-            else
-            {
-                return false;
-            }
-
-            if (needsModrm && !modrm())
+            hde64s instruction{};
+            const unsigned length = hde64_disasm(code, &instruction);
+            if (length == 0 || (instruction.flags & F_ERROR))
                 return false;
 
-            if ((out.opcode == 0xF6 || out.opcode == 0xF7) && out.hasModrm && out.reg < 2)
-                immediate = out.opcode == 0xF6 ? 1u : (operand16 ? 2u : 4u);
+            out.length = length;
+            out.opcode = instruction.opcode;
+            out.opcode2 = instruction.opcode2;
+            out.rexW = instruction.rex_w != 0;
+            out.rexB = instruction.rex_b != 0;
+            out.hasModrm = (instruction.flags & F_MODRM) != 0;
+            out.mod = instruction.modrm_mod;
+            out.reg = instruction.modrm_reg;
+            out.rm = instruction.modrm_rm;
+            out.hasDisp32 = (instruction.flags & F_DISP32) != 0;
+            out.disp32 = static_cast<int32_t>(instruction.disp.disp32);
+            out.ripRelative = out.hasModrm && instruction.modrm_mod == 0 &&
+                instruction.modrm_rm == 5 && (instruction.flags & F_SIB) == 0;
+            if (instruction.flags & F_IMM32)
+                out.imm32 = instruction.imm.imm32;
 
-            if (immediate)
-            {
-                if (!need(immediate))
-                    return false;
-                if (immediate == 4)
-                    std::memcpy(&out.imm32, code + at, sizeof(out.imm32));
-                at += immediate;
-            }
-
-            out.length = at;
-            return out.length > 0;
+            return true;
         }
 
         struct Notifier
