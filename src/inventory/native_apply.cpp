@@ -1037,11 +1037,18 @@ namespace NativeApply
             // The target's own state is the base: an inconclusive read must never
             // replace what the weapon already carries.
             Attachments::Set current;
-            if (!LootSOCache::ReadAttachments(job.targetId, current))
+            const bool completeSnapshot = LootSOCache::ReadAttachments(job.targetId, current);
+            if (!completeSnapshot)
             {
-                Log("[use-tool] sticker %d: %016llX could not be read - not applying",
-                    job.kit, static_cast<unsigned long long>(job.targetId));
-                return false;
+                // Lootline reads occupied sticker slots through CS2's own item-view getters.
+                // Unknown charm data is left untouched by the targeted attachment write.
+                if (!Attachments::ReadStickerSlotsViaItemView(job.targetId, current))
+                {
+                    Log("[use-tool] sticker %d: %016llX could not be read by SOCache or CS2 ItemView - not applying",
+                        job.kit, static_cast<unsigned long long>(job.targetId));
+                    return false;
+                }
+                Log("[use-tool] sticker target read through CS2 ItemView fallback; preserving unobserved attributes");
             }
 
             Attachments::Set next = current;
@@ -1098,9 +1105,9 @@ namespace NativeApply
             Attachments::Set current;
             if (!LootSOCache::ReadAttachments(job.targetId, current))
             {
-                Log("[use-tool] charm %d: %016llX could not be read - not applying",
-                    job.kit, static_cast<unsigned long long>(job.targetId));
-                return false;
+                // Targeted keychain writes do not require reading or replacing sticker data.
+                Log("[use-tool] charm target snapshot unavailable; using Lootline-style targeted keychain write");
+                current = Attachments::Set{};
             }
 
             Attachments::Set next = current;
@@ -1112,10 +1119,12 @@ namespace NativeApply
             charm.y = job.placed ? job.y : 0.0f;
             charm.z = job.placed ? job.z : 0.0f;
 
-            // A charm replacing one that carried a Sticker Slab's sticker or a
-            // highlight clip drops them (0 = none).
-            if (charm.hasSticker) charm.sticker = 0;
-            if (charm.hasHighlight) charm.highlight = 0;
+            // Lootline writes these fields on every charm apply; zero clears any old
+            // Sticker Slab sticker or highlight clip when a charm is replaced.
+            charm.hasSticker = true;
+            charm.sticker = 0;
+            charm.hasHighlight = true;
+            charm.highlight = 0;
 
             const bool written = LootSOCache::SyncAttachments(job.targetId, next);
             bool announced = false;
