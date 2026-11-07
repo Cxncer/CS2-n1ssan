@@ -14,6 +14,7 @@ namespace LootSchema
 
     bool SetAttributeInt(void* econItem, int attrIndex, int32_t value);
     bool SetAttributeFloat(void* econItem, int attrIndex, float value);
+    bool SetAttributeFloatByName(void* econItem, const char* attributeName, float value);
 
     bool IsAttributeUint(int attrIndex);
     uint32_t InventoryOffsetFromUseTool();

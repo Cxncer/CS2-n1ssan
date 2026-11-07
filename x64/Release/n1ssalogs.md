@@ -1,0 +1,5389 @@
+# n1ssan diagnostic log
+
+[build] Operation Armory x Obsidian Build 3.0 | Nov  7 2026 00:05:08
+N1SSAN_STATUS|1|2026-11-06T17:26:42Z|INITIALIZING|reason=worker_started
+[off] PAWN_MyWearables = 0x1268
+[off] field offsets populated
+[auto-off] dwEntityList                 hit 0x00007FF88BD893CB -> rva 0x271FBB8 (val=000004C5F546E000)
+[auto-off] dwLocalPlayerController      hit 0x00007FF88BCA5750 -> rva 0x2542548 (val=000004C683B61400)
+[auto-off] dwLocalPlayerPawn            hit 0x00007FF88B4C1615 -> rva 0x27391E0 (val=000004C5F5A32600)
+[auto-off] summary: matched=3/3
+[off] RVA_ENTITY_LIST           = 0x00007FF88DA8FBB8
+[off] RVA_LOCALPLAYERCONTROLLER = 0x00007FF88D8B2548
+[off] RVA_LOCALPLAYERPAWN       = 0x00007FF88DAA91E0
+[loadout] discovered Bridge data path: E:\Vibe Coding\CS2 Lore\CS2 n1ssan\development\n1ssan-web-bridge\n1ssan-data.json
+[loadout] JSON file found (1557 bytes)
+[loadout] CT/gloves: Driver Gloves (Brocade Crane) pk=1399 def=5031
+[loadout] CT/knife: Bayonet (Fade) pk=38 def=500
+[loadout] CT/weapon: USP-S (Kill Confirmed) pk=504 def=61
+[loadout] T/gloves: Specialist Gloves (Cloud Chaser) pk=1440 def=5034
+[loadout] T/knife: Butterfly Knife (Freehand) pk=581 def=515
+[loadout] T/weapon: P250 (Visions) pk=1153 def=36
+[loadout] 6 items from E:\Vibe Coding\CS2 Lore\CS2 n1ssan\development\n1ssan-web-bridge\n1ssan-data.json
+[schema-live] m_nSubclassID runtime=0x380 hardcoded=0x38C MISMATCH
+[schema-live] subclass resolver ready: 0x380
+[schema-gloves] C_CSPlayerPawn->m_EconGloves = 0x1770
+[schema-gloves] C_CSPlayerPawn->m_bNeedToReApplyGloves = 0x176D
+[schema-gloves] C_EconItemView->m_iItemDefinitionIndex = 0x1BA
+[schema-gloves] C_EconItemView->m_iEntityQuality = 0x1BC
+[schema-gloves] C_EconItemView->m_iItemIDHigh = 0x1D0
+[schema-gloves] C_EconItemView->m_bInitialized = 0x1E8
+[schema-gloves] C_EconItemView->m_bDisallowSOC = 0x1E9
+[schema-gloves] C_EconItemView->m_bRestoreCustomMaterialAfterPrecache = 0x1B8
+[schema-gloves] C_EconItemView->m_AttributeList = 0x208
+[schema-gloves] C_EconItemView->m_NetworkedDynamicAttributes = 0x280
+[schema-gloves] CAttributeList->m_Attributes = 0x8
+[schema-gloves] READY
+[resolve] InvalidateDescription          @ 0x00007FF88C511350
+[resolve] BuildModernSkin                @ 0x00007FF88C1B5B10
+[resolve] SetMeshGroupMask               @ 0x00007FF88BE35A90
+[resolve] RegenerateSkins                @ 0x00007FF88BB9B4B0
+[resolve] ReleaseCompositeMaterials      @ 0x00007FF88C85C4A0
+[resolve] GloveCreatePaintKit            @ 0x00007FF88C5013D0
+[resolve] AgentSetModel                  @ 0x00007FF88BCD5C90
+[resolve] KnifeUpdateSubclass            @ 0x00007FF88B579000
+[resolve] GloveSetBodyGroup              @ 0x00007FF88BCD4BB0
+[resolve] MemAlloc                       @ 0x00007FF904FDDD30
+[resolve] MemFree                        @ 0x00007FF904FDDD70
+[resolve] CSkeletonInstance->m_modelState = 0x140 (hardcoded)
+[resolve] CModelState->m_hModel = 0xA0 (hardcoded)
+[resolve] entityList @ 0x00007FF88DA8FBB8 -> 0x000004C5F546E000
+[glove-paintkit-schema] READY
+[glove-schema] READY
+=== [schema-snapshot] start ===
+[schema-preflight] PASS slot=gloves team=CT weapon=Driver Gloves def=5031 itemName=slick_gloves pk=1399 skin=Brocade Crane
+[schema-preflight] PASS slot=weapon team=T weapon=P250 def=36 itemName=weapon_p250 pk=1153 skin=Visions
+[schema-preflight] PASS slot=knife team=CT weapon=Bayonet def=500 itemName=weapon_bayonet pk=38 skin=Fade
+[schema-preflight] PASS slot=weapon team=CT weapon=USP-S def=61 itemName=weapon_usp_silencer pk=504 skin=Kill Confirmed
+[schema-preflight] PASS slot=gloves team=T weapon=Specialist Gloves def=5034 itemName=specialist_gloves pk=1440 skin=Cloud Chaser
+[schema-preflight] PASS slot=knife team=T weapon=Butterfly Knife def=515 itemName=weapon_knife_butterfly pk=581 skin=Freehand
+[schema-preflight] checked=6 targets=6 result=PASS
+[schema-snapshot] itemDefinitions=2059 livePaintKits=1481 paintKitDefinitions=1481 stickerKits=11789 keychains=143
+[schema-snapshot] items_game=loaded paintMap=available offset=0x2A0
+[schema-snapshot] compatibility=available items=85 pairs=125800 compatible=2128
+[schema-snapshot] snapshot written: E:\Vibe Coding\CS2 Lore\CS2 n1ssan\development\CS2-n1ssan\x64\Release\n1ssan-cs2-schema.json
+[schema-preflight] result=PASS
+=== [schema-snapshot] done ===
+[plan-a] CEconItemSystem* = 0x000004C567B32FB0 (stored)
+[loot-schema] GetAttributeDefinitionByName @ 0x00007FF88C4A30F0
+[loot-schema] OK (invOffset=0x528D0, setUint=00007FF88C458E70, setFloat=00007FF88C459080)
+[plan-a] ready, will inject on first stage-6
+[loot-schema] attr 'set item texture prefab' (idx 6) -> 0x000004C659D7E500
+[loot-schema] attr 'set item texture seed' (idx 7) -> 0x000004C659D7E5A0
+[loot-schema] attr 'set item texture wear' (idx 8) -> 0x000004C659D7E640
+[plan-a] inject: created=6 existed=0 failed=0
+[knife-anim] initialized (State=0x19A8 Action=0xC0 Reset=0xD8 Extra=0x270)
+[knife-anim] KnifeInspect @ 0x00007FF88BB89F50 HOOKED
+[knife-anim] KnifeReflect pattern not found
+[fsn] pClient=0x00007FF88D8D4620 vtable=0x00007FF88CFD8230 fn=0x00007FF88BEDEFE0 slot=36
+[fsn] hooked (vtable overwrite)
+N1SSAN_STATUS|1|2026-11-06T17:26:46Z|CHECKS_PASSED|reason=required_initialization_checks_passed
+[diagnostic] targets=6
+[fsn] first stage call seen
+
+=== SNAPSHOT ===
+[snap] fsnCount=1 lastStage=0 stage5Count=0
+[snap] stage histogram:
+[snap]   stage  0: 1 frames
+[snap] dwLocalPlayerController @ 0x00007FF88D8B2548 -> 0x000004C683B61400 
+[snap] dwLocalPlayerPawn       @ 0x00007FF88DAA91E0 -> 0x000004C5F5A32600 
+[snap] pawn: vtable=0x00007FF8B26C3740 inClient=0 health=1222
+[snap] ctrl: vtable=0x00007FF88CF81680 inClient=1 m_hPlayerPawn@0x92C = 0x01C7800B (idx=11)
+[snap] entitySystem @ 0x00007FF88DA8FBB8 = 0x000004C5F546E000 highestEntityIndex=13
+[snap] entity resolution: 12/16 of indices 1..16 valid
+[snap] ctrl->pawn handle resolve: 0x01C7800B -> 0x000004C683A1E000
+[snap] ----------------------------------------
+[knife-anim] stage=6 reached
+[glove-observe] pawn=000004C683A1E000 reapply=0 changed=0 def=0 init=0 idHigh=0x0
+[apply-cache] weapon model cache invalidated
+[apply-cache] pawn changed: 000004C683A1E000
+[match] FOUND pawn=0x000004C683A1E000 hp=100
+[apply] tick pawn=0x000004C683A1E000
+[apply] wData=0x0000000000000000 count=0
+[apply] activeHandle=0xFFFFFFFF
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[knife-anim] stage=6 reached
+[knife-anim] stage=6 reached
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+
+=== SNAPSHOT ===
+[snap] fsnCount=2569 lastStage=0 stage5Count=214
+[snap] stage histogram:
+[snap]   stage  0: 322 frames
+[snap]   stage  1: 214 frames
+[snap]   stage  2: 214 frames
+[snap]   stage  3: 214 frames
+[snap]   stage  5: 214 frames
+[snap]   stage  6: 214 frames
+[snap]   stage  7: 214 frames
+[snap]   stage  8: 214 frames
+[snap]   stage 10: 214 frames
+[snap]   stage 11: 321 frames
+[snap]   stage 12: 214 frames
+[snap] dwLocalPlayerController @ 0x00007FF88D8B2548 -> 0x000004C683B61400 
+[snap] dwLocalPlayerPawn       @ 0x00007FF88DAA91E0 -> 0x000004C5F5A32600 
+[snap] pawn: vtable=0x00007FF8B26C3740 inClient=0 health=1222
+[snap] ctrl: vtable=0x00007FF88CF81680 inClient=1 m_hPlayerPawn@0x92C = 0x01C7800B (idx=11)
+[snap] entitySystem @ 0x00007FF88DA8FBB8 = 0x000004C5F546E000 highestEntityIndex=13
+[snap] entity resolution: 12/16 of indices 1..16 valid
+[snap] ctrl->pawn handle resolve: 0x01C7800B -> 0x000004C683A1E000
+[snap] ----------------------------------------
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+
+=== SNAPSHOT ===
+[snap] fsnCount=5137 lastStage=0 stage5Count=428
+[snap] stage histogram:
+[snap]   stage  0: 643 frames
+[snap]   stage  1: 428 frames
+[snap]   stage  2: 428 frames
+[snap]   stage  3: 428 frames
+[snap]   stage  5: 428 frames
+[snap]   stage  6: 428 frames
+[snap]   stage  7: 428 frames
+[snap]   stage  8: 428 frames
+[snap]   stage 10: 428 frames
+[snap]   stage 11: 642 frames
+[snap]   stage 12: 428 frames
+[snap] dwLocalPlayerController @ 0x00007FF88D8B2548 -> 0x000004C683B61400 
+[snap] dwLocalPlayerPawn       @ 0x00007FF88DAA91E0 -> 0x000004C5F5A32600 
+[snap] pawn: vtable=0x00007FF8B26C3740 inClient=0 health=1222
+[snap] ctrl: vtable=0x00007FF88CF81680 inClient=1 m_hPlayerPawn@0x92C = 0x01C7800B (idx=11)
+[snap] entitySystem @ 0x00007FF88DA8FBB8 = 0x000004C5F546E000 highestEntityIndex=13
+[snap] entity resolution: 12/16 of indices 1..16 valid
+[snap] ctrl->pawn handle resolve: 0x01C7800B -> 0x000004C683A1E000
+[snap] ----------------------------------------
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+
+=== SNAPSHOT ===
+[snap] fsnCount=7841 lastStage=0 stage5Count=650
+[snap] stage histogram:
+[snap]   stage  0: 996 frames
+[snap]   stage  1: 650 frames
+[snap]   stage  2: 650 frames
+[snap]   stage  3: 650 frames
+[snap]   stage  5: 650 frames
+[snap]   stage  6: 650 frames
+[snap]   stage  7: 650 frames
+[snap]   stage  8: 650 frames
+[snap]   stage 10: 650 frames
+[snap]   stage 11: 962 frames
+[snap]   stage 12: 683 frames
+[snap] dwLocalPlayerController @ 0x00007FF88D8B2548 -> 0x000004C683B61400 
+[snap] dwLocalPlayerPawn       @ 0x00007FF88DAA91E0 -> 0x000004C5F5A32600 
+[snap] pawn: vtable=0x00007FF8B26C3740 inClient=0 health=1222
+[snap] ctrl: vtable=0x00007FF88CF81680 inClient=1 m_hPlayerPawn@0x92C = 0x01C7800B (idx=11)
+[snap] entitySystem @ 0x00007FF88DA8FBB8 = 0x000004C5F546E000 highestEntityIndex=13
+[snap] entity resolution: 12/16 of indices 1..16 valid
+[snap] ctrl->pawn handle resolve: 0x01C7800B -> 0x000004C683A1E000
+[snap] ----------------------------------------
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+
+=== SNAPSHOT ===
+[snap] fsnCount=10382 lastStage=0 stage5Count=861
+[snap] stage histogram:
+[snap]   stage  0: 1317 frames
+[snap]   stage  1: 861 frames
+[snap]   stage  2: 861 frames
+[snap]   stage  3: 861 frames
+[snap]   stage  5: 861 frames
+[snap]   stage  6: 861 frames
+[snap]   stage  7: 861 frames
+[snap]   stage  8: 861 frames
+[snap]   stage 10: 861 frames
+[snap]   stage 11: 1283 frames
+[snap]   stage 12: 894 frames
+[snap] dwLocalPlayerController @ 0x00007FF88D8B2548 -> 0x000004C683B61400 
+[snap] dwLocalPlayerPawn       @ 0x00007FF88DAA91E0 -> 0x000004C5F5A32600 
+[snap] pawn: vtable=0x00007FF8B26C3740 inClient=0 health=1222
+[snap] ctrl: vtable=0x00007FF88CF81680 inClient=1 m_hPlayerPawn@0x92C = 0x01C7800B (idx=11)
+[snap] entitySystem @ 0x00007FF88DA8FBB8 = 0x000004C5F546E000 highestEntityIndex=13
+[snap] entity resolution: 12/16 of indices 1..16 valid
+[snap] ctrl->pawn handle resolve: 0x01C7800B -> 0x000004C683A1E000
+[snap] ----------------------------------------
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+
+=== SNAPSHOT ===
+[snap] fsnCount=12932 lastStage=0 stage5Count=1073
+[snap] stage histogram:
+[snap]   stage  0: 1638 frames
+[snap]   stage  1: 1073 frames
+[snap]   stage  2: 1073 frames
+[snap]   stage  3: 1073 frames
+[snap]   stage  5: 1073 frames
+[snap]   stage  6: 1073 frames
+[snap]   stage  7: 1073 frames
+[snap]   stage  8: 1073 frames
+[snap]   stage 10: 1073 frames
+[snap]   stage 11: 1604 frames
+[snap]   stage 12: 1106 frames
+[snap] dwLocalPlayerController @ 0x00007FF88D8B2548 -> 0x000004C683B61400 
+[snap] dwLocalPlayerPawn       @ 0x00007FF88DAA91E0 -> 0x000004C5F5A32600 
+[snap] pawn: vtable=0x00007FF8B26C3740 inClient=0 health=1222
+[snap] ctrl: vtable=0x00007FF88CF81680 inClient=1 m_hPlayerPawn@0x92C = 0x01C7800B (idx=11)
+[snap] entitySystem @ 0x00007FF88DA8FBB8 = 0x000004C5F546E000 highestEntityIndex=13
+[snap] entity resolution: 12/16 of indices 1..16 valid
+[snap] ctrl->pawn handle resolve: 0x01C7800B -> 0x000004C683A1E000
+[snap] ----------------------------------------
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+
+=== SNAPSHOT ===
+[snap] fsnCount=15498 lastStage=0 stage5Count=1287
+[snap] stage histogram:
+[snap]   stage  0: 1958 frames
+[snap]   stage  1: 1287 frames
+[snap]   stage  2: 1287 frames
+[snap]   stage  3: 1287 frames
+[snap]   stage  5: 1287 frames
+[snap]   stage  6: 1287 frames
+[snap]   stage  7: 1287 frames
+[snap]   stage  8: 1287 frames
+[snap]   stage 10: 1287 frames
+[snap]   stage 11: 1924 frames
+[snap]   stage 12: 1320 frames
+[snap] dwLocalPlayerController @ 0x00007FF88D8B2548 -> 0x000004C683B61400 
+[snap] dwLocalPlayerPawn       @ 0x00007FF88DAA91E0 -> 0x000004C5F5A32600 
+[snap] pawn: vtable=0x00007FF8B26C3740 inClient=0 health=1222
+[snap] ctrl: vtable=0x00007FF88CF81680 inClient=1 m_hPlayerPawn@0x92C = 0x01C7800B (idx=11)
+[snap] entitySystem @ 0x00007FF88DA8FBB8 = 0x000004C5F546E000 highestEntityIndex=13
+[snap] entity resolution: 12/16 of indices 1..16 valid
+[snap] ctrl->pawn handle resolve: 0x01C7800B -> 0x000004C683A1E000
+[snap] ----------------------------------------
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+
+=== SNAPSHOT ===
+[snap] fsnCount=18037 lastStage=0 stage5Count=1498
+[snap] stage histogram:
+[snap]   stage  0: 2278 frames
+[snap]   stage  1: 1498 frames
+[snap]   stage  2: 1498 frames
+[snap]   stage  3: 1498 frames
+[snap]   stage  5: 1498 frames
+[snap]   stage  6: 1498 frames
+[snap]   stage  7: 1498 frames
+[snap]   stage  8: 1498 frames
+[snap]   stage 10: 1498 frames
+[snap]   stage 11: 2244 frames
+[snap]   stage 12: 1531 frames
+[snap] dwLocalPlayerController @ 0x00007FF88D8B2548 -> 0x000004C683B61400 
+[snap] dwLocalPlayerPawn       @ 0x00007FF88DAA91E0 -> 0x000004C5F5A32600 
+[snap] pawn: vtable=0x00007FF8B26C3740 inClient=0 health=1222
+[snap] ctrl: vtable=0x00007FF88CF81680 inClient=1 m_hPlayerPawn@0x92C = 0x01C7800B (idx=11)
+[snap] entitySystem @ 0x00007FF88DA8FBB8 = 0x000004C5F546E000 highestEntityIndex=13
+[snap] entity resolution: 12/16 of indices 1..16 valid
+[snap] ctrl->pawn handle resolve: 0x01C7800B -> 0x000004C683A1E000
+[snap] ----------------------------------------
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+
+=== SNAPSHOT ===
+[snap] fsnCount=20578 lastStage=0 stage5Count=1709
+[snap] stage histogram:
+[snap]   stage  0: 2599 frames
+[snap]   stage  1: 1709 frames
+[snap]   stage  2: 1709 frames
+[snap]   stage  3: 1709 frames
+[snap]   stage  5: 1709 frames
+[snap]   stage  6: 1709 frames
+[snap]   stage  7: 1709 frames
+[snap]   stage  8: 1709 frames
+[snap]   stage 10: 1709 frames
+[snap]   stage 11: 2565 frames
+[snap]   stage 12: 1742 frames
+[snap] dwLocalPlayerController @ 0x00007FF88D8B2548 -> 0x000004C683B61400 
+[snap] dwLocalPlayerPawn       @ 0x00007FF88DAA91E0 -> 0x000004C5F5A32600 
+[snap] pawn: vtable=0x00007FF8B26C3740 inClient=0 health=1222
+[snap] ctrl: vtable=0x00007FF88CF81680 inClient=1 m_hPlayerPawn@0x92C = 0x01C7800B (idx=11)
+[snap] entitySystem @ 0x00007FF88DA8FBB8 = 0x000004C5F546E000 highestEntityIndex=13
+[snap] entity resolution: 12/16 of indices 1..16 valid
+[snap] ctrl->pawn handle resolve: 0x01C7800B -> 0x000004C683A1E000
+[snap] ----------------------------------------
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+
+=== SNAPSHOT ===
+[snap] fsnCount=23155 lastStage=0 stage5Count=1924
+[snap] stage histogram:
+[snap]   stage  0: 2920 frames
+[snap]   stage  1: 1924 frames
+[snap]   stage  2: 1924 frames
+[snap]   stage  3: 1924 frames
+[snap]   stage  5: 1924 frames
+[snap]   stage  6: 1924 frames
+[snap]   stage  7: 1924 frames
+[snap]   stage  8: 1924 frames
+[snap]   stage 10: 1924 frames
+[snap]   stage 11: 2886 frames
+[snap]   stage 12: 1957 frames
+[snap] dwLocalPlayerController @ 0x00007FF88D8B2548 -> 0x000004C683B61400 
+[snap] dwLocalPlayerPawn       @ 0x00007FF88DAA91E0 -> 0x000004C5F5A32600 
+[snap] pawn: vtable=0x00007FF8B26C3740 inClient=0 health=1222
+[snap] ctrl: vtable=0x00007FF88CF81680 inClient=1 m_hPlayerPawn@0x92C = 0x01C7800B (idx=11)
+[snap] entitySystem @ 0x00007FF88DA8FBB8 = 0x000004C5F546E000 highestEntityIndex=13
+[snap] entity resolution: 12/16 of indices 1..16 valid
+[snap] ctrl->pawn handle resolve: 0x01C7800B -> 0x000004C683A1E000
+[snap] ----------------------------------------
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+
+=== SNAPSHOT ===
+[snap] fsnCount=25784 lastStage=0 stage5Count=2141
+[snap] stage histogram:
+[snap]   stage  0: 3258 frames
+[snap]   stage  1: 2141 frames
+[snap]   stage  2: 2141 frames
+[snap]   stage  3: 2141 frames
+[snap]   stage  5: 2141 frames
+[snap]   stage  6: 2141 frames
+[snap]   stage  7: 2141 frames
+[snap]   stage  8: 2141 frames
+[snap]   stage 10: 2141 frames
+[snap]   stage 11: 3207 frames
+[snap]   stage 12: 2191 frames
+[snap] dwLocalPlayerController @ 0x00007FF88D8B2548 -> 0x000004C683B61400 
+[snap] dwLocalPlayerPawn       @ 0x00007FF88DAA91E0 -> 0x000004C5F5A32600 
+[snap] pawn: vtable=0x00007FF8B26C3740 inClient=0 health=1222
+[snap] ctrl: vtable=0x00007FF88CF81680 inClient=1 m_hPlayerPawn@0x92C = 0x01C7800B (idx=11)
+[snap] entitySystem @ 0x00007FF88DA8FBB8 = 0x000004C5F546E000 highestEntityIndex=13
+[snap] entity resolution: 12/16 of indices 1..16 valid
+[snap] ctrl->pawn handle resolve: 0x01C7800B -> 0x000004C683A1E000
+[snap] ----------------------------------------
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+
+=== SNAPSHOT ===
+[snap] fsnCount=28458 lastStage=11 stage5Count=2353
+[snap] stage histogram:
+[snap]   stage  0: 3640 frames
+[snap]   stage  1: 2353 frames
+[snap]   stage  2: 2353 frames
+[snap]   stage  3: 2353 frames
+[snap]   stage  5: 2353 frames
+[snap]   stage  6: 2353 frames
+[snap]   stage  7: 2353 frames
+[snap]   stage  8: 2353 frames
+[snap]   stage 10: 2354 frames
+[snap]   stage 11: 3519 frames
+[snap]   stage 12: 2474 frames
+[snap] dwLocalPlayerController @ 0x00007FF88D8B2548 -> 0x000004C683B61400 
+[snap] dwLocalPlayerPawn       @ 0x00007FF88DAA91E0 -> 0x000004C5F5A32600 
+[snap] pawn: vtable=0x00007FF8B26C3740 inClient=0 health=1222
+[snap] ctrl: vtable=0x00007FF88CF81680 inClient=1 m_hPlayerPawn@0x92C = 0x01C7800B (idx=11)
+[snap] entitySystem @ 0x00007FF88DA8FBB8 = 0x000004C5F546E000 highestEntityIndex=13
+[snap] entity resolution: 12/16 of indices 1..16 valid
+[snap] ctrl->pawn handle resolve: 0x01C7800B -> 0x000004C683A1E000
+[snap] ----------------------------------------
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+
+=== SNAPSHOT ===
+[snap] fsnCount=31022 lastStage=0 stage5Count=2567
+[snap] stage histogram:
+[snap]   stage  0: 3960 frames
+[snap]   stage  1: 2567 frames
+[snap]   stage  2: 2567 frames
+[snap]   stage  3: 2567 frames
+[snap]   stage  5: 2567 frames
+[snap]   stage  6: 2567 frames
+[snap]   stage  7: 2567 frames
+[snap]   stage  8: 2567 frames
+[snap]   stage 10: 2567 frames
+[snap]   stage 11: 3838 frames
+[snap]   stage 12: 2688 frames
+[snap] dwLocalPlayerController @ 0x00007FF88D8B2548 -> 0x000004C683B61400 
+[snap] dwLocalPlayerPawn       @ 0x00007FF88DAA91E0 -> 0x000004C5F5A32600 
+[snap] pawn: vtable=0x00007FF8B26C3740 inClient=0 health=1222
+[snap] ctrl: vtable=0x00007FF88CF81680 inClient=1 m_hPlayerPawn@0x92C = 0x01C7800B (idx=11)
+[snap] entitySystem @ 0x00007FF88DA8FBB8 = 0x000004C5F546E000 highestEntityIndex=13
+[snap] entity resolution: 12/16 of indices 1..16 valid
+[snap] ctrl->pawn handle resolve: 0x01C7800B -> 0x000004C683A1E000
+[snap] ----------------------------------------
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+
+=== SNAPSHOT ===
+[snap] fsnCount=33588 lastStage=7 stage5Count=2781
+[snap] stage histogram:
+[snap]   stage  0: 4281 frames
+[snap]   stage  1: 2781 frames
+[snap]   stage  2: 2781 frames
+[snap]   stage  3: 2780 frames
+[snap]   stage  5: 2781 frames
+[snap]   stage  6: 2781 frames
+[snap]   stage  7: 2781 frames
+[snap]   stage  8: 2780 frames
+[snap]   stage 10: 2781 frames
+[snap]   stage 11: 4160 frames
+[snap]   stage 12: 2901 frames
+[snap] dwLocalPlayerController @ 0x00007FF88D8B2548 -> 0x000004C683B61400 
+[snap] dwLocalPlayerPawn       @ 0x00007FF88DAA91E0 -> 0x000004C5F5A32600 
+[snap] pawn: vtable=0x00007FF8B26C3740 inClient=0 health=1222
+[snap] ctrl: vtable=0x00007FF88CF81680 inClient=1 m_hPlayerPawn@0x92C = 0x01C7800B (idx=11)
+[snap] entitySystem @ 0x00007FF88DA8FBB8 = 0x000004C5F546E000 highestEntityIndex=13
+[snap] entity resolution: 12/16 of indices 1..16 valid
+[snap] ctrl->pawn handle resolve: 0x01C7800B -> 0x000004C683A1E000
+[snap] ----------------------------------------
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+
+=== SNAPSHOT ===
+[snap] fsnCount=36109 lastStage=0 stage5Count=2990
+[snap] stage histogram:
+[snap]   stage  0: 4600 frames
+[snap]   stage  1: 2990 frames
+[snap]   stage  2: 2990 frames
+[snap]   stage  3: 2990 frames
+[snap]   stage  5: 2990 frames
+[snap]   stage  6: 2990 frames
+[snap]   stage  7: 2990 frames
+[snap]   stage  8: 2990 frames
+[snap]   stage 10: 2990 frames
+[snap]   stage 11: 4478 frames
+[snap]   stage 12: 3111 frames
+[snap] dwLocalPlayerController @ 0x00007FF88D8B2548 -> 0x000004C683B61400 
+[snap] dwLocalPlayerPawn       @ 0x00007FF88DAA91E0 -> 0x000004C5F5A32600 
+[snap] pawn: vtable=0x00007FF8B26C3740 inClient=0 health=1222
+[snap] ctrl: vtable=0x00007FF88CF81680 inClient=1 m_hPlayerPawn@0x92C = 0x01C7800B (idx=11)
+[snap] entitySystem @ 0x00007FF88DA8FBB8 = 0x000004C5F546E000 highestEntityIndex=13
+[snap] entity resolution: 12/16 of indices 1..16 valid
+[snap] ctrl->pawn handle resolve: 0x01C7800B -> 0x000004C683A1E000
+[snap] ----------------------------------------
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+
+=== SNAPSHOT ===
+[snap] fsnCount=38679 lastStage=0 stage5Count=3204
+[snap] stage histogram:
+[snap]   stage  0: 4922 frames
+[snap]   stage  1: 3204 frames
+[snap]   stage  2: 3204 frames
+[snap]   stage  3: 3204 frames
+[snap]   stage  5: 3204 frames
+[snap]   stage  6: 3204 frames
+[snap]   stage  7: 3204 frames
+[snap]   stage  8: 3204 frames
+[snap]   stage 10: 3204 frames
+[snap]   stage 11: 4800 frames
+[snap]   stage 12: 3325 frames
+[snap] dwLocalPlayerController @ 0x00007FF88D8B2548 -> 0x000004C683B61400 
+[snap] dwLocalPlayerPawn       @ 0x00007FF88DAA91E0 -> 0x000004C5F5A32600 
+[snap] pawn: vtable=0x00007FF8B26C3740 inClient=0 health=1222
+[snap] ctrl: vtable=0x00007FF88CF81680 inClient=1 m_hPlayerPawn@0x92C = 0x01C7800B (idx=11)
+[snap] entitySystem @ 0x00007FF88DA8FBB8 = 0x000004C5F546E000 highestEntityIndex=13
+[snap] entity resolution: 12/16 of indices 1..16 valid
+[snap] ctrl->pawn handle resolve: 0x01C7800B -> 0x000004C683A1E000
+[snap] ----------------------------------------
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+
+=== SNAPSHOT ===
+[snap] fsnCount=41245 lastStage=0 stage5Count=3418
+[snap] stage histogram:
+[snap]   stage  0: 5242 frames
+[snap]   stage  1: 3418 frames
+[snap]   stage  2: 3418 frames
+[snap]   stage  3: 3418 frames
+[snap]   stage  5: 3418 frames
+[snap]   stage  6: 3418 frames
+[snap]   stage  7: 3418 frames
+[snap]   stage  8: 3418 frames
+[snap]   stage 10: 3418 frames
+[snap]   stage 11: 5120 frames
+[snap]   stage 12: 3539 frames
+[snap] dwLocalPlayerController @ 0x00007FF88D8B2548 -> 0x000004C683B61400 
+[snap] dwLocalPlayerPawn       @ 0x00007FF88DAA91E0 -> 0x000004C5F5A32600 
+[snap] pawn: vtable=0x00007FF8B26C3740 inClient=0 health=1222
+[snap] ctrl: vtable=0x00007FF88CF81680 inClient=1 m_hPlayerPawn@0x92C = 0x01C7800B (idx=11)
+[snap] entitySystem @ 0x00007FF88DA8FBB8 = 0x000004C5F546E000 highestEntityIndex=13
+[snap] entity resolution: 12/16 of indices 1..16 valid
+[snap] ctrl->pawn handle resolve: 0x01C7800B -> 0x000004C683A1E000
+[snap] ----------------------------------------
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+
+=== SNAPSHOT ===
+[snap] fsnCount=43795 lastStage=0 stage5Count=3630
+[snap] stage histogram:
+[snap]   stage  0: 5563 frames
+[snap]   stage  1: 3630 frames
+[snap]   stage  2: 3630 frames
+[snap]   stage  3: 3630 frames
+[snap]   stage  5: 3630 frames
+[snap]   stage  6: 3630 frames
+[snap]   stage  7: 3630 frames
+[snap]   stage  8: 3630 frames
+[snap]   stage 10: 3630 frames
+[snap]   stage 11: 5441 frames
+[snap]   stage 12: 3751 frames
+[snap] dwLocalPlayerController @ 0x00007FF88D8B2548 -> 0x000004C683B61400 
+[snap] dwLocalPlayerPawn       @ 0x00007FF88DAA91E0 -> 0x000004C5F5A32600 
+[snap] pawn: vtable=0x00007FF8B26C3740 inClient=0 health=1222
+[snap] ctrl: vtable=0x00007FF88CF81680 inClient=1 m_hPlayerPawn@0x92C = 0x01C7800B (idx=11)
+[snap] entitySystem @ 0x00007FF88DA8FBB8 = 0x000004C5F546E000 highestEntityIndex=13
+[snap] entity resolution: 12/16 of indices 1..16 valid
+[snap] ctrl->pawn handle resolve: 0x01C7800B -> 0x000004C683A1E000
+[snap] ----------------------------------------
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+
+=== SNAPSHOT ===
+[snap] fsnCount=46336 lastStage=0 stage5Count=3841
+[snap] stage histogram:
+[snap]   stage  0: 5884 frames
+[snap]   stage  1: 3841 frames
+[snap]   stage  2: 3841 frames
+[snap]   stage  3: 3841 frames
+[snap]   stage  5: 3841 frames
+[snap]   stage  6: 3841 frames
+[snap]   stage  7: 3841 frames
+[snap]   stage  8: 3841 frames
+[snap]   stage 10: 3841 frames
+[snap]   stage 11: 5762 frames
+[snap]   stage 12: 3962 frames
+[snap] dwLocalPlayerController @ 0x00007FF88D8B2548 -> 0x000004C683B61400 
+[snap] dwLocalPlayerPawn       @ 0x00007FF88DAA91E0 -> 0x000004C5F5A32600 
+[snap] pawn: vtable=0x00007FF8B26C3740 inClient=0 health=1222
+[snap] ctrl: vtable=0x00007FF88CF81680 inClient=1 m_hPlayerPawn@0x92C = 0x01C7800B (idx=11)
+[snap] entitySystem @ 0x00007FF88DA8FBB8 = 0x000004C5F546E000 highestEntityIndex=13
+[snap] entity resolution: 12/16 of indices 1..16 valid
+[snap] ctrl->pawn handle resolve: 0x01C7800B -> 0x000004C683A1E000
+[snap] ----------------------------------------
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+
+=== SNAPSHOT ===
+[snap] fsnCount=48848 lastStage=0 stage5Count=4049
+[snap] stage histogram:
+[snap]   stage  0: 6204 frames
+[snap]   stage  1: 4049 frames
+[snap]   stage  2: 4049 frames
+[snap]   stage  3: 4049 frames
+[snap]   stage  5: 4049 frames
+[snap]   stage  6: 4049 frames
+[snap]   stage  7: 4049 frames
+[snap]   stage  8: 4049 frames
+[snap]   stage 10: 4049 frames
+[snap]   stage 11: 6082 frames
+[snap]   stage 12: 4170 frames
+[snap] dwLocalPlayerController @ 0x00007FF88D8B2548 -> 0x000004C683B61400 
+[snap] dwLocalPlayerPawn       @ 0x00007FF88DAA91E0 -> 0x000004C5F5A32600 
+[snap] pawn: vtable=0x00007FF8B26C3740 inClient=0 health=1222
+[snap] ctrl: vtable=0x00007FF88CF81680 inClient=1 m_hPlayerPawn@0x92C = 0x01C7800B (idx=11)
+[snap] entitySystem @ 0x00007FF88DA8FBB8 = 0x000004C5F546E000 highestEntityIndex=13
+[snap] entity resolution: 12/16 of indices 1..16 valid
+[snap] ctrl->pawn handle resolve: 0x01C7800B -> 0x000004C683A1E000
+[snap] ----------------------------------------
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+
+=== SNAPSHOT ===
+[snap] fsnCount=51389 lastStage=0 stage5Count=4260
+[snap] stage histogram:
+[snap]   stage  0: 6525 frames
+[snap]   stage  1: 4260 frames
+[snap]   stage  2: 4260 frames
+[snap]   stage  3: 4260 frames
+[snap]   stage  5: 4260 frames
+[snap]   stage  6: 4260 frames
+[snap]   stage  7: 4260 frames
+[snap]   stage  8: 4260 frames
+[snap]   stage 10: 4260 frames
+[snap]   stage 11: 6403 frames
+[snap]   stage 12: 4381 frames
+[snap] dwLocalPlayerController @ 0x00007FF88D8B2548 -> 0x000004C683B61400 
+[snap] dwLocalPlayerPawn       @ 0x00007FF88DAA91E0 -> 0x000004C5F5A32600 
+[snap] pawn: vtable=0x00007FF8B26C3740 inClient=0 health=1222
+[snap] ctrl: vtable=0x00007FF88CF81680 inClient=1 m_hPlayerPawn@0x92C = 0x01C7800B (idx=11)
+[snap] entitySystem @ 0x00007FF88DA8FBB8 = 0x000004C5F546E000 highestEntityIndex=13
+[snap] entity resolution: 12/16 of indices 1..16 valid
+[snap] ctrl->pawn handle resolve: 0x01C7800B -> 0x000004C683A1E000
+[snap] ----------------------------------------
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+
+=== SNAPSHOT ===
+[snap] fsnCount=53919 lastStage=0 stage5Count=4470
+[snap] stage histogram:
+[snap]   stage  0: 6845 frames
+[snap]   stage  1: 4470 frames
+[snap]   stage  2: 4470 frames
+[snap]   stage  3: 4470 frames
+[snap]   stage  5: 4470 frames
+[snap]   stage  6: 4470 frames
+[snap]   stage  7: 4470 frames
+[snap]   stage  8: 4470 frames
+[snap]   stage 10: 4470 frames
+[snap]   stage 11: 6723 frames
+[snap]   stage 12: 4591 frames
+[snap] dwLocalPlayerController @ 0x00007FF88D8B2548 -> 0x000004C683B61400 
+[snap] dwLocalPlayerPawn       @ 0x00007FF88DAA91E0 -> 0x000004C5F5A32600 
+[snap] pawn: vtable=0x00007FF8B26C3740 inClient=0 health=1222
+[snap] ctrl: vtable=0x00007FF88CF81680 inClient=1 m_hPlayerPawn@0x92C = 0x01C7800B (idx=11)
+[snap] entitySystem @ 0x00007FF88DA8FBB8 = 0x000004C5F546E000 highestEntityIndex=13
+[snap] entity resolution: 12/16 of indices 1..16 valid
+[snap] ctrl->pawn handle resolve: 0x01C7800B -> 0x000004C683A1E000
+[snap] ----------------------------------------
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+
+=== SNAPSHOT ===
+[snap] fsnCount=56487 lastStage=0 stage5Count=4684
+[snap] stage histogram:
+[snap]   stage  0: 7166 frames
+[snap]   stage  1: 4684 frames
+[snap]   stage  2: 4684 frames
+[snap]   stage  3: 4684 frames
+[snap]   stage  5: 4684 frames
+[snap]   stage  6: 4684 frames
+[snap]   stage  7: 4684 frames
+[snap]   stage  8: 4684 frames
+[snap]   stage 10: 4684 frames
+[snap]   stage 11: 7044 frames
+[snap]   stage 12: 4805 frames
+[snap] dwLocalPlayerController @ 0x00007FF88D8B2548 -> 0x000004C683B61400 
+[snap] dwLocalPlayerPawn       @ 0x00007FF88DAA91E0 -> 0x000004C5F5A32600 
+[snap] pawn: vtable=0x00007FF8B26C3740 inClient=0 health=1222
+[snap] ctrl: vtable=0x00007FF88CF81680 inClient=1 m_hPlayerPawn@0x92C = 0x01C7800B (idx=11)
+[snap] entitySystem @ 0x00007FF88DA8FBB8 = 0x000004C5F546E000 highestEntityIndex=13
+[snap] entity resolution: 12/16 of indices 1..16 valid
+[snap] ctrl->pawn handle resolve: 0x01C7800B -> 0x000004C683A1E000
+[snap] ----------------------------------------
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+
+=== SNAPSHOT ===
+[snap] fsnCount=59055 lastStage=0 stage5Count=4898
+[snap] stage histogram:
+[snap]   stage  0: 7487 frames
+[snap]   stage  1: 4898 frames
+[snap]   stage  2: 4898 frames
+[snap]   stage  3: 4898 frames
+[snap]   stage  5: 4898 frames
+[snap]   stage  6: 4898 frames
+[snap]   stage  7: 4898 frames
+[snap]   stage  8: 4898 frames
+[snap]   stage 10: 4898 frames
+[snap]   stage 11: 7365 frames
+[snap]   stage 12: 5019 frames
+[snap] dwLocalPlayerController @ 0x00007FF88D8B2548 -> 0x000004C683B61400 
+[snap] dwLocalPlayerPawn       @ 0x00007FF88DAA91E0 -> 0x000004C5F5A32600 
+[snap] pawn: vtable=0x00007FF8B26C3740 inClient=0 health=1222
+[snap] ctrl: vtable=0x00007FF88CF81680 inClient=1 m_hPlayerPawn@0x92C = 0x01C7800B (idx=11)
+[snap] entitySystem @ 0x00007FF88DA8FBB8 = 0x000004C5F546E000 highestEntityIndex=13
+[snap] entity resolution: 12/16 of indices 1..16 valid
+[snap] ctrl->pawn handle resolve: 0x01C7800B -> 0x000004C683A1E000
+[snap] ----------------------------------------
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+
+=== SNAPSHOT ===
+[snap] fsnCount=61632 lastStage=0 stage5Count=5113
+[snap] stage histogram:
+[snap]   stage  0: 7808 frames
+[snap]   stage  1: 5113 frames
+[snap]   stage  2: 5113 frames
+[snap]   stage  3: 5113 frames
+[snap]   stage  5: 5113 frames
+[snap]   stage  6: 5113 frames
+[snap]   stage  7: 5113 frames
+[snap]   stage  8: 5113 frames
+[snap]   stage 10: 5113 frames
+[snap]   stage 11: 7686 frames
+[snap]   stage 12: 5234 frames
+[snap] dwLocalPlayerController @ 0x00007FF88D8B2548 -> 0x000004C683B61400 
+[snap] dwLocalPlayerPawn       @ 0x00007FF88DAA91E0 -> 0x000004C5F5A32600 
+[snap] pawn: vtable=0x00007FF8B26C3740 inClient=0 health=1222
+[snap] ctrl: vtable=0x00007FF88CF81680 inClient=1 m_hPlayerPawn@0x92C = 0x01C7800B (idx=11)
+[snap] entitySystem @ 0x00007FF88DA8FBB8 = 0x000004C5F546E000 highestEntityIndex=13
+[snap] entity resolution: 12/16 of indices 1..16 valid
+[snap] ctrl->pawn handle resolve: 0x01C7800B -> 0x000004C683A1E000
+[snap] ----------------------------------------
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+
+=== SNAPSHOT ===
+[snap] fsnCount=64182 lastStage=0 stage5Count=5325
+[snap] stage histogram:
+[snap]   stage  0: 8129 frames
+[snap]   stage  1: 5325 frames
+[snap]   stage  2: 5325 frames
+[snap]   stage  3: 5325 frames
+[snap]   stage  5: 5325 frames
+[snap]   stage  6: 5325 frames
+[snap]   stage  7: 5325 frames
+[snap]   stage  8: 5325 frames
+[snap]   stage 10: 5325 frames
+[snap]   stage 11: 8007 frames
+[snap]   stage 12: 5446 frames
+[snap] dwLocalPlayerController @ 0x00007FF88D8B2548 -> 0x000004C683B61400 
+[snap] dwLocalPlayerPawn       @ 0x00007FF88DAA91E0 -> 0x000004C5F5A32600 
+[snap] pawn: vtable=0x00007FF8B26C3740 inClient=0 health=1222
+[snap] ctrl: vtable=0x00007FF88CF81680 inClient=1 m_hPlayerPawn@0x92C = 0x01C7800B (idx=11)
+[snap] entitySystem @ 0x00007FF88DA8FBB8 = 0x000004C5F546E000 highestEntityIndex=13
+[snap] entity resolution: 12/16 of indices 1..16 valid
+[snap] ctrl->pawn handle resolve: 0x01C7800B -> 0x000004C683A1E000
+[snap] ----------------------------------------
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+
+=== SNAPSHOT ===
+[snap] fsnCount=66721 lastStage=0 stage5Count=5536
+[snap] stage histogram:
+[snap]   stage  0: 8449 frames
+[snap]   stage  1: 5536 frames
+[snap]   stage  2: 5536 frames
+[snap]   stage  3: 5536 frames
+[snap]   stage  5: 5536 frames
+[snap]   stage  6: 5536 frames
+[snap]   stage  7: 5536 frames
+[snap]   stage  8: 5536 frames
+[snap]   stage 10: 5536 frames
+[snap]   stage 11: 8327 frames
+[snap]   stage 12: 5657 frames
+[snap] dwLocalPlayerController @ 0x00007FF88D8B2548 -> 0x000004C683B61400 
+[snap] dwLocalPlayerPawn       @ 0x00007FF88DAA91E0 -> 0x000004C5F5A32600 
+[snap] pawn: vtable=0x00007FF8B26C3740 inClient=0 health=1222
+[snap] ctrl: vtable=0x00007FF88CF81680 inClient=1 m_hPlayerPawn@0x92C = 0x01C7800B (idx=11)
+[snap] entitySystem @ 0x00007FF88DA8FBB8 = 0x000004C5F546E000 highestEntityIndex=13
+[snap] entity resolution: 12/16 of indices 1..16 valid
+[snap] ctrl->pawn handle resolve: 0x01C7800B -> 0x000004C683A1E000
+[snap] ----------------------------------------
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+
+=== SNAPSHOT ===
+[snap] fsnCount=69298 lastStage=0 stage5Count=5751
+[snap] stage histogram:
+[snap]   stage  0: 8770 frames
+[snap]   stage  1: 5751 frames
+[snap]   stage  2: 5751 frames
+[snap]   stage  3: 5751 frames
+[snap]   stage  5: 5751 frames
+[snap]   stage  6: 5751 frames
+[snap]   stage  7: 5751 frames
+[snap]   stage  8: 5751 frames
+[snap]   stage 10: 5751 frames
+[snap]   stage 11: 8648 frames
+[snap]   stage 12: 5872 frames
+[snap] dwLocalPlayerController @ 0x00007FF88D8B2548 -> 0x000004C683B61400 
+[snap] dwLocalPlayerPawn       @ 0x00007FF88DAA91E0 -> 0x000004C5F5A32600 
+[snap] pawn: vtable=0x00007FF8B26C3740 inClient=0 health=1222
+[snap] ctrl: vtable=0x00007FF88CF81680 inClient=1 m_hPlayerPawn@0x92C = 0x01C7800B (idx=11)
+[snap] entitySystem @ 0x00007FF88DA8FBB8 = 0x000004C5F546E000 highestEntityIndex=13
+[snap] entity resolution: 12/16 of indices 1..16 valid
+[snap] ctrl->pawn handle resolve: 0x01C7800B -> 0x000004C683A1E000
+[snap] ----------------------------------------
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+
+=== SNAPSHOT ===
+[snap] fsnCount=71864 lastStage=0 stage5Count=5965
+[snap] stage histogram:
+[snap]   stage  0: 9090 frames
+[snap]   stage  1: 5965 frames
+[snap]   stage  2: 5965 frames
+[snap]   stage  3: 5965 frames
+[snap]   stage  5: 5965 frames
+[snap]   stage  6: 5965 frames
+[snap]   stage  7: 5965 frames
+[snap]   stage  8: 5965 frames
+[snap]   stage 10: 5965 frames
+[snap]   stage 11: 8968 frames
+[snap]   stage 12: 6086 frames
+[snap] dwLocalPlayerController @ 0x00007FF88D8B2548 -> 0x000004C683B61400 
+[snap] dwLocalPlayerPawn       @ 0x00007FF88DAA91E0 -> 0x000004C5F5A32600 
+[snap] pawn: vtable=0x00007FF8B26C3740 inClient=0 health=1222
+[snap] ctrl: vtable=0x00007FF88CF81680 inClient=1 m_hPlayerPawn@0x92C = 0x01C7800B (idx=11)
+[snap] entitySystem @ 0x00007FF88DA8FBB8 = 0x000004C5F546E000 highestEntityIndex=13
+[snap] entity resolution: 12/16 of indices 1..16 valid
+[snap] ctrl->pawn handle resolve: 0x01C7800B -> 0x000004C683A1E000
+[snap] ----------------------------------------
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+
+=== SNAPSHOT ===
+[snap] fsnCount=74432 lastStage=0 stage5Count=6179
+[snap] stage histogram:
+[snap]   stage  0: 9411 frames
+[snap]   stage  1: 6179 frames
+[snap]   stage  2: 6179 frames
+[snap]   stage  3: 6179 frames
+[snap]   stage  5: 6179 frames
+[snap]   stage  6: 6179 frames
+[snap]   stage  7: 6179 frames
+[snap]   stage  8: 6179 frames
+[snap]   stage 10: 6179 frames
+[snap]   stage 11: 9289 frames
+[snap]   stage 12: 6300 frames
+[snap] dwLocalPlayerController @ 0x00007FF88D8B2548 -> 0x000004C683B61400 
+[snap] dwLocalPlayerPawn       @ 0x00007FF88DAA91E0 -> 0x000004C5F5A32600 
+[snap] pawn: vtable=0x00007FF8B26C3740 inClient=0 health=1222
+[snap] ctrl: vtable=0x00007FF88CF81680 inClient=1 m_hPlayerPawn@0x92C = 0x01C7800B (idx=11)
+[snap] entitySystem @ 0x00007FF88DA8FBB8 = 0x000004C5F546E000 highestEntityIndex=13
+[snap] entity resolution: 12/16 of indices 1..16 valid
+[snap] ctrl->pawn handle resolve: 0x01C7800B -> 0x000004C683A1E000
+[snap] ----------------------------------------
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+
+=== SNAPSHOT ===
+[snap] fsnCount=77009 lastStage=0 stage5Count=6394
+[snap] stage histogram:
+[snap]   stage  0: 9732 frames
+[snap]   stage  1: 6394 frames
+[snap]   stage  2: 6394 frames
+[snap]   stage  3: 6394 frames
+[snap]   stage  5: 6394 frames
+[snap]   stage  6: 6394 frames
+[snap]   stage  7: 6394 frames
+[snap]   stage  8: 6394 frames
+[snap]   stage 10: 6394 frames
+[snap]   stage 11: 9610 frames
+[snap]   stage 12: 6515 frames
+[snap] dwLocalPlayerController @ 0x00007FF88D8B2548 -> 0x000004C683B61400 
+[snap] dwLocalPlayerPawn       @ 0x00007FF88DAA91E0 -> 0x000004C5F5A32600 
+[snap] pawn: vtable=0x00007FF8B26C3740 inClient=0 health=1222
+[snap] ctrl: vtable=0x00007FF88CF81680 inClient=1 m_hPlayerPawn@0x92C = 0x01C7800B (idx=11)
+[snap] entitySystem @ 0x00007FF88DA8FBB8 = 0x000004C5F546E000 highestEntityIndex=13
+[snap] entity resolution: 12/16 of indices 1..16 valid
+[snap] ctrl->pawn handle resolve: 0x01C7800B -> 0x000004C683A1E000
+[snap] ----------------------------------------
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+
+=== SNAPSHOT ===
+[snap] fsnCount=79566 lastStage=0 stage5Count=6607
+[snap] stage histogram:
+[snap]   stage  0: 10052 frames
+[snap]   stage  1: 6607 frames
+[snap]   stage  2: 6607 frames
+[snap]   stage  3: 6607 frames
+[snap]   stage  5: 6607 frames
+[snap]   stage  6: 6607 frames
+[snap]   stage  7: 6607 frames
+[snap]   stage  8: 6607 frames
+[snap]   stage 10: 6607 frames
+[snap]   stage 11: 9930 frames
+[snap]   stage 12: 6728 frames
+[snap] dwLocalPlayerController @ 0x00007FF88D8B2548 -> 0x000004C683B61400 
+[snap] dwLocalPlayerPawn       @ 0x00007FF88DAA91E0 -> 0x000004C5F5A32600 
+[snap] pawn: vtable=0x00007FF8B26C3740 inClient=0 health=1222
+[snap] ctrl: vtable=0x00007FF88CF81680 inClient=1 m_hPlayerPawn@0x92C = 0x01C7800B (idx=11)
+[snap] entitySystem @ 0x00007FF88DA8FBB8 = 0x000004C5F546E000 highestEntityIndex=13
+[snap] entity resolution: 12/16 of indices 1..16 valid
+[snap] ctrl->pawn handle resolve: 0x01C7800B -> 0x000004C683A1E000
+[snap] ----------------------------------------
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+
+=== SNAPSHOT ===
+[snap] fsnCount=82132 lastStage=7 stage5Count=6821
+[snap] stage histogram:
+[snap]   stage  0: 10373 frames
+[snap]   stage  1: 6821 frames
+[snap]   stage  2: 6821 frames
+[snap]   stage  3: 6820 frames
+[snap]   stage  5: 6821 frames
+[snap]   stage  6: 6821 frames
+[snap]   stage  7: 6821 frames
+[snap]   stage  8: 6820 frames
+[snap]   stage 10: 6821 frames
+[snap]   stage 11: 10252 frames
+[snap]   stage 12: 6941 frames
+[snap] dwLocalPlayerController @ 0x00007FF88D8B2548 -> 0x000004C683B61400 
+[snap] dwLocalPlayerPawn       @ 0x00007FF88DAA91E0 -> 0x000004C5F5A32600 
+[snap] pawn: vtable=0x00007FF8B26C3740 inClient=0 health=1222
+[snap] ctrl: vtable=0x00007FF88CF81680 inClient=1 m_hPlayerPawn@0x92C = 0x01C7800B (idx=11)
+[snap] entitySystem @ 0x00007FF88DA8FBB8 = 0x000004C5F546E000 highestEntityIndex=13
+[snap] entity resolution: 12/16 of indices 1..16 valid
+[snap] ctrl->pawn handle resolve: 0x01C7800B -> 0x000004C683A1E000
+[snap] ----------------------------------------
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+
+=== SNAPSHOT ===
+[snap] fsnCount=84700 lastStage=0 stage5Count=7035
+[snap] stage histogram:
+[snap]   stage  0: 10693 frames
+[snap]   stage  1: 7035 frames
+[snap]   stage  2: 7035 frames
+[snap]   stage  3: 7035 frames
+[snap]   stage  5: 7035 frames
+[snap]   stage  6: 7035 frames
+[snap]   stage  7: 7035 frames
+[snap]   stage  8: 7035 frames
+[snap]   stage 10: 7035 frames
+[snap]   stage 11: 10571 frames
+[snap]   stage 12: 7156 frames
+[snap] dwLocalPlayerController @ 0x00007FF88D8B2548 -> 0x000004C683B61400 
+[snap] dwLocalPlayerPawn       @ 0x00007FF88DAA91E0 -> 0x000004C5F5A32600 
+[snap] pawn: vtable=0x00007FF8B26C3740 inClient=0 health=1222
+[snap] ctrl: vtable=0x00007FF88CF81680 inClient=1 m_hPlayerPawn@0x92C = 0x01C7800B (idx=11)
+[snap] entitySystem @ 0x00007FF88DA8FBB8 = 0x000004C5F546E000 highestEntityIndex=13
+[snap] entity resolution: 12/16 of indices 1..16 valid
+[snap] ctrl->pawn handle resolve: 0x01C7800B -> 0x000004C683A1E000
+[snap] ----------------------------------------
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+
+=== SNAPSHOT ===
+[snap] fsnCount=87268 lastStage=0 stage5Count=7249
+[snap] stage histogram:
+[snap]   stage  0: 11014 frames
+[snap]   stage  1: 7249 frames
+[snap]   stage  2: 7249 frames
+[snap]   stage  3: 7249 frames
+[snap]   stage  5: 7249 frames
+[snap]   stage  6: 7249 frames
+[snap]   stage  7: 7249 frames
+[snap]   stage  8: 7249 frames
+[snap]   stage 10: 7249 frames
+[snap]   stage 11: 10892 frames
+[snap]   stage 12: 7370 frames
+[snap] dwLocalPlayerController @ 0x00007FF88D8B2548 -> 0x000004C683B61400 
+[snap] dwLocalPlayerPawn       @ 0x00007FF88DAA91E0 -> 0x000004C5F5A32600 
+[snap] pawn: vtable=0x00007FF8B26C3740 inClient=0 health=1222
+[snap] ctrl: vtable=0x00007FF88CF81680 inClient=1 m_hPlayerPawn@0x92C = 0x01C7800B (idx=11)
+[snap] entitySystem @ 0x00007FF88DA8FBB8 = 0x000004C5F546E000 highestEntityIndex=13
+[snap] entity resolution: 12/16 of indices 1..16 valid
+[snap] ctrl->pawn handle resolve: 0x01C7800B -> 0x000004C683A1E000
+[snap] ----------------------------------------
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+
+=== SNAPSHOT ===
+[snap] fsnCount=89825 lastStage=0 stage5Count=7462
+[snap] stage histogram:
+[snap]   stage  0: 11334 frames
+[snap]   stage  1: 7462 frames
+[snap]   stage  2: 7462 frames
+[snap]   stage  3: 7462 frames
+[snap]   stage  5: 7462 frames
+[snap]   stage  6: 7462 frames
+[snap]   stage  7: 7462 frames
+[snap]   stage  8: 7462 frames
+[snap]   stage 10: 7462 frames
+[snap]   stage 11: 11212 frames
+[snap]   stage 12: 7583 frames
+[snap] dwLocalPlayerController @ 0x00007FF88D8B2548 -> 0x000004C683B61400 
+[snap] dwLocalPlayerPawn       @ 0x00007FF88DAA91E0 -> 0x000004C5F5A32600 
+[snap] pawn: vtable=0x00007FF8B26C3740 inClient=0 health=1222
+[snap] ctrl: vtable=0x00007FF88CF81680 inClient=1 m_hPlayerPawn@0x92C = 0x01C7800B (idx=11)
+[snap] entitySystem @ 0x00007FF88DA8FBB8 = 0x000004C5F546E000 highestEntityIndex=13
+[snap] entity resolution: 12/16 of indices 1..16 valid
+[snap] ctrl->pawn handle resolve: 0x01C7800B -> 0x000004C683A1E000
+[snap] ----------------------------------------
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+
+=== SNAPSHOT ===
+[snap] fsnCount=92380 lastStage=7 stage5Count=7675
+[snap] stage histogram:
+[snap]   stage  0: 11654 frames
+[snap]   stage  1: 7675 frames
+[snap]   stage  2: 7675 frames
+[snap]   stage  3: 7674 frames
+[snap]   stage  5: 7675 frames
+[snap]   stage  6: 7675 frames
+[snap]   stage  7: 7675 frames
+[snap]   stage  8: 7674 frames
+[snap]   stage 10: 7675 frames
+[snap]   stage 11: 11533 frames
+[snap]   stage 12: 7795 frames
+[snap] dwLocalPlayerController @ 0x00007FF88D8B2548 -> 0x000004C683B61400 
+[snap] dwLocalPlayerPawn       @ 0x00007FF88DAA91E0 -> 0x000004C5F5A32600 
+[snap] pawn: vtable=0x00007FF8B26C3740 inClient=0 health=1222
+[snap] ctrl: vtable=0x00007FF88CF81680 inClient=1 m_hPlayerPawn@0x92C = 0x01C7800B (idx=11)
+[snap] entitySystem @ 0x00007FF88DA8FBB8 = 0x000004C5F546E000 highestEntityIndex=13
+[snap] entity resolution: 12/16 of indices 1..16 valid
+[snap] ctrl->pawn handle resolve: 0x01C7800B -> 0x000004C683A1E000
+[snap] ----------------------------------------
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+
+=== SNAPSHOT ===
+[snap] fsnCount=94913 lastStage=11 stage5Count=7885
+[snap] stage histogram:
+[snap]   stage  0: 11974 frames
+[snap]   stage  1: 7885 frames
+[snap]   stage  2: 7885 frames
+[snap]   stage  3: 7885 frames
+[snap]   stage  5: 7885 frames
+[snap]   stage  6: 7885 frames
+[snap]   stage  7: 7885 frames
+[snap]   stage  8: 7885 frames
+[snap]   stage 10: 7885 frames
+[snap]   stage 11: 11853 frames
+[snap]   stage 12: 8006 frames
+[snap] dwLocalPlayerController @ 0x00007FF88D8B2548 -> 0x000004C683B61400 
+[snap] dwLocalPlayerPawn       @ 0x00007FF88DAA91E0 -> 0x000004C5F5A32600 
+[snap] pawn: vtable=0x00007FF8B26C3740 inClient=0 health=1222
+[snap] ctrl: vtable=0x00007FF88CF81680 inClient=1 m_hPlayerPawn@0x92C = 0x01C7800B (idx=11)
+[snap] entitySystem @ 0x00007FF88DA8FBB8 = 0x000004C5F546E000 highestEntityIndex=13
+[snap] entity resolution: 12/16 of indices 1..16 valid
+[snap] ctrl->pawn handle resolve: 0x01C7800B -> 0x000004C683A1E000
+[snap] ----------------------------------------
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+
+=== SNAPSHOT ===
+[snap] fsnCount=97480 lastStage=0 stage5Count=8099
+[snap] stage histogram:
+[snap]   stage  0: 12295 frames
+[snap]   stage  1: 8099 frames
+[snap]   stage  2: 8099 frames
+[snap]   stage  3: 8099 frames
+[snap]   stage  5: 8099 frames
+[snap]   stage  6: 8099 frames
+[snap]   stage  7: 8099 frames
+[snap]   stage  8: 8099 frames
+[snap]   stage 10: 8099 frames
+[snap]   stage 11: 12173 frames
+[snap]   stage 12: 8220 frames
+[snap] dwLocalPlayerController @ 0x00007FF88D8B2548 -> 0x000004C683B61400 
+[snap] dwLocalPlayerPawn       @ 0x00007FF88DAA91E0 -> 0x000004C5F5A32600 
+[snap] pawn: vtable=0x00007FF8B26C3740 inClient=0 health=1222
+[snap] ctrl: vtable=0x00007FF88CF81680 inClient=1 m_hPlayerPawn@0x92C = 0x01C7800B (idx=11)
+[snap] entitySystem @ 0x00007FF88DA8FBB8 = 0x000004C5F546E000 highestEntityIndex=13
+[snap] entity resolution: 12/16 of indices 1..16 valid
+[snap] ctrl->pawn handle resolve: 0x01C7800B -> 0x000004C683A1E000
+[snap] ----------------------------------------
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+
+=== SNAPSHOT ===
+[snap] fsnCount=100057 lastStage=0 stage5Count=8314
+[snap] stage histogram:
+[snap]   stage  0: 12616 frames
+[snap]   stage  1: 8314 frames
+[snap]   stage  2: 8314 frames
+[snap]   stage  3: 8314 frames
+[snap]   stage  5: 8314 frames
+[snap]   stage  6: 8314 frames
+[snap]   stage  7: 8314 frames
+[snap]   stage  8: 8314 frames
+[snap]   stage 10: 8314 frames
+[snap]   stage 11: 12494 frames
+[snap]   stage 12: 8435 frames
+[snap] dwLocalPlayerController @ 0x00007FF88D8B2548 -> 0x000004C683B61400 
+[snap] dwLocalPlayerPawn       @ 0x00007FF88DAA91E0 -> 0x000004C5F5A32600 
+[snap] pawn: vtable=0x00007FF8B26C3740 inClient=0 health=1222
+[snap] ctrl: vtable=0x00007FF88CF81680 inClient=1 m_hPlayerPawn@0x92C = 0x01C7800B (idx=11)
+[snap] entitySystem @ 0x00007FF88DA8FBB8 = 0x000004C5F546E000 highestEntityIndex=13
+[snap] entity resolution: 12/16 of indices 1..16 valid
+[snap] ctrl->pawn handle resolve: 0x01C7800B -> 0x000004C683A1E000
+[snap] ----------------------------------------
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+
+=== SNAPSHOT ===
+[snap] fsnCount=102634 lastStage=0 stage5Count=8529
+[snap] stage histogram:
+[snap]   stage  0: 12937 frames
+[snap]   stage  1: 8529 frames
+[snap]   stage  2: 8529 frames
+[snap]   stage  3: 8529 frames
+[snap]   stage  5: 8529 frames
+[snap]   stage  6: 8529 frames
+[snap]   stage  7: 8529 frames
+[snap]   stage  8: 8529 frames
+[snap]   stage 10: 8529 frames
+[snap]   stage 11: 12815 frames
+[snap]   stage 12: 8650 frames
+[snap] dwLocalPlayerController @ 0x00007FF88D8B2548 -> 0x000004C683B61400 
+[snap] dwLocalPlayerPawn       @ 0x00007FF88DAA91E0 -> 0x000004C5F5A32600 
+[snap] pawn: vtable=0x00007FF8B26C3740 inClient=0 health=1222
+[snap] ctrl: vtable=0x00007FF88CF81680 inClient=1 m_hPlayerPawn@0x92C = 0x01C7800B (idx=11)
+[snap] entitySystem @ 0x00007FF88DA8FBB8 = 0x000004C5F546E000 highestEntityIndex=13
+[snap] entity resolution: 12/16 of indices 1..16 valid
+[snap] ctrl->pawn handle resolve: 0x01C7800B -> 0x000004C683A1E000
+[snap] ----------------------------------------
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+
+=== SNAPSHOT ===
+[snap] fsnCount=105211 lastStage=0 stage5Count=8744
+[snap] stage histogram:
+[snap]   stage  0: 13258 frames
+[snap]   stage  1: 8744 frames
+[snap]   stage  2: 8744 frames
+[snap]   stage  3: 8744 frames
+[snap]   stage  5: 8744 frames
+[snap]   stage  6: 8744 frames
+[snap]   stage  7: 8744 frames
+[snap]   stage  8: 8744 frames
+[snap]   stage 10: 8744 frames
+[snap]   stage 11: 13136 frames
+[snap]   stage 12: 8865 frames
+[snap] dwLocalPlayerController @ 0x00007FF88D8B2548 -> 0x000004C683B61400 
+[snap] dwLocalPlayerPawn       @ 0x00007FF88DAA91E0 -> 0x000004C5F5A32600 
+[snap] pawn: vtable=0x00007FF8B26C3740 inClient=0 health=1222
+[snap] ctrl: vtable=0x00007FF88CF81680 inClient=1 m_hPlayerPawn@0x92C = 0x01C7800B (idx=11)
+[snap] entitySystem @ 0x00007FF88DA8FBB8 = 0x000004C5F546E000 highestEntityIndex=13
+[snap] entity resolution: 12/16 of indices 1..16 valid
+[snap] ctrl->pawn handle resolve: 0x01C7800B -> 0x000004C683A1E000
+[snap] ----------------------------------------
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+
+=== SNAPSHOT ===
+[snap] fsnCount=107778 lastStage=12 stage5Count=8958
+[snap] stage histogram:
+[snap]   stage  0: 13578 frames
+[snap]   stage  1: 8958 frames
+[snap]   stage  2: 8958 frames
+[snap]   stage  3: 8958 frames
+[snap]   stage  5: 8958 frames
+[snap]   stage  6: 8958 frames
+[snap]   stage  7: 8958 frames
+[snap]   stage  8: 8958 frames
+[snap]   stage 10: 8958 frames
+[snap]   stage 11: 13457 frames
+[snap]   stage 12: 9079 frames
+[snap] dwLocalPlayerController @ 0x00007FF88D8B2548 -> 0x000004C683B61400 
+[snap] dwLocalPlayerPawn       @ 0x00007FF88DAA91E0 -> 0x000004C5F5A32600 
+[snap] pawn: vtable=0x00007FF8B26C3740 inClient=0 health=1222
+[snap] ctrl: vtable=0x00007FF88CF81680 inClient=1 m_hPlayerPawn@0x92C = 0x01C7800B (idx=11)
+[snap] entitySystem @ 0x00007FF88DA8FBB8 = 0x000004C5F546E000 highestEntityIndex=13
+[snap] entity resolution: 12/16 of indices 1..16 valid
+[snap] ctrl->pawn handle resolve: 0x01C7800B -> 0x000004C683A1E000
+[snap] ----------------------------------------
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+
+=== SNAPSHOT ===
+[snap] fsnCount=110307 lastStage=0 stage5Count=9168
+[snap] stage histogram:
+[snap]   stage  0: 13898 frames
+[snap]   stage  1: 9168 frames
+[snap]   stage  2: 9168 frames
+[snap]   stage  3: 9168 frames
+[snap]   stage  5: 9168 frames
+[snap]   stage  6: 9168 frames
+[snap]   stage  7: 9168 frames
+[snap]   stage  8: 9168 frames
+[snap]   stage 10: 9168 frames
+[snap]   stage 11: 13776 frames
+[snap]   stage 12: 9289 frames
+[snap] dwLocalPlayerController @ 0x00007FF88D8B2548 -> 0x000004C683B61400 
+[snap] dwLocalPlayerPawn       @ 0x00007FF88DAA91E0 -> 0x000004C5F5A32600 
+[snap] pawn: vtable=0x00007FF8B26C3740 inClient=0 health=1222
+[snap] ctrl: vtable=0x00007FF88CF81680 inClient=1 m_hPlayerPawn@0x92C = 0x01C7800B (idx=11)
+[snap] entitySystem @ 0x00007FF88DA8FBB8 = 0x000004C5F546E000 highestEntityIndex=13
+[snap] entity resolution: 12/16 of indices 1..16 valid
+[snap] ctrl->pawn handle resolve: 0x01C7800B -> 0x000004C683A1E000
+[snap] ----------------------------------------
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+
+=== SNAPSHOT ===
+[snap] fsnCount=112857 lastStage=0 stage5Count=9380
+[snap] stage histogram:
+[snap]   stage  0: 14219 frames
+[snap]   stage  1: 9380 frames
+[snap]   stage  2: 9380 frames
+[snap]   stage  3: 9380 frames
+[snap]   stage  5: 9380 frames
+[snap]   stage  6: 9380 frames
+[snap]   stage  7: 9380 frames
+[snap]   stage  8: 9380 frames
+[snap]   stage 10: 9380 frames
+[snap]   stage 11: 14097 frames
+[snap]   stage 12: 9501 frames
+[snap] dwLocalPlayerController @ 0x00007FF88D8B2548 -> 0x000004C683B61400 
+[snap] dwLocalPlayerPawn       @ 0x00007FF88DAA91E0 -> 0x000004C5F5A32600 
+[snap] pawn: vtable=0x00007FF8B26C3740 inClient=0 health=1222
+[snap] ctrl: vtable=0x00007FF88CF81680 inClient=1 m_hPlayerPawn@0x92C = 0x01C7800B (idx=11)
+[snap] entitySystem @ 0x00007FF88DA8FBB8 = 0x000004C5F546E000 highestEntityIndex=13
+[snap] entity resolution: 12/16 of indices 1..16 valid
+[snap] ctrl->pawn handle resolve: 0x01C7800B -> 0x000004C683A1E000
+[snap] ----------------------------------------
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+
+=== SNAPSHOT ===
+[snap] fsnCount=115407 lastStage=0 stage5Count=9592
+[snap] stage histogram:
+[snap]   stage  0: 14540 frames
+[snap]   stage  1: 9592 frames
+[snap]   stage  2: 9592 frames
+[snap]   stage  3: 9592 frames
+[snap]   stage  5: 9592 frames
+[snap]   stage  6: 9592 frames
+[snap]   stage  7: 9592 frames
+[snap]   stage  8: 9592 frames
+[snap]   stage 10: 9592 frames
+[snap]   stage 11: 14418 frames
+[snap]   stage 12: 9713 frames
+[snap] dwLocalPlayerController @ 0x00007FF88D8B2548 -> 0x000004C683B61400 
+[snap] dwLocalPlayerPawn       @ 0x00007FF88DAA91E0 -> 0x000004C5F5A32600 
+[snap] pawn: vtable=0x00007FF8B26C3740 inClient=0 health=1222
+[snap] ctrl: vtable=0x00007FF88CF81680 inClient=1 m_hPlayerPawn@0x92C = 0x01C7800B (idx=11)
+[snap] entitySystem @ 0x00007FF88DA8FBB8 = 0x000004C5F546E000 highestEntityIndex=13
+[snap] entity resolution: 12/16 of indices 1..16 valid
+[snap] ctrl->pawn handle resolve: 0x01C7800B -> 0x000004C683A1E000
+[snap] ----------------------------------------
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+
+=== SNAPSHOT ===
+[snap] fsnCount=117975 lastStage=0 stage5Count=9806
+[snap] stage histogram:
+[snap]   stage  0: 14861 frames
+[snap]   stage  1: 9806 frames
+[snap]   stage  2: 9806 frames
+[snap]   stage  3: 9806 frames
+[snap]   stage  5: 9806 frames
+[snap]   stage  6: 9806 frames
+[snap]   stage  7: 9806 frames
+[snap]   stage  8: 9806 frames
+[snap]   stage 10: 9806 frames
+[snap]   stage 11: 14739 frames
+[snap]   stage 12: 9927 frames
+[snap] dwLocalPlayerController @ 0x00007FF88D8B2548 -> 0x000004C683B61400 
+[snap] dwLocalPlayerPawn       @ 0x00007FF88DAA91E0 -> 0x000004C5F5A32600 
+[snap] pawn: vtable=0x00007FF8B26C3740 inClient=0 health=1222
+[snap] ctrl: vtable=0x00007FF88CF81680 inClient=1 m_hPlayerPawn@0x92C = 0x01C7800B (idx=11)
+[snap] entitySystem @ 0x00007FF88DA8FBB8 = 0x000004C5F546E000 highestEntityIndex=13
+[snap] entity resolution: 12/16 of indices 1..16 valid
+[snap] ctrl->pawn handle resolve: 0x01C7800B -> 0x000004C683A1E000
+[snap] ----------------------------------------
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+
+=== SNAPSHOT ===
+[snap] fsnCount=120559 lastStage=0 stage5Count=10022
+[snap] stage histogram:
+[snap]   stage  0: 15181 frames
+[snap]   stage  1: 10022 frames
+[snap]   stage  2: 10022 frames
+[snap]   stage  3: 10022 frames
+[snap]   stage  5: 10022 frames
+[snap]   stage  6: 10022 frames
+[snap]   stage  7: 10022 frames
+[snap]   stage  8: 10022 frames
+[snap]   stage 10: 10022 frames
+[snap]   stage 11: 15059 frames
+[snap]   stage 12: 10143 frames
+[snap] dwLocalPlayerController @ 0x00007FF88D8B2548 -> 0x000004C683B61400 
+[snap] dwLocalPlayerPawn       @ 0x00007FF88DAA91E0 -> 0x000004C5F5A32600 
+[snap] pawn: vtable=0x00007FF8B26C3740 inClient=0 health=1222
+[snap] ctrl: vtable=0x00007FF88CF81680 inClient=1 m_hPlayerPawn@0x92C = 0x01C7800B (idx=11)
+[snap] entitySystem @ 0x00007FF88DA8FBB8 = 0x000004C5F546E000 highestEntityIndex=13
+[snap] entity resolution: 12/16 of indices 1..16 valid
+[snap] ctrl->pawn handle resolve: 0x01C7800B -> 0x000004C683A1E000
+[snap] ----------------------------------------
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+
+=== SNAPSHOT ===
+[snap] fsnCount=123136 lastStage=0 stage5Count=10237
+[snap] stage histogram:
+[snap]   stage  0: 15502 frames
+[snap]   stage  1: 10237 frames
+[snap]   stage  2: 10237 frames
+[snap]   stage  3: 10237 frames
+[snap]   stage  5: 10237 frames
+[snap]   stage  6: 10237 frames
+[snap]   stage  7: 10237 frames
+[snap]   stage  8: 10237 frames
+[snap]   stage 10: 10237 frames
+[snap]   stage 11: 15380 frames
+[snap]   stage 12: 10358 frames
+[snap] dwLocalPlayerController @ 0x00007FF88D8B2548 -> 0x000004C683B61400 
+[snap] dwLocalPlayerPawn       @ 0x00007FF88DAA91E0 -> 0x000004C5F5A32600 
+[snap] pawn: vtable=0x00007FF8B26C3740 inClient=0 health=1222
+[snap] ctrl: vtable=0x00007FF88CF81680 inClient=1 m_hPlayerPawn@0x92C = 0x01C7800B (idx=11)
+[snap] entitySystem @ 0x00007FF88DA8FBB8 = 0x000004C5F546E000 highestEntityIndex=13
+[snap] entity resolution: 12/16 of indices 1..16 valid
+[snap] ctrl->pawn handle resolve: 0x01C7800B -> 0x000004C683A1E000
+[snap] ----------------------------------------
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+
+=== SNAPSHOT ===
+[snap] fsnCount=125691 lastStage=0 stage5Count=10450
+[snap] stage histogram:
+[snap]   stage  0: 15821 frames
+[snap]   stage  1: 10450 frames
+[snap]   stage  2: 10450 frames
+[snap]   stage  3: 10450 frames
+[snap]   stage  5: 10450 frames
+[snap]   stage  6: 10450 frames
+[snap]   stage  7: 10450 frames
+[snap]   stage  8: 10450 frames
+[snap]   stage 10: 10450 frames
+[snap]   stage 11: 15699 frames
+[snap]   stage 12: 10571 frames
+[snap] dwLocalPlayerController @ 0x00007FF88D8B2548 -> 0x000004C683B61400 
+[snap] dwLocalPlayerPawn       @ 0x00007FF88DAA91E0 -> 0x000004C5F5A32600 
+[snap] pawn: vtable=0x00007FF8B26C3740 inClient=0 health=1222
+[snap] ctrl: vtable=0x00007FF88CF81680 inClient=1 m_hPlayerPawn@0x92C = 0x01C7800B (idx=11)
+[snap] entitySystem @ 0x00007FF88DA8FBB8 = 0x000004C5F546E000 highestEntityIndex=13
+[snap] entity resolution: 12/16 of indices 1..16 valid
+[snap] ctrl->pawn handle resolve: 0x01C7800B -> 0x000004C683A1E000
+[snap] ----------------------------------------
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+
+=== SNAPSHOT ===
+[snap] fsnCount=128259 lastStage=0 stage5Count=10664
+[snap] stage histogram:
+[snap]   stage  0: 16142 frames
+[snap]   stage  1: 10664 frames
+[snap]   stage  2: 10664 frames
+[snap]   stage  3: 10664 frames
+[snap]   stage  5: 10664 frames
+[snap]   stage  6: 10664 frames
+[snap]   stage  7: 10664 frames
+[snap]   stage  8: 10664 frames
+[snap]   stage 10: 10664 frames
+[snap]   stage 11: 16020 frames
+[snap]   stage 12: 10785 frames
+[snap] dwLocalPlayerController @ 0x00007FF88D8B2548 -> 0x000004C683B61400 
+[snap] dwLocalPlayerPawn       @ 0x00007FF88DAA91E0 -> 0x000004C5F5A32600 
+[snap] pawn: vtable=0x00007FF8B26C3740 inClient=0 health=1222
+[snap] ctrl: vtable=0x00007FF88CF81680 inClient=1 m_hPlayerPawn@0x92C = 0x01C7800B (idx=11)
+[snap] entitySystem @ 0x00007FF88DA8FBB8 = 0x000004C5F546E000 highestEntityIndex=13
+[snap] entity resolution: 12/16 of indices 1..16 valid
+[snap] ctrl->pawn handle resolve: 0x01C7800B -> 0x000004C683A1E000
+[snap] ----------------------------------------
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+
+=== SNAPSHOT ===
+[snap] fsnCount=130836 lastStage=0 stage5Count=10879
+[snap] stage histogram:
+[snap]   stage  0: 16463 frames
+[snap]   stage  1: 10879 frames
+[snap]   stage  2: 10879 frames
+[snap]   stage  3: 10879 frames
+[snap]   stage  5: 10879 frames
+[snap]   stage  6: 10879 frames
+[snap]   stage  7: 10879 frames
+[snap]   stage  8: 10879 frames
+[snap]   stage 10: 10879 frames
+[snap]   stage 11: 16341 frames
+[snap]   stage 12: 11000 frames
+[snap] dwLocalPlayerController @ 0x00007FF88D8B2548 -> 0x000004C683B61400 
+[snap] dwLocalPlayerPawn       @ 0x00007FF88DAA91E0 -> 0x000004C5F5A32600 
+[snap] pawn: vtable=0x00007FF8B26C3740 inClient=0 health=1222
+[snap] ctrl: vtable=0x00007FF88CF81680 inClient=1 m_hPlayerPawn@0x92C = 0x01C7800B (idx=11)
+[snap] entitySystem @ 0x00007FF88DA8FBB8 = 0x000004C5F546E000 highestEntityIndex=13
+[snap] entity resolution: 12/16 of indices 1..16 valid
+[snap] ctrl->pawn handle resolve: 0x01C7800B -> 0x000004C683A1E000
+[snap] ----------------------------------------
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+
+=== SNAPSHOT ===
+[snap] fsnCount=133411 lastStage=0 stage5Count=11094
+[snap] stage histogram:
+[snap]   stage  0: 16783 frames
+[snap]   stage  1: 11094 frames
+[snap]   stage  2: 11094 frames
+[snap]   stage  3: 11094 frames
+[snap]   stage  5: 11094 frames
+[snap]   stage  6: 11094 frames
+[snap]   stage  7: 11094 frames
+[snap]   stage  8: 11094 frames
+[snap]   stage 10: 11094 frames
+[snap]   stage 11: 16661 frames
+[snap]   stage 12: 11215 frames
+[snap] dwLocalPlayerController @ 0x00007FF88D8B2548 -> 0x000004C683B61400 
+[snap] dwLocalPlayerPawn       @ 0x00007FF88DAA91E0 -> 0x000004C5F5A32600 
+[snap] pawn: vtable=0x00007FF8B26C3740 inClient=0 health=1222
+[snap] ctrl: vtable=0x00007FF88CF81680 inClient=1 m_hPlayerPawn@0x92C = 0x01C7800B (idx=11)
+[snap] entitySystem @ 0x00007FF88DA8FBB8 = 0x000004C5F546E000 highestEntityIndex=13
+[snap] entity resolution: 12/16 of indices 1..16 valid
+[snap] ctrl->pawn handle resolve: 0x01C7800B -> 0x000004C683A1E000
+[snap] ----------------------------------------
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+
+=== SNAPSHOT ===
+[snap] fsnCount=135995 lastStage=7 stage5Count=11310
+[snap] stage histogram:
+[snap]   stage  0: 17104 frames
+[snap]   stage  1: 11310 frames
+[snap]   stage  2: 11310 frames
+[snap]   stage  3: 11309 frames
+[snap]   stage  5: 11310 frames
+[snap]   stage  6: 11310 frames
+[snap]   stage  7: 11310 frames
+[snap]   stage  8: 11309 frames
+[snap]   stage 10: 11310 frames
+[snap]   stage 11: 16983 frames
+[snap]   stage 12: 11430 frames
+[snap] dwLocalPlayerController @ 0x00007FF88D8B2548 -> 0x000004C683B61400 
+[snap] dwLocalPlayerPawn       @ 0x00007FF88DAA91E0 -> 0x000004C5F5A32600 
+[snap] pawn: vtable=0x00007FF8B26C3740 inClient=0 health=1222
+[snap] ctrl: vtable=0x00007FF88CF81680 inClient=1 m_hPlayerPawn@0x92C = 0x01C7800B (idx=11)
+[snap] entitySystem @ 0x00007FF88DA8FBB8 = 0x000004C5F546E000 highestEntityIndex=13
+[snap] entity resolution: 12/16 of indices 1..16 valid
+[snap] ctrl->pawn handle resolve: 0x01C7800B -> 0x000004C683A1E000
+[snap] ----------------------------------------
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+
+=== SNAPSHOT ===
+[snap] fsnCount=138563 lastStage=0 stage5Count=11524
+[snap] stage histogram:
+[snap]   stage  0: 17424 frames
+[snap]   stage  1: 11524 frames
+[snap]   stage  2: 11524 frames
+[snap]   stage  3: 11524 frames
+[snap]   stage  5: 11524 frames
+[snap]   stage  6: 11524 frames
+[snap]   stage  7: 11524 frames
+[snap]   stage  8: 11524 frames
+[snap]   stage 10: 11524 frames
+[snap]   stage 11: 17302 frames
+[snap]   stage 12: 11645 frames
+[snap] dwLocalPlayerController @ 0x00007FF88D8B2548 -> 0x000004C683B61400 
+[snap] dwLocalPlayerPawn       @ 0x00007FF88DAA91E0 -> 0x000004C5F5A32600 
+[snap] pawn: vtable=0x00007FF8B26C3740 inClient=0 health=1222
+[snap] ctrl: vtable=0x00007FF88CF81680 inClient=1 m_hPlayerPawn@0x92C = 0x01C7800B (idx=11)
+[snap] entitySystem @ 0x00007FF88DA8FBB8 = 0x000004C5F546E000 highestEntityIndex=13
+[snap] entity resolution: 12/16 of indices 1..16 valid
+[snap] ctrl->pawn handle resolve: 0x01C7800B -> 0x000004C683A1E000
+[snap] ----------------------------------------
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+
+=== SNAPSHOT ===
+[snap] fsnCount=141131 lastStage=0 stage5Count=11738
+[snap] stage histogram:
+[snap]   stage  0: 17745 frames
+[snap]   stage  1: 11738 frames
+[snap]   stage  2: 11738 frames
+[snap]   stage  3: 11738 frames
+[snap]   stage  5: 11738 frames
+[snap]   stage  6: 11738 frames
+[snap]   stage  7: 11738 frames
+[snap]   stage  8: 11738 frames
+[snap]   stage 10: 11738 frames
+[snap]   stage 11: 17623 frames
+[snap]   stage 12: 11859 frames
+[snap] dwLocalPlayerController @ 0x00007FF88D8B2548 -> 0x000004C683B61400 
+[snap] dwLocalPlayerPawn       @ 0x00007FF88DAA91E0 -> 0x000004C5F5A32600 
+[snap] pawn: vtable=0x00007FF8B26C3740 inClient=0 health=1222
+[snap] ctrl: vtable=0x00007FF88CF81680 inClient=1 m_hPlayerPawn@0x92C = 0x01C7800B (idx=11)
+[snap] entitySystem @ 0x00007FF88DA8FBB8 = 0x000004C5F546E000 highestEntityIndex=13
+[snap] entity resolution: 12/16 of indices 1..16 valid
+[snap] ctrl->pawn handle resolve: 0x01C7800B -> 0x000004C683A1E000
+[snap] ----------------------------------------
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+
+=== SNAPSHOT ===
+[snap] fsnCount=143708 lastStage=0 stage5Count=11953
+[snap] stage histogram:
+[snap]   stage  0: 18066 frames
+[snap]   stage  1: 11953 frames
+[snap]   stage  2: 11953 frames
+[snap]   stage  3: 11953 frames
+[snap]   stage  5: 11953 frames
+[snap]   stage  6: 11953 frames
+[snap]   stage  7: 11953 frames
+[snap]   stage  8: 11953 frames
+[snap]   stage 10: 11953 frames
+[snap]   stage 11: 17944 frames
+[snap]   stage 12: 12074 frames
+[snap] dwLocalPlayerController @ 0x00007FF88D8B2548 -> 0x000004C683B61400 
+[snap] dwLocalPlayerPawn       @ 0x00007FF88DAA91E0 -> 0x000004C5F5A32600 
+[snap] pawn: vtable=0x00007FF8B26C3740 inClient=0 health=1222
+[snap] ctrl: vtable=0x00007FF88CF81680 inClient=1 m_hPlayerPawn@0x92C = 0x01C7800B (idx=11)
+[snap] entitySystem @ 0x00007FF88DA8FBB8 = 0x000004C5F546E000 highestEntityIndex=13
+[snap] entity resolution: 12/16 of indices 1..16 valid
+[snap] ctrl->pawn handle resolve: 0x01C7800B -> 0x000004C683A1E000
+[snap] ----------------------------------------
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+
+=== SNAPSHOT ===
+[snap] fsnCount=146283 lastStage=0 stage5Count=12168
+[snap] stage histogram:
+[snap]   stage  0: 18386 frames
+[snap]   stage  1: 12168 frames
+[snap]   stage  2: 12168 frames
+[snap]   stage  3: 12168 frames
+[snap]   stage  5: 12168 frames
+[snap]   stage  6: 12168 frames
+[snap]   stage  7: 12168 frames
+[snap]   stage  8: 12168 frames
+[snap]   stage 10: 12168 frames
+[snap]   stage 11: 18264 frames
+[snap]   stage 12: 12289 frames
+[snap] dwLocalPlayerController @ 0x00007FF88D8B2548 -> 0x000004C683B61400 
+[snap] dwLocalPlayerPawn       @ 0x00007FF88DAA91E0 -> 0x000004C5F5A32600 
+[snap] pawn: vtable=0x00007FF8B26C3740 inClient=0 health=1222
+[snap] ctrl: vtable=0x00007FF88CF81680 inClient=1 m_hPlayerPawn@0x92C = 0x01C7800B (idx=11)
+[snap] entitySystem @ 0x00007FF88DA8FBB8 = 0x000004C5F546E000 highestEntityIndex=13
+[snap] entity resolution: 12/16 of indices 1..16 valid
+[snap] ctrl->pawn handle resolve: 0x01C7800B -> 0x000004C683A1E000
+[snap] ----------------------------------------
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+
+=== SNAPSHOT ===
+[snap] fsnCount=148851 lastStage=0 stage5Count=12382
+[snap] stage histogram:
+[snap]   stage  0: 18707 frames
+[snap]   stage  1: 12382 frames
+[snap]   stage  2: 12382 frames
+[snap]   stage  3: 12382 frames
+[snap]   stage  5: 12382 frames
+[snap]   stage  6: 12382 frames
+[snap]   stage  7: 12382 frames
+[snap]   stage  8: 12382 frames
+[snap]   stage 10: 12382 frames
+[snap]   stage 11: 18585 frames
+[snap]   stage 12: 12503 frames
+[snap] dwLocalPlayerController @ 0x00007FF88D8B2548 -> 0x000004C683B61400 
+[snap] dwLocalPlayerPawn       @ 0x00007FF88DAA91E0 -> 0x000004C5F5A32600 
+[snap] pawn: vtable=0x00007FF8B26C3740 inClient=0 health=1222
+[snap] ctrl: vtable=0x00007FF88CF81680 inClient=1 m_hPlayerPawn@0x92C = 0x01C7800B (idx=11)
+[snap] entitySystem @ 0x00007FF88DA8FBB8 = 0x000004C5F546E000 highestEntityIndex=13
+[snap] entity resolution: 12/16 of indices 1..16 valid
+[snap] ctrl->pawn handle resolve: 0x01C7800B -> 0x000004C683A1E000
+[snap] ----------------------------------------
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+
+=== SNAPSHOT ===
+[snap] fsnCount=151433 lastStage=7 stage5Count=12598
+[snap] stage histogram:
+[snap]   stage  0: 19027 frames
+[snap]   stage  1: 12598 frames
+[snap]   stage  2: 12598 frames
+[snap]   stage  3: 12597 frames
+[snap]   stage  5: 12598 frames
+[snap]   stage  6: 12598 frames
+[snap]   stage  7: 12598 frames
+[snap]   stage  8: 12597 frames
+[snap]   stage 10: 12598 frames
+[snap]   stage 11: 18906 frames
+[snap]   stage 12: 12718 frames
+[snap] dwLocalPlayerController @ 0x00007FF88D8B2548 -> 0x000004C683B61400 
+[snap] dwLocalPlayerPawn       @ 0x00007FF88DAA91E0 -> 0x000004C5F5A32600 
+[snap] pawn: vtable=0x00007FF8B26C3740 inClient=0 health=1222
+[snap] ctrl: vtable=0x00007FF88CF81680 inClient=1 m_hPlayerPawn@0x92C = 0x01C7800B (idx=11)
+[snap] entitySystem @ 0x00007FF88DA8FBB8 = 0x000004C5F546E000 highestEntityIndex=13
+[snap] entity resolution: 12/16 of indices 1..16 valid
+[snap] ctrl->pawn handle resolve: 0x01C7800B -> 0x000004C683A1E000
+[snap] ----------------------------------------
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+
+=== SNAPSHOT ===
+[snap] fsnCount=154001 lastStage=0 stage5Count=12812
+[snap] stage histogram:
+[snap]   stage  0: 19347 frames
+[snap]   stage  1: 12812 frames
+[snap]   stage  2: 12812 frames
+[snap]   stage  3: 12812 frames
+[snap]   stage  5: 12812 frames
+[snap]   stage  6: 12812 frames
+[snap]   stage  7: 12812 frames
+[snap]   stage  8: 12812 frames
+[snap]   stage 10: 12812 frames
+[snap]   stage 11: 19225 frames
+[snap]   stage 12: 12933 frames
+[snap] dwLocalPlayerController @ 0x00007FF88D8B2548 -> 0x000004C683B61400 
+[snap] dwLocalPlayerPawn       @ 0x00007FF88DAA91E0 -> 0x000004C5F5A32600 
+[snap] pawn: vtable=0x00007FF8B26C3740 inClient=0 health=1222
+[snap] ctrl: vtable=0x00007FF88CF81680 inClient=1 m_hPlayerPawn@0x92C = 0x01C7800B (idx=11)
+[snap] entitySystem @ 0x00007FF88DA8FBB8 = 0x000004C5F546E000 highestEntityIndex=13
+[snap] entity resolution: 12/16 of indices 1..16 valid
+[snap] ctrl->pawn handle resolve: 0x01C7800B -> 0x000004C683A1E000
+[snap] ----------------------------------------
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+
+=== SNAPSHOT ===
+[snap] fsnCount=156569 lastStage=0 stage5Count=13026
+[snap] stage histogram:
+[snap]   stage  0: 19668 frames
+[snap]   stage  1: 13026 frames
+[snap]   stage  2: 13026 frames
+[snap]   stage  3: 13026 frames
+[snap]   stage  5: 13026 frames
+[snap]   stage  6: 13026 frames
+[snap]   stage  7: 13026 frames
+[snap]   stage  8: 13026 frames
+[snap]   stage 10: 13026 frames
+[snap]   stage 11: 19546 frames
+[snap]   stage 12: 13147 frames
+[snap] dwLocalPlayerController @ 0x00007FF88D8B2548 -> 0x000004C683B61400 
+[snap] dwLocalPlayerPawn       @ 0x00007FF88DAA91E0 -> 0x000004C5F5A32600 
+[snap] pawn: vtable=0x00007FF8B26C3740 inClient=0 health=1222
+[snap] ctrl: vtable=0x00007FF88CF81680 inClient=1 m_hPlayerPawn@0x92C = 0x01C7800B (idx=11)
+[snap] entitySystem @ 0x00007FF88DA8FBB8 = 0x000004C5F546E000 highestEntityIndex=13
+[snap] entity resolution: 12/16 of indices 1..16 valid
+[snap] ctrl->pawn handle resolve: 0x01C7800B -> 0x000004C683A1E000
+[snap] ----------------------------------------
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+
+=== SNAPSHOT ===
+[snap] fsnCount=159126 lastStage=0 stage5Count=13239
+[snap] stage histogram:
+[snap]   stage  0: 19988 frames
+[snap]   stage  1: 13239 frames
+[snap]   stage  2: 13239 frames
+[snap]   stage  3: 13239 frames
+[snap]   stage  5: 13239 frames
+[snap]   stage  6: 13239 frames
+[snap]   stage  7: 13239 frames
+[snap]   stage  8: 13239 frames
+[snap]   stage 10: 13239 frames
+[snap]   stage 11: 19866 frames
+[snap]   stage 12: 13360 frames
+[snap] dwLocalPlayerController @ 0x00007FF88D8B2548 -> 0x000004C683B61400 
+[snap] dwLocalPlayerPawn       @ 0x00007FF88DAA91E0 -> 0x000004C5F5A32600 
+[snap] pawn: vtable=0x00007FF8B26C3740 inClient=0 health=1222
+[snap] ctrl: vtable=0x00007FF88CF81680 inClient=1 m_hPlayerPawn@0x92C = 0x01C7800B (idx=11)
+[snap] entitySystem @ 0x00007FF88DA8FBB8 = 0x000004C5F546E000 highestEntityIndex=13
+[snap] entity resolution: 12/16 of indices 1..16 valid
+[snap] ctrl->pawn handle resolve: 0x01C7800B -> 0x000004C683A1E000
+[snap] ----------------------------------------
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+
+=== SNAPSHOT ===
+[snap] fsnCount=161703 lastStage=0 stage5Count=13454
+[snap] stage histogram:
+[snap]   stage  0: 20309 frames
+[snap]   stage  1: 13454 frames
+[snap]   stage  2: 13454 frames
+[snap]   stage  3: 13454 frames
+[snap]   stage  5: 13454 frames
+[snap]   stage  6: 13454 frames
+[snap]   stage  7: 13454 frames
+[snap]   stage  8: 13454 frames
+[snap]   stage 10: 13454 frames
+[snap]   stage 11: 20187 frames
+[snap]   stage 12: 13575 frames
+[snap] dwLocalPlayerController @ 0x00007FF88D8B2548 -> 0x000004C683B61400 
+[snap] dwLocalPlayerPawn       @ 0x00007FF88DAA91E0 -> 0x000004C5F5A32600 
+[snap] pawn: vtable=0x00007FF8B26C3740 inClient=0 health=1222
+[snap] ctrl: vtable=0x00007FF88CF81680 inClient=1 m_hPlayerPawn@0x92C = 0x01C7800B (idx=11)
+[snap] entitySystem @ 0x00007FF88DA8FBB8 = 0x000004C5F546E000 highestEntityIndex=13
+[snap] entity resolution: 12/16 of indices 1..16 valid
+[snap] ctrl->pawn handle resolve: 0x01C7800B -> 0x000004C683A1E000
+[snap] ----------------------------------------
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+
+=== SNAPSHOT ===
+[snap] fsnCount=164278 lastStage=0 stage5Count=13669
+[snap] stage histogram:
+[snap]   stage  0: 20629 frames
+[snap]   stage  1: 13669 frames
+[snap]   stage  2: 13669 frames
+[snap]   stage  3: 13669 frames
+[snap]   stage  5: 13669 frames
+[snap]   stage  6: 13669 frames
+[snap]   stage  7: 13669 frames
+[snap]   stage  8: 13669 frames
+[snap]   stage 10: 13669 frames
+[snap]   stage 11: 20507 frames
+[snap]   stage 12: 13790 frames
+[snap] dwLocalPlayerController @ 0x00007FF88D8B2548 -> 0x000004C683B61400 
+[snap] dwLocalPlayerPawn       @ 0x00007FF88DAA91E0 -> 0x000004C5F5A32600 
+[snap] pawn: vtable=0x00007FF8B26C3740 inClient=0 health=1222
+[snap] ctrl: vtable=0x00007FF88CF81680 inClient=1 m_hPlayerPawn@0x92C = 0x01C7800B (idx=11)
+[snap] entitySystem @ 0x00007FF88DA8FBB8 = 0x000004C5F546E000 highestEntityIndex=13
+[snap] entity resolution: 12/16 of indices 1..16 valid
+[snap] ctrl->pawn handle resolve: 0x01C7800B -> 0x000004C683A1E000
+[snap] ----------------------------------------
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+
+=== SNAPSHOT ===
+[snap] fsnCount=166862 lastStage=7 stage5Count=13885
+[snap] stage histogram:
+[snap]   stage  0: 20950 frames
+[snap]   stage  1: 13885 frames
+[snap]   stage  2: 13885 frames
+[snap]   stage  3: 13884 frames
+[snap]   stage  5: 13885 frames
+[snap]   stage  6: 13885 frames
+[snap]   stage  7: 13885 frames
+[snap]   stage  8: 13884 frames
+[snap]   stage 10: 13885 frames
+[snap]   stage 11: 20829 frames
+[snap]   stage 12: 14005 frames
+[snap] dwLocalPlayerController @ 0x00007FF88D8B2548 -> 0x000004C683B61400 
+[snap] dwLocalPlayerPawn       @ 0x00007FF88DAA91E0 -> 0x000004C5F5A32600 
+[snap] pawn: vtable=0x00007FF8B26C3740 inClient=0 health=1222
+[snap] ctrl: vtable=0x00007FF88CF81680 inClient=1 m_hPlayerPawn@0x92C = 0x01C7800B (idx=11)
+[snap] entitySystem @ 0x00007FF88DA8FBB8 = 0x000004C5F546E000 highestEntityIndex=13
+[snap] entity resolution: 12/16 of indices 1..16 valid
+[snap] ctrl->pawn handle resolve: 0x01C7800B -> 0x000004C683A1E000
+[snap] ----------------------------------------
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+
+=== SNAPSHOT ===
+[snap] fsnCount=169439 lastStage=0 stage5Count=14100
+[snap] stage histogram:
+[snap]   stage  0: 21270 frames
+[snap]   stage  1: 14100 frames
+[snap]   stage  2: 14100 frames
+[snap]   stage  3: 14100 frames
+[snap]   stage  5: 14100 frames
+[snap]   stage  6: 14100 frames
+[snap]   stage  7: 14100 frames
+[snap]   stage  8: 14100 frames
+[snap]   stage 10: 14100 frames
+[snap]   stage 11: 21148 frames
+[snap]   stage 12: 14221 frames
+[snap] dwLocalPlayerController @ 0x00007FF88D8B2548 -> 0x000004C683B61400 
+[snap] dwLocalPlayerPawn       @ 0x00007FF88DAA91E0 -> 0x000004C5F5A32600 
+[snap] pawn: vtable=0x00007FF8B26C3740 inClient=0 health=1222
+[snap] ctrl: vtable=0x00007FF88CF81680 inClient=1 m_hPlayerPawn@0x92C = 0x01C7800B (idx=11)
+[snap] entitySystem @ 0x00007FF88DA8FBB8 = 0x000004C5F546E000 highestEntityIndex=13
+[snap] entity resolution: 12/16 of indices 1..16 valid
+[snap] ctrl->pawn handle resolve: 0x01C7800B -> 0x000004C683A1E000
+[snap] ----------------------------------------
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+
+=== SNAPSHOT ===
+[snap] fsnCount=171987 lastStage=0 stage5Count=14312
+[snap] stage histogram:
+[snap]   stage  0: 21590 frames
+[snap]   stage  1: 14312 frames
+[snap]   stage  2: 14312 frames
+[snap]   stage  3: 14312 frames
+[snap]   stage  5: 14312 frames
+[snap]   stage  6: 14312 frames
+[snap]   stage  7: 14312 frames
+[snap]   stage  8: 14312 frames
+[snap]   stage 10: 14312 frames
+[snap]   stage 11: 21468 frames
+[snap]   stage 12: 14433 frames
+[snap] dwLocalPlayerController @ 0x00007FF88D8B2548 -> 0x000004C683B61400 
+[snap] dwLocalPlayerPawn       @ 0x00007FF88DAA91E0 -> 0x000004C5F5A32600 
+[snap] pawn: vtable=0x00007FF8B26C3740 inClient=0 health=1222
+[snap] ctrl: vtable=0x00007FF88CF81680 inClient=1 m_hPlayerPawn@0x92C = 0x01C7800B (idx=11)
+[snap] entitySystem @ 0x00007FF88DA8FBB8 = 0x000004C5F546E000 highestEntityIndex=13
+[snap] entity resolution: 12/16 of indices 1..16 valid
+[snap] ctrl->pawn handle resolve: 0x01C7800B -> 0x000004C683A1E000
+[snap] ----------------------------------------
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+
+=== SNAPSHOT ===
+[snap] fsnCount=174555 lastStage=0 stage5Count=14526
+[snap] stage histogram:
+[snap]   stage  0: 21911 frames
+[snap]   stage  1: 14526 frames
+[snap]   stage  2: 14526 frames
+[snap]   stage  3: 14526 frames
+[snap]   stage  5: 14526 frames
+[snap]   stage  6: 14526 frames
+[snap]   stage  7: 14526 frames
+[snap]   stage  8: 14526 frames
+[snap]   stage 10: 14526 frames
+[snap]   stage 11: 21789 frames
+[snap]   stage 12: 14647 frames
+[snap] dwLocalPlayerController @ 0x00007FF88D8B2548 -> 0x000004C683B61400 
+[snap] dwLocalPlayerPawn       @ 0x00007FF88DAA91E0 -> 0x000004C5F5A32600 
+[snap] pawn: vtable=0x00007FF8B26C3740 inClient=0 health=1222
+[snap] ctrl: vtable=0x00007FF88CF81680 inClient=1 m_hPlayerPawn@0x92C = 0x01C7800B (idx=11)
+[snap] entitySystem @ 0x00007FF88DA8FBB8 = 0x000004C5F546E000 highestEntityIndex=13
+[snap] entity resolution: 12/16 of indices 1..16 valid
+[snap] ctrl->pawn handle resolve: 0x01C7800B -> 0x000004C683A1E000
+[snap] ----------------------------------------
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+
+=== SNAPSHOT ===
+[snap] fsnCount=177141 lastStage=0 stage5Count=14742
+[snap] stage histogram:
+[snap]   stage  0: 22232 frames
+[snap]   stage  1: 14742 frames
+[snap]   stage  2: 14742 frames
+[snap]   stage  3: 14742 frames
+[snap]   stage  5: 14742 frames
+[snap]   stage  6: 14742 frames
+[snap]   stage  7: 14742 frames
+[snap]   stage  8: 14742 frames
+[snap]   stage 10: 14742 frames
+[snap]   stage 11: 22110 frames
+[snap]   stage 12: 14863 frames
+[snap] dwLocalPlayerController @ 0x00007FF88D8B2548 -> 0x000004C683B61400 
+[snap] dwLocalPlayerPawn       @ 0x00007FF88DAA91E0 -> 0x000004C5F5A32600 
+[snap] pawn: vtable=0x00007FF8B26C3740 inClient=0 health=1222
+[snap] ctrl: vtable=0x00007FF88CF81680 inClient=1 m_hPlayerPawn@0x92C = 0x01C7800B (idx=11)
+[snap] entitySystem @ 0x00007FF88DA8FBB8 = 0x000004C5F546E000 highestEntityIndex=13
+[snap] entity resolution: 12/16 of indices 1..16 valid
+[snap] ctrl->pawn handle resolve: 0x01C7800B -> 0x000004C683A1E000
+[snap] ----------------------------------------
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+
+=== SNAPSHOT ===
+[snap] fsnCount=179709 lastStage=0 stage5Count=14956
+[snap] stage histogram:
+[snap]   stage  0: 22553 frames
+[snap]   stage  1: 14956 frames
+[snap]   stage  2: 14956 frames
+[snap]   stage  3: 14956 frames
+[snap]   stage  5: 14956 frames
+[snap]   stage  6: 14956 frames
+[snap]   stage  7: 14956 frames
+[snap]   stage  8: 14956 frames
+[snap]   stage 10: 14956 frames
+[snap]   stage 11: 22431 frames
+[snap]   stage 12: 15077 frames
+[snap] dwLocalPlayerController @ 0x00007FF88D8B2548 -> 0x000004C683B61400 
+[snap] dwLocalPlayerPawn       @ 0x00007FF88DAA91E0 -> 0x000004C5F5A32600 
+[snap] pawn: vtable=0x00007FF8B26C3740 inClient=0 health=1222
+[snap] ctrl: vtable=0x00007FF88CF81680 inClient=1 m_hPlayerPawn@0x92C = 0x01C7800B (idx=11)
+[snap] entitySystem @ 0x00007FF88DA8FBB8 = 0x000004C5F546E000 highestEntityIndex=13
+[snap] entity resolution: 12/16 of indices 1..16 valid
+[snap] ctrl->pawn handle resolve: 0x01C7800B -> 0x000004C683A1E000
+[snap] ----------------------------------------
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+
+=== SNAPSHOT ===
+[snap] fsnCount=182275 lastStage=0 stage5Count=15170
+[snap] stage histogram:
+[snap]   stage  0: 22873 frames
+[snap]   stage  1: 15170 frames
+[snap]   stage  2: 15170 frames
+[snap]   stage  3: 15170 frames
+[snap]   stage  5: 15170 frames
+[snap]   stage  6: 15170 frames
+[snap]   stage  7: 15170 frames
+[snap]   stage  8: 15170 frames
+[snap]   stage 10: 15170 frames
+[snap]   stage 11: 22751 frames
+[snap]   stage 12: 15291 frames
+[snap] dwLocalPlayerController @ 0x00007FF88D8B2548 -> 0x000004C683B61400 
+[snap] dwLocalPlayerPawn       @ 0x00007FF88DAA91E0 -> 0x000004C5F5A32600 
+[snap] pawn: vtable=0x00007FF8B26C3740 inClient=0 health=1222
+[snap] ctrl: vtable=0x00007FF88CF81680 inClient=1 m_hPlayerPawn@0x92C = 0x01C7800B (idx=11)
+[snap] entitySystem @ 0x00007FF88DA8FBB8 = 0x000004C5F546E000 highestEntityIndex=13
+[snap] entity resolution: 12/16 of indices 1..16 valid
+[snap] ctrl->pawn handle resolve: 0x01C7800B -> 0x000004C683A1E000
+[snap] ----------------------------------------
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+
+=== SNAPSHOT ===
+[snap] fsnCount=184852 lastStage=0 stage5Count=15385
+[snap] stage histogram:
+[snap]   stage  0: 23194 frames
+[snap]   stage  1: 15385 frames
+[snap]   stage  2: 15385 frames
+[snap]   stage  3: 15385 frames
+[snap]   stage  5: 15385 frames
+[snap]   stage  6: 15385 frames
+[snap]   stage  7: 15385 frames
+[snap]   stage  8: 15385 frames
+[snap]   stage 10: 15385 frames
+[snap]   stage 11: 23072 frames
+[snap]   stage 12: 15506 frames
+[snap] dwLocalPlayerController @ 0x00007FF88D8B2548 -> 0x000004C683B61400 
+[snap] dwLocalPlayerPawn       @ 0x00007FF88DAA91E0 -> 0x000004C5F5A32600 
+[snap] pawn: vtable=0x00007FF8B26C3740 inClient=0 health=1222
+[snap] ctrl: vtable=0x00007FF88CF81680 inClient=1 m_hPlayerPawn@0x92C = 0x01C7800B (idx=11)
+[snap] entitySystem @ 0x00007FF88DA8FBB8 = 0x000004C5F546E000 highestEntityIndex=13
+[snap] entity resolution: 12/16 of indices 1..16 valid
+[snap] ctrl->pawn handle resolve: 0x01C7800B -> 0x000004C683A1E000
+[snap] ----------------------------------------
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+
+=== SNAPSHOT ===
+[snap] fsnCount=187420 lastStage=0 stage5Count=15599
+[snap] stage histogram:
+[snap]   stage  0: 23515 frames
+[snap]   stage  1: 15599 frames
+[snap]   stage  2: 15599 frames
+[snap]   stage  3: 15599 frames
+[snap]   stage  5: 15599 frames
+[snap]   stage  6: 15599 frames
+[snap]   stage  7: 15599 frames
+[snap]   stage  8: 15599 frames
+[snap]   stage 10: 15599 frames
+[snap]   stage 11: 23393 frames
+[snap]   stage 12: 15720 frames
+[snap] dwLocalPlayerController @ 0x00007FF88D8B2548 -> 0x000004C683B61400 
+[snap] dwLocalPlayerPawn       @ 0x00007FF88DAA91E0 -> 0x000004C5F5A32600 
+[snap] pawn: vtable=0x00007FF8B26C3740 inClient=0 health=1222
+[snap] ctrl: vtable=0x00007FF88CF81680 inClient=1 m_hPlayerPawn@0x92C = 0x01C7800B (idx=11)
+[snap] entitySystem @ 0x00007FF88DA8FBB8 = 0x000004C5F546E000 highestEntityIndex=13
+[snap] entity resolution: 12/16 of indices 1..16 valid
+[snap] ctrl->pawn handle resolve: 0x01C7800B -> 0x000004C683A1E000
+[snap] ----------------------------------------
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+
+=== SNAPSHOT ===
+[snap] fsnCount=189979 lastStage=3 stage5Count=15812
+[snap] stage histogram:
+[snap]   stage  0: 23836 frames
+[snap]   stage  1: 15812 frames
+[snap]   stage  2: 15812 frames
+[snap]   stage  3: 15812 frames
+[snap]   stage  5: 15812 frames
+[snap]   stage  6: 15812 frames
+[snap]   stage  7: 15812 frames
+[snap]   stage  8: 15812 frames
+[snap]   stage 10: 15812 frames
+[snap]   stage 11: 23715 frames
+[snap]   stage 12: 15932 frames
+[snap] dwLocalPlayerController @ 0x00007FF88D8B2548 -> 0x000004C683B61400 
+[snap] dwLocalPlayerPawn       @ 0x00007FF88DAA91E0 -> 0x000004C5F5A32600 
+[snap] pawn: vtable=0x00007FF8B26C3740 inClient=0 health=1222
+[snap] ctrl: vtable=0x00007FF88CF81680 inClient=1 m_hPlayerPawn@0x92C = 0x01C7800B (idx=11)
+[snap] entitySystem @ 0x00007FF88DA8FBB8 = 0x000004C5F546E000 highestEntityIndex=13
+[snap] entity resolution: 12/16 of indices 1..16 valid
+[snap] ctrl->pawn handle resolve: 0x01C7800B -> 0x000004C683A1E000
+[snap] ----------------------------------------
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000004C683A1E000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[status-path] selected=C:\Users\mirac\AppData\Local\n1ssan\status\cs2-18972.status source=LOCALAPPDATA
+
+# n1ssan diagnostic session
+[build] armory-obsidian-3.0
+[build] Operation Armory x Obsidian Build 3.0 | Nov  7 2026 08:22:09
+N1SSAN_STATUS|1|2026-11-07T01:39:10Z|18972|armory-obsidian-3.0|INITIALIZING|reason=worker_started
+[status-write] begin state=INITIALIZING path=C:\Users\mirac\AppData\Local\n1ssan\status\cs2-18972.status
+[status-write] success state=INITIALIZING error=0
+[off] PAWN_MyWearables = 0x1268
+[off] field offsets populated
+[auto-off] dwEntityList                 hit 0x00007FF8A55793CB -> rva 0x271FBB8 (val=000003ED05479000)
+[auto-off] dwLocalPlayerController      hit 0x00007FF8A5495750 -> rva 0x2542548 (val=000003EDA07D0000)
+[auto-off] dwLocalPlayerPawn            hit 0x00007FF8A4CB1615 -> rva 0x27391E0 (val=000003ED22372C00)
+[auto-off] summary: matched=3/3
+[off] RVA_ENTITY_LIST           = 0x00007FF8A727FBB8
+[off] RVA_LOCALPLAYERCONTROLLER = 0x00007FF8A70A2548
+[off] RVA_LOCALPLAYERPAWN       = 0x00007FF8A72991E0
+[bridge] discovered Bridge directory: E:\Vibe Coding\CS2 Lore\CS2 n1ssan\development\n1ssan-web-bridge\
+[runtime-mode] no valid selection found; defaulting to Loadout
+[runtime-mode] initial mode: loadout
+[runtime-mode] selected=loadout
+[schema-live] m_nSubclassID runtime=0x380 hardcoded=0x38C MISMATCH
+[schema-live] subclass resolver ready: 0x380
+[schema-gloves] C_CSPlayerPawn->m_EconGloves = 0x1770
+[schema-gloves] C_CSPlayerPawn->m_bNeedToReApplyGloves = 0x176D
+[schema-gloves] C_EconItemView->m_iItemDefinitionIndex = 0x1BA
+[schema-gloves] C_EconItemView->m_iEntityQuality = 0x1BC
+[schema-gloves] C_EconItemView->m_iItemIDHigh = 0x1D0
+[schema-gloves] C_EconItemView->m_bInitialized = 0x1E8
+[schema-gloves] C_EconItemView->m_bDisallowSOC = 0x1E9
+[schema-gloves] C_EconItemView->m_bRestoreCustomMaterialAfterPrecache = 0x1B8
+[schema-gloves] C_EconItemView->m_AttributeList = 0x208
+[schema-gloves] C_EconItemView->m_NetworkedDynamicAttributes = 0x280
+[schema-gloves] CAttributeList->m_Attributes = 0x8
+[schema-gloves] READY
+[resolve] InvalidateDescription          @ 0x00007FF8A5D01350
+[resolve] BuildModernSkin                @ 0x00007FF8A59A5B10
+[resolve] SetMeshGroupMask               @ 0x00007FF8A5625A90
+[resolve] RegenerateSkins                @ 0x00007FF8A538B4B0
+[resolve] ReleaseCompositeMaterials      @ 0x00007FF8A604C4A0
+[resolve] GloveCreatePaintKit            @ 0x00007FF8A5CF13D0
+[resolve] AgentSetModel                  @ 0x00007FF8A54C5C90
+[resolve] KnifeUpdateSubclass            @ 0x00007FF8A4D69000
+[resolve] GloveSetBodyGroup              @ 0x00007FF8A54C4BB0
+[resolve] MemAlloc                       @ 0x00007FF8FCC7DD30
+[resolve] MemFree                        @ 0x00007FF8FCC7DD70
+[resolve] CSkeletonInstance->m_modelState = 0x140 (hardcoded)
+[resolve] CModelState->m_hModel = 0xA0 (hardcoded)
+[resolve] entityList @ 0x00007FF8A727FBB8 -> 0x000003ED05479000
+[glove-paintkit-schema] READY
+[glove-schema] READY
+[bridge] discovered Bridge directory: E:\Vibe Coding\CS2 Lore\CS2 n1ssan\development\n1ssan-web-bridge\
+[loadout] Bridge data path: E:\Vibe Coding\CS2 Lore\CS2 n1ssan\development\n1ssan-web-bridge\n1ssan-data.json
+[loadout] JSON file found (1557 bytes)
+[loadout] CT/gloves: Driver Gloves (Brocade Crane) pk=1399 def=5031
+[loadout] CT/knife: Bayonet (Fade) pk=38 def=500
+[loadout] CT/weapon: USP-S (Kill Confirmed) pk=504 def=61
+[loadout] T/gloves: Specialist Gloves (Cloud Chaser) pk=1440 def=5034
+[loadout] T/knife: Butterfly Knife (Freehand) pk=581 def=515
+[loadout] T/weapon: P250 (Visions) pk=1153 def=36
+[loadout] 6 items from E:\Vibe Coding\CS2 Lore\CS2 n1ssan\development\n1ssan-web-bridge\n1ssan-data.json
+=== [schema-snapshot] start ===
+[schema-preflight] PASS slot=gloves team=CT weapon=Driver Gloves def=5031 itemName=slick_gloves pk=1399 skin=Brocade Crane
+[schema-preflight] PASS slot=weapon team=T weapon=P250 def=36 itemName=weapon_p250 pk=1153 skin=Visions
+[schema-preflight] PASS slot=knife team=CT weapon=Bayonet def=500 itemName=weapon_bayonet pk=38 skin=Fade
+[schema-preflight] PASS slot=weapon team=CT weapon=USP-S def=61 itemName=weapon_usp_silencer pk=504 skin=Kill Confirmed
+[schema-preflight] PASS slot=gloves team=T weapon=Specialist Gloves def=5034 itemName=specialist_gloves pk=1440 skin=Cloud Chaser
+[schema-preflight] PASS slot=knife team=T weapon=Butterfly Knife def=515 itemName=weapon_knife_butterfly pk=581 skin=Freehand
+[schema-preflight] checked=6 targets=6 result=PASS
+[schema-snapshot] itemDefinitions=2059 livePaintKits=1481 paintKitDefinitions=1481 stickerKits=11789 keychains=143
+[schema-snapshot] items_game=loaded paintMap=available offset=0x2A0
+[schema-snapshot] compatibility=available items=85 pairs=125800 compatible=2128
+[schema-snapshot] snapshot written: E:\Vibe Coding\CS2 Lore\CS2 n1ssan\development\CS2-n1ssan\x64\Release\n1ssan-cs2-schema.json
+[schema-preflight] result=PASS
+=== [schema-snapshot] done ===
+[plan-a] CEconItemSystem* = 0x000003EC77B33DB0 (stored)
+[loot-schema] GetAttributeDefinitionByName @ 0x00007FF8A5C930F0
+[loot-schema] OK (invOffset=0x528D0, setUint=00007FF8A5C48E70, setFloat=00007FF8A5C49080)
+[plan-a] ready, injecting Loadout items
+[loot-schema] attr 'set item texture prefab' (idx 6) -> 0x000003ED704B79C0
+[loot-schema] attr 6 kind=2 (0=float,1=uint32,2=default,3=other)
+[loot-schema] attr 'set item texture seed' (idx 7) -> 0x000003ED704B7A60
+[loot-schema] attr 7 kind=2 (0=float,1=uint32,2=default,3=other)
+[loot-schema] attr 'set item texture wear' (idx 8) -> 0x000003ED704B7B00
+[loot-schema] attr 8 kind=2 (0=float,1=uint32,2=default,3=other)
+[plan-a] inject: created=6 existed=0 failed=0
+[knife-anim] initialized (State=0x19A8 Action=0xC0 Reset=0xD8 Extra=0x270)
+[knife-anim] KnifeInspect @ 0x00007FF8A5379F50 HOOKED
+[knife-anim] KnifeReflect pattern not found
+[armory-inventory] watching for inventory changes: E:\Vibe Coding\CS2 Lore\CS2 n1ssan\development\n1ssan-web-bridge\armory-inventory.json
+[loadout] watching for runtime changes: E:\Vibe Coding\CS2 Lore\CS2 n1ssan\development\n1ssan-web-bridge\n1ssan-data.json
+[fsn] pClient=0x00007FF8A70C4620 vtable=0x00007FF8A67C8230 fn=0x00007FF8A56CEFE0 slot=36
+[fsn] hooked (vtable overwrite)
+N1SSAN_STATUS|1|2026-11-07T01:39:15Z|18972|armory-obsidian-3.0|CHECKS_PASSED|reason=required_initialization_checks_passed
+[status-write] begin state=CHECKS_PASSED path=C:\Users\mirac\AppData\Local\n1ssan\status\cs2-18972.status
+[status-write] success state=CHECKS_PASSED error=0
+[diagnostic] runtime=loadout targets=6
+N1SSAN_STATUS|1|2026-11-07T01:39:15Z|18972|armory-obsidian-3.0|READY|reason=runtime_worker_heartbeat
+[status-write] begin state=READY path=C:\Users\mirac\AppData\Local\n1ssan\status\cs2-18972.status
+[status-write] success state=READY error=0
+[fsn] first stage call seen
+
+=== SNAPSHOT ===
+[snap] fsnCount=1 lastStage=0 stage5Count=0
+[snap] stage histogram:
+[snap]   stage  0: 1 frames
+[snap] dwLocalPlayerController @ 0x00007FF8A70A2548 -> 0x000003EDA07D0000 
+[snap] dwLocalPlayerPawn       @ 0x00007FF8A72991E0 -> 0x000003ED22372C00 
+[snap] pawn: vtable=0x00007FF8AA9B3740 inClient=0 health=1005
+[snap] ctrl: vtable=0x00007FF8A6771680 inClient=1 m_hPlayerPawn@0x92C = 0x00A4800B (idx=11)
+[snap] entitySystem @ 0x00007FF8A727FBB8 = 0x000003ED05479000 highestEntityIndex=13
+[snap] entity resolution: 12/16 of indices 1..16 valid
+[snap] ctrl->pawn handle resolve: 0x00A4800B -> 0x000003ED9DE91800
+[snap] ----------------------------------------
+[knife-anim] stage=6 reached
+[glove-observe] pawn=000003ED9DE91800 reapply=0 changed=0 def=0 init=0 idHigh=0x0
+[match] network signOn=6 maxClients=1 backgroundMap=0 connected=0 alive=0
+[detect] pawn=0x000003ED9DE91800 hp=100 signOn=6 bg=0
+[knife-anim] stage=6 reached
+[knife-anim] stage=6 reached
+[armory-inventory] staged 14 items (applies outside an active match)
+
+=== SNAPSHOT ===
+[snap] fsnCount=1047 lastStage=0 stage5Count=48
+[snap] stage histogram:
+[snap]   stage  0: 308 frames
+[snap]   stage  1: 48 frames
+[snap]   stage  2: 48 frames
+[snap]   stage  3: 48 frames
+[snap]   stage  5: 48 frames
+[snap]   stage  6: 48 frames
+[snap]   stage  7: 48 frames
+[snap]   stage  8: 48 frames
+[snap]   stage 10: 48 frames
+[snap]   stage 11: 307 frames
+[snap]   stage 12: 48 frames
+[snap] dwLocalPlayerController @ 0x00007FF8A70A2548 -> 0x000003EDA07D0000 
+[snap] dwLocalPlayerPawn       @ 0x00007FF8A72991E0 -> 0x000003ED22372C00 
+[snap] pawn: vtable=0x00007FF8AA9B3740 inClient=0 health=1005
+[snap] ctrl: vtable=0x00007FF8A6771680 inClient=1 m_hPlayerPawn@0x92C = 0x00A4800B (idx=11)
+[snap] entitySystem @ 0x00007FF8A727FBB8 = 0x000003ED05479000 highestEntityIndex=13
+[snap] entity resolution: 12/16 of indices 1..16 valid
+[snap] ctrl->pawn handle resolve: 0x00A4800B -> 0x000003ED9DE91800
+[snap] ----------------------------------------
+N1SSAN_STATUS|1|2026-11-07T01:39:25Z|18972|armory-obsidian-3.0|READY|reason=runtime_worker_heartbeat
+[status-write] begin state=READY path=C:\Users\mirac\AppData\Local\n1ssan\status\cs2-18972.status
+[status-write] success state=READY error=0
+
+=== SNAPSHOT ===
+[snap] fsnCount=2156 lastStage=0 stage5Count=101
+[snap] stage histogram:
+[snap]   stage  0: 624 frames
+[snap]   stage  1: 101 frames
+[snap]   stage  2: 101 frames
+[snap]   stage  3: 101 frames
+[snap]   stage  5: 101 frames
+[snap]   stage  6: 101 frames
+[snap]   stage  7: 101 frames
+[snap]   stage  8: 101 frames
+[snap]   stage 10: 101 frames
+[snap]   stage 11: 614 frames
+[snap]   stage 12: 110 frames
+[snap] dwLocalPlayerController @ 0x00007FF8A70A2548 -> 0x000003EDA07D0000 
+[snap] dwLocalPlayerPawn       @ 0x00007FF8A72991E0 -> 0x000003ED22372C00 
+[snap] pawn: vtable=0x00007FF8AA9B3740 inClient=0 health=1005
+[snap] ctrl: vtable=0x00007FF8A6771680 inClient=1 m_hPlayerPawn@0x92C = 0x00A4800B (idx=11)
+[snap] entitySystem @ 0x00007FF8A727FBB8 = 0x000003ED05479000 highestEntityIndex=13
+[snap] entity resolution: 12/16 of indices 1..16 valid
+[snap] ctrl->pawn handle resolve: 0x00A4800B -> 0x000003ED9DE91800
+[snap] ----------------------------------------
+[detect] pawn=0x000003ED9DE91800 hp=100 signOn=6 bg=0
+[runtime-mode] switched to armory
+[armory-inventory] preparing replacement set: 14 items
+[loot-schema] attr 'kill eater' (idx 80) -> 0x000003ED704BA580
+[loot-schema] attr 'kill eater score type' (idx 81) -> 0x000003ED704BA620
+[armory-inventory] replacement committed: created=14 removed=0 removeFailed=0
+[armory-inventory] staged 14 items (applies outside an active match)
+[armory-inventory] preparing replacement set: 14 items
+[armory-inventory] replacement committed: created=14 removed=14 removeFailed=0
+
+=== SNAPSHOT ===
+[snap] fsnCount=3202 lastStage=0 stage5Count=149
+[snap] stage histogram:
+[snap]   stage  0: 931 frames
+[snap]   stage  1: 149 frames
+[snap]   stage  2: 149 frames
+[snap]   stage  3: 149 frames
+[snap]   stage  5: 149 frames
+[snap]   stage  6: 149 frames
+[snap]   stage  7: 149 frames
+[snap]   stage  8: 149 frames
+[snap]   stage 10: 149 frames
+[snap]   stage 11: 921 frames
+[snap]   stage 12: 158 frames
+[snap] dwLocalPlayerController @ 0x00007FF8A70A2548 -> 0x000003EDA07D0000 
+[snap] dwLocalPlayerPawn       @ 0x00007FF8A72991E0 -> 0x000003ED22372C00 
+[snap] pawn: vtable=0x00007FF8AA9B3740 inClient=0 health=1005
+[snap] ctrl: vtable=0x00007FF8A6771680 inClient=1 m_hPlayerPawn@0x92C = 0x00A4800B (idx=11)
+[snap] entitySystem @ 0x00007FF8A727FBB8 = 0x000003ED05479000 highestEntityIndex=13
+[snap] entity resolution: 12/16 of indices 1..16 valid
+[snap] ctrl->pawn handle resolve: 0x00A4800B -> 0x000003ED9DE91800
+[snap] ----------------------------------------
+[armory-inventory] staged 12 items (applies outside an active match)
+[armory-inventory] preparing replacement set: 12 items
+[armory-inventory] replacement committed: created=12 removed=14 removeFailed=0
+[armory-inventory] staged 12 items (applies outside an active match)
+N1SSAN_STATUS|1|2026-11-07T01:39:35Z|18972|armory-obsidian-3.0|READY|reason=runtime_worker_heartbeat
+[status-write] begin state=READY path=C:\Users\mirac\AppData\Local\n1ssan\status\cs2-18972.status
+[status-write] success state=READY error=0
+[armory-inventory] preparing replacement set: 12 items
+[armory-inventory] replacement committed: created=12 removed=12 removeFailed=0
+
+=== SNAPSHOT ===
+[snap] fsnCount=4248 lastStage=0 stage5Count=197
+[snap] stage histogram:
+[snap]   stage  0: 1238 frames
+[snap]   stage  1: 197 frames
+[snap]   stage  2: 197 frames
+[snap]   stage  3: 197 frames
+[snap]   stage  5: 197 frames
+[snap]   stage  6: 197 frames
+[snap]   stage  7: 197 frames
+[snap]   stage  8: 197 frames
+[snap]   stage 10: 197 frames
+[snap]   stage 11: 1228 frames
+[snap]   stage 12: 206 frames
+[snap] dwLocalPlayerController @ 0x00007FF8A70A2548 -> 0x000003EDA07D0000 
+[snap] dwLocalPlayerPawn       @ 0x00007FF8A72991E0 -> 0x000003ED22372C00 
+[snap] pawn: vtable=0x00007FF8AA9B3740 inClient=0 health=1005
+[snap] ctrl: vtable=0x00007FF8A6771680 inClient=1 m_hPlayerPawn@0x92C = 0x00A4800B (idx=11)
+[snap] entitySystem @ 0x00007FF8A727FBB8 = 0x000003ED05479000 highestEntityIndex=13
+[snap] entity resolution: 12/16 of indices 1..16 valid
+[snap] ctrl->pawn handle resolve: 0x00A4800B -> 0x000003ED9DE91800
+[snap] ----------------------------------------
+
+=== SNAPSHOT ===
+[snap] fsnCount=5650 lastStage=0 stage5Count=271
+[snap] stage histogram:
+[snap]   stage  0: 1606 frames
+[snap]   stage  1: 271 frames
+[snap]   stage  2: 271 frames
+[snap]   stage  3: 271 frames
+[snap]   stage  5: 271 frames
+[snap]   stage  6: 271 frames
+[snap]   stage  7: 271 frames
+[snap]   stage  8: 271 frames
+[snap]   stage 10: 271 frames
+[snap]   stage 11: 1541 frames
+[snap]   stage 12: 335 frames
+[snap] dwLocalPlayerController @ 0x00007FF8A70A2548 -> 0x000003EDA07D0000 
+[snap] dwLocalPlayerPawn       @ 0x00007FF8A72991E0 -> 0x000003ED22372C00 
+[snap] pawn: vtable=0x00007FF8AA9B3740 inClient=0 health=1005
+[snap] ctrl: vtable=0x00007FF8A6771680 inClient=1 m_hPlayerPawn@0x92C = 0x00A4800B (idx=11)
+[snap] entitySystem @ 0x00007FF8A727FBB8 = 0x000003ED05479000 highestEntityIndex=13
+[snap] entity resolution: 12/16 of indices 1..16 valid
+[snap] ctrl->pawn handle resolve: 0x00A4800B -> 0x000003ED9DE91800
+[snap] ----------------------------------------
+N1SSAN_STATUS|1|2026-11-07T01:39:45Z|18972|armory-obsidian-3.0|READY|reason=runtime_worker_heartbeat
+[status-write] begin state=READY path=C:\Users\mirac\AppData\Local\n1ssan\status\cs2-18972.status
+[status-write] success state=READY error=0
+
+=== SNAPSHOT ===
+[snap] fsnCount=10073 lastStage=0 stage5Count=574
+[snap] stage histogram:
+[snap]   stage  0: 2454 frames
+[snap]   stage  1: 574 frames
+[snap]   stage  2: 574 frames
+[snap]   stage  3: 574 frames
+[snap]   stage  5: 574 frames
+[snap]   stage  6: 574 frames
+[snap]   stage  7: 574 frames
+[snap]   stage  8: 574 frames
+[snap]   stage 10: 574 frames
+[snap]   stage 11: 1855 frames
+[snap]   stage 12: 1172 frames
+[snap] dwLocalPlayerController @ 0x00007FF8A70A2548 -> 0x000003EDA07D0000 
+[snap] dwLocalPlayerPawn       @ 0x00007FF8A72991E0 -> 0x000003ED22372C00 
+[snap] pawn: vtable=0x00007FF8AA9B3740 inClient=0 health=1005
+[snap] ctrl: vtable=0x00007FF8A6771680 inClient=1 m_hPlayerPawn@0x92C = 0x00A4800B (idx=11)
+[snap] entitySystem @ 0x00007FF8A727FBB8 = 0x000003ED05479000 highestEntityIndex=13
+[snap] entity resolution: 12/16 of indices 1..16 valid
+[snap] ctrl->pawn handle resolve: 0x00A4800B -> 0x000003ED9DE91800
+[snap] ----------------------------------------
+
+=== SNAPSHOT ===
+[snap] fsnCount=14565 lastStage=0 stage5Count=890
+[snap] stage histogram:
+[snap]   stage  0: 3278 frames
+[snap]   stage  1: 890 frames
+[snap]   stage  2: 890 frames
+[snap]   stage  3: 890 frames
+[snap]   stage  5: 890 frames
+[snap]   stage  6: 890 frames
+[snap]   stage  7: 890 frames
+[snap]   stage  8: 890 frames
+[snap]   stage 10: 890 frames
+[snap]   stage 11: 2175 frames
+[snap]   stage 12: 1992 frames
+[snap] dwLocalPlayerController @ 0x00007FF8A70A2548 -> 0x000003EDA07D0000 
+[snap] dwLocalPlayerPawn       @ 0x00007FF8A72991E0 -> 0x000003ED22372C00 
+[snap] pawn: vtable=0x00007FF8AA9B3740 inClient=0 health=1005
+[snap] ctrl: vtable=0x00007FF8A6771680 inClient=1 m_hPlayerPawn@0x92C = 0x00A4800B (idx=11)
+[snap] entitySystem @ 0x00007FF8A727FBB8 = 0x000003ED05479000 highestEntityIndex=13
+[snap] entity resolution: 12/16 of indices 1..16 valid
+[snap] ctrl->pawn handle resolve: 0x00A4800B -> 0x000003ED9DE91800
+[snap] ----------------------------------------
+N1SSAN_STATUS|1|2026-11-07T01:39:55Z|18972|armory-obsidian-3.0|READY|reason=runtime_worker_heartbeat
+[status-write] begin state=READY path=C:\Users\mirac\AppData\Local\n1ssan\status\cs2-18972.status
+[status-write] success state=READY error=0
+
+=== SNAPSHOT ===
+[snap] fsnCount=19244 lastStage=0 stage5Count=1211
+[snap] stage histogram:
+[snap]   stage  0: 4173 frames
+[snap]   stage  1: 1211 frames
+[snap]   stage  2: 1211 frames
+[snap]   stage  3: 1211 frames
+[snap]   stage  5: 1211 frames
+[snap]   stage  6: 1211 frames
+[snap]   stage  7: 1211 frames
+[snap]   stage  8: 1211 frames
+[snap]   stage 10: 1211 frames
+[snap]   stage 11: 2496 frames
+[snap]   stage 12: 2887 frames
+[snap] dwLocalPlayerController @ 0x00007FF8A70A2548 -> 0x000003EDA07D0000 
+[snap] dwLocalPlayerPawn       @ 0x00007FF8A72991E0 -> 0x000003ED22372C00 
+[snap] pawn: vtable=0x00007FF8AA9B3740 inClient=0 health=1005
+[snap] ctrl: vtable=0x00007FF8A6771680 inClient=1 m_hPlayerPawn@0x92C = 0x00A4800B (idx=11)
+[snap] entitySystem @ 0x00007FF8A727FBB8 = 0x000003ED05479000 highestEntityIndex=13
+[snap] entity resolution: 12/16 of indices 1..16 valid
+[snap] ctrl->pawn handle resolve: 0x00A4800B -> 0x000003ED9DE91800
+[snap] ----------------------------------------
+
+=== SNAPSHOT ===
+[snap] fsnCount=23707 lastStage=0 stage5Count=1526
+[snap] stage histogram:
+[snap]   stage  0: 4987 frames
+[snap]   stage  1: 1526 frames
+[snap]   stage  2: 1526 frames
+[snap]   stage  3: 1526 frames
+[snap]   stage  5: 1526 frames
+[snap]   stage  6: 1526 frames
+[snap]   stage  7: 1526 frames
+[snap]   stage  8: 1526 frames
+[snap]   stage 10: 1526 frames
+[snap]   stage 11: 2816 frames
+[snap]   stage 12: 3696 frames
+[snap] dwLocalPlayerController @ 0x00007FF8A70A2548 -> 0x000003EDA07D0000 
+[snap] dwLocalPlayerPawn       @ 0x00007FF8A72991E0 -> 0x000003ED22372C00 
+[snap] pawn: vtable=0x00007FF8AA9B3740 inClient=0 health=1005
+[snap] ctrl: vtable=0x00007FF8A6771680 inClient=1 m_hPlayerPawn@0x92C = 0x00A4800B (idx=11)
+[snap] entitySystem @ 0x00007FF8A727FBB8 = 0x000003ED05479000 highestEntityIndex=13
+[snap] entity resolution: 12/16 of indices 1..16 valid
+[snap] ctrl->pawn handle resolve: 0x00A4800B -> 0x000003ED9DE91800
+[snap] ----------------------------------------
+N1SSAN_STATUS|1|2026-11-07T01:40:05Z|18972|armory-obsidian-3.0|READY|reason=runtime_worker_heartbeat
+[status-write] begin state=READY path=C:\Users\mirac\AppData\Local\n1ssan\status\cs2-18972.status
+[status-write] success state=READY error=0
+
+=== SNAPSHOT ===
+[snap] fsnCount=28028 lastStage=0 stage5Count=1845
+[snap] stage histogram:
+[snap]   stage  0: 5712 frames
+[snap]   stage  1: 1845 frames
+[snap]   stage  2: 1845 frames
+[snap]   stage  3: 1845 frames
+[snap]   stage  5: 1845 frames
+[snap]   stage  6: 1845 frames
+[snap]   stage  7: 1845 frames
+[snap]   stage  8: 1845 frames
+[snap]   stage 10: 1845 frames
+[snap]   stage 11: 3136 frames
+[snap]   stage 12: 4420 frames
+[snap] dwLocalPlayerController @ 0x00007FF8A70A2548 -> 0x000003EDA07D0000 
+[snap] dwLocalPlayerPawn       @ 0x00007FF8A72991E0 -> 0x000003ED22372C00 
+[snap] pawn: vtable=0x00007FF8AA9B3740 inClient=0 health=1005
+[snap] ctrl: vtable=0x00007FF8A6771680 inClient=1 m_hPlayerPawn@0x92C = 0x00A4800B (idx=11)
+[snap] entitySystem @ 0x00007FF8A727FBB8 = 0x000003ED05479000 highestEntityIndex=13
+[snap] entity resolution: 12/16 of indices 1..16 valid
+[snap] ctrl->pawn handle resolve: 0x00A4800B -> 0x000003ED9DE91800
+[snap] ----------------------------------------
+
+=== SNAPSHOT ===
+[snap] fsnCount=32304 lastStage=0 stage5Count=2165
+[snap] stage histogram:
+[snap]   stage  0: 6410 frames
+[snap]   stage  1: 2165 frames
+[snap]   stage  2: 2165 frames
+[snap]   stage  3: 2165 frames
+[snap]   stage  5: 2165 frames
+[snap]   stage  6: 2165 frames
+[snap]   stage  7: 2165 frames
+[snap]   stage  8: 2165 frames
+[snap]   stage 10: 2165 frames
+[snap]   stage 11: 3456 frames
+[snap]   stage 12: 5118 frames
+[snap] dwLocalPlayerController @ 0x00007FF8A70A2548 -> 0x000003EDA07D0000 
+[snap] dwLocalPlayerPawn       @ 0x00007FF8A72991E0 -> 0x000003ED22372C00 
+[snap] pawn: vtable=0x00007FF8AA9B3740 inClient=0 health=1005
+[snap] ctrl: vtable=0x00007FF8A6771680 inClient=1 m_hPlayerPawn@0x92C = 0x00A4800B (idx=11)
+[snap] entitySystem @ 0x00007FF8A727FBB8 = 0x000003ED05479000 highestEntityIndex=13
+[snap] entity resolution: 12/16 of indices 1..16 valid
+[snap] ctrl->pawn handle resolve: 0x00A4800B -> 0x000003ED9DE91800
+[snap] ----------------------------------------
+N1SSAN_STATUS|1|2026-11-07T01:40:15Z|18972|armory-obsidian-3.0|READY|reason=runtime_worker_heartbeat
+[status-write] begin state=READY path=C:\Users\mirac\AppData\Local\n1ssan\status\cs2-18972.status
+[status-write] success state=READY error=0
+
+=== SNAPSHOT ===
+[snap] fsnCount=36533 lastStage=0 stage5Count=2484
+[snap] stage histogram:
+[snap]   stage  0: 7089 frames
+[snap]   stage  1: 2484 frames
+[snap]   stage  2: 2484 frames
+[snap]   stage  3: 2484 frames
+[snap]   stage  5: 2484 frames
+[snap]   stage  6: 2484 frames
+[snap]   stage  7: 2484 frames
+[snap]   stage  8: 2484 frames
+[snap]   stage 10: 2484 frames
+[snap]   stage 11: 3776 frames
+[snap]   stage 12: 5796 frames
+[snap] dwLocalPlayerController @ 0x00007FF8A70A2548 -> 0x000003EDA07D0000 
+[snap] dwLocalPlayerPawn       @ 0x00007FF8A72991E0 -> 0x000003ED22372C00 
+[snap] pawn: vtable=0x00007FF8AA9B3740 inClient=0 health=1005
+[snap] ctrl: vtable=0x00007FF8A6771680 inClient=1 m_hPlayerPawn@0x92C = 0x00A4800B (idx=11)
+[snap] entitySystem @ 0x00007FF8A727FBB8 = 0x000003ED05479000 highestEntityIndex=13
+[snap] entity resolution: 12/16 of indices 1..16 valid
+[snap] ctrl->pawn handle resolve: 0x00A4800B -> 0x000003ED9DE91800
+[snap] ----------------------------------------
+
+=== SNAPSHOT ===
+[snap] fsnCount=41241 lastStage=0 stage5Count=2792
+[snap] stage histogram:
+[snap]   stage  0: 8057 frames
+[snap]   stage  1: 2792 frames
+[snap]   stage  2: 2792 frames
+[snap]   stage  3: 2792 frames
+[snap]   stage  5: 2792 frames
+[snap]   stage  6: 2792 frames
+[snap]   stage  7: 2792 frames
+[snap]   stage  8: 2792 frames
+[snap]   stage 10: 2792 frames
+[snap]   stage 11: 4095 frames
+[snap]   stage 12: 6753 frames
+[snap] dwLocalPlayerController @ 0x00007FF8A70A2548 -> 0x000003EDA07D0000 
+[snap] dwLocalPlayerPawn       @ 0x00007FF8A72991E0 -> 0x000003ED22372C00 
+[snap] pawn: vtable=0x00007FF8AA9B3740 inClient=0 health=1005
+[snap] ctrl: vtable=0x00007FF8A6771680 inClient=1 m_hPlayerPawn@0x92C = 0x00A4800B (idx=11)
+[snap] entitySystem @ 0x00007FF8A727FBB8 = 0x000003ED05479000 highestEntityIndex=13
+[snap] entity resolution: 12/16 of indices 1..16 valid
+[snap] ctrl->pawn handle resolve: 0x00A4800B -> 0x000003ED9DE91800
+[snap] ----------------------------------------
+N1SSAN_STATUS|1|2026-11-07T01:40:26Z|18972|armory-obsidian-3.0|READY|reason=runtime_worker_heartbeat
+[status-write] begin state=READY path=C:\Users\mirac\AppData\Local\n1ssan\status\cs2-18972.status
+[status-write] success state=READY error=0
+
+=== SNAPSHOT ===
+[snap] fsnCount=41326 lastStage=1 stage5Count=2799
+[snap] stage histogram:
+[snap]   stage  0: 8067 frames
+[snap]   stage  1: 2800 frames
+[snap]   stage  2: 2799 frames
+[snap]   stage  3: 2799 frames
+[snap]   stage  5: 2799 frames
+[snap]   stage  6: 2799 frames
+[snap]   stage  7: 2799 frames
+[snap]   stage  8: 2799 frames
+[snap]   stage 10: 2799 frames
+[snap]   stage 11: 4106 frames
+[snap]   stage 12: 6760 frames
+[snap] dwLocalPlayerController @ 0x00007FF8A70A2548 -> 0x0000000000000000 
+[snap] dwLocalPlayerPawn       @ 0x00007FF8A72991E0 -> 0x000003ED22372C00 
+[snap] pawn: vtable=0x00007FF8AA9B3740 inClient=0 health=1005
+[snap] ctrl: null or below 0x10000 - not connected
+[snap] entitySystem @ 0x00007FF8A727FBB8 = 0x000003ED05479000 highestEntityIndex=0
+[snap] entity resolution: 0/16 of indices 1..16 valid
+[snap] ----------------------------------------
+[glove-observe] pawn=000003ED22372C00 reapply=114 changed=0 def=24948 init=115 idHigh=0x726F482C
+[glove-observe] pawn=000003EDA13E0000 reapply=0 changed=0 def=0 init=0 idHigh=0x0
+
+=== SNAPSHOT ===
+[snap] fsnCount=46815 lastStage=0 stage5Count=3084
+[snap] stage histogram:
+[snap]   stage  0: 9400 frames
+[snap]   stage  1: 3160 frames
+[snap]   stage  2: 3160 frames
+[snap]   stage  3: 3156 frames
+[snap]   stage  4: 1 frames
+[snap]   stage  5: 3084 frames
+[snap]   stage  6: 3084 frames
+[snap]   stage  7: 3084 frames
+[snap]   stage  8: 3084 frames
+[snap]   stage 10: 3084 frames
+[snap]   stage 11: 4397 frames
+[snap]   stage 12: 8121 frames
+[snap] dwLocalPlayerController @ 0x00007FF8A70A2548 -> 0x000003ED937A0600 
+[snap] dwLocalPlayerPawn       @ 0x00007FF8A72991E0 -> 0x000003ED22372C00 
+[snap] pawn: vtable=0x00007FF8AA9B3740 inClient=0 health=1005
+[snap] ctrl: vtable=0x00007FF8A6771680 inClient=1 m_hPlayerPawn@0x92C = 0x003E81A1 (idx=417)
+[snap] entitySystem @ 0x00007FF8A727FBB8 = 0x000003ED05479000 highestEntityIndex=205
+[snap] entity resolution: 1/16 of indices 1..16 valid
+[snap] ctrl->pawn handle resolve: 0x003E81A1 -> 0x000003EDA13E0000
+[snap] ----------------------------------------
+[apply-cache] weapon model cache invalidated
+[apply-cache] pawn changed: 000003EDA13E0000
+[match] FOUND pawn=0x000003EDA13E0000 hp=100 signOn=6 bg=0 connected=0
+[apply-cache] weapon model cache invalidated
+[glove-observe] pawn=000003EDA13E0000 reapply=0 changed=0 def=5031 init=1 idHigh=0xFFFFFFFF
+[apply-cache] weapon model cache invalidated
+[apply-cache] weapon model cache invalidated
+[apply-cache] weapon model cache invalidated
+[apply-cache] weapon model cache invalidated
+[apply-cache] weapon model cache invalidated
+[apply-cache] weapon model cache invalidated
+[apply-cache] weapon model cache invalidated
+[apply-cache] weapon model cache invalidated
+[apply-cache] weapon model cache invalidated
+[apply-cache] weapon model cache invalidated
+[apply-cache] weapon model cache invalidated
+N1SSAN_STATUS|1|2026-11-07T01:40:36Z|18972|armory-obsidian-3.0|READY|reason=runtime_worker_heartbeat
+[status-write] begin state=READY path=C:\Users\mirac\AppData\Local\n1ssan\status\cs2-18972.status
+[status-write] success state=READY error=0
+[apply-cache] weapon model cache invalidated
+[apply-cache] weapon model cache invalidated
+[apply-cache] weapon model cache invalidated
+[apply-cache] weapon model cache invalidated
+
+=== SNAPSHOT ===
+[snap] fsnCount=52780 lastStage=0 stage5Count=3399
+[snap] stage histogram:
+[snap]   stage  0: 10965 frames
+[snap]   stage  1: 3475 frames
+[snap]   stage  2: 3475 frames
+[snap]   stage  3: 3471 frames
+[snap]   stage  4: 1 frames
+[snap]   stage  5: 3399 frames
+[snap]   stage  6: 3399 frames
+[snap]   stage  7: 3399 frames
+[snap]   stage  8: 3399 frames
+[snap]   stage 10: 3399 frames
+[snap]   stage 11: 4717 frames
+[snap]   stage 12: 9681 frames
+[snap] dwLocalPlayerController @ 0x00007FF8A70A2548 -> 0x000003ED937A0600 
+[snap] dwLocalPlayerPawn       @ 0x00007FF8A72991E0 -> 0x000003ED22372C00 
+[snap] pawn: vtable=0x00007FF8AA9B3740 inClient=0 health=1005
+[snap] ctrl: vtable=0x00007FF8A6771680 inClient=1 m_hPlayerPawn@0x92C = 0x003E81A1 (idx=417)
+[snap] entitySystem @ 0x00007FF8A727FBB8 = 0x000003ED05479000 highestEntityIndex=211
+[snap] entity resolution: 1/16 of indices 1..16 valid
+[snap] ctrl->pawn handle resolve: 0x003E81A1 -> 0x000003EDA13E0000
+[snap] ----------------------------------------
+
+=== SNAPSHOT ===
+[snap] fsnCount=58908 lastStage=0 stage5Count=3719
+[snap] stage histogram:
+[snap]   stage  0: 12589 frames
+[snap]   stage  1: 3795 frames
+[snap]   stage  2: 3795 frames
+[snap]   stage  3: 3791 frames
+[snap]   stage  4: 1 frames
+[snap]   stage  5: 3719 frames
+[snap]   stage  6: 3719 frames
+[snap]   stage  7: 3719 frames
+[snap]   stage  8: 3719 frames
+[snap]   stage 10: 3719 frames
+[snap]   stage 11: 5037 frames
+[snap]   stage 12: 11305 frames
+[snap] dwLocalPlayerController @ 0x00007FF8A70A2548 -> 0x000003ED937A0600 
+[snap] dwLocalPlayerPawn       @ 0x00007FF8A72991E0 -> 0x000003ED22372C00 
+[snap] pawn: vtable=0x00007FF8AA9B3740 inClient=0 health=1005
+[snap] ctrl: vtable=0x00007FF8A6771680 inClient=1 m_hPlayerPawn@0x92C = 0x003E81A1 (idx=417)
+[snap] entitySystem @ 0x00007FF8A727FBB8 = 0x000003ED05479000 highestEntityIndex=211
+[snap] entity resolution: 1/16 of indices 1..16 valid
+[snap] ctrl->pawn handle resolve: 0x003E81A1 -> 0x000003EDA13E0000
+[snap] ----------------------------------------
+N1SSAN_STATUS|1|2026-11-07T01:40:46Z|18972|armory-obsidian-3.0|READY|reason=runtime_worker_heartbeat
+[status-write] begin state=READY path=C:\Users\mirac\AppData\Local\n1ssan\status\cs2-18972.status
+[status-write] success state=READY error=0
+
+=== SNAPSHOT ===
+[snap] fsnCount=65022 lastStage=0 stage5Count=4039
+[snap] stage histogram:
+[snap]   stage  0: 14206 frames
+[snap]   stage  1: 4115 frames
+[snap]   stage  2: 4115 frames
+[snap]   stage  3: 4111 frames
+[snap]   stage  4: 1 frames
+[snap]   stage  5: 4039 frames
+[snap]   stage  6: 4039 frames
+[snap]   stage  7: 4039 frames
+[snap]   stage  8: 4039 frames
+[snap]   stage 10: 4039 frames
+[snap]   stage 11: 5357 frames
+[snap]   stage 12: 12922 frames
+[snap] dwLocalPlayerController @ 0x00007FF8A70A2548 -> 0x000003ED937A0600 
+[snap] dwLocalPlayerPawn       @ 0x00007FF8A72991E0 -> 0x000003ED22372C00 
+[snap] pawn: vtable=0x00007FF8AA9B3740 inClient=0 health=1005
+[snap] ctrl: vtable=0x00007FF8A6771680 inClient=1 m_hPlayerPawn@0x92C = 0x003E81A1 (idx=417)
+[snap] entitySystem @ 0x00007FF8A727FBB8 = 0x000003ED05479000 highestEntityIndex=211
+[snap] entity resolution: 1/16 of indices 1..16 valid
+[snap] ctrl->pawn handle resolve: 0x003E81A1 -> 0x000003EDA13E0000
+[snap] ----------------------------------------
+
+=== SNAPSHOT ===
+[snap] fsnCount=71040 lastStage=0 stage5Count=4359
+[snap] stage histogram:
+[snap]   stage  0: 15775 frames
+[snap]   stage  1: 4435 frames
+[snap]   stage  2: 4435 frames
+[snap]   stage  3: 4431 frames
+[snap]   stage  4: 1 frames
+[snap]   stage  5: 4359 frames
+[snap]   stage  6: 4359 frames
+[snap]   stage  7: 4359 frames
+[snap]   stage  8: 4359 frames
+[snap]   stage 10: 4359 frames
+[snap]   stage 11: 5677 frames
+[snap]   stage 12: 14491 frames
+[snap] dwLocalPlayerController @ 0x00007FF8A70A2548 -> 0x000003ED937A0600 
+[snap] dwLocalPlayerPawn       @ 0x00007FF8A72991E0 -> 0x000003ED22372C00 
+[snap] pawn: vtable=0x00007FF8AA9B3740 inClient=0 health=1005
+[snap] ctrl: vtable=0x00007FF8A6771680 inClient=1 m_hPlayerPawn@0x92C = 0x003E81A1 (idx=417)
+[snap] entitySystem @ 0x00007FF8A727FBB8 = 0x000003ED05479000 highestEntityIndex=211
+[snap] entity resolution: 1/16 of indices 1..16 valid
+[snap] ctrl->pawn handle resolve: 0x003E81A1 -> 0x000003EDA13E0000
+[snap] ----------------------------------------
+N1SSAN_STATUS|1|2026-11-07T01:40:56Z|18972|armory-obsidian-3.0|READY|reason=runtime_worker_heartbeat
+[status-write] begin state=READY path=C:\Users\mirac\AppData\Local\n1ssan\status\cs2-18972.status
+[status-write] success state=READY error=0
+
+=== SNAPSHOT ===
+[snap] fsnCount=76999 lastStage=0 stage5Count=4678
+[snap] stage histogram:
+[snap]   stage  0: 17319 frames
+[snap]   stage  1: 4754 frames
+[snap]   stage  2: 4754 frames
+[snap]   stage  3: 4750 frames
+[snap]   stage  4: 1 frames
+[snap]   stage  5: 4678 frames
+[snap]   stage  6: 4678 frames
+[snap]   stage  7: 4678 frames
+[snap]   stage  8: 4678 frames
+[snap]   stage 10: 4678 frames
+[snap]   stage 11: 5997 frames
+[snap]   stage 12: 16034 frames
+[snap] dwLocalPlayerController @ 0x00007FF8A70A2548 -> 0x000003ED937A0600 
+[snap] dwLocalPlayerPawn       @ 0x00007FF8A72991E0 -> 0x000003ED22372C00 
+[snap] pawn: vtable=0x00007FF8AA9B3740 inClient=0 health=1005
+[snap] ctrl: vtable=0x00007FF8A6771680 inClient=1 m_hPlayerPawn@0x92C = 0x003E81A1 (idx=417)
+[snap] entitySystem @ 0x00007FF8A727FBB8 = 0x000003ED05479000 highestEntityIndex=211
+[snap] entity resolution: 1/16 of indices 1..16 valid
+[snap] ctrl->pawn handle resolve: 0x003E81A1 -> 0x000003EDA13E0000
+[snap] ----------------------------------------
+
+=== SNAPSHOT ===
+[snap] fsnCount=82955 lastStage=0 stage5Count=4998
+[snap] stage histogram:
+[snap]   stage  0: 18857 frames
+[snap]   stage  1: 5074 frames
+[snap]   stage  2: 5074 frames
+[snap]   stage  3: 5070 frames
+[snap]   stage  4: 1 frames
+[snap]   stage  5: 4998 frames
+[snap]   stage  6: 4998 frames
+[snap]   stage  7: 4998 frames
+[snap]   stage  8: 4998 frames
+[snap]   stage 10: 4998 frames
+[snap]   stage 11: 6317 frames
+[snap]   stage 12: 17572 frames
+[snap] dwLocalPlayerController @ 0x00007FF8A70A2548 -> 0x000003ED937A0600 
+[snap] dwLocalPlayerPawn       @ 0x00007FF8A72991E0 -> 0x000003ED22372C00 
+[snap] pawn: vtable=0x00007FF8AA9B3740 inClient=0 health=1005
+[snap] ctrl: vtable=0x00007FF8A6771680 inClient=1 m_hPlayerPawn@0x92C = 0x003E81A1 (idx=417)
+[snap] entitySystem @ 0x00007FF8A727FBB8 = 0x000003ED05479000 highestEntityIndex=211
+[snap] entity resolution: 1/16 of indices 1..16 valid
+[snap] ctrl->pawn handle resolve: 0x003E81A1 -> 0x000003EDA13E0000
+[snap] ----------------------------------------
