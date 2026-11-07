@@ -3,6 +3,8 @@
 #include "config/offsets.h"
 #include "diagnostics/log.h"
 #include "inventory/loadout.h"
+#include "inventory/armory_inventory.h"
+#include "inventory/runtime_mode.h"
 #include "memory/access.h"
 #include "sdk/entities.h"
 #include "sdk/functions.h"
@@ -195,28 +197,47 @@ void RunGloves(std::uintptr_t pawn)
         !SafeReadFloat(pawn + g_off.PAWN_SpawnTime, spawnTime))
         return;
 
-    // Adapt the standalone runtime's per-team config to N1ssan's JSON loadout.
+    // Resolve the active runtime source without mixing Armory and Loadout.
+    const bool armoryMode =
+        RuntimeModeState::Current() == RuntimeMode::Armory;
+    const std::string teamName = team == 2 ? "T" : team == 3 ? "CT" : "";
+
     std::uint16_t definition = 0;
     int paintKit = 0;
     int seed = 0;
     float wear = 0.0001f;
-    for (const auto& [key, target] : g_targets)
-    {
-        (void)key;
-        if (!IsGloveSlot(target.slot))
-            continue;
-        if (!((target.team == "T" && team == 2) ||
-              (target.team == "CT" && team == 3)))
-            continue;
 
-        definition = target.defIndex;
-        paintKit = target.paintKit;
-        seed = (std::clamp)(target.resolvedSeed, 0, 1000);
-        wear = (std::clamp)(target.wear, 0.0001f, 1.0f);
-        break;
+    if (armoryMode)
+    {
+        TargetSkin target{};
+        if (ArmoryInventory::GetEquippedGloveTarget(teamName, target))
+        {
+            definition = target.defIndex;
+            paintKit = target.paintKit;
+            seed = (std::clamp)(target.resolvedSeed, 0, 1000);
+            wear = (std::clamp)(target.wear, 0.0001f, 1.0f);
+        }
+    }
+    else
+    {
+        for (const auto& [key, target] : g_targets)
+        {
+            (void)key;
+            if (!IsGloveSlot(target.slot))
+                continue;
+            if (!((target.team == "T" && team == 2) ||
+                  (target.team == "CT" && team == 3)))
+                continue;
+
+            definition = target.defIndex;
+            paintKit = target.paintKit;
+            seed = (std::clamp)(target.resolvedSeed, 0, 1000);
+            wear = (std::clamp)(target.wear, 0.0001f, 1.0f);
+            break;
+        }
     }
 
-    const bool customSelection = g_enabled && definition != 0;
+    const bool customSelection = (armoryMode || g_enabled) && definition != 0;
     if (!customSelection)
     {
         if (!g_appliedCustomGloves)
