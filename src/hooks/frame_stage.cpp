@@ -561,12 +561,17 @@ static void __fastcall FsnDetour(void* pClient, int stage)
     if (!inMatch && runtimeMode == RuntimeMode::Armory)
         ArmoryInventory::AdoptPending();
 
-    // In Armory mode the Loadout dataset is ignored entirely, so equipped
-    // skins in the game are never overridden by n1ssan-data.json.
-    if (!loadoutMode)
+    // Keep the two data sources isolated, but run the same in-match entity
+    // application pipeline for whichever mode the user explicitly selected.
+    if (runtimeMode != RuntimeMode::Loadout &&
+        runtimeMode != RuntimeMode::Armory)
         return;
 
-    if (!g_enabled || g_targets.empty())
+    if (loadoutMode && (!g_enabled || g_targets.empty()))
+        return;
+
+    if (runtimeMode == RuntimeMode::Armory &&
+        !ArmoryInventory::HasEquippedTargets())
         return;
 
     if (g_matchState == MatchState::IDLE)
