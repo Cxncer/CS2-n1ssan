@@ -34,46 +34,116 @@ namespace
         output[i] = '\0';
     }
 
-    void InitializeStatusPath()
+    bool EnsureDirectory(const char* path)
     {
-        char root[MAX_PATH]{};
-        DWORD length = GetEnvironmentVariableA("LOCALAPPDATA", root, MAX_PATH);
-        if (length == 0 || length >= MAX_PATH)
-        {
-            if (GetTempPathA(MAX_PATH, root) == 0) return;
-            size_t n = strlen(root);
-            if (n && root[n - 1] == '\\') root[n - 1] = '\0';
-        }
-
-        char appDir[MAX_PATH]{};
-        sprintf_s(appDir, "%s\\n1ssan", root);
-        CreateDirectoryA(appDir, nullptr);
-
-        char statusDir[MAX_PATH]{};
-        sprintf_s(statusDir, "%s\\status", appDir);
-        CreateDirectoryA(statusDir, nullptr);
-
-        sprintf_s(g_statusPath, "%s\\cs2-%lu.status",
-            statusDir, static_cast<unsigned long>(GetCurrentProcessId()));
+        if (CreateDirectoryA(path, nullptr)) return true;
+        return GetLastError() == ERROR_ALREADY_EXISTS;
     }
 
-    void WriteStatusSnapshot(const char* record)
+    void InitializeStatusPath()
     {
-        if (!g_statusPath[0] || !record) return;
+        char roots[2][MAX_PATH]{};
+        DWORD length = GetEnvironmentVariableA("LOCALAPPDATA", roots[0], MAX_PATH);
+        if (length == 0 || length >= MAX_PATH)
+            roots[0][0] = '\0';
 
-        char temporaryPath[MAX_PATH]{};
-        sprintf_s(temporaryPath, "%s.tmp", g_statusPath);
+        DWORD tempLength = GetTempPathA(MAX_PATH, roots[1]);
+        if (tempLength == 0 || tempLength >= MAX_PATH)
+            roots[1][0] = '\0';
 
+        for (int i = 0; i < 2; ++i)
         {
-            std::ofstream output(temporaryPath, std::ios::binary | std::ios::trunc);
-            if (!output) return;
-            output << record << "\n";
-            output.flush();
-            if (!output.good()) return;
+            if (!roots[i][0]) continue;
+
+            size_t rootLength = strlen(roots[i]);
+            while (rootLength > 0 &&
+                (roots[i][rootLength - 1] == '\\' || roots[i][rootLength - 1] == '/'))
+                roots[i][--rootLength] = '\0';
+
+            char appDir[MAX_PATH]{};
+            char statusDir[MAX_PATH]{};
+            if (sprintf_s(appDir, "%s\\n1ssan", roots[i]) < 0 ||
+                sprintf_s(statusDir, "%s\\status", appDir) < 0)
+                continue;
+
+            if (!EnsureDirectory(appDir) || !EnsureDirectory(statusDir))
+            {
+                const DWORD error = GetLastError();
+                Log("[status-path] directory creation failed root=%s error=%lu",
+                    roots[i], static_cast<unsigned long>(error));
+                continue;
+            }
+
+            if (sprintf_s(g_statusPath, "%s\\cs2-%lu.status",
+                statusDir, static_cast<unsigned long>(GetCurrentProcessId())) > 0)
+            {
+                Log("[status-path] selected=%s source=%s",
+                    g_statusPath, i == 0 ? "LOCALAPPDATA" : "TEMP");
+                return;
+            }
         }
 
-        MoveFileExA(temporaryPath, g_statusPath,
-            MOVEFILE_REPLACE_EXISTING | MOVEFILE_WRITE_THROUGH);
+        Log("[status-path] unavailable; no writable status directory found");
+    }
+
+    bool WriteStatusSnapshot(const char* record, DWORD& error)
+    {
+        error = ERROR_SUCCESS;
+        if (!g_statusPath[0] || !record)
+        {
+            error = ERROR_PATH_NOT_FOUND;
+            return false;
+        }
+
+        char temporaryPath[MAX_PATH]{};
+        if (sprintf_s(temporaryPath, "%s.tmp", g_statusPath) <= 0)
+        {
+            error = ERROR_BUFFER_OVERFLOW;
+            return false;
+        }
+
+        HANDLE file = CreateFileA(
+            temporaryPath, GENERIC_WRITE, FILE_SHARE_READ | FILE_SHARE_WRITE,
+            nullptr, CREATE_ALWAYS, FILE_ATTRIBUTE_NORMAL, nullptr);
+        if (file == INVALID_HANDLE_VALUE)
+        {
+            error = GetLastError();
+            return false;
+        }
+
+        const DWORD length = static_cast<DWORD>(strlen(record));
+        DWORD written = 0;
+        bool ok = WriteFile(file, record, length, &written, nullptr) &&
+            written == length;
+        if (!ok)
+            error = GetLastError();
+        if (ok && !WriteFile(file, "\n", 1, &written, nullptr))
+        {
+            ok = false;
+            error = GetLastError();
+        }
+        if (ok && !FlushFileBuffers(file))
+        {
+            ok = false;
+            error = GetLastError();
+        }
+
+        CloseHandle(file);
+        if (!ok)
+        {
+            DeleteFileA(temporaryPath);
+            return false;
+        }
+
+        if (!MoveFileExA(temporaryPath, g_statusPath,
+            MOVEFILE_REPLACE_EXISTING | MOVEFILE_WRITE_THROUGH))
+        {
+            error = GetLastError();
+            DeleteFileA(temporaryPath);
+            return false;
+        }
+
+        return true;
     }
 }
 
@@ -145,7 +215,14 @@ void LogStatus(const char* state, const char* reason)
         kBuildId, safeState, safeReason);
 
     Log("%s", record);
-    WriteStatusSnapshot(record);
+    Log("[status-write] begin state=%s path=%s", safeState,
+        g_statusPath[0] ? g_statusPath : "<unavailable>");
+
+    DWORD writeError = ERROR_SUCCESS;
+    const bool written = WriteStatusSnapshot(record, writeError);
+    Log("[status-write] %s state=%s error=%lu",
+        written ? "success" : "FAILED", safeState,
+        static_cast<unsigned long>(writeError));
 }
 
 uint64_t NowMs()
