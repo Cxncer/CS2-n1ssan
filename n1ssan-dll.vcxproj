@@ -175,6 +175,7 @@
     <ClCompile Include="src\inventory\armory_inventory.cpp" />
     <ClCompile Include="src\inventory\attachments.cpp" />
     <ClCompile Include="src\inventory\native_apply.cpp" />
+    <ClCompile Include="src\inventory\hde64.c" />
     <ClCompile Include="src\inventory\runtime_mode.cpp" />
     <ClCompile Include="src\inventory\plan_a.cpp" />
     <ClCompile Include="src\inventory\schema_prob.cpp" />
@@ -235,6 +236,9 @@
     <ClInclude Include="src\inventory\engine_schema_diagnostic.h" />
     <ClInclude Include="src\inventory\loadout.h" />
     <ClInclude Include="src\inventory\loot_patterns.h" />
+    <ClInclude Include="src\inventory\hde64.h" />
+    <ClInclude Include="src\inventory\pstdint.h" />
+    <ClInclude Include="src\inventory\table64.h" />
     <ClInclude Include="src\inventory\loot_schema.h" />
     <ClInclude Include="src\inventory\loot_socache.h" />
     <ClInclude Include="src\inventory\plan_a.h" />
