@@ -117,10 +117,14 @@ namespace
             written == length;
         if (!ok)
             error = GetLastError();
-        if (ok && !WriteFile(file, "\n", 1, &written, nullptr))
+        if (ok)
         {
-            ok = false;
-            error = GetLastError();
+            if (!WriteFile(file, "\n", 1, &written, nullptr) || written != 1)
+            {
+                ok = false;
+                error = GetLastError();
+                if (error == ERROR_SUCCESS) error = ERROR_WRITE_FAULT;
+            }
         }
         if (ok && !FlushFileBuffers(file))
         {
