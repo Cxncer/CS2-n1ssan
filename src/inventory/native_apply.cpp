@@ -72,6 +72,7 @@ namespace NativeApply
 
         ScriptFn g_originalUseTool = nullptr;
         std::atomic_bool g_installed{ false };
+        std::atomic<uint64_t> g_hookCalls{ 0 };
         std::atomic_bool g_inHook{ false };
         std::atomic_bool g_inJobs{ false };
         std::atomic<uint64_t> g_lastAttemptMs{ 0 };
@@ -1317,8 +1318,25 @@ namespace NativeApply
 
         void __fastcall HkUseTool(void* api, const char* toolId, const char* itemId)
         {
+            // Log at the actual detour boundary, before any Armory/mode/identity
+            // filters. Previously every diagnostic was downstream of those
+            // filters, so zero [use-tool] lines could not distinguish a dead
+            // hook from a live hook forwarding an ordinary CS2 request.
+            const uint64_t call = g_hookCalls.fetch_add(1) + 1;
+            const bool trace = call <= 32 || (call % 128) == 0;
+            if (trace)
+            {
+                Log("[use-tool] hook-entry #%llu mode=%d api=%p toolArg=%p targetArg=%p original=%p",
+                    static_cast<unsigned long long>(call),
+                    static_cast<int>(RuntimeModeState::Current()),
+                    api, toolId, itemId, reinterpret_cast<void*>(g_originalUseTool));
+            }
+
             if (g_inHook.exchange(true))
             {
+                if (trace)
+                    Log("[use-tool] hook-entry #%llu reentrant - forwarding to original",
+                        static_cast<unsigned long long>(call));
                 if (g_originalUseTool)
                     g_originalUseTool(api, toolId, itemId);
                 return;
@@ -1332,11 +1350,17 @@ namespace NativeApply
             }
             __except (EXCEPTION_EXECUTE_HANDLER)
             {
-                Log("[use-tool] exception while reading the request - left to the game");
+                Log("[use-tool] hook-entry #%llu exception while reading request - forwarding",
+                    static_cast<unsigned long long>(call));
                 handled = false;
             }
 
             g_inHook.store(false);
+
+            if (trace)
+                Log("[use-tool] hook-entry #%llu decision=%s",
+                    static_cast<unsigned long long>(call),
+                    handled ? "handled locally" : "forwarded to CS2");
 
             if (handled)
                 return;
@@ -1362,6 +1386,9 @@ namespace NativeApply
             return true;
 
         g_attempts += 1;
+        Log("[use-tool] initialize attempt=%d installed=%d mode=%d",
+            g_attempts, g_installed.load() ? 1 : 0,
+            static_cast<int>(RuntimeModeState::Current()));
 
         if (!MH_CreateHook_p || !MH_EnableHook_p)
         {
