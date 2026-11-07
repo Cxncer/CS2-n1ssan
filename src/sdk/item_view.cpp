@@ -6,6 +6,7 @@
 #include "sdk/functions.h"
 #include "config/offsets.h"
 #include "diagnostics/log.h"
+#include "inventory/attachments.h"
 
 #include <bit>
 #include <cstring>
@@ -73,7 +74,8 @@ void EconAttr_Remove(uintptr_t item)
     if (data) MemFree(data);
 }
 
-void EconAttr_Create(uintptr_t item, int paintKit, float wear, int seed, int statTrak)
+void EconAttr_Create(uintptr_t item, int paintKit, float wear, int seed, int statTrak,
+                     const Attachments::Set* attachments)
 {
     if (!item) return;
 
@@ -91,10 +93,12 @@ void EconAttr_Create(uintptr_t item, int paintKit, float wear, int seed, int sta
     const bool hasPK = paintKit > 0;
     const bool hasST = statTrak >= 0;
     const int  count = (hasPK ? 3 : 0) + (hasST ? 2 : 0);
-    if (count == 0) return;
+    const size_t attachCount =
+        attachments ? Attachments::AttributeCount(*attachments) : 0;
+    if (count == 0 && attachCount == 0) return;
 
     constexpr size_t EXTRA = 8;
-    const size_t capacity = count + EXTRA;
+    const size_t capacity = static_cast<size_t>(count) + attachCount + EXTRA;
 
     auto* attrs = static_cast<EconItemAttribute_t*>(MemAlloc(capacity * sizeof(EconItemAttribute_t)));
     if (!attrs)
@@ -129,6 +133,16 @@ void EconAttr_Create(uintptr_t item, int paintKit, float wear, int seed, int sta
     v->data = reinterpret_cast<uintptr_t>(attrs);
     v->allocationCount = (int32_t)capacity;
     v->growSizeAndFlags = UTL_VECTOR_FIXED_FLAGS;
+
+    if (attachCount > 0)
+    {
+        const size_t total = Attachments::Append(attrs, i, *attachments);
+        v->size = (int32_t)total;
+
+        char text[192]{};
+        Attachments::Describe(*attachments, text, sizeof(text));
+        Log("[attr] attachments written (%zu attributes): %s", total - i, text);
+    }
 }
 
 uintptr_t GetWeaponItem(uintptr_t weaponEnt)

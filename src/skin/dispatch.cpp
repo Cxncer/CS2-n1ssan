@@ -6,10 +6,51 @@
 #include "sdk/item_view.h"
 #include "config/offsets.h"
 #include "inventory/loadout.h"
+#include "inventory/armory_inventory.h"
+#include "inventory/runtime_mode.h"
 #include "memory/access.h"
+#include "sdk/entities.h"
+#include "sdk/handles.h"
+#include "skin/glove_schema.h"
 #include "diagnostics/log.h"
 
 #include <string>
+
+namespace
+{
+    // Lootline's IsOwnWeapon equivalent. Armory must not repaint an enemy's
+    // dropped weapon merely because it appears in the local weapon handle list.
+    // If schema/account ownership data is unavailable, preserve the existing
+    // fail-open behavior rather than suppressing the player's own cosmetics.
+    bool IsOwnArmoryWeapon(uintptr_t weaponEnt, uintptr_t pawn)
+    {
+        uint32_t ownerOffset = 0;
+        if (!GlovesSchema::TryGet(
+                "C_EconEntity", "m_OriginalOwnerXuidLow", ownerOffset) ||
+            ownerOffset == 0)
+            return true;
+
+        uint32_t originalOwner = 0;
+        if (!SafeReadU32(weaponEnt + ownerOffset, originalOwner) ||
+            originalOwner == 0)
+            return true;
+
+        uint32_t controllerHandle = 0;
+        if (!SafeReadU32(pawn + g_off.PAWN_hController, controllerHandle) ||
+            !HandleValid(controllerHandle))
+            return true;
+
+        const uintptr_t controller = GetEntityByHandle(controllerHandle);
+        uint64_t steamId = 0;
+        if (!controller ||
+            !SafeReadQword(controller + g_off.CTRL_SteamID, steamId))
+            return true;
+
+        const uint32_t localAccountId =
+            static_cast<uint32_t>(steamId & 0xFFFFFFFFull);
+        return localAccountId == 0 || originalOwner == localAccountId;
+    }
+}
 
 bool ProcessWeapon(uintptr_t weaponEnt, uintptr_t pawn)
 {
@@ -57,6 +98,63 @@ bool ProcessWeapon(uintptr_t weaponEnt, uintptr_t pawn)
     uint8_t team = 0;
     SafeReadU8(pawn + g_off.PAWN_TeamNum, team);
     const char* teamStr = (team == 2) ? "T" : (team == 3) ? "CT" : "";
+
+    if (RuntimeModeState::Current() == RuntimeMode::Armory)
+    {
+        if (!IsOwnArmoryWeapon(weaponEnt, pawn))
+        {
+            Log("[armory-apply] skipped non-owned weapon entity=%p def=%u",
+                (void*)weaponEnt, def);
+            return false;
+        }
+
+        // The live weapon view is server-built, so its EconItemView ID never
+        // identifies a projected instance. Resolve through the equipment
+        // assignment for this team; a definition only matches on its own when
+        // every owned instance for it renders identically.
+        const bool knife = IsKnifeDefinition(def);
+        const char* teamLabel = teamStr[0] ? teamStr : "unknown";
+
+        TargetSkin equipped{};
+        Attachments::Set attachments;
+        std::string matchDetail;
+        const ArmoryInventory::ArmoryMatch match =
+            ArmoryInventory::ResolveTargetForWeapon(
+                def, team, knife, equipped, matchDetail, &attachments);
+
+        if (match == ArmoryInventory::ArmoryMatch::None)
+        {
+            Log("[armory-apply] no Armory target for live weapon def=%u team=%s (%s)",
+                def, teamLabel, matchDetail.c_str());
+            return false;
+        }
+
+        const char* source =
+            match == ArmoryInventory::ArmoryMatch::EquippedInGame ? "in-game" :
+            match == ArmoryInventory::ArmoryMatch::Equipped ? "assigned" : "equivalent";
+
+        Log("[armory-apply] %s live weapon def=%u team=%s paintKit=%d (%s)",
+            source, def, teamLabel, equipped.paintKit, matchDetail.c_str());
+
+        if (knife)
+        {
+            const bool knifeChanged =
+                KnifeApply(weaponEnt, view, equipped.defIndex);
+            const bool skinChanged =
+                ApplyWeaponSkin(weaponEnt, pawn, equipped);
+            return knifeChanged || skinChanged;
+        }
+
+        if (equipped.defIndex != def)
+        {
+            Log("[armory-apply] equipped item definition mismatch entity=%u item=%u",
+                def, equipped.defIndex);
+            return false;
+        }
+
+        return ApplyWeaponSkin(weaponEnt, pawn, equipped,
+            attachments.Empty() ? nullptr : &attachments);
+    }
 
     // Knife: look up knife target by slot, not def
     if (IsKnifeDefinition(def)) {

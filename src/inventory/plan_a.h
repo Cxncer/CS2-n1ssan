@@ -18,4 +18,8 @@ namespace PlanA
     // Reconciles SOCache items against the current g_targets after a runtime
     // loadout change. Idempotent: existing items report AlreadyExists.
     void ReconcileAllItems();
+
+    // Removes only Loadout-generated SOCache entries (the 0x8 ID namespace).
+    // Call from the game thread when Armory becomes the active runtime mode.
+    bool RemoveAllLoadoutItems();
 }
