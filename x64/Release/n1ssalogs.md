@@ -90322,3 +90322,1019 @@ N1SSAN_STATUS|1|2026-11-07T15:09:22Z|13368|armory-obsidian-3.0|READY|reason=runt
 [status-write] begin state=READY path=C:\Users\mirac\AppData\Local\n1ssan\status\cs2-13368.status
 [status-write] success state=READY error=0
 [detect] pawn=0x0000031F7FACF000 hp=100 signOn=6 bg=0
+[status-path] selected=C:\Users\mirac\AppData\Local\n1ssan\status\cs2-2916.status source=LOCALAPPDATA
+
+# n1ssan diagnostic session
+[build] armory-obsidian-3.0
+[build] Operation Armory x Obsidian Build 3.0 | Nov  7 2026 22:01:25
+N1SSAN_STATUS|1|2026-11-07T15:12:55Z|2916|armory-obsidian-3.0|INITIALIZING|reason=worker_started
+[status-write] begin state=INITIALIZING path=C:\Users\mirac\AppData\Local\n1ssan\status\cs2-2916.status
+[status-write] success state=INITIALIZING error=0
+[off] PAWN_MyWearables = 0x1268
+[off] field offsets populated
+[auto-off] dwEntityList                 hit 0x00007FFFA1B993CB -> rva 0x271FBB8 (val=0000040AE3478000)
+[auto-off] dwLocalPlayerController      hit 0x00007FFFA1AB5750 -> rva 0x2542548 (val=0000040B74015800)
+[auto-off] dwLocalPlayerPawn            hit 0x00007FFFA12D1615 -> rva 0x27391E0 (val=0000040B001A0200)
+[auto-off] summary: matched=3/3
+[off] RVA_ENTITY_LIST           = 0x00007FFFA389FBB8
+[off] RVA_LOCALPLAYERCONTROLLER = 0x00007FFFA36C2548
+[off] RVA_LOCALPLAYERPAWN       = 0x00007FFFA38B91E0
+[bridge] discovered Bridge directory: E:\Vibe Coding\CS2 Lore\CS2 n1ssan\development\n1ssan-web-bridge\
+[runtime-mode] no valid selection yet; waiting for launcher
+[runtime-mode] initialized in neutral mode; waiting for DOMINATE selection
+[schema-live] m_nSubclassID runtime=0x380 hardcoded=0x38C MISMATCH
+[schema-live] subclass resolver ready: 0x380
+[schema-gloves] C_CSPlayerPawn->m_EconGloves = 0x1770
+[schema-gloves] C_CSPlayerPawn->m_bNeedToReApplyGloves = 0x176D
+[schema-gloves] C_EconItemView->m_iItemDefinitionIndex = 0x1BA
+[schema-gloves] C_EconItemView->m_iEntityQuality = 0x1BC
+[schema-gloves] C_EconItemView->m_iItemIDHigh = 0x1D0
+[schema-gloves] C_EconItemView->m_bInitialized = 0x1E8
+[schema-gloves] C_EconItemView->m_bDisallowSOC = 0x1E9
+[schema-gloves] C_EconItemView->m_bRestoreCustomMaterialAfterPrecache = 0x1B8
+[schema-gloves] C_EconItemView->m_AttributeList = 0x208
+[schema-gloves] C_EconItemView->m_NetworkedDynamicAttributes = 0x280
+[schema-gloves] CAttributeList->m_Attributes = 0x8
+[schema-gloves] READY
+[resolve] InvalidateDescription          @ 0x00007FFFA2321350
+[resolve] BuildModernSkin                @ 0x00007FFFA1FC5B10
+[resolve] SetMeshGroupMask               @ 0x00007FFFA1C45A90
+[resolve] RegenerateSkins                @ 0x00007FFFA19AB4B0
+[resolve] ReleaseCompositeMaterials      @ 0x00007FFFA266C4A0
+[resolve] GloveCreatePaintKit            @ 0x00007FFFA23113D0
+[resolve] AgentSetModel                  @ 0x00007FFFA1AE5C90
+[resolve] KnifeUpdateSubclass            @ 0x00007FFFA1389000
+[resolve] GloveSetBodyGroup              @ 0x00007FFFA1AE4BB0
+[resolve] MemAlloc                       @ 0x00007FFFC04ADD30
+[resolve] MemFree                        @ 0x00007FFFC04ADD70
+[resolve] CSkeletonInstance->m_modelState = 0x140 (hardcoded)
+[resolve] CModelState->m_hModel = 0xA0 (hardcoded)
+[resolve] entityList @ 0x00007FFFA389FBB8 -> 0x0000040AE3478000
+[glove-paintkit-schema] READY
+[glove-schema] READY
+[plan-a] CEconItemSystem* = 0x0000040A55B32FC0 (stored)
+[loot-schema] GetAttributeDefinitionByName @ 0x00007FFFA22B30F0
+[loot-schema] OK (invOffset=0x528D0, setUint=00007FFFA2268E70, setFloat=00007FFFA2269080)
+[socache] CreateBaseTypeCache initialized @ 00007FFFA27AB820
+[plan-a] shared inventory runtime ready; Loadout injection disabled
+[use-tool] initialize attempt=1 installed=0 mode=0
+[use-tool] placement probe: sticker signature=FOUND
+[use-tool] placement probe: keychain signature=FOUND
+[use-tool] notification: instruction 4 after the signature could not be decoded
+[use-tool] hook: ok at 0x00007FFFA2185810 via signature (CS2's inventory applies Armory stickers and charms)
+[use-tool] placement pointers: sticker slot=00007FFFA339AE90 x=00007FFFA377960C y=00007FFFA3779610 rotation=00007FFFA3779614 wear=00007FFFA3779618; charm x=00007FFFA37798A8 y=00007FFFA37798AC z=00007FFFA37798B0
+[use-tool] placement: sticker ok, charm ok
+[use-tool] popup notification: NOT found - the item changes, the popup is not told
+[armory-inventory] watching for inventory changes: E:\Vibe Coding\CS2 Lore\CS2 n1ssan\development\n1ssan-web-bridge\armory-inventory.json
+[armory-equipment] watching for loadout assignments: E:\Vibe Coding\CS2 Lore\CS2 n1ssan\development\n1ssan-web-bridge\armory-equipment.json
+[loadout-api] resolved GetItemID=00007FFFA21285D0 GetSlotEquippedWithDefIndex=00007FFFA213DC10
+[fsn] pClient=0x00007FFFA36E4620 vtable=0x00007FFFA2DE8230 fn=0x00007FFFA1CEEFE0 slot=36
+[fsn] hooked (vtable overwrite)
+[fsn] first stage call seen
+
+=== SNAPSHOT ===
+[snap] fsnCount=1 lastStage=0 stage5Count=0
+[snap] stage histogram:
+[snap]   stage  0: 1 frames
+[snap] dwLocalPlayerController @ 0x00007FFFA36C2548 -> 0x0000040B74015800 
+[snap] dwLocalPlayerPawn       @ 0x00007FFFA38B91E0 -> 0x0000040B001A0200 
+[snap] pawn: vtable=0x00007FFFA7863740 inClient=0 health=1035
+[snap] ctrl: vtable=0x00007FFFA2D91680 inClient=1 m_hPlayerPawn@0x92C = 0x0118800B (idx=11)
+[snap] entitySystem @ 0x00007FFFA389FBB8 = 0x0000040AE3478000 highestEntityIndex=13
+[snap] entity resolution: 12/16 of indices 1..16 valid
+[snap] ctrl->pawn handle resolve: 0x0118800B -> 0x0000040B73E58800
+[snap] ----------------------------------------
+N1SSAN_STATUS|1|2026-11-07T15:12:56Z|2916|armory-obsidian-3.0|CHECKS_PASSED|reason=required_initialization_checks_passed
+[status-write] begin state=CHECKS_PASSED path=C:\Users\mirac\AppData\Local\n1ssan\status\cs2-2916.status
+[status-write] success state=CHECKS_PASSED error=0
+[knife-anim] stage=6 reached
+[diagnostic] runtime=unknown targets=0; awaiting DOMINATE selection
+[glove-observe] pawn=0000040B73E58800 reapply=0 changed=0 def=0 init=0 idHigh=0x0
+N1SSAN_STATUS|1|2026-11-07T15:12:56Z|2916|armory-obsidian-3.0|READY|reason=runtime_worker_heartbeat
+[match] network signOn=6 maxClients=1 backgroundMap=0 connected=0 alive=0
+[status-write] begin state=READY path=C:\Users\mirac\AppData\Local\n1ssan\status\cs2-2916.status
+[status-write] success state=READY error=0
+[knife-anim] stage=6 reached
+[knife-anim] stage=6 reached
+[armory-equipment] index: assignments=0 resolved=0 unresolved=0 conflicts=0 definitions=0 slots=0
+[armory-equipment] reloaded equipment document
+[armory-inventory] staged 21 items (applies outside an active match)
+[runtime-mode] switched to armory
+[runtime-mode] preparing requested mode: armory
+[runtime-mode] active mode: armory
+[socache-diag] SOCache resolved inv=0000040AE37C1000 offset=0x68 cache=0000040B532FA8C0 typeCache=0000040B53393DE0
+[plan-a] Loadout cleanup: found=0 removed=0 failed=0
+[armory-inventory] preparing replacement set: 21 items
+[loot-schema] attr 'set item texture prefab' (idx 6) -> 0x0000040B48490E60
+[loot-schema] attr 6 kind=2 (0=float,1=uint32,2=default,3=other)
+[loot-schema] attr 'set item texture seed' (idx 7) -> 0x0000040B48490F00
+[loot-schema] attr 7 kind=2 (0=float,1=uint32,2=default,3=other)
+[loot-schema] attr 'set item texture wear' (idx 8) -> 0x0000040B48490FA0
+[loot-schema] attr 8 kind=2 (0=float,1=uint32,2=default,3=other)
+[loot-schema] attr 'kill eater' (idx 80) -> 0x0000040B48493A20
+[loot-schema] attr 'kill eater score type' (idx 81) -> 0x0000040B48493AC0
+[armory-equipment] index: assignments=0 resolved=0 unresolved=0 conflicts=0 definitions=13 slots=0
+[armory-inventory] replacement committed: desired=21 created=21 retained=0 removed=0 removeFailed=0
+[detect] pawn=0x0000040B73E58800 hp=100 signOn=6 bg=0
+[armory-equipment] index: assignments=0 resolved=0 unresolved=0 conflicts=0 definitions=13 slots=0
+[armory-equipment] reloaded equipment document
+[armory-inventory] staged 21 items (applies outside an active match)
+[armory-inventory] preparing replacement set: 21 items
+[armory-inventory] retained item id=9538ABCBF71A8046 def=500
+[attach] sticker and charm attributes resolved (6 sticker slots, 1 charm)
+[armory-inventory] attachments synced on 9538ABCBF71A8046: stickers=0 charm=none
+[armory-inventory] retained item id=95244DC29825E7F2 def=9
+[armory-inventory] retained item id=94528252B4CFB440 def=5032
+[armory-inventory] retained item id=9E1ADCC398C4B2EE def=5031
+[armory-inventory] retained item id=98BBAA49A8315DD5 def=4
+[armory-inventory] attachments synced on 98BBAA49A8315DD5: stickers=0 charm=none
+[armory-inventory] retained item id=9BE82F3C6AA31745 def=7
+[armory-inventory] attachments synced on 9BE82F3C6AA31745: stickers=0 charm=none
+[armory-inventory] retained item id=9805674D09936DFC def=1
+[armory-inventory] attachments synced on 9805674D09936DFC: stickers=0 charm=none
+[armory-inventory] retained item id=927D74E1B27C9578 def=4613
+[armory-inventory] attachments synced on 927D74E1B27C9578: stickers=0 charm=none
+[armory-inventory] retained item id=92C732394146EDB2 def=5031
+[armory-inventory] retained item id=9399C2071CCFA392 def=1209
+[armory-inventory] retained item id=9D06E2A144C70C0D def=1209
+[armory-inventory] retained item id=948A982793B40E18 def=1209
+[armory-inventory] attachments synced on 948A982793B40E18: stickers=0 charm=none
+[armory-inventory] retained item id=951A9B0E50733917 def=1209
+[armory-inventory] attachments synced on 951A9B0E50733917: stickers=0 charm=none
+[armory-inventory] retained item id=9969FB3ECB950170 def=1355
+[armory-inventory] retained item id=9B7FFAC2AC18155C def=4
+[armory-inventory] attachments synced on 9B7FFAC2AC18155C: stickers=0 charm=none
+[armory-inventory] retained item id=9C92EB3FB49D7E2B def=60
+[armory-inventory] retained item id=97531B6F266A7162 def=7
+[armory-inventory] attachments synced on 97531B6F266A7162: stickers=0 charm=none
+[armory-inventory] retained item id=9E084A17924E7E2A def=4750
+[armory-inventory] attachments synced on 9E084A17924E7E2A: stickers=0 charm=none
+[armory-inventory] retained item id=929A3A1CAAF5AFED def=523
+[armory-inventory] attachments synced on 929A3A1CAAF5AFED: stickers=0 charm=none
+[armory-inventory] retained item id=90649233EDE3A56C def=1209
+[armory-inventory] retained item id=984B84ADF11940B7 def=1209
+[armory-equipment] index: assignments=0 resolved=0 unresolved=0 conflicts=0 definitions=13 slots=0
+[armory-inventory] replacement committed: desired=21 created=0 retained=21 removed=0 removeFailed=0
+
+=== SNAPSHOT ===
+[snap] fsnCount=2603 lastStage=0 stage5Count=216
+[snap] stage histogram:
+[snap]   stage  0: 330 frames
+[snap]   stage  1: 216 frames
+[snap]   stage  2: 216 frames
+[snap]   stage  3: 216 frames
+[snap]   stage  5: 216 frames
+[snap]   stage  6: 216 frames
+[snap]   stage  7: 216 frames
+[snap]   stage  8: 216 frames
+[snap]   stage 10: 216 frames
+[snap]   stage 11: 320 frames
+[snap]   stage 12: 225 frames
+[snap] dwLocalPlayerController @ 0x00007FFFA36C2548 -> 0x0000040B74015800 
+[snap] dwLocalPlayerPawn       @ 0x00007FFFA38B91E0 -> 0x0000040B001A0200 
+[snap] pawn: vtable=0x00007FFFA7863740 inClient=0 health=1035
+[snap] ctrl: vtable=0x00007FFFA2D91680 inClient=1 m_hPlayerPawn@0x92C = 0x0118800B (idx=11)
+[snap] entitySystem @ 0x00007FFFA389FBB8 = 0x0000040AE3478000 highestEntityIndex=13
+[snap] entity resolution: 12/16 of indices 1..16 valid
+[snap] ctrl->pawn handle resolve: 0x0118800B -> 0x0000040B73E58800
+[snap] ----------------------------------------
+[armory-equipment] index: assignments=0 resolved=0 unresolved=0 conflicts=0 definitions=13 slots=0
+[armory-equipment] reloaded equipment document
+[armory-inventory] staged 21 items (applies outside an active match)
+[armory-inventory] preparing replacement set: 21 items
+[armory-inventory] retained item id=9538ABCBF71A8046 def=500
+[armory-inventory] attachments synced on 9538ABCBF71A8046: stickers=0 charm=none
+[armory-inventory] retained item id=95244DC29825E7F2 def=9
+[armory-inventory] retained item id=94528252B4CFB440 def=5032
+[armory-inventory] attachments synced on 94528252B4CFB440: stickers=0 charm=none
+[armory-inventory] retained item id=9E1ADCC398C4B2EE def=5031
+[armory-inventory] retained item id=98BBAA49A8315DD5 def=4
+[armory-inventory] attachments synced on 98BBAA49A8315DD5: stickers=0 charm=none
+[armory-inventory] retained item id=9BE82F3C6AA31745 def=7
+[armory-inventory] attachments synced on 9BE82F3C6AA31745: stickers=0 charm=none
+[armory-inventory] retained item id=9805674D09936DFC def=1
+[armory-inventory] retained item id=927D74E1B27C9578 def=4613
+[armory-inventory] attachments synced on 927D74E1B27C9578: stickers=0 charm=none
+[armory-inventory] retained item id=92C732394146EDB2 def=5031
+[armory-inventory] attachments synced on 92C732394146EDB2: stickers=0 charm=none
+[armory-inventory] retained item id=9399C2071CCFA392 def=1209
+[armory-inventory] attachments synced on 9399C2071CCFA392: stickers=0 charm=none
+[armory-inventory] retained item id=9D06E2A144C70C0D def=1209
+[armory-inventory] retained item id=948A982793B40E18 def=1209
+[armory-inventory] retained item id=951A9B0E50733917 def=1209
+[armory-inventory] retained item id=9969FB3ECB950170 def=1355
+[armory-inventory] attachments synced on 9969FB3ECB950170: stickers=0 charm=none
+[armory-inventory] retained item id=9B7FFAC2AC18155C def=4
+[armory-inventory] attachments synced on 9B7FFAC2AC18155C: stickers=0 charm=none
+[armory-inventory] retained item id=9C92EB3FB49D7E2B def=60
+[armory-inventory] retained item id=97531B6F266A7162 def=7
+[armory-inventory] attachments synced on 97531B6F266A7162: stickers=0 charm=none
+[armory-inventory] retained item id=9E084A17924E7E2A def=4750
+[armory-inventory] attachments synced on 9E084A17924E7E2A: stickers=0 charm=none
+[armory-inventory] retained item id=929A3A1CAAF5AFED def=523
+[armory-inventory] attachments synced on 929A3A1CAAF5AFED: stickers=0 charm=none
+[armory-inventory] retained item id=90649233EDE3A56C def=1209
+[armory-inventory] retained item id=984B84ADF11940B7 def=1209
+[armory-equipment] index: assignments=0 resolved=0 unresolved=0 conflicts=0 definitions=13 slots=0
+[armory-inventory] replacement committed: desired=21 created=0 retained=21 removed=0 removeFailed=0
+
+=== SNAPSHOT ===
+[snap] fsnCount=5209 lastStage=0 stage5Count=434
+[snap] stage histogram:
+[snap]   stage  0: 652 frames
+[snap]   stage  1: 434 frames
+[snap]   stage  2: 434 frames
+[snap]   stage  3: 434 frames
+[snap]   stage  5: 434 frames
+[snap]   stage  6: 434 frames
+[snap]   stage  7: 434 frames
+[snap]   stage  8: 434 frames
+[snap]   stage 10: 434 frames
+[snap]   stage 11: 642 frames
+[snap]   stage 12: 443 frames
+[snap] dwLocalPlayerController @ 0x00007FFFA36C2548 -> 0x0000040B74015800 
+N1SSAN_STATUS|1|2026-11-07T15:13:06Z|2916|armory-obsidian-3.0|READY|reason=runtime_worker_heartbeat
+[snap] dwLocalPlayerPawn       @ 0x00007FFFA38B91E0 -> 0x0000040B001A0200 
+[snap] pawn: vtable=0x00007FFFA7863740 inClient=0 health=1035
+[snap] ctrl: vtable=0x00007FFFA2D91680 inClient=1 m_hPlayerPawn@0x92C = 0x0118800B (idx=11)
+[status-write] begin state=READY path=C:\Users\mirac\AppData\Local\n1ssan\status\cs2-2916.status
+[snap] entitySystem @ 0x00007FFFA389FBB8 = 0x0000040AE3478000 highestEntityIndex=13
+[snap] entity resolution: 12/16 of indices 1..16 valid
+[snap] ctrl->pawn handle resolve: 0x0118800B -> 0x0000040B73E58800
+[snap] ----------------------------------------
+[status-write] success state=READY error=0
+[detect] pawn=0x0000040B73E58800 hp=100 signOn=6 bg=0
+
+=== SNAPSHOT ===
+[snap] fsnCount=7838 lastStage=0 stage5Count=655
+[snap] stage histogram:
+[snap]   stage  0: 972 frames
+[snap]   stage  1: 655 frames
+[snap]   stage  2: 655 frames
+[snap]   stage  3: 655 frames
+[snap]   stage  5: 655 frames
+[snap]   stage  6: 655 frames
+[snap]   stage  7: 655 frames
+[snap]   stage  8: 655 frames
+[snap]   stage 10: 655 frames
+[snap]   stage 11: 962 frames
+[snap]   stage 12: 664 frames
+[snap] dwLocalPlayerController @ 0x00007FFFA36C2548 -> 0x0000040B74015800 
+[snap] dwLocalPlayerPawn       @ 0x00007FFFA38B91E0 -> 0x0000040B001A0200 
+[snap] pawn: vtable=0x00007FFFA7863740 inClient=0 health=1035
+[snap] ctrl: vtable=0x00007FFFA2D91680 inClient=1 m_hPlayerPawn@0x92C = 0x0118800B (idx=11)
+[snap] entitySystem @ 0x00007FFFA389FBB8 = 0x0000040AE3478000 highestEntityIndex=13
+[snap] entity resolution: 12/16 of indices 1..16 valid
+[snap] ctrl->pawn handle resolve: 0x0118800B -> 0x0000040B73E58800
+[snap] ----------------------------------------
+[armory-equipment] index: assignments=0 resolved=0 unresolved=0 conflicts=0 definitions=13 slots=0
+[armory-equipment] reloaded equipment document
+[armory-inventory] staged 21 items (applies outside an active match)
+[armory-inventory] preparing replacement set: 21 items
+[armory-inventory] retained item id=9538ABCBF71A8046 def=500
+[armory-inventory] retained item id=95244DC29825E7F2 def=9
+[armory-inventory] retained item id=94528252B4CFB440 def=5032
+[armory-inventory] retained item id=9E1ADCC398C4B2EE def=5031
+[armory-inventory] retained item id=98BBAA49A8315DD5 def=4
+[armory-inventory] attachments synced on 98BBAA49A8315DD5: stickers=0 charm=none
+[armory-inventory] retained item id=9BE82F3C6AA31745 def=7
+[armory-inventory] attachments synced on 9BE82F3C6AA31745: stickers=0 charm=none
+[armory-inventory] retained item id=9805674D09936DFC def=1
+[armory-inventory] attachments synced on 9805674D09936DFC: stickers=0 charm=none
+[armory-inventory] retained item id=927D74E1B27C9578 def=4613
+[armory-inventory] attachments synced on 927D74E1B27C9578: stickers=0 charm=none
+[armory-inventory] retained item id=92C732394146EDB2 def=5031
+[armory-inventory] attachments synced on 92C732394146EDB2: stickers=0 charm=none
+[armory-inventory] retained item id=9399C2071CCFA392 def=1209
+[armory-inventory] attachments synced on 9399C2071CCFA392: stickers=0 charm=none
+[armory-inventory] retained item id=9D06E2A144C70C0D def=1209
+[armory-inventory] attachments synced on 9D06E2A144C70C0D: stickers=0 charm=none
+[armory-inventory] retained item id=948A982793B40E18 def=1209
+[armory-inventory] attachments synced on 948A982793B40E18: stickers=0 charm=none
+[armory-inventory] retained item id=951A9B0E50733917 def=1209
+[armory-inventory] retained item id=9969FB3ECB950170 def=1355
+[armory-inventory] retained item id=9B7FFAC2AC18155C def=4
+[armory-inventory] attachments synced on 9B7FFAC2AC18155C: stickers=0 charm=none
+[armory-inventory] retained item id=9C92EB3FB49D7E2B def=60
+[armory-inventory] retained item id=97531B6F266A7162 def=7
+[armory-inventory] attachments synced on 97531B6F266A7162: stickers=0 charm=none
+[armory-inventory] retained item id=9E084A17924E7E2A def=4750
+[armory-inventory] attachments synced on 9E084A17924E7E2A: stickers=0 charm=none
+[armory-inventory] retained item id=929A3A1CAAF5AFED def=523
+[armory-inventory] attachments synced on 929A3A1CAAF5AFED: stickers=0 charm=none
+[armory-inventory] retained item id=90649233EDE3A56C def=1209
+[armory-inventory] retained item id=984B84ADF11940B7 def=1209
+[armory-equipment] index: assignments=0 resolved=0 unresolved=0 conflicts=0 definitions=13 slots=0
+[armory-inventory] replacement committed: desired=21 created=0 retained=21 removed=0 removeFailed=0
+
+=== SNAPSHOT ===
+[snap] fsnCount=11472 lastStage=0 stage5Count=921
+[snap] stage histogram:
+[snap]   stage  0: 1592 frames
+[snap]   stage  1: 921 frames
+[snap]   stage  2: 921 frames
+[snap]   stage  3: 921 frames
+[snap]   stage  5: 921 frames
+N1SSAN_STATUS|1|2026-11-07T15:13:16Z|2916|armory-obsidian-3.0|READY|reason=runtime_worker_heartbeat
+[snap]   stage  6: 921 frames
+[status-write] begin state=READY path=C:\Users\mirac\AppData\Local\n1ssan\status\cs2-2916.status
+[snap]   stage  7: 921 frames
+[snap]   stage  8: 921 frames
+[snap]   stage 10: 921 frames
+[snap]   stage 11: 1279 frames
+[snap]   stage 12: 1233 frames
+[snap] dwLocalPlayerController @ 0x00007FFFA36C2548 -> 0x0000040B74015800 
+[status-write] success state=READY error=0
+[snap] dwLocalPlayerPawn       @ 0x00007FFFA38B91E0 -> 0x0000040B001A0200 
+[snap] pawn: vtable=0x00007FFFA7863740 inClient=0 health=1035
+[snap] ctrl: vtable=0x00007FFFA2D91680 inClient=1 m_hPlayerPawn@0x92C = 0x0118800B (idx=11)
+[snap] entitySystem @ 0x00007FFFA389FBB8 = 0x0000040AE3478000 highestEntityIndex=13
+[snap] entity resolution: 12/16 of indices 1..16 valid
+[snap] ctrl->pawn handle resolve: 0x0118800B -> 0x0000040B73E58800
+[snap] ----------------------------------------
+[detect] pawn=0x0000040B73E58800 hp=100 signOn=6 bg=0
+
+=== SNAPSHOT ===
+[snap] fsnCount=16100 lastStage=0 stage5Count=1237
+[snap] stage histogram:
+[snap]   stage  0: 2484 frames
+[snap]   stage  1: 1237 frames
+[snap]   stage  2: 1237 frames
+[snap]   stage  3: 1237 frames
+[snap]   stage  5: 1237 frames
+[snap]   stage  6: 1237 frames
+[snap]   stage  7: 1237 frames
+[snap]   stage  8: 1237 frames
+[snap]   stage 10: 1237 frames
+[snap]   stage 11: 1599 frames
+[snap]   stage 12: 2121 frames
+[snap] dwLocalPlayerController @ 0x00007FFFA36C2548 -> 0x0000040B74015800 
+[snap] dwLocalPlayerPawn       @ 0x00007FFFA38B91E0 -> 0x0000040B001A0200 
+[snap] pawn: vtable=0x00007FFFA7863740 inClient=0 health=1035
+[snap] ctrl: vtable=0x00007FFFA2D91680 inClient=1 m_hPlayerPawn@0x92C = 0x0118800B (idx=11)
+[snap] entitySystem @ 0x00007FFFA389FBB8 = 0x0000040AE3478000 highestEntityIndex=13
+[snap] entity resolution: 12/16 of indices 1..16 valid
+[snap] ctrl->pawn handle resolve: 0x0118800B -> 0x0000040B73E58800
+[snap] ----------------------------------------
+
+=== SNAPSHOT ===
+[snap] fsnCount=20563 lastStage=0 stage5Count=1550
+[snap] stage histogram:
+[snap]   stage  0: 3307 frames
+[snap]   stage  1: 1550 frames
+[snap]   stage  2: 1550 frames
+[snap]   stage  3: 1550 frames
+[snap]   stage  5: 1550 frames
+[snap]   stage  6: 1550 frames
+[snap]   stage  7: 1550 frames
+[snap]   stage  8: 1550 frames
+[snap]   stage 10: 1550 frames
+[snap]   stage 11: 1919 frames
+[snap]   stage 12: 2937 frames
+[snap] dwLocalPlayerController @ 0x00007FFFA36C2548 -> 0x0000040B74015800 
+[snap] dwLocalPlayerPawn       @ 0x00007FFFA38B91E0 -> 0x0000040B001A0200 
+[snap] pawn: vtable=0x00007FFFA7863740 inClient=0 health=1035
+N1SSAN_STATUS|1|2026-11-07T15:13:26Z|2916|armory-obsidian-3.0|READY|reason=runtime_worker_heartbeat
+[snap] ctrl: vtable=0x00007FFFA2D91680 inClient=1 m_hPlayerPawn@0x92C = 0x0118800B (idx=11)
+[snap] entitySystem @ 0x00007FFFA389FBB8 = 0x0000040AE3478000 highestEntityIndex=13
+[status-write] begin state=READY path=C:\Users\mirac\AppData\Local\n1ssan\status\cs2-2916.status
+[snap] entity resolution: 12/16 of indices 1..16 valid
+[snap] ctrl->pawn handle resolve: 0x0118800B -> 0x0000040B73E58800
+[snap] ----------------------------------------
+[status-write] success state=READY error=0
+[detect] pawn=0x0000040B73E58800 hp=100 signOn=6 bg=0
+
+=== SNAPSHOT ===
+[snap] fsnCount=24654 lastStage=0 stage5Count=1863
+[snap] stage histogram:
+[snap]   stage  0: 3944 frames
+[snap]   stage  1: 1863 frames
+[snap]   stage  2: 1863 frames
+[snap]   stage  3: 1863 frames
+[snap]   stage  5: 1863 frames
+[snap]   stage  6: 1863 frames
+[snap]   stage  7: 1863 frames
+[snap]   stage  8: 1863 frames
+[snap]   stage 10: 1863 frames
+[snap]   stage 11: 2239 frames
+[snap]   stage 12: 3567 frames
+[snap] dwLocalPlayerController @ 0x00007FFFA36C2548 -> 0x0000040B74015800 
+[snap] dwLocalPlayerPawn       @ 0x00007FFFA38B91E0 -> 0x0000040B001A0200 
+[snap] pawn: vtable=0x00007FFFA7863740 inClient=0 health=1035
+[snap] ctrl: vtable=0x00007FFFA2D91680 inClient=1 m_hPlayerPawn@0x92C = 0x0118800B (idx=11)
+[snap] entitySystem @ 0x00007FFFA389FBB8 = 0x0000040AE3478000 highestEntityIndex=13
+[snap] entity resolution: 12/16 of indices 1..16 valid
+[snap] ctrl->pawn handle resolve: 0x0118800B -> 0x0000040B73E58800
+[snap] ----------------------------------------
+[use-tool] hook-entry #1 mode=2 api=0000040A5526DB00 toolArg=0000040B778F41A0 targetArg=0000040B778F7D20 original=00007FFF9FAE0FC0
+[use-tool] sticker 10 on 9B7FFAC2AC18155C: at the popup's spot - applying
+[use-tool] hook-entry #1 decision=handled locally
+[attach] Lootline ItemViewById resolved @ 00007FFFA19BD190
+[attach] ItemViewById read 9B7FFAC2AC18155C via CS2 getters
+[use-tool] sticker target read through CS2 ItemView fallback; preserving unobserved attributes
+[use-tool] consumed sticker item 90649233EDE3A56C removal=SUCCESS
+[use-tool] sticker 10 applied to 9B7FFAC2AC18155C in slot 0 (position 0): attributes written, inventory told, popup NOT told, sticker item used up
+
+=== SNAPSHOT ===
+[snap] fsnCount=28702 lastStage=0 stage5Count=2181
+[snap] stage histogram:
+[snap]   stage  0: 4537 frames
+[snap]   stage  1: 2181 frames
+[snap]   stage  2: 2181 frames
+[snap]   stage  3: 2181 frames
+[snap]   stage  5: 2181 frames
+[snap]   stage  6: 2181 frames
+[snap]   stage  7: 2181 frames
+[snap]   stage  8: 2181 frames
+[snap]   stage 10: 2181 frames
+[snap]   stage 11: 2559 frames
+[snap]   stage 12: 4158 frames
+[snap] dwLocalPlayerController @ 0x00007FFFA36C2548 -> 0x0000040B74015800 
+[snap] dwLocalPlayerPawn       @ 0x00007FFFA38B91E0 -> 0x0000040B001A0200 
+N1SSAN_STATUS|1|2026-11-07T15:13:36Z|2916|armory-obsidian-3.0|READY|reason=runtime_worker_heartbeat
+[snap] pawn: vtable=0x00007FFFA7863740 inClient=0 health=1035
+[status-write] begin state=READY path=C:\Users\mirac\AppData\Local\n1ssan\status\cs2-2916.status
+[snap] ctrl: vtable=0x00007FFFA2D91680 inClient=1 m_hPlayerPawn@0x92C = 0x0118800B (idx=11)
+[snap] entitySystem @ 0x00007FFFA389FBB8 = 0x0000040AE3478000 highestEntityIndex=13
+[snap] entity resolution: 12/16 of indices 1..16 valid
+[snap] ctrl->pawn handle resolve: 0x0118800B -> 0x0000040B73E58800
+[status-write] success state=READY error=0
+[snap] ----------------------------------------
+[detect] pawn=0x0000040B73E58800 hp=100 signOn=6 bg=0
+
+=== SNAPSHOT ===
+[snap] fsnCount=32809 lastStage=0 stage5Count=2494
+[snap] stage histogram:
+[snap]   stage  0: 5182 frames
+[snap]   stage  1: 2494 frames
+[snap]   stage  2: 2494 frames
+[snap]   stage  3: 2494 frames
+[snap]   stage  5: 2494 frames
+[snap]   stage  6: 2494 frames
+[snap]   stage  7: 2494 frames
+[snap]   stage  8: 2494 frames
+[snap]   stage 10: 2494 frames
+[snap]   stage 11: 2880 frames
+[snap]   stage 12: 4795 frames
+[snap] dwLocalPlayerController @ 0x00007FFFA36C2548 -> 0x0000040B74015800 
+[snap] dwLocalPlayerPawn       @ 0x00007FFFA38B91E0 -> 0x0000040B001A0200 
+[snap] pawn: vtable=0x00007FFFA7863740 inClient=0 health=1035
+[snap] ctrl: vtable=0x00007FFFA2D91680 inClient=1 m_hPlayerPawn@0x92C = 0x0118800B (idx=11)
+[snap] entitySystem @ 0x00007FFFA389FBB8 = 0x0000040AE3478000 highestEntityIndex=13
+[snap] entity resolution: 12/16 of indices 1..16 valid
+[snap] ctrl->pawn handle resolve: 0x0118800B -> 0x0000040B73E58800
+[snap] ----------------------------------------
+
+=== SNAPSHOT ===
+[snap] fsnCount=36882 lastStage=0 stage5Count=2811
+[snap] stage histogram:
+[snap]   stage  0: 5792 frames
+[snap]   stage  1: 2811 frames
+[snap]   stage  2: 2811 frames
+[snap]   stage  3: 2811 frames
+[snap]   stage  5: 2811 frames
+[snap]   stage  6: 2811 frames
+[snap]   stage  7: 2811 frames
+[snap]   stage  8: 2811 frames
+[snap]   stage 10: 2811 frames
+[snap]   stage 11: 3200 frames
+[snap]   stage 12: 5402 frames
+[snap] dwLocalPlayerController @ 0x00007FFFA36C2548 -> 0x0000040B74015800 
+N1SSAN_STATUS|1|2026-11-07T15:13:46Z|2916|armory-obsidian-3.0|READY|reason=runtime_worker_heartbeat
+[snap] dwLocalPlayerPawn       @ 0x00007FFFA38B91E0 -> 0x0000040B001A0200 
+[status-write] begin state=READY path=C:\Users\mirac\AppData\Local\n1ssan\status\cs2-2916.status
+[snap] pawn: vtable=0x00007FFFA7863740 inClient=0 health=1035
+[snap] ctrl: vtable=0x00007FFFA2D91680 inClient=1 m_hPlayerPawn@0x92C = 0x0118800B (idx=11)
+[snap] entitySystem @ 0x00007FFFA389FBB8 = 0x0000040AE3478000 highestEntityIndex=13
+[snap] entity resolution: 12/16 of indices 1..16 valid
+[status-write] success state=READY error=0
+[snap] ctrl->pawn handle resolve: 0x0118800B -> 0x0000040B73E58800
+[snap] ----------------------------------------
+[detect] pawn=0x0000040B73E58800 hp=100 signOn=6 bg=0
+
+=== SNAPSHOT ===
+[snap] fsnCount=41026 lastStage=11 stage5Count=3125
+[snap] stage histogram:
+[snap]   stage  0: 6450 frames
+[snap]   stage  1: 3125 frames
+[snap]   stage  2: 3125 frames
+[snap]   stage  3: 3125 frames
+[snap]   stage  5: 3125 frames
+[snap]   stage  6: 3125 frames
+[snap]   stage  7: 3125 frames
+[snap]   stage  8: 3125 frames
+[snap]   stage 10: 3126 frames
+[snap]   stage 11: 3521 frames
+[snap]   stage 12: 6054 frames
+[snap] dwLocalPlayerController @ 0x00007FFFA36C2548 -> 0x0000040B74015800 
+[snap] dwLocalPlayerPawn       @ 0x00007FFFA38B91E0 -> 0x0000040B001A0200 
+[snap] pawn: vtable=0x00007FFFA7863740 inClient=0 health=1035
+[snap] ctrl: vtable=0x00007FFFA2D91680 inClient=1 m_hPlayerPawn@0x92C = 0x0118800B (idx=11)
+[snap] entitySystem @ 0x00007FFFA389FBB8 = 0x0000040AE3478000 highestEntityIndex=13
+[snap] entity resolution: 12/16 of indices 1..16 valid
+[snap] ctrl->pawn handle resolve: 0x0118800B -> 0x0000040B73E58800
+[snap] ----------------------------------------
+
+=== SNAPSHOT ===
+[snap] fsnCount=45004 lastStage=0 stage5Count=3445
+[snap] stage histogram:
+[snap]   stage  0: 7000 frames
+[snap]   stage  1: 3445 frames
+[snap]   stage  2: 3445 frames
+[snap]   stage  3: 3445 frames
+[snap]   stage  5: 3445 frames
+[snap]   stage  6: 3445 frames
+[snap]   stage  7: 3445 frames
+[snap]   stage  8: 3445 frames
+[snap]   stage 10: 3445 frames
+[snap]   stage 11: 3840 frames
+[snap]   stage 12: 6604 frames
+[snap] dwLocalPlayerController @ 0x00007FFFA36C2548 -> 0x0000040B74015800 
+[snap] dwLocalPlayerPawn       @ 0x00007FFFA38B91E0 -> 0x0000040B001A0200 
+[snap] pawn: vtable=0x00007FFFA7863740 inClient=0 health=1035
+[snap] ctrl: vtable=0x00007FFFA2D91680 inClient=1 m_hPlayerPawn@0x92C = 0x0118800B (idx=11)
+[snap] entitySystem @ 0x00007FFFA389FBB8 = 0x0000040AE3478000 highestEntityIndex=13
+[snap] entity resolution: 12/16 of indices 1..16 valid
+[snap] ctrl->pawn handle resolve: 0x0118800B -> 0x0000040B73E58800
+[snap] ----------------------------------------
+N1SSAN_STATUS|1|2026-11-07T15:13:56Z|2916|armory-obsidian-3.0|READY|reason=runtime_worker_heartbeat
+[status-write] begin state=READY path=C:\Users\mirac\AppData\Local\n1ssan\status\cs2-2916.status
+[status-write] success state=READY error=0
+[detect] pawn=0x0000040B73E58800 hp=100 signOn=6 bg=0
+
+=== SNAPSHOT ===
+[snap] fsnCount=48979 lastStage=0 stage5Count=3766
+[snap] stage histogram:
+[snap]   stage  0: 7543 frames
+[snap]   stage  1: 3766 frames
+[snap]   stage  2: 3766 frames
+[snap]   stage  3: 3766 frames
+[snap]   stage  5: 3766 frames
+[snap]   stage  6: 3766 frames
+[snap]   stage  7: 3766 frames
+[snap]   stage  8: 3766 frames
+[snap]   stage 10: 3766 frames
+[snap]   stage 11: 4161 frames
+[snap]   stage 12: 7147 frames
+[snap] dwLocalPlayerController @ 0x00007FFFA36C2548 -> 0x0000040B74015800 
+[snap] dwLocalPlayerPawn       @ 0x00007FFFA38B91E0 -> 0x0000040B001A0200 
+[snap] pawn: vtable=0x00007FFFA7863740 inClient=0 health=1035
+[snap] ctrl: vtable=0x00007FFFA2D91680 inClient=1 m_hPlayerPawn@0x92C = 0x0118800B (idx=11)
+[snap] entitySystem @ 0x00007FFFA389FBB8 = 0x0000040AE3478000 highestEntityIndex=13
+[snap] entity resolution: 12/16 of indices 1..16 valid
+[snap] ctrl->pawn handle resolve: 0x0118800B -> 0x0000040B73E58800
+[snap] ----------------------------------------
+
+=== SNAPSHOT ===
+[snap] fsnCount=52935 lastStage=0 stage5Count=4086
+[snap] stage histogram:
+[snap]   stage  0: 8081 frames
+[snap]   stage  1: 4086 frames
+[snap]   stage  2: 4086 frames
+[snap]   stage  3: 4086 frames
+[snap]   stage  5: 4086 frames
+[snap]   stage  6: 4086 frames
+[snap]   stage  7: 4086 frames
+[snap]   stage  8: 4086 frames
+[snap]   stage 10: 4086 frames
+[snap]   stage 11: 4481 frames
+[snap]   stage 12: 7685 frames
+[snap] dwLocalPlayerController @ 0x00007FFFA36C2548 -> 0x0000040B74015800 
+[snap] dwLocalPlayerPawn       @ 0x00007FFFA38B91E0 -> 0x0000040B001A0200 
+N1SSAN_STATUS|1|2026-11-07T15:14:06Z|2916|armory-obsidian-3.0|READY|reason=runtime_worker_heartbeat
+[snap] pawn: vtable=0x00007FFFA7863740 inClient=0 health=1035
+[status-write] begin state=READY path=C:\Users\mirac\AppData\Local\n1ssan\status\cs2-2916.status
+[snap] ctrl: vtable=0x00007FFFA2D91680 inClient=1 m_hPlayerPawn@0x92C = 0x0118800B (idx=11)
+[snap] entitySystem @ 0x00007FFFA389FBB8 = 0x0000040AE3478000 highestEntityIndex=13
+[snap] entity resolution: 12/16 of indices 1..16 valid
+[status-write] success state=READY error=0
+[snap] ctrl->pawn handle resolve: 0x0118800B -> 0x0000040B73E58800
+[snap] ----------------------------------------
+[detect] pawn=0x0000040B73E58800 hp=100 signOn=6 bg=0
+[use-tool] hook-entry #2 mode=2 api=0000040A5526DB00 toolArg=0000040B77EA99A0 targetArg=0000040B77EA8BE0 original=00007FFF9FAE0FC0
+[use-tool] sticker 1028 on 9B7FFAC2AC18155C: at the popup's spot - applying
+[use-tool] hook-entry #2 decision=handled locally
+[attach] ItemViewById read 9B7FFAC2AC18155C via CS2 getters
+[use-tool] sticker target read through CS2 ItemView fallback; preserving unobserved attributes
+[use-tool] consumed sticker item 951A9B0E50733917 removal=SUCCESS
+[use-tool] sticker 1028 applied to 9B7FFAC2AC18155C in slot 1 (position 3): attributes written, inventory told, popup NOT told, sticker item used up
+
+=== SNAPSHOT ===
+[snap] fsnCount=56883 lastStage=0 stage5Count=4406
+[snap] stage histogram:
+[snap]   stage  0: 8615 frames
+[snap]   stage  1: 4406 frames
+[snap]   stage  2: 4406 frames
+[snap]   stage  3: 4406 frames
+[snap]   stage  5: 4406 frames
+[snap]   stage  6: 4406 frames
+[snap]   stage  7: 4406 frames
+[snap]   stage  8: 4406 frames
+[snap]   stage 10: 4406 frames
+[snap]   stage 11: 4801 frames
+[snap]   stage 12: 8219 frames
+[snap] dwLocalPlayerController @ 0x00007FFFA36C2548 -> 0x0000040B74015800 
+[snap] dwLocalPlayerPawn       @ 0x00007FFFA38B91E0 -> 0x0000040B001A0200 
+[snap] pawn: vtable=0x00007FFFA7863740 inClient=0 health=1035
+[snap] ctrl: vtable=0x00007FFFA2D91680 inClient=1 m_hPlayerPawn@0x92C = 0x0118800B (idx=11)
+[snap] entitySystem @ 0x00007FFFA389FBB8 = 0x0000040AE3478000 highestEntityIndex=13
+[snap] entity resolution: 12/16 of indices 1..16 valid
+[snap] ctrl->pawn handle resolve: 0x0118800B -> 0x0000040B73E58800
+[snap] ----------------------------------------
+
+=== SNAPSHOT ===
+[snap] fsnCount=60872 lastStage=0 stage5Count=4723
+[snap] stage histogram:
+[snap]   stage  0: 9183 frames
+[snap]   stage  1: 4723 frames
+[snap]   stage  2: 4723 frames
+[snap]   stage  3: 4723 frames
+[snap]   stage  5: 4723 frames
+[snap]   stage  6: 4723 frames
+[snap]   stage  7: 4723 frames
+[snap]   stage  8: 4723 frames
+[snap]   stage 10: 4723 frames
+[snap]   stage 11: 5122 frames
+[snap]   stage 12: 8783 frames
+[snap] dwLocalPlayerController @ 0x00007FFFA36C2548 -> 0x0000040B74015800 
+[snap] dwLocalPlayerPawn       @ 0x00007FFFA38B91E0 -> 0x0000040B001A0200 
+[snap] pawn: vtable=0x00007FFFA7863740 inClient=0 health=1035
+[snap] ctrl: vtable=0x00007FFFA2D91680 inClient=1 m_hPlayerPawn@0x92C = 0x0118800B (idx=11)
+N1SSAN_STATUS|1|2026-11-07T15:14:16Z|2916|armory-obsidian-3.0|READY|reason=runtime_worker_heartbeat
+[snap] entitySystem @ 0x00007FFFA389FBB8 = 0x0000040AE3478000 highestEntityIndex=13
+[status-write] begin state=READY path=C:\Users\mirac\AppData\Local\n1ssan\status\cs2-2916.status
+[snap] entity resolution: 12/16 of indices 1..16 valid
+[snap] ctrl->pawn handle resolve: 0x0118800B -> 0x0000040B73E58800
+[snap] ----------------------------------------
+[status-write] success state=READY error=0
+[detect] pawn=0x0000040B73E58800 hp=100 signOn=6 bg=0
+
+=== SNAPSHOT ===
+[snap] fsnCount=64948 lastStage=0 stage5Count=5039
+[snap] stage histogram:
+[snap]   stage  0: 9799 frames
+[snap]   stage  1: 5039 frames
+[snap]   stage  2: 5039 frames
+[snap]   stage  3: 5039 frames
+[snap]   stage  5: 5039 frames
+[snap]   stage  6: 5039 frames
+[snap]   stage  7: 5039 frames
+[snap]   stage  8: 5039 frames
+[snap]   stage 10: 5039 frames
+[snap]   stage 11: 5442 frames
+[snap]   stage 12: 9395 frames
+[snap] dwLocalPlayerController @ 0x00007FFFA36C2548 -> 0x0000040B74015800 
+[snap] dwLocalPlayerPawn       @ 0x00007FFFA38B91E0 -> 0x0000040B001A0200 
+[snap] pawn: vtable=0x00007FFFA7863740 inClient=0 health=1035
+[snap] ctrl: vtable=0x00007FFFA2D91680 inClient=1 m_hPlayerPawn@0x92C = 0x0118800B (idx=11)
+[snap] entitySystem @ 0x00007FFFA389FBB8 = 0x0000040AE3478000 highestEntityIndex=13
+[snap] entity resolution: 12/16 of indices 1..16 valid
+[snap] ctrl->pawn handle resolve: 0x0118800B -> 0x0000040B73E58800
+[snap] ----------------------------------------
+
+=== SNAPSHOT ===
+[snap] fsnCount=69055 lastStage=0 stage5Count=5352
+[snap] stage histogram:
+[snap]   stage  0: 10444 frames
+[snap]   stage  1: 5352 frames
+[snap]   stage  2: 5352 frames
+[snap]   stage  3: 5352 frames
+[snap]   stage  5: 5352 frames
+[snap]   stage  6: 5352 frames
+[snap]   stage  7: 5352 frames
+[snap]   stage  8: 5352 frames
+[snap]   stage 10: 5352 frames
+[snap]   stage 11: 5762 frames
+[snap]   stage 12: 10033 frames
+[snap] dwLocalPlayerController @ 0x00007FFFA36C2548 -> 0x0000040B74015800 
+[snap] dwLocalPlayerPawn       @ 0x00007FFFA38B91E0 -> 0x0000040B001A0200 
+[snap] pawn: vtable=0x00007FFFA7863740 inClient=0 health=1035
+[snap] ctrl: vtable=0x00007FFFA2D91680 inClient=1 m_hPlayerPawn@0x92C = 0x0118800B (idx=11)
+[snap] entitySystem @ 0x00007FFFA389FBB8 = 0x0000040AE3478000 highestEntityIndex=13
+[snap] entity resolution: 12/16 of indices 1..16 valid
+[snap] ctrl->pawn handle resolve: 0x0118800B -> 0x0000040B73E58800
+[snap] ----------------------------------------
+N1SSAN_STATUS|1|2026-11-07T15:14:26Z|2916|armory-obsidian-3.0|READY|reason=runtime_worker_heartbeat
+[status-write] begin state=READY path=C:\Users\mirac\AppData\Local\n1ssan\status\cs2-2916.status
+[status-write] success state=READY error=0
+[use-tool] hook-entry #3 mode=2 api=0000040A5526DB00 toolArg=0000040B7BB27580 targetArg=0000040B7BB22B60 original=00007FFF9FAE0FC0
+[use-tool] charm 24 on 9B7FFAC2AC18155C: at the popup's spot - applying
+[use-tool] hook-entry #3 decision=handled locally
+[use-tool] charm target snapshot unavailable; using Lootline-style targeted keychain write
+[use-tool] consumed charm item 9969FB3ECB950170 removal=SUCCESS
+[use-tool] charm 24 (seed 0) hung on 9B7FFAC2AC18155C at x 5.969 y 0.476 z 1.908 (the popup's spot): attributes written, inventory told, popup NOT told, charm item used up
+[detect] pawn=0x0000040B73E58800 hp=100 signOn=6 bg=0
+
+=== SNAPSHOT ===
+[snap] fsnCount=72837 lastStage=0 stage5Count=5666
+[snap] stage histogram:
+[snap]   stage  0: 10922 frames
+[snap]   stage  1: 5666 frames
+[snap]   stage  2: 5666 frames
+[snap]   stage  3: 5666 frames
+[snap]   stage  5: 5666 frames
+[snap]   stage  6: 5666 frames
+[snap]   stage  7: 5666 frames
+[snap]   stage  8: 5666 frames
+[snap]   stage 10: 5666 frames
+[snap]   stage 11: 6082 frames
+[snap]   stage 12: 10505 frames
+[snap] dwLocalPlayerController @ 0x00007FFFA36C2548 -> 0x0000040B74015800 
+[snap] dwLocalPlayerPawn       @ 0x00007FFFA38B91E0 -> 0x0000040B001A0200 
+[snap] pawn: vtable=0x00007FFFA7863740 inClient=0 health=1035
+[snap] ctrl: vtable=0x00007FFFA2D91680 inClient=1 m_hPlayerPawn@0x92C = 0x0118800B (idx=11)
+[snap] entitySystem @ 0x00007FFFA389FBB8 = 0x0000040AE3478000 highestEntityIndex=13
+[snap] entity resolution: 12/16 of indices 1..16 valid
+[snap] ctrl->pawn handle resolve: 0x0118800B -> 0x0000040B73E58800
+[snap] ----------------------------------------
+
+=== SNAPSHOT ===
+[snap] fsnCount=76691 lastStage=0 stage5Count=5980
+[snap] stage histogram:
+[snap]   stage  0: 11436 frames
+[snap]   stage  1: 5980 frames
+[snap]   stage  2: 5980 frames
+[snap]   stage  3: 5980 frames
+[snap]   stage  5: 5980 frames
+[snap]   stage  6: 5980 frames
+[snap]   stage  7: 5980 frames
+[snap]   stage  8: 5980 frames
+[snap]   stage 10: 5980 frames
+[snap]   stage 11: 6402 frames
+[snap]   stage 12: 11013 frames
+[snap] dwLocalPlayerController @ 0x00007FFFA36C2548 -> 0x0000040B74015800 
+[snap] dwLocalPlayerPawn       @ 0x00007FFFA38B91E0 -> 0x0000040B001A0200 
+[snap] pawn: vtable=0x00007FFFA7863740 inClient=0 health=1035
+[snap] ctrl: vtable=0x00007FFFA2D91680 inClient=1 m_hPlayerPawn@0x92C = 0x0118800B (idx=11)
+[snap] entitySystem @ 0x00007FFFA389FBB8 = 0x0000040AE3478000 highestEntityIndex=13
+[snap] entity resolution: 12/16 of indices 1..16 valid
+[snap] ctrl->pawn handle resolve: 0x0118800B -> 0x0000040B73E58800
+[snap] ----------------------------------------
+N1SSAN_STATUS|1|2026-11-07T15:14:36Z|2916|armory-obsidian-3.0|READY|reason=runtime_worker_heartbeat
+[status-write] begin state=READY path=C:\Users\mirac\AppData\Local\n1ssan\status\cs2-2916.status
+[status-write] success state=READY error=0
+[detect] pawn=0x0000040B73E58800 hp=100 signOn=6 bg=0
+
+=== SNAPSHOT ===
+[snap] fsnCount=80896 lastStage=0 stage5Count=6297
+[snap] stage histogram:
+[snap]   stage  0: 12112 frames
+[snap]   stage  1: 6297 frames
+[snap]   stage  2: 6297 frames
+[snap]   stage  3: 6297 frames
+[snap]   stage  5: 6297 frames
+[snap]   stage  6: 6297 frames
+[snap]   stage  7: 6297 frames
+[snap]   stage  8: 6297 frames
+[snap]   stage 10: 6297 frames
+[snap]   stage 11: 6722 frames
+[snap]   stage 12: 11686 frames
+[snap] dwLocalPlayerController @ 0x00007FFFA36C2548 -> 0x0000040B74015800 
+[snap] dwLocalPlayerPawn       @ 0x00007FFFA38B91E0 -> 0x0000040B001A0200 
+[snap] pawn: vtable=0x00007FFFA7863740 inClient=0 health=1035
+[snap] ctrl: vtable=0x00007FFFA2D91680 inClient=1 m_hPlayerPawn@0x92C = 0x0118800B (idx=11)
+[snap] entitySystem @ 0x00007FFFA389FBB8 = 0x0000040AE3478000 highestEntityIndex=13
+[snap] entity resolution: 12/16 of indices 1..16 valid
+[snap] ctrl->pawn handle resolve: 0x0118800B -> 0x0000040B73E58800
+[snap] ----------------------------------------
+
+=== SNAPSHOT ===
+[snap] fsnCount=84772 lastStage=0 stage5Count=6617
+[snap] stage histogram:
+[snap]   stage  0: 12610 frames
+[snap]   stage  1: 6617 frames
+[snap]   stage  2: 6617 frames
+[snap]   stage  3: 6617 frames
+[snap]   stage  5: 6617 frames
+[snap]   stage  6: 6617 frames
+[snap]   stage  7: 6617 frames
+[snap]   stage  8: 6617 frames
+[snap]   stage 10: 6617 frames
+[snap]   stage 11: 7042 frames
+[snap]   stage 12: 12184 frames
+[snap] dwLocalPlayerController @ 0x00007FFFA36C2548 -> 0x0000040B74015800 
+[snap] dwLocalPlayerPawn       @ 0x00007FFFA38B91E0 -> 0x0000040B001A0200 
+[snap] pawn: vtable=0x00007FFFA7863740 inClient=0 health=1035
+[snap] ctrl: vtable=0x00007FFFA2D91680 inClient=1 m_hPlayerPawn@0x92C = 0x0118800B (idx=11)
+[snap] entitySystem @ 0x00007FFFA389FBB8 = 0x0000040AE3478000 highestEntityIndex=13
+[snap] entity resolution: 12/16 of indices 1..16 valid
+[snap] ctrl->pawn handle resolve: 0x0118800B -> 0x0000040B73E58800
+[snap] ----------------------------------------
+N1SSAN_STATUS|1|2026-11-07T15:14:46Z|2916|armory-obsidian-3.0|READY|reason=runtime_worker_heartbeat
+[status-write] begin state=READY path=C:\Users\mirac\AppData\Local\n1ssan\status\cs2-2916.status
+[status-write] success state=READY error=0
+[detect] pawn=0x0000040B73E58800 hp=100 signOn=6 bg=0
+[use-tool] hook-entry #4 mode=2 api=0000040A5526DB00 toolArg=0000040B7B2381C0 targetArg=0000040B7B234080 original=00007FFF9FAE0FC0
+[use-tool] sticker 10 on 9C92EB3FB49D7E2B: at the popup's spot - applying
+[use-tool] hook-entry #4 decision=handled locally
+[attach] ItemViewById read 9C92EB3FB49D7E2B via CS2 getters
+[use-tool] sticker target read through CS2 ItemView fallback; preserving unobserved attributes
+[use-tool] consumed sticker item 984B84ADF11940B7 removal=SUCCESS
+[use-tool] sticker 10 applied to 9C92EB3FB49D7E2B in slot 0 (position 4): attributes written, inventory told, popup NOT told, sticker item used up
+
+=== SNAPSHOT ===
+[snap] fsnCount=88664 lastStage=0 stage5Count=6937
+[snap] stage histogram:
+[snap]   stage  0: 13116 frames
+[snap]   stage  1: 6937 frames
+[snap]   stage  2: 6937 frames
+[snap]   stage  3: 6937 frames
+[snap]   stage  5: 6937 frames
+[snap]   stage  6: 6937 frames
+[snap]   stage  7: 6937 frames
+[snap]   stage  8: 6937 frames
+[snap]   stage 10: 6937 frames
+[snap]   stage 11: 7362 frames
+[snap]   stage 12: 12690 frames
+[snap] dwLocalPlayerController @ 0x00007FFFA36C2548 -> 0x0000040B74015800 
+[snap] dwLocalPlayerPawn       @ 0x00007FFFA38B91E0 -> 0x0000040B001A0200 
+[snap] pawn: vtable=0x00007FFFA7863740 inClient=0 health=1035
+[snap] ctrl: vtable=0x00007FFFA2D91680 inClient=1 m_hPlayerPawn@0x92C = 0x0118800B (idx=11)
+[snap] entitySystem @ 0x00007FFFA389FBB8 = 0x0000040AE3478000 highestEntityIndex=13
+[snap] entity resolution: 12/16 of indices 1..16 valid
+[snap] ctrl->pawn handle resolve: 0x0118800B -> 0x0000040B73E58800
+[snap] ----------------------------------------
+
+=== SNAPSHOT ===
+[snap] fsnCount=92524 lastStage=0 stage5Count=7249
+[snap] stage histogram:
+[snap]   stage  0: 13642 frames
+[snap]   stage  1: 7249 frames
+[snap]   stage  2: 7249 frames
+[snap]   stage  3: 7249 frames
+[snap]   stage  5: 7249 frames
+[snap]   stage  6: 7249 frames
+[snap]   stage  7: 7249 frames
+[snap]   stage  8: 7249 frames
+[snap]   stage 10: 7249 frames
+[snap]   stage 11: 7683 frames
+[snap]   stage 12: 13207 frames
+[snap] dwLocalPlayerController @ 0x00007FFFA36C2548 -> 0x0000040B74015800 
+[snap] dwLocalPlayerPawn       @ 0x00007FFFA38B91E0 -> 0x0000040B001A0200 
+[snap] pawn: vtable=0x00007FFFA7863740 inClient=0 health=1035
+[snap] ctrl: vtable=0x00007FFFA2D91680 inClient=1 m_hPlayerPawn@0x92C = 0x0118800B (idx=11)
+[snap] entitySystem @ 0x00007FFFA389FBB8 = 0x0000040AE3478000 highestEntityIndex=13
+[snap] entity resolution: 12/16 of indices 1..16 valid
+[snap] ctrl->pawn handle resolve: 0x0118800B -> 0x0000040B73E58800
+[snap] ----------------------------------------
+N1SSAN_STATUS|1|2026-11-07T15:14:56Z|2916|armory-obsidian-3.0|READY|reason=runtime_worker_heartbeat
+[status-write] begin state=READY path=C:\Users\mirac\AppData\Local\n1ssan\status\cs2-2916.status
+[status-write] success state=READY error=0
+[detect] pawn=0x0000040B73E58800 hp=100 signOn=6 bg=0
+
+=== SNAPSHOT ===
+[snap] fsnCount=96468 lastStage=0 stage5Count=7567
+[snap] stage histogram:
+[snap]   stage  0: 14183 frames
+[snap]   stage  1: 7567 frames
+[snap]   stage  2: 7567 frames
+[snap]   stage  3: 7567 frames
+[snap]   stage  5: 7567 frames
+[snap]   stage  6: 7567 frames
+[snap]   stage  7: 7567 frames
+[snap]   stage  8: 7567 frames
+[snap]   stage 10: 7567 frames
+[snap]   stage 11: 8003 frames
+[snap]   stage 12: 13746 frames
+[snap] dwLocalPlayerController @ 0x00007FFFA36C2548 -> 0x0000040B74015800 
+[snap] dwLocalPlayerPawn       @ 0x00007FFFA38B91E0 -> 0x0000040B001A0200 
+[snap] pawn: vtable=0x00007FFFA7863740 inClient=0 health=1035
+[snap] ctrl: vtable=0x00007FFFA2D91680 inClient=1 m_hPlayerPawn@0x92C = 0x0118800B (idx=11)
+[snap] entitySystem @ 0x00007FFFA389FBB8 = 0x0000040AE3478000 highestEntityIndex=13
+[snap] entity resolution: 12/16 of indices 1..16 valid
+[snap] ctrl->pawn handle resolve: 0x0118800B -> 0x0000040B73E58800
+[snap] ----------------------------------------
+
+=== SNAPSHOT ===
+[snap] fsnCount=100543 lastStage=0 stage5Count=7860
+[snap] stage histogram:
+[snap]   stage  0: 14902 frames
+[snap]   stage  1: 7860 frames
+[snap]   stage  2: 7860 frames
+[snap]   stage  3: 7860 frames
+[snap]   stage  5: 7860 frames
+[snap]   stage  6: 7860 frames
+[snap]   stage  7: 7860 frames
+[snap]   stage  8: 7860 frames
+[snap]   stage 10: 7860 frames
+[snap]   stage 11: 8302 frames
+[snap]   stage 12: 14459 frames
+[snap] dwLocalPlayerController @ 0x00007FFFA36C2548 -> 0x0000040B74015800 
+[snap] dwLocalPlayerPawn       @ 0x00007FFFA38B91E0 -> 0x0000040B001A0200 
+[snap] pawn: vtable=0x00007FFFA7863740 inClient=0 health=1035
+[snap] ctrl: vtable=0x00007FFFA2D91680 inClient=1 m_hPlayerPawn@0x92C = 0x0118800B (idx=11)
+[snap] entitySystem @ 0x00007FFFA389FBB8 = 0x0000040AE3478000 highestEntityIndex=13
+[snap] entity resolution: 12/16 of indices 1..16 valid
+[snap] ctrl->pawn handle resolve: 0x0118800B -> 0x0000040B73E58800
+[snap] ----------------------------------------
+N1SSAN_STATUS|1|2026-11-07T15:15:06Z|2916|armory-obsidian-3.0|READY|reason=runtime_worker_heartbeat
+[status-write] begin state=READY path=C:\Users\mirac\AppData\Local\n1ssan\status\cs2-2916.status
+[status-write] success state=READY error=0
+[detect] pawn=0x0000040B73E58800 hp=100 signOn=6 bg=0
+
+=== SNAPSHOT ===
+[snap] fsnCount=104685 lastStage=7 stage5Count=8164
+[snap] stage histogram:
+[snap]   stage  0: 15606 frames
+[snap]   stage  1: 8164 frames
+[snap]   stage  2: 8164 frames
+[snap]   stage  3: 8163 frames
+[snap]   stage  5: 8164 frames
+[snap]   stage  6: 8164 frames
+[snap]   stage  7: 8164 frames
+[snap]   stage  8: 8163 frames
+[snap]   stage 10: 8164 frames
+[snap]   stage 11: 8614 frames
+[snap]   stage 12: 15155 frames
+[snap] dwLocalPlayerController @ 0x00007FFFA36C2548 -> 0x0000040B74015800 
+[snap] dwLocalPlayerPawn       @ 0x00007FFFA38B91E0 -> 0x0000040B001A0200 
+[snap] pawn: vtable=0x00007FFFA7863740 inClient=0 health=1035
+[snap] ctrl: vtable=0x00007FFFA2D91680 inClient=1 m_hPlayerPawn@0x92C = 0x0118800B (idx=11)
+[snap] entitySystem @ 0x00007FFFA389FBB8 = 0x0000040AE3478000 highestEntityIndex=13
+[snap] entity resolution: 12/16 of indices 1..16 valid
+[snap] ctrl->pawn handle resolve: 0x0118800B -> 0x0000040B73E58800
+[snap] ----------------------------------------
+
+=== SNAPSHOT ===
+[snap] fsnCount=108558 lastStage=0 stage5Count=8483
+[snap] stage histogram:
+[snap]   stage  0: 16106 frames
+[snap]   stage  1: 8483 frames
+[snap]   stage  2: 8483 frames
+[snap]   stage  3: 8483 frames
+[snap]   stage  5: 8483 frames
+[snap]   stage  6: 8483 frames
+[snap]   stage  7: 8483 frames
+[snap]   stage  8: 8483 frames
+[snap]   stage 10: 8483 frames
+[snap]   stage 11: 8934 frames
+[snap]   stage 12: 15654 frames
+[snap] dwLocalPlayerController @ 0x00007FFFA36C2548 -> 0x0000040B74015800 
+[snap] dwLocalPlayerPawn       @ 0x00007FFFA38B91E0 -> 0x0000040B001A0200 
+[snap] pawn: vtable=0x00007FFFA7863740 inClient=0 health=1035
+[snap] ctrl: vtable=0x00007FFFA2D91680 inClient=1 m_hPlayerPawn@0x92C = 0x0118800B (idx=11)
+[snap] entitySystem @ 0x00007FFFA389FBB8 = 0x0000040AE3478000 highestEntityIndex=13
+[snap] entity resolution: 12/16 of indices 1..16 valid
+[snap] ctrl->pawn handle resolve: 0x0118800B -> 0x0000040B73E58800
+[snap] ----------------------------------------
+N1SSAN_STATUS|1|2026-11-07T15:15:16Z|2916|armory-obsidian-3.0|READY|reason=runtime_worker_heartbeat
+[status-write] begin state=READY path=C:\Users\mirac\AppData\Local\n1ssan\status\cs2-2916.status
+[status-write] success state=READY error=0
+[use-tool] hook-entry #5 mode=2 api=0000040A5526DB00 toolArg=0000040B778FB6E0 targetArg=0000040B778FAD00 original=00007FFF9FAE0FC0
+[use-tool] sticker 969 on 9BE82F3C6AA31745: at the popup's spot - applying
+[use-tool] hook-entry #5 decision=handled locally
+[attach] ItemViewById read 9BE82F3C6AA31745 via CS2 getters
+[use-tool] sticker target read through CS2 ItemView fallback; preserving unobserved attributes
+[use-tool] consumed sticker item 9399C2071CCFA392 removal=SUCCESS
+[use-tool] sticker 969 applied to 9BE82F3C6AA31745 in slot 0 (position 1): attributes written, inventory told, popup NOT told, sticker item used up
+[detect] pawn=0x0000040B73E58800 hp=100 signOn=6 bg=0
+
+=== SNAPSHOT ===
+[snap] fsnCount=112624 lastStage=0 stage5Count=8799
+[snap] stage histogram:
+[snap]   stage  0: 16717 frames
+[snap]   stage  1: 8799 frames
+[snap]   stage  2: 8799 frames
+[snap]   stage  3: 8799 frames
+[snap]   stage  5: 8799 frames
+[snap]   stage  6: 8799 frames
+[snap]   stage  7: 8799 frames
+[snap]   stage  8: 8799 frames
+[snap]   stage 10: 8799 frames
+[snap]   stage 11: 9254 frames
+[snap]   stage 12: 16261 frames
+[snap] dwLocalPlayerController @ 0x00007FFFA36C2548 -> 0x0000040B74015800 
+[snap] dwLocalPlayerPawn       @ 0x00007FFFA38B91E0 -> 0x0000040B001A0200 
+[snap] pawn: vtable=0x00007FFFA7863740 inClient=0 health=1035
+[snap] ctrl: vtable=0x00007FFFA2D91680 inClient=1 m_hPlayerPawn@0x92C = 0x0118800B (idx=11)
+[snap] entitySystem @ 0x00007FFFA389FBB8 = 0x0000040AE3478000 highestEntityIndex=13
+[snap] entity resolution: 12/16 of indices 1..16 valid
+[snap] ctrl->pawn handle resolve: 0x0118800B -> 0x0000040B73E58800
+[snap] ----------------------------------------
+
+=== SNAPSHOT ===
+[snap] fsnCount=116512 lastStage=0 stage5Count=9113
+[snap] stage histogram:
+[snap]   stage  0: 17248 frames
+[snap]   stage  1: 9113 frames
+[snap]   stage  2: 9113 frames
+[snap]   stage  3: 9113 frames
+[snap]   stage  5: 9113 frames
+[snap]   stage  6: 9113 frames
+[snap]   stage  7: 9113 frames
+[snap]   stage  8: 9113 frames
+[snap]   stage 10: 9113 frames
+[snap]   stage 11: 9574 frames
+[snap]   stage 12: 16786 frames
+[snap] dwLocalPlayerController @ 0x00007FFFA36C2548 -> 0x0000040B74015800 
+[snap] dwLocalPlayerPawn       @ 0x00007FFFA38B91E0 -> 0x0000040B001A0200 
+[snap] pawn: vtable=0x00007FFFA7863740 inClient=0 health=1035
+[snap] ctrl: vtable=0x00007FFFA2D91680 inClient=1 m_hPlayerPawn@0x92C = 0x0118800B (idx=11)
+[snap] entitySystem @ 0x00007FFFA389FBB8 = 0x0000040AE3478000 highestEntityIndex=13
+[snap] entity resolution: 12/16 of indices 1..16 valid
+[snap] ctrl->pawn handle resolve: 0x0118800B -> 0x0000040B73E58800
+[snap] ----------------------------------------
+N1SSAN_STATUS|1|2026-11-07T15:15:26Z|2916|armory-obsidian-3.0|READY|reason=runtime_worker_heartbeat
+[status-write] begin state=READY path=C:\Users\mirac\AppData\Local\n1ssan\status\cs2-2916.status
+[status-write] success state=READY error=0
+[detect] pawn=0x0000040B73E58800 hp=100 signOn=6 bg=0
