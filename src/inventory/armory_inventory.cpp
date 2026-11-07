@@ -6,6 +6,7 @@
 
 #include "diagnostics/log.h"
 #include "inventory/loadout.h"
+#include "inventory/runtime_mode.h"
 #include "inventory/loot_socache.h"
 
 #include <windows.h>
@@ -19,6 +20,7 @@
 #include <sstream>
 #include <string>
 #include <thread>
+#include <unordered_map>
 #include <vector>
 
 namespace
@@ -41,8 +43,14 @@ namespace
 
     std::mutex g_mutex;
     std::vector<ArmoryItem> g_staged;
+    std::vector<ArmoryItem> g_inventoryItems;
+    std::unordered_map<uint32_t, TargetSkin> g_equippedWeapons;
+    std::unordered_map<std::string, TargetSkin> g_equippedKnives;
+    std::unordered_map<std::string, TargetSkin> g_equippedGloves;
     std::atomic<bool> g_pending{ false };
     std::string g_path;
+    std::string g_equipmentPath;
+    std::string g_profilesPath;
 
 
 
@@ -184,6 +192,7 @@ namespace
             if (ExtractNumber(object, "stickerKit", number)) item.stickerKit = static_cast<int>(number);
             if (ExtractNumber(object, "keychain", number)) item.keychain = static_cast<int>(number);
             if (ExtractNumber(object, "keychainSeed", number)) item.keychainSeed = static_cast<int>(number);
+            ExtractString(object, "customName", item.customName);
 
             bool statTrak = false;
             if (ExtractBool(object, "statTrak", statTrak))
@@ -206,6 +215,171 @@ namespace
         out = buffer.str();
         return !out.empty();
     }
+
+    bool ExtractObjectArray(const std::string& text, const char* key,
+        std::vector<std::string>& objects)
+    {
+        objects.clear();
+        const std::string needle = std::string("\\\"") + key + "\\\"";
+        const size_t keyAt = text.find(needle);
+        if (keyAt == std::string::npos) return false;
+        const size_t arrayAt = text.find('[', keyAt + needle.size());
+        if (arrayAt == std::string::npos) return false;
+
+        size_t i = arrayAt + 1;
+        while (i < text.size())
+        {
+            while (i < text.size() &&
+                (text[i] == ' ' || text[i] == '\\t' || text[i] == '\\r' ||
+                 text[i] == '\\n' || text[i] == ','))
+                ++i;
+
+            if (i >= text.size()) return false;
+            if (text[i] == ']') return true;
+            if (text[i] != '{') return false;
+
+            const size_t start = i;
+            int depth = 0;
+            bool quoted = false;
+            bool escaped = false;
+            for (; i < text.size(); ++i)
+            {
+                const char ch = text[i];
+                if (quoted)
+                {
+                    if (escaped) escaped = false;
+                    else if (ch == '\\\\') escaped = true;
+                    else if (ch == '"') quoted = false;
+                    continue;
+                }
+                if (ch == '"') quoted = true;
+                else if (ch == '{') ++depth;
+                else if (ch == '}' && --depth == 0)
+                {
+                    ++i;
+                    objects.push_back(text.substr(start, i - start));
+                    break;
+                }
+            }
+            if (depth != 0) return false;
+        }
+        return false;
+    }
+
+    void RefreshEquippedTargets()
+    {
+        std::string equipmentText, profilesText;
+        if (!ReadFileText(g_equipmentPath, equipmentText) ||
+            !ReadFileText(g_profilesPath, profilesText))
+            return;
+
+        std::string activeProfileId;
+        if (!ExtractString(profilesText, "activeProfileId", activeProfileId))
+            ExtractString(equipmentText, "activeLoadoutProfileId", activeProfileId);
+        if (activeProfileId.empty())
+            return;
+
+        std::vector<std::string> assignments;
+        if (!ExtractObjectArray(equipmentText, "assignments", assignments))
+            return;
+
+        std::vector<ArmoryItem> inventory;
+        {
+            std::lock_guard<std::mutex> lock(g_mutex);
+            inventory = g_inventoryItems;
+        }
+
+        std::unordered_map<std::string, const ArmoryItem*> byInstance;
+        byInstance.reserve(inventory.size());
+        for (const auto& item : inventory)
+            byInstance.emplace(item.instanceId, &item);
+
+        std::unordered_map<uint32_t, TargetSkin> weapons;
+        std::unordered_map<std::string, TargetSkin> knives;
+        std::unordered_map<std::string, TargetSkin> gloves;
+
+        for (const auto& object : assignments)
+        {
+            std::string profileId, team, slot, target, instanceId;
+            if (!ExtractString(object, "loadoutProfileId", profileId) ||
+                profileId != activeProfileId ||
+                !ExtractString(object, "team", team) ||
+                !ExtractString(object, "slot", slot) ||
+                !ExtractString(object, "target", target) ||
+                !ExtractString(object, "itemInstanceId", instanceId))
+                continue;
+
+            const auto found = byInstance.find(instanceId);
+            if (found == byInstance.end())
+                continue;
+
+            const ArmoryItem& item = *found->second;
+            if (!item.definition || item.paintKit < 0 ||
+                (team != "T" && team != "CT"))
+                continue;
+
+            TargetSkin skin{};
+            skin.paintKit = item.paintKit;
+            skin.resolvedSeed = item.seed;
+            skin.wear = item.wear;
+            skin.statTrak = item.statTrak >= 0;
+            skin.skinName = item.customName.empty() ? target : item.customName;
+            skin.weaponName = target;
+            skin.team = team;
+            skin.slot = slot;
+            skin.defIndex = item.definition;
+
+            if (slot == "weapon" || slot == "zeus")
+                weapons[TargetKey(item.definition, team)] = skin;
+            else if (slot == "knife")
+                knives[team] = skin;
+            else if (slot == "gloves")
+            {
+                skin.slot = "glove";
+                gloves[team] = skin;
+            }
+        }
+
+        {
+            std::lock_guard<std::mutex> lock(g_mutex);
+            g_equippedWeapons = std::move(weapons);
+            g_equippedKnives = std::move(knives);
+            g_equippedGloves = std::move(gloves);
+        }
+
+        Log("[armory-equipment] activeProfile=%s assignments=%zu weaponTargets=%zu knifeTargets=%zu gloveTargets=%zu",
+            activeProfileId.c_str(), assignments.size(),
+            g_equippedWeapons.size(), g_equippedKnives.size(), g_equippedGloves.size());
+    }
+
+    void StartEquipmentWatcher()
+    {
+        std::thread([]()
+        {
+            FILETIME lastEquipment{}, lastProfiles{};
+            bool haveEquipment = false, haveProfiles = false;
+            for (;;)
+            {
+                Sleep(1000);
+                WIN32_FILE_ATTRIBUTE_DATA equipmentInfo{}, profilesInfo{};
+                const bool hasEquipment = GetFileAttributesExA(
+                    g_equipmentPath.c_str(), GetFileExInfoStandard, &equipmentInfo) != 0;
+                const bool hasProfiles = GetFileAttributesExA(
+                    g_profilesPath.c_str(), GetFileExInfoStandard, &profilesInfo) != 0;
+                if (!hasEquipment || !hasProfiles) continue;
+
+                const bool changed = !haveEquipment || !haveProfiles ||
+                    CompareFileTime(&equipmentInfo.ftLastWriteTime, &lastEquipment) != 0 ||
+                    CompareFileTime(&profilesInfo.ftLastWriteTime, &lastProfiles) != 0;
+                if (!changed) continue;
+
+                lastEquipment = equipmentInfo.ftLastWriteTime;
+                lastProfiles = profilesInfo.ftLastWriteTime;
+                haveEquipment = haveProfiles = true;
+                RefreshEquippedTargets();
+            }
+        }).detach();
+    }
 }
 
 namespace ArmoryInventory
@@ -223,7 +397,10 @@ namespace ArmoryInventory
             return;
 
         g_path = g_bridgeDirectory + "armory-inventory.json";
+        g_equipmentPath = g_bridgeDirectory + "armory-equipment.json";
+        g_profilesPath = g_bridgeDirectory + "loadout-profiles.json";
         Log("[armory-inventory] watching for inventory changes: %s", g_path.c_str());
+        StartEquipmentWatcher();
 
         std::thread([]()
         {
@@ -276,9 +453,11 @@ namespace ArmoryInventory
                 const size_t count = items.size();
                 {
                     std::lock_guard<std::mutex> lock(g_mutex);
+                    g_inventoryItems = items;
                     g_staged = std::move(items);
                 }
 
+                RefreshEquippedTargets();
                 g_pending.store(true, std::memory_order_release);
                 Log("[armory-inventory] staged %zu items (applies outside an active match)", count);
             }
