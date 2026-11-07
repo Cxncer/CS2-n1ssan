@@ -7,6 +7,7 @@ namespace LootPatterns
     inline constexpr const char* InventoryManager = "48 8D 05 ? ? ? ? C3 CC CC CC CC CC CC CC CC 8B 91 ? ? ? ? B8";
     inline constexpr const char* CreateEconItem = "48 83 EC 28 B9 48 00 00 00 E8 ? ? ? ? 48 85";
     inline constexpr const char* CreateBaseTypeCache = "40 ? 48 83 EC ? 4C 8B 49 ? 44 8B D2";
+    inline constexpr const char* ItemViewById = "40 53 48 83 EC 20 48 8B D9 48 8B 0D ? ? ? ? 48 85 C9 74 ? 48 8B D3 E8 ? ? ? ? 48 85 C0 75 ? 48 B8 00 00 00 00 00 00 00 F0";
 
     // Copied verbatim from Lootline 1.5.2 (source/patterns.h).
     // CEconTool_Sticker's "apply" (vfunc 9): where CS2's sticker placement popup
