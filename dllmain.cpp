@@ -70,6 +70,53 @@ static bool LoadMinHook()
         && MH_Initialize_p() == 0;
 }
 
+// ---- Deferred runtime-mode activation ----
+static DWORD WINAPI RuntimeModeActivationThread(LPVOID)
+{
+    RuntimeMode lastAttempted = RuntimeMode::Unknown;
+
+    for (;;)
+    {
+        const RuntimeMode requested = RuntimeModeState::Requested();
+        if (requested == RuntimeMode::Unknown || requested == lastAttempted)
+        {
+            Sleep(250);
+            continue;
+        }
+
+        Log("[runtime-mode] preparing requested mode: %s",
+            requested == RuntimeMode::Loadout ? "loadout" : "armory");
+
+        if (requested == RuntimeMode::Loadout)
+        {
+            LoadLoadout();
+            if (g_targets.empty())
+            {
+                Log("[runtime-mode] Loadout activation rejected: no valid targets were loaded");
+                lastAttempted = requested;
+                continue;
+            }
+
+            if (!RunSchemaProbe())
+            {
+                Log("[runtime-mode] Loadout activation rejected: compatibility preflight failed");
+                lastAttempted = requested;
+                continue;
+            }
+
+            KnifeAnimation::Initialize();
+            StartLoadoutWatcher();
+        }
+
+        RuntimeModeState::SetCurrent(requested);
+        lastAttempted = requested;
+        Log("[runtime-mode] active mode: %s",
+            requested == RuntimeMode::Loadout ? "loadout" : "armory");
+    }
+
+    return 0;
+}
+
 // ---- Initialization worker ----
 
 static DWORD WINAPI InjectThread(LPVOID)
@@ -113,27 +160,10 @@ static DWORD WINAPI InjectThread(LPVOID)
     g_bridgeDirectory = bridgeDirectory;
     RuntimeModeState::StartWatcher(bridgeDirectory);
 
-    // DOMINATE may publish runtime-mode.json just after injection starts.
-    // Do not guess Loadout or Armory: wait for the user's explicit selection.
-    RuntimeMode runtimeMode = RuntimeModeState::Current();
-    for (int i = 0; runtimeMode == RuntimeMode::Unknown && i < 300; ++i)
-    {
-        if (i % 50 == 0)
-            Log("[runtime-mode] waiting for an explicit Loadout/Armory selection");
-        Sleep(100);
-        runtimeMode = RuntimeModeState::Current();
-    }
-
-    if (runtimeMode == RuntimeMode::Unknown)
-    {
-        Log("[fatal] no valid runtime mode was selected within 30 seconds");
-        LogStatus("FAILED", "runtime_mode_unavailable");
-        return 0;
-    }
-
-    const bool loadoutMode = runtimeMode == RuntimeMode::Loadout;
-    Log("[runtime-mode] selected=%s",
-        loadoutMode ? "loadout" : "armory");
+    // Injection readiness is mode-neutral. DOMINATE selects the runtime only
+    // after this DLL has installed its hooks and reported READY.
+    const bool loadoutMode = false;
+    Log("[runtime-mode] initialized in neutral mode; waiting for DOMINATE selection");
 
     RunEngineSchemaDiagnostic();
 
@@ -160,27 +190,8 @@ static DWORD WINAPI InjectThread(LPVOID)
     const bool optionalFeaturesDegraded =
         !gloveOffsetsReady || !glovePaintKitReady || !gloveSchemaReady;
 
-    if (loadoutMode)
-    {
-        LoadLoadout();
-        if (g_targets.empty())
-        {
-            Log("[fatal] selected Loadout mode but no valid Loadout targets were loaded");
-            LogStatus("FAILED", "loadout_empty");
-            return 0;
-        }
-
-        if (!RunSchemaProbe())
-        {
-            Log("[fatal] loadout compatibility preflight failed");
-            LogStatus("FAILED", "loadout_compatibility_failed");
-            return 0;
-        }
-    }
-    else
-    {
-        Log("[runtime-mode] Armory selected: Loadout JSON and compatibility preflight skipped");
-    }
+    // Mode-specific data is intentionally deferred until DOMINATE publishes
+    // the user's choice. Shared schema/runtime initialization remains neutral.
 
     // PlanA owns the shared CEconItemSystem / SOCache initialization. It only
     // injects Loadout items when Loadout is the selected runtime source.
@@ -191,14 +202,8 @@ static DWORD WINAPI InjectThread(LPVOID)
         return 0;
     }
 
-    if (loadoutMode)
-    {
-        KnifeAnimation::Initialize();
-        StartLoadoutWatcher();
-    }
-
-    // Armory inventory is independent of Loadout and can be watched even when
-    // n1ssan-data.json does not exist.
+    // Both data sources can be watched while inactive. FrameStageNotify only
+    // adopts the source that has been explicitly activated below.
     ArmoryInventory::StartWatcher();
 
     if (!InstallFSNHook())
@@ -208,9 +213,18 @@ static DWORD WINAPI InjectThread(LPVOID)
         return 0;
     }
 
+    HANDLE modeThread = CreateThread(nullptr, 0, RuntimeModeActivationThread, nullptr, 0, nullptr);
+    if (!modeThread)
+    {
+        Log("[fatal] runtime-mode activation worker could not be created");
+        LogStatus("FAILED", "runtime_mode_worker_unavailable");
+        return 0;
+    }
+    CloseHandle(modeThread);
+
     LogStatus("CHECKS_PASSED", "required_initialization_checks_passed");
-    Log("[diagnostic] runtime=%s targets=%zu",
-        loadoutMode ? "loadout" : "armory", g_targets.size());
+    Log("[diagnostic] runtime=unknown targets=%zu; awaiting DOMINATE selection",
+        g_targets.size());
 
     const char* runtimeState = optionalFeaturesDegraded ? "DEGRADED" : "READY";
     const char* runtimeReason = optionalFeaturesDegraded
