@@ -10,6 +10,8 @@
 
 #include <windows.h>
 
+#include <algorithm>
+
 #include <atomic>
 #include <cstdint>
 #include <cstdlib>
@@ -47,22 +49,43 @@ namespace
 
 
 
-    uint64_t StableIdFor(const std::string& instanceId, uint64_t generation)
+    void HashBytes(uint64_t& hash, const void* data, size_t size)
     {
-        uint64_t hash = 1469598103934665603ull;
-        for (unsigned char c : instanceId)
+        const auto* bytes = static_cast<const unsigned char*>(data);
+        for (size_t i = 0; i < size; ++i)
         {
-            hash ^= c;
+            hash ^= bytes[i];
             hash *= 1099511628211ull;
         }
+    }
 
-        // A new projection gets a fresh managed ID namespace. This lets us
-        // stage the complete replacement set before removing the previous set.
-        for (unsigned int shift = 0; shift < 64; shift += 8)
-        {
-            hash ^= static_cast<uint8_t>(generation >> shift);
-            hash *= 1099511628211ull;
-        }
+    uint64_t StableIdFor(const ArmoryItem& item)
+    {
+        // The projected SOCache ID must survive watcher re-reads of an
+        // unchanged profile. Regenerating IDs on every file timestamp change
+        // invalidates CS2's native equipment references and breaks exact
+        // equipped-item matching in the live weapon EconItemView.
+        uint64_t hash = 1469598103934665603ull;
+        HashBytes(hash, item.instanceId.data(), item.instanceId.size());
+
+        const uint16_t definition = item.definition;
+        const int quality = item.quality;
+        const int rarity = item.rarity;
+        const int paintKit = item.paintKit;
+        const int seed = item.seed;
+        uint32_t wearBits = 0;
+        std::memcpy(&wearBits, &item.wear, sizeof(wearBits));
+
+        HashBytes(hash, &definition, sizeof(definition));
+        HashBytes(hash, &quality, sizeof(quality));
+        HashBytes(hash, &rarity, sizeof(rarity));
+        HashBytes(hash, &paintKit, sizeof(paintKit));
+        HashBytes(hash, &seed, sizeof(seed));
+        HashBytes(hash, &wearBits, sizeof(wearBits));
+        HashBytes(hash, &item.statTrak, sizeof(item.statTrak));
+        HashBytes(hash, &item.stickerKit, sizeof(item.stickerKit));
+        HashBytes(hash, &item.keychain, sizeof(item.keychain));
+        HashBytes(hash, &item.keychainSeed, sizeof(item.keychainSeed));
 
         return 0x9000000000000000ull | (hash & 0x0FFFFFFFFFFFFFFFull);
     }
@@ -130,13 +153,6 @@ namespace
         const size_t arrayStart = text.find('[', itemsKey);
         if (arrayStart == std::string::npos) return false;
 
-        FILETIME writtenAt{};
-        GetSystemTimeAsFileTime(&writtenAt);
-        ULARGE_INTEGER generationValue{};
-        generationValue.LowPart = writtenAt.dwLowDateTime;
-        generationValue.HighPart = writtenAt.dwHighDateTime;
-        const uint64_t generation = generationValue.QuadPart;
-
         size_t i = arrayStart + 1;
         size_t objectCount = 0;
 
@@ -190,7 +206,7 @@ namespace
             if (ExtractBool(object, "statTrak", statTrak))
                 item.statTrak = statTrak ? 0 : -1;
 
-            item.id = StableIdFor(item.instanceId, generation);
+            item.id = StableIdFor(item);
             out.push_back(std::move(item));
         }
 
@@ -277,7 +293,9 @@ namespace ArmoryInventory
                 const size_t count = items.size();
                 {
                     std::lock_guard<std::mutex> lock(g_mutex);
-                    g_inventoryItems = items;
+                    // Keep the active lookup table aligned with the inventory
+                    // currently committed to SOCache. Publish staged entries
+                    // only after the replacement transaction succeeds.
                     g_staged = std::move(items);
                 }
 
@@ -319,8 +337,23 @@ namespace ArmoryInventory
         bool failed = false;
         bool notReady = false;
 
+        std::vector<uint64_t> desiredIds;
+        desiredIds.reserve(g_staged.size());
+
         for (const ArmoryItem& item : g_staged)
         {
+            desiredIds.push_back(item.id);
+
+            // An unchanged profile re-read resolves to the same stable ID.
+            // Keep that SOCache object in place so CS2's native Loadout
+            // reference remains valid instead of replacing it every poll.
+            if (LootSOCache::HasItem(item.id))
+            {
+                Log("[armory-inventory] retained item id=%016llX def=%u",
+                    static_cast<unsigned long long>(item.id), item.definition);
+                continue;
+            }
+
             LootSOCache::NewItem request{};
             request.id = item.id;
             request.definition = item.definition;
@@ -382,12 +415,20 @@ namespace ArmoryInventory
         int removeFailed = 0;
         for (uint64_t id : previousIds)
         {
+            if (std::find(desiredIds.begin(), desiredIds.end(), id) != desiredIds.end())
+                continue;
             if (LootSOCache::Remove(id)) ++removed;
             else ++removeFailed;
         }
 
-        Log("[armory-inventory] replacement committed: created=%zu removed=%d removeFailed=%d",
-            createdIds.size(), removed, removeFailed);
+        // Publish only after all desired objects exist and obsolete managed
+        // objects have been reconciled. This prevents a staged profile from
+        // being used to resolve live entities before its SOCache commit.
+        g_inventoryItems = g_staged;
+
+        Log("[armory-inventory] replacement committed: desired=%zu created=%zu retained=%zu removed=%d removeFailed=%d",
+            desiredIds.size(), createdIds.size(), desiredIds.size() - createdIds.size(),
+            removed, removeFailed);
 
         g_staged.clear();
         g_pending.store(false, std::memory_order_release);
