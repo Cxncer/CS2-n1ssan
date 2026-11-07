@@ -849,6 +849,7 @@ namespace Attachments
 
     void RecordApplied(
         std::uint64_t itemId,
+        const Set& applied,
         const char* sourceToolInstanceId,
         bool charm,
         int stickerSlot,
@@ -877,13 +878,10 @@ namespace Attachments
             return;
         }
 
-        Set current;
-        if (!LootSOCache::ReadAttachments(itemId, current))
-        {
-            Log("[attach] immediate persistence skipped: target %016llX could not be read back",
-                static_cast<unsigned long long>(itemId));
-            return;
-        }
+        // The caller passes the exact snapshot successfully written by
+        // SyncAttachments. Do not depend on a second raw attribute read here:
+        // some charm-only targets intentionally use the targeted-write path.
+        const Set& current = applied;
 
         std::lock_guard<std::mutex> lock(g_stateMutex);
         DropAcked();
