@@ -387,7 +387,7 @@ namespace Attachments
         {
             std::string json = "{\n";
             json += "  \"source\": \"n1ssan-dll\",\n";
-            json += "  \"profileId\": \"" + profileId + "\",\n";
+            json += "  \"profileId\": " + JsonString(profileId) + ",\n";
             json += "  \"inventoryRevision\": " + std::to_string(revision) + ",\n";
             json += "  \"seq\": " + std::to_string(g_seq) + ",\n";
             json += "  \"records\": [\n";
