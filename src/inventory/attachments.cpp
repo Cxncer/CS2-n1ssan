@@ -847,6 +847,75 @@ namespace Attachments
         DescribeSet(set, out, size);
     }
 
+    void RecordApplied(
+        std::uint64_t itemId,
+        const char* sourceToolInstanceId,
+        bool charm,
+        int stickerSlot,
+        bool sourceToolConsumed)
+    {
+        if (!itemId) return;
+
+        std::string profileId;
+        int revision = 0;
+        if (!ArmoryInventory::SessionInfo(profileId, revision) || profileId.empty())
+        {
+            Log("[attach] immediate persistence skipped: Armory session is unavailable");
+            return;
+        }
+
+        std::vector<ArmoryInventory::ManagedItem> items;
+        if (!ArmoryInventory::SnapshotManagedItems(items))
+            return;
+
+        const auto target = std::find_if(items.begin(), items.end(),
+            [itemId](const ArmoryInventory::ManagedItem& item) { return item.id == itemId; });
+        if (target == items.end() || target->instanceId.empty())
+        {
+            Log("[attach] immediate persistence skipped: target %016llX is not in the active projection",
+                static_cast<unsigned long long>(itemId));
+            return;
+        }
+
+        Set current;
+        if (!LootSOCache::ReadAttachments(itemId, current))
+        {
+            Log("[attach] immediate persistence skipped: target %016llX could not be read back",
+                static_cast<unsigned long long>(itemId));
+            return;
+        }
+
+        std::lock_guard<std::mutex> lock(g_stateMutex);
+        DropAcked();
+        if (g_seq < g_lastAck) g_seq = g_lastAck;
+
+        Record record;
+        record.seq = ++g_seq;
+        record.instanceId = target->instanceId;
+        record.itemId = itemId;
+        record.set = current;
+        record.stableMs = SETTLE_MS;
+        record.observedAt = IsoNow();
+        record.consumedCharm = charm;
+        record.sourceStickerSlot = charm ? -1 : stickerSlot;
+        if (sourceToolConsumed && sourceToolInstanceId && *sourceToolInstanceId)
+            record.consumedToolInstanceId = sourceToolInstanceId;
+
+        g_lastKnown[itemId] = current;
+        g_pending.erase(itemId);
+        g_records.push_back(record);
+
+        const bool written = WriteDetectionFile(profileId, revision);
+        char description[256]{};
+        Describe(current, description, sizeof(description));
+        Log("[attach] immediate native observation %s for %s (%016llX), source=%s consumed=%d file=%s",
+            description, target->instanceId.c_str(),
+            static_cast<unsigned long long>(itemId),
+            record.consumedToolInstanceId.empty() ? "none" : record.consumedToolInstanceId.c_str(),
+            record.consumedToolInstanceId.empty() ? 0 : 1,
+            written ? "written" : "write failed");
+    }
+
     void ObserveAndPersist()
     {
         const uint64_t now = NowMs();
@@ -948,6 +1017,6 @@ namespace Attachments
             it = alive ? std::next(it) : g_pending.erase(it);
         }
 
-        if (dirty) WriteDetectionFile(profileId, revision);
+        if (dirty || !g_records.empty()) WriteDetectionFile(profileId, revision);
     }
 }
