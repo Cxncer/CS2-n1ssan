@@ -18461,3 +18461,914 @@ N1SSAN_STATUS|1|2026-11-07T02:38:38Z|14188|armory-obsidian-3.0|READY|reason=runt
 [armory-inventory] preparing replacement set: 12 items
 [armory-inventory] replacement deferred: SOCache enumeration failed
 [plan-a] Loadout cleanup deferred: SOCache enumeration failed
+[status-path] selected=C:\Users\mirac\AppData\Local\n1ssan\status\cs2-28604.status source=LOCALAPPDATA
+
+# n1ssan diagnostic session
+[build] armory-obsidian-3.0
+[build] Operation Armory x Obsidian Build 3.0 | Nov  7 2026 09:36:39
+N1SSAN_STATUS|1|2026-11-07T02:57:05Z|28604|armory-obsidian-3.0|INITIALIZING|reason=worker_started
+[status-write] begin state=INITIALIZING path=C:\Users\mirac\AppData\Local\n1ssan\status\cs2-28604.status
+[status-write] success state=INITIALIZING error=0
+[off] PAWN_MyWearables = 0x1268
+[off] field offsets populated
+[auto-off] dwEntityList                 hit 0x00007FF8B1FE93CB -> rva 0x271FBB8 (val=0000053AD9460000)
+[auto-off] dwLocalPlayerController      hit 0x00007FF8B1F05750 -> rva 0x2542548 (val=0000053B6BCE4E00)
+[auto-off] dwLocalPlayerPawn            hit 0x00007FF8B1721615 -> rva 0x27391E0 (val=0000053AD98F0800)
+[auto-off] summary: matched=3/3
+[off] RVA_ENTITY_LIST           = 0x00007FF8B3CEFBB8
+[off] RVA_LOCALPLAYERCONTROLLER = 0x00007FF8B3B12548
+[off] RVA_LOCALPLAYERPAWN       = 0x00007FF8B3D091E0
+[bridge] discovered Bridge directory: E:\Vibe Coding\CS2 Lore\CS2 n1ssan\development\n1ssan-web-bridge\
+[runtime-mode] no valid selection yet; waiting for launcher
+[runtime-mode] initialized in neutral mode; waiting for DOMINATE selection
+[schema-live] m_nSubclassID runtime=0x380 hardcoded=0x38C MISMATCH
+[schema-live] subclass resolver ready: 0x380
+[schema-gloves] C_CSPlayerPawn->m_EconGloves = 0x1770
+[schema-gloves] C_CSPlayerPawn->m_bNeedToReApplyGloves = 0x176D
+[schema-gloves] C_EconItemView->m_iItemDefinitionIndex = 0x1BA
+[schema-gloves] C_EconItemView->m_iEntityQuality = 0x1BC
+[schema-gloves] C_EconItemView->m_iItemIDHigh = 0x1D0
+[schema-gloves] C_EconItemView->m_bInitialized = 0x1E8
+[schema-gloves] C_EconItemView->m_bDisallowSOC = 0x1E9
+[schema-gloves] C_EconItemView->m_bRestoreCustomMaterialAfterPrecache = 0x1B8
+[schema-gloves] C_EconItemView->m_AttributeList = 0x208
+[schema-gloves] C_EconItemView->m_NetworkedDynamicAttributes = 0x280
+[schema-gloves] CAttributeList->m_Attributes = 0x8
+[schema-gloves] READY
+[resolve] InvalidateDescription          @ 0x00007FF8B2771350
+[resolve] BuildModernSkin                @ 0x00007FF8B2415B10
+[resolve] SetMeshGroupMask               @ 0x00007FF8B2095A90
+[resolve] RegenerateSkins                @ 0x00007FF8B1DFB4B0
+[resolve] ReleaseCompositeMaterials      @ 0x00007FF8B2ABC4A0
+[resolve] GloveCreatePaintKit            @ 0x00007FF8B27613D0
+[resolve] AgentSetModel                  @ 0x00007FF8B1F35C90
+[resolve] KnifeUpdateSubclass            @ 0x00007FF8B17D9000
+[resolve] GloveSetBodyGroup              @ 0x00007FF8B1F34BB0
+[resolve] MemAlloc                       @ 0x00007FF92FF7DD30
+[resolve] MemFree                        @ 0x00007FF92FF7DD70
+[resolve] CSkeletonInstance->m_modelState = 0x140 (hardcoded)
+[resolve] CModelState->m_hModel = 0xA0 (hardcoded)
+[resolve] entityList @ 0x00007FF8B3CEFBB8 -> 0x0000053AD9460000
+[glove-paintkit-schema] READY
+[glove-schema] READY
+[plan-a] CEconItemSystem* = 0x0000053A4BB32F50 (stored)
+[loot-schema] GetAttributeDefinitionByName @ 0x00007FF8B27030F0
+[loot-schema] OK (invOffset=0x528D0, setUint=00007FF8B26B8E70, setFloat=00007FF8B26B9080)
+[plan-a] shared inventory runtime ready; Loadout injection disabled
+[armory-inventory] watching for inventory changes: E:\Vibe Coding\CS2 Lore\CS2 n1ssan\development\n1ssan-web-bridge\armory-inventory.json
+[fsn] pClient=0x00007FF8B3B34620 vtable=0x00007FF8B3238230 fn=0x00007FF8B213EFE0 slot=36
+[fsn] hooked (vtable overwrite)
+[fsn] first stage call seen
+
+=== SNAPSHOT ===
+[snap] fsnCount=1 lastStage=0 stage5Count=0
+[snap] stage histogram:
+[snap]   stage  0: 1 frames
+[snap] dwLocalPlayerController @ 0x00007FF8B3B12548 -> 0x0000053B6BCE4E00 
+[snap] dwLocalPlayerPawn       @ 0x00007FF8B3D091E0 -> 0x0000053AD98F0800 
+[snap] pawn: vtable=0x00007FF8FC213740 inClient=0 health=1339
+[snap] ctrl: vtable=0x00007FF8B31E1680 inClient=1 m_hPlayerPawn@0x92C = 0x0177800B (idx=11)
+[snap] entitySystem @ 0x00007FF8B3CEFBB8 = 0x0000053AD9460000 highestEntityIndex=13
+[snap] entity resolution: 12/16 of indices 1..16 valid
+[snap] ctrl->pawn handle resolve: 0x0177800B -> 0x0000053B6BBB8000
+[snap] ----------------------------------------
+N1SSAN_STATUS|1|2026-11-07T02:57:05Z|28604|armory-obsidian-3.0|CHECKS_PASSED|reason=required_initialization_checks_passed
+[knife-anim] stage=6 reached
+[status-write] begin state=CHECKS_PASSED path=C:\Users\mirac\AppData\Local\n1ssan\status\cs2-28604.status
+[glove-observe] pawn=0000053B6BBB8000 reapply=0 changed=0 def=0 init=0 idHigh=0x0
+[match] network signOn=6 maxClients=1 backgroundMap=0 connected=0 alive=0
+[status-write] success state=CHECKS_PASSED error=0
+[diagnostic] runtime=unknown targets=0; awaiting DOMINATE selection
+N1SSAN_STATUS|1|2026-11-07T02:57:05Z|28604|armory-obsidian-3.0|READY|reason=runtime_worker_heartbeat
+[status-write] begin state=READY path=C:\Users\mirac\AppData\Local\n1ssan\status\cs2-28604.status
+[status-write] success state=READY error=0
+[knife-anim] stage=6 reached
+[knife-anim] stage=6 reached
+[armory-inventory] staged 12 items (applies outside an active match)
+
+=== SNAPSHOT ===
+[snap] fsnCount=2613 lastStage=11 stage5Count=219
+[snap] stage histogram:
+[snap]   stage  0: 321 frames
+[snap]   stage  1: 219 frames
+[snap]   stage  2: 219 frames
+[snap]   stage  3: 219 frames
+[snap]   stage  5: 219 frames
+[snap]   stage  6: 219 frames
+[snap]   stage  7: 219 frames
+[snap]   stage  8: 219 frames
+[snap]   stage 10: 219 frames
+[snap]   stage 11: 321 frames
+[snap]   stage 12: 219 frames
+[snap] dwLocalPlayerController @ 0x00007FF8B3B12548 -> 0x0000053B6BCE4E00 
+[snap] dwLocalPlayerPawn       @ 0x00007FF8B3D091E0 -> 0x0000053AD98F0800 
+[snap] pawn: vtable=0x00007FF8FC213740 inClient=0 health=1339
+[snap] ctrl: vtable=0x00007FF8B31E1680 inClient=1 m_hPlayerPawn@0x92C = 0x0177800B (idx=11)
+[snap] entitySystem @ 0x00007FF8B3CEFBB8 = 0x0000053AD9460000 highestEntityIndex=13
+[snap] entity resolution: 12/16 of indices 1..16 valid
+[snap] ctrl->pawn handle resolve: 0x0177800B -> 0x0000053B6BBB8000
+[snap] ----------------------------------------
+
+=== SNAPSHOT ===
+[snap] fsnCount=5234 lastStage=0 stage5Count=439
+[snap] stage histogram:
+[snap]   stage  0: 642 frames
+[snap]   stage  1: 439 frames
+[snap]   stage  2: 439 frames
+[snap]   stage  3: 439 frames
+[snap]   stage  5: 439 frames
+[snap]   stage  6: 439 frames
+[snap]   stage  7: 439 frames
+[snap]   stage  8: 439 frames
+[snap]   stage 10: 439 frames
+[snap]   stage 11: 641 frames
+[snap]   stage 12: 439 frames
+[snap] dwLocalPlayerController @ 0x00007FF8B3B12548 -> 0x0000053B6BCE4E00 
+[snap] dwLocalPlayerPawn       @ 0x00007FF8B3D091E0 -> 0x0000053AD98F0800 
+[snap] pawn: vtable=0x00007FF8FC213740 inClient=0 health=1339
+[snap] ctrl: vtable=0x00007FF8B31E1680 inClient=1 m_hPlayerPawn@0x92C = 0x0177800B (idx=11)
+[snap] entitySystem @ 0x00007FF8B3CEFBB8 = 0x0000053AD9460000 highestEntityIndex=13
+[snap] entity resolution: 12/16 of indices 1..16 valid
+[snap] ctrl->pawn handle resolve: 0x0177800B -> 0x0000053B6BBB8000
+[snap] ----------------------------------------
+N1SSAN_STATUS|1|2026-11-07T02:57:15Z|28604|armory-obsidian-3.0|READY|reason=runtime_worker_heartbeat
+[status-write] begin state=READY path=C:\Users\mirac\AppData\Local\n1ssan\status\cs2-28604.status
+[status-write] success state=READY error=0
+
+=== SNAPSHOT ===
+[snap] fsnCount=7864 lastStage=12 stage5Count=660
+[snap] stage histogram:
+[snap]   stage  0: 962 frames
+[snap]   stage  1: 660 frames
+[snap]   stage  2: 660 frames
+[snap]   stage  3: 660 frames
+[snap]   stage  5: 660 frames
+[snap]   stage  6: 660 frames
+[snap]   stage  7: 660 frames
+[snap]   stage  8: 660 frames
+[snap]   stage 10: 660 frames
+[snap]   stage 11: 962 frames
+[snap]   stage 12: 660 frames
+[snap] dwLocalPlayerController @ 0x00007FF8B3B12548 -> 0x0000053B6BCE4E00 
+[snap] dwLocalPlayerPawn       @ 0x00007FF8B3D091E0 -> 0x0000053AD98F0800 
+[snap] pawn: vtable=0x00007FF8FC213740 inClient=0 health=1339
+[snap] ctrl: vtable=0x00007FF8B31E1680 inClient=1 m_hPlayerPawn@0x92C = 0x0177800B (idx=11)
+[snap] entitySystem @ 0x00007FF8B3CEFBB8 = 0x0000053AD9460000 highestEntityIndex=13
+[snap] entity resolution: 12/16 of indices 1..16 valid
+[snap] ctrl->pawn handle resolve: 0x0177800B -> 0x0000053B6BBB8000
+[snap] ----------------------------------------
+
+=== SNAPSHOT ===
+[snap] fsnCount=10485 lastStage=0 stage5Count=880
+[snap] stage histogram:
+[snap]   stage  0: 1283 frames
+[snap]   stage  1: 880 frames
+[snap]   stage  2: 880 frames
+[snap]   stage  3: 880 frames
+[snap]   stage  5: 880 frames
+[snap]   stage  6: 880 frames
+[snap]   stage  7: 880 frames
+[snap]   stage  8: 880 frames
+[snap]   stage 10: 880 frames
+[snap]   stage 11: 1282 frames
+[snap]   stage 12: 880 frames
+[snap] dwLocalPlayerController @ 0x00007FF8B3B12548 -> 0x0000053B6BCE4E00 
+[snap] dwLocalPlayerPawn       @ 0x00007FF8B3D091E0 -> 0x0000053AD98F0800 
+[snap] pawn: vtable=0x00007FF8FC213740 inClient=0 health=1339
+[snap] ctrl: vtable=0x00007FF8B31E1680 inClient=1 m_hPlayerPawn@0x92C = 0x0177800B (idx=11)
+[snap] entitySystem @ 0x00007FF8B3CEFBB8 = 0x0000053AD9460000 highestEntityIndex=13
+[snap] entity resolution: 12/16 of indices 1..16 valid
+[snap] ctrl->pawn handle resolve: 0x0177800B -> 0x0000053B6BBB8000
+[snap] ----------------------------------------
+N1SSAN_STATUS|1|2026-11-07T02:57:25Z|28604|armory-obsidian-3.0|READY|reason=runtime_worker_heartbeat
+[status-write] begin state=READY path=C:\Users\mirac\AppData\Local\n1ssan\status\cs2-28604.status
+[status-write] success state=READY error=0
+
+=== SNAPSHOT ===
+[snap] fsnCount=13105 lastStage=0 stage5Count=1100
+[snap] stage histogram:
+[snap]   stage  0: 1603 frames
+[snap]   stage  1: 1100 frames
+[snap]   stage  2: 1100 frames
+[snap]   stage  3: 1100 frames
+[snap]   stage  5: 1100 frames
+[snap]   stage  6: 1100 frames
+[snap]   stage  7: 1100 frames
+[snap]   stage  8: 1100 frames
+[snap]   stage 10: 1100 frames
+[snap]   stage 11: 1602 frames
+[snap]   stage 12: 1100 frames
+[snap] dwLocalPlayerController @ 0x00007FF8B3B12548 -> 0x0000053B6BCE4E00 
+[snap] dwLocalPlayerPawn       @ 0x00007FF8B3D091E0 -> 0x0000053AD98F0800 
+[snap] pawn: vtable=0x00007FF8FC213740 inClient=0 health=1339
+[snap] ctrl: vtable=0x00007FF8B31E1680 inClient=1 m_hPlayerPawn@0x92C = 0x0177800B (idx=11)
+[snap] entitySystem @ 0x00007FF8B3CEFBB8 = 0x0000053AD9460000 highestEntityIndex=13
+[snap] entity resolution: 12/16 of indices 1..16 valid
+[snap] ctrl->pawn handle resolve: 0x0177800B -> 0x0000053B6BBB8000
+[snap] ----------------------------------------
+
+=== SNAPSHOT ===
+[snap] fsnCount=15736 lastStage=0 stage5Count=1321
+[snap] stage histogram:
+[snap]   stage  0: 1924 frames
+[snap]   stage  1: 1321 frames
+[snap]   stage  2: 1321 frames
+[snap]   stage  3: 1321 frames
+[snap]   stage  5: 1321 frames
+[snap]   stage  6: 1321 frames
+[snap]   stage  7: 1321 frames
+[snap]   stage  8: 1321 frames
+[snap]   stage 10: 1321 frames
+[snap]   stage 11: 1923 frames
+[snap]   stage 12: 1321 frames
+[snap] dwLocalPlayerController @ 0x00007FF8B3B12548 -> 0x0000053B6BCE4E00 
+[snap] dwLocalPlayerPawn       @ 0x00007FF8B3D091E0 -> 0x0000053AD98F0800 
+[snap] pawn: vtable=0x00007FF8FC213740 inClient=0 health=1339
+[snap] ctrl: vtable=0x00007FF8B31E1680 inClient=1 m_hPlayerPawn@0x92C = 0x0177800B (idx=11)
+N1SSAN_STATUS|1|2026-11-07T02:57:35Z|28604|armory-obsidian-3.0|READY|reason=runtime_worker_heartbeat
+[snap] entitySystem @ 0x00007FF8B3CEFBB8 = 0x0000053AD9460000 highestEntityIndex=13
+[status-write] begin state=READY path=C:\Users\mirac\AppData\Local\n1ssan\status\cs2-28604.status
+[snap] entity resolution: 12/16 of indices 1..16 valid
+[snap] ctrl->pawn handle resolve: 0x0177800B -> 0x0000053B6BBB8000
+[snap] ----------------------------------------
+[status-write] success state=READY error=0
+
+=== SNAPSHOT ===
+[snap] fsnCount=18367 lastStage=0 stage5Count=1542
+[snap] stage histogram:
+[snap]   stage  0: 2245 frames
+[snap]   stage  1: 1542 frames
+[snap]   stage  2: 1542 frames
+[snap]   stage  3: 1542 frames
+[snap]   stage  5: 1542 frames
+[snap]   stage  6: 1542 frames
+[snap]   stage  7: 1542 frames
+[snap]   stage  8: 1542 frames
+[snap]   stage 10: 1542 frames
+[snap]   stage 11: 2244 frames
+[snap]   stage 12: 1542 frames
+[snap] dwLocalPlayerController @ 0x00007FF8B3B12548 -> 0x0000053B6BCE4E00 
+[snap] dwLocalPlayerPawn       @ 0x00007FF8B3D091E0 -> 0x0000053AD98F0800 
+[snap] pawn: vtable=0x00007FF8FC213740 inClient=0 health=1339
+[snap] ctrl: vtable=0x00007FF8B31E1680 inClient=1 m_hPlayerPawn@0x92C = 0x0177800B (idx=11)
+[snap] entitySystem @ 0x00007FF8B3CEFBB8 = 0x0000053AD9460000 highestEntityIndex=13
+[snap] entity resolution: 12/16 of indices 1..16 valid
+[snap] ctrl->pawn handle resolve: 0x0177800B -> 0x0000053B6BBB8000
+[snap] ----------------------------------------
+
+=== SNAPSHOT ===
+[snap] fsnCount=20987 lastStage=0 stage5Count=1762
+[snap] stage histogram:
+[snap]   stage  0: 2565 frames
+[snap]   stage  1: 1762 frames
+[snap]   stage  2: 1762 frames
+[snap]   stage  3: 1762 frames
+[snap]   stage  5: 1762 frames
+[snap]   stage  6: 1762 frames
+[snap]   stage  7: 1762 frames
+[snap]   stage  8: 1762 frames
+[snap]   stage 10: 1762 frames
+[snap]   stage 11: 2564 frames
+[snap]   stage 12: 1762 frames
+[snap] dwLocalPlayerController @ 0x00007FF8B3B12548 -> 0x0000053B6BCE4E00 
+[snap] dwLocalPlayerPawn       @ 0x00007FF8B3D091E0 -> 0x0000053AD98F0800 
+[snap] pawn: vtable=0x00007FF8FC213740 inClient=0 health=1339
+[snap] ctrl: vtable=0x00007FF8B31E1680 inClient=1 m_hPlayerPawn@0x92C = 0x0177800B (idx=11)
+[snap] entitySystem @ 0x00007FF8B3CEFBB8 = 0x0000053AD9460000 highestEntityIndex=13
+[snap] entity resolution: 12/16 of indices 1..16 valid
+[snap] ctrl->pawn handle resolve: 0x0177800B -> 0x0000053B6BBB8000
+N1SSAN_STATUS|1|2026-11-07T02:57:45Z|28604|armory-obsidian-3.0|READY|reason=runtime_worker_heartbeat
+[snap] ----------------------------------------
+[status-write] begin state=READY path=C:\Users\mirac\AppData\Local\n1ssan\status\cs2-28604.status
+[status-write] success state=READY error=0
+[runtime-mode] switched to armory
+[runtime-mode] preparing requested mode: armory
+[runtime-mode] active mode: armory
+[socache-diag] SOCache scan failed inv=0000053AD97C1000 cachedOffset=0x0 createTypeCache=0000000000000000 plausibleCandidates=1 typeCacheException=0
+[plan-a] Loadout cleanup deferred: SOCache enumeration failed
+[armory-inventory] preparing replacement set: 12 items
+[armory-inventory] replacement deferred: SOCache enumeration failed
+[plan-a] Loadout cleanup deferred: SOCache enumeration failed
+[armory-inventory] preparing replacement set: 12 items
+[armory-inventory] replacement deferred: SOCache enumeration failed
+[plan-a] Loadout cleanup deferred: SOCache enumeration failed
+[armory-inventory] preparing replacement set: 12 items
+[armory-inventory] replacement deferred: SOCache enumeration failed
+[plan-a] Loadout cleanup deferred: SOCache enumeration failed
+[armory-inventory] preparing replacement set: 12 items
+[armory-inventory] replacement deferred: SOCache enumeration failed
+[armory-inventory] staged 12 items (applies outside an active match)
+[plan-a] Loadout cleanup deferred: SOCache enumeration failed
+[armory-inventory] preparing replacement set: 12 items
+[armory-inventory] replacement deferred: SOCache enumeration failed
+[plan-a] Loadout cleanup deferred: SOCache enumeration failed
+[armory-inventory] preparing replacement set: 12 items
+[armory-inventory] replacement deferred: SOCache enumeration failed
+[plan-a] Loadout cleanup deferred: SOCache enumeration failed
+[armory-inventory] preparing replacement set: 12 items
+[armory-inventory] replacement deferred: SOCache enumeration failed
+[plan-a] Loadout cleanup deferred: SOCache enumeration failed
+[armory-inventory] preparing replacement set: 12 items
+[armory-inventory] replacement deferred: SOCache enumeration failed
+[plan-a] Loadout cleanup deferred: SOCache enumeration failed
+[armory-inventory] preparing replacement set: 12 items
+[armory-inventory] replacement deferred: SOCache enumeration failed
+[plan-a] Loadout cleanup deferred: SOCache enumeration failed
+[armory-inventory] preparing replacement set: 12 items
+[armory-inventory] replacement deferred: SOCache enumeration failed
+[plan-a] Loadout cleanup deferred: SOCache enumeration failed
+[armory-inventory] preparing replacement set: 12 items
+[armory-inventory] replacement deferred: SOCache enumeration failed
+[plan-a] Loadout cleanup deferred: SOCache enumeration failed
+[armory-inventory] preparing replacement set: 12 items
+[armory-inventory] replacement deferred: SOCache enumeration failed
+[plan-a] Loadout cleanup deferred: SOCache enumeration failed
+[armory-inventory] preparing replacement set: 12 items
+[armory-inventory] replacement deferred: SOCache enumeration failed
+[plan-a] Loadout cleanup deferred: SOCache enumeration failed
+[armory-inventory] preparing replacement set: 12 items
+[armory-inventory] replacement deferred: SOCache enumeration failed
+[plan-a] Loadout cleanup deferred: SOCache enumeration failed
+[armory-inventory] preparing replacement set: 12 items
+[armory-inventory] replacement deferred: SOCache enumeration failed
+[plan-a] Loadout cleanup deferred: SOCache enumeration failed
+[armory-inventory] preparing replacement set: 12 items
+[armory-inventory] replacement deferred: SOCache enumeration failed
+[plan-a] Loadout cleanup deferred: SOCache enumeration failed
+[armory-inventory] preparing replacement set: 12 items
+[armory-inventory] replacement deferred: SOCache enumeration failed
+[plan-a] Loadout cleanup deferred: SOCache enumeration failed
+[armory-inventory] preparing replacement set: 12 items
+[armory-inventory] replacement deferred: SOCache enumeration failed
+[plan-a] Loadout cleanup deferred: SOCache enumeration failed
+[armory-inventory] preparing replacement set: 12 items
+[armory-inventory] replacement deferred: SOCache enumeration failed
+[plan-a] Loadout cleanup deferred: SOCache enumeration failed
+[armory-inventory] preparing replacement set: 12 items
+[armory-inventory] replacement deferred: SOCache enumeration failed
+[plan-a] Loadout cleanup deferred: SOCache enumeration failed
+[armory-inventory] preparing replacement set: 12 items
+[armory-inventory] replacement deferred: SOCache enumeration failed
+[plan-a] Loadout cleanup deferred: SOCache enumeration failed
+[armory-inventory] preparing replacement set: 12 items
+[armory-inventory] replacement deferred: SOCache enumeration failed
+[plan-a] Loadout cleanup deferred: SOCache enumeration failed
+[armory-inventory] preparing replacement set: 12 items
+[armory-inventory] replacement deferred: SOCache enumeration failed
+[plan-a] Loadout cleanup deferred: SOCache enumeration failed
+[armory-inventory] preparing replacement set: 12 items
+[armory-inventory] replacement deferred: SOCache enumeration failed
+[plan-a] Loadout cleanup deferred: SOCache enumeration failed
+[armory-inventory] preparing replacement set: 12 items
+[armory-inventory] replacement deferred: SOCache enumeration failed
+[plan-a] Loadout cleanup deferred: SOCache enumeration failed
+[armory-inventory] preparing replacement set: 12 items
+[armory-inventory] replacement deferred: SOCache enumeration failed
+[plan-a] Loadout cleanup deferred: SOCache enumeration failed
+[armory-inventory] preparing replacement set: 12 items
+[armory-inventory] replacement deferred: SOCache enumeration failed
+[plan-a] Loadout cleanup deferred: SOCache enumeration failed
+[armory-inventory] preparing replacement set: 12 items
+[armory-inventory] replacement deferred: SOCache enumeration failed
+[plan-a] Loadout cleanup deferred: SOCache enumeration failed
+[armory-inventory] preparing replacement set: 12 items
+[armory-inventory] replacement deferred: SOCache enumeration failed
+[plan-a] Loadout cleanup deferred: SOCache enumeration failed
+[armory-inventory] preparing replacement set: 12 items
+[armory-inventory] replacement deferred: SOCache enumeration failed
+[plan-a] Loadout cleanup deferred: SOCache enumeration failed
+[armory-inventory] preparing replacement set: 12 items
+[armory-inventory] replacement deferred: SOCache enumeration failed
+[plan-a] Loadout cleanup deferred: SOCache enumeration failed
+[armory-inventory] preparing replacement set: 12 items
+[armory-inventory] replacement deferred: SOCache enumeration failed
+[plan-a] Loadout cleanup deferred: SOCache enumeration failed
+[armory-inventory] preparing replacement set: 12 items
+[armory-inventory] replacement deferred: SOCache enumeration failed
+[plan-a] Loadout cleanup deferred: SOCache enumeration failed
+[armory-inventory] preparing replacement set: 12 items
+[armory-inventory] replacement deferred: SOCache enumeration failed
+[plan-a] Loadout cleanup deferred: SOCache enumeration failed
+[armory-inventory] preparing replacement set: 12 items
+[armory-inventory] replacement deferred: SOCache enumeration failed
+[plan-a] Loadout cleanup deferred: SOCache enumeration failed
+[armory-inventory] preparing replacement set: 12 items
+[armory-inventory] replacement deferred: SOCache enumeration failed
+[plan-a] Loadout cleanup deferred: SOCache enumeration failed
+[armory-inventory] preparing replacement set: 12 items
+[armory-inventory] replacement deferred: SOCache enumeration failed
+[plan-a] Loadout cleanup deferred: SOCache enumeration failed
+[armory-inventory] preparing replacement set: 12 items
+[armory-inventory] replacement deferred: SOCache enumeration failed
+[plan-a] Loadout cleanup deferred: SOCache enumeration failed
+[armory-inventory] preparing replacement set: 12 items
+[armory-inventory] replacement deferred: SOCache enumeration failed
+[plan-a] Loadout cleanup deferred: SOCache enumeration failed
+[armory-inventory] preparing replacement set: 12 items
+[armory-inventory] replacement deferred: SOCache enumeration failed
+[plan-a] Loadout cleanup deferred: SOCache enumeration failed
+[armory-inventory] preparing replacement set: 12 items
+[armory-inventory] replacement deferred: SOCache enumeration failed
+[plan-a] Loadout cleanup deferred: SOCache enumeration failed
+[armory-inventory] preparing replacement set: 12 items
+[armory-inventory] replacement deferred: SOCache enumeration failed
+[plan-a] Loadout cleanup deferred: SOCache enumeration failed
+[armory-inventory] preparing replacement set: 12 items
+[armory-inventory] replacement deferred: SOCache enumeration failed
+[plan-a] Loadout cleanup deferred: SOCache enumeration failed
+[armory-inventory] preparing replacement set: 12 items
+[armory-inventory] replacement deferred: SOCache enumeration failed
+[plan-a] Loadout cleanup deferred: SOCache enumeration failed
+[armory-inventory] preparing replacement set: 12 items
+[armory-inventory] replacement deferred: SOCache enumeration failed
+[plan-a] Loadout cleanup deferred: SOCache enumeration failed
+[armory-inventory] preparing replacement set: 12 items
+[armory-inventory] replacement deferred: SOCache enumeration failed
+[plan-a] Loadout cleanup deferred: SOCache enumeration failed
+[armory-inventory] preparing replacement set: 12 items
+[armory-inventory] replacement deferred: SOCache enumeration failed
+[plan-a] Loadout cleanup deferred: SOCache enumeration failed
+[armory-inventory] preparing replacement set: 12 items
+[armory-inventory] replacement deferred: SOCache enumeration failed
+[plan-a] Loadout cleanup deferred: SOCache enumeration failed
+[armory-inventory] preparing replacement set: 12 items
+[armory-inventory] replacement deferred: SOCache enumeration failed
+[plan-a] Loadout cleanup deferred: SOCache enumeration failed
+[armory-inventory] preparing replacement set: 12 items
+[armory-inventory] replacement deferred: SOCache enumeration failed
+[plan-a] Loadout cleanup deferred: SOCache enumeration failed
+[armory-inventory] preparing replacement set: 12 items
+[armory-inventory] replacement deferred: SOCache enumeration failed
+[plan-a] Loadout cleanup deferred: SOCache enumeration failed
+[armory-inventory] preparing replacement set: 12 items
+[armory-inventory] replacement deferred: SOCache enumeration failed
+[plan-a] Loadout cleanup deferred: SOCache enumeration failed
+[armory-inventory] preparing replacement set: 12 items
+[armory-inventory] replacement deferred: SOCache enumeration failed
+[plan-a] Loadout cleanup deferred: SOCache enumeration failed
+[armory-inventory] preparing replacement set: 12 items
+[armory-inventory] replacement deferred: SOCache enumeration failed
+[plan-a] Loadout cleanup deferred: SOCache enumeration failed
+[armory-inventory] preparing replacement set: 12 items
+[armory-inventory] replacement deferred: SOCache enumeration failed
+[plan-a] Loadout cleanup deferred: SOCache enumeration failed
+[armory-inventory] preparing replacement set: 12 items
+[armory-inventory] replacement deferred: SOCache enumeration failed
+[plan-a] Loadout cleanup deferred: SOCache enumeration failed
+[armory-inventory] preparing replacement set: 12 items
+[armory-inventory] replacement deferred: SOCache enumeration failed
+[plan-a] Loadout cleanup deferred: SOCache enumeration failed
+[armory-inventory] preparing replacement set: 12 items
+[armory-inventory] replacement deferred: SOCache enumeration failed
+[plan-a] Loadout cleanup deferred: SOCache enumeration failed
+[armory-inventory] preparing replacement set: 12 items
+[armory-inventory] replacement deferred: SOCache enumeration failed
+[plan-a] Loadout cleanup deferred: SOCache enumeration failed
+[armory-inventory] preparing replacement set: 12 items
+[armory-inventory] replacement deferred: SOCache enumeration failed
+[plan-a] Loadout cleanup deferred: SOCache enumeration failed
+[armory-inventory] preparing replacement set: 12 items
+[armory-inventory] replacement deferred: SOCache enumeration failed
+[plan-a] Loadout cleanup deferred: SOCache enumeration failed
+[armory-inventory] preparing replacement set: 12 items
+[armory-inventory] replacement deferred: SOCache enumeration failed
+[plan-a] Loadout cleanup deferred: SOCache enumeration failed
+[armory-inventory] preparing replacement set: 12 items
+[armory-inventory] replacement deferred: SOCache enumeration failed
+[plan-a] Loadout cleanup deferred: SOCache enumeration failed
+[armory-inventory] preparing replacement set: 12 items
+[armory-inventory] replacement deferred: SOCache enumeration failed
+[plan-a] Loadout cleanup deferred: SOCache enumeration failed
+[armory-inventory] preparing replacement set: 12 items
+[armory-inventory] replacement deferred: SOCache enumeration failed
+[plan-a] Loadout cleanup deferred: SOCache enumeration failed
+[armory-inventory] preparing replacement set: 12 items
+[armory-inventory] replacement deferred: SOCache enumeration failed
+
+=== SNAPSHOT ===
+[snap] fsnCount=23816 lastStage=0 stage5Count=1997
+[snap] stage histogram:
+[snap]   stage  0: 2922 frames
+[snap]   stage  1: 1997 frames
+[snap]   stage  2: 1997 frames
+[snap]   stage  3: 1997 frames
+[snap]   stage  5: 1997 frames
+[snap]   stage  6: 1997 frames
+[snap]   stage  7: 1997 frames
+[snap]   stage  8: 1997 frames
+[snap]   stage 10: 1997 frames
+[snap]   stage 11: 2885 frames
+[snap]   stage 12: 2033 frames
+[snap] dwLocalPlayerController @ 0x00007FF8B3B12548 -> 0x0000053B6BCE4E00 
+[snap] dwLocalPlayerPawn       @ 0x00007FF8B3D091E0 -> 0x0000053AD98F0800 
+[snap] pawn: vtable=0x00007FF8FC213740 inClient=0 health=1339
+[snap] ctrl: vtable=0x00007FF8B31E1680 inClient=1 m_hPlayerPawn@0x92C = 0x0177800B (idx=11)
+[snap] entitySystem @ 0x00007FF8B3CEFBB8 = 0x0000053AD9460000 highestEntityIndex=13
+[snap] entity resolution: 12/16 of indices 1..16 valid
+[snap] ctrl->pawn handle resolve: 0x0177800B -> 0x0000053B6BBB8000
+[snap] ----------------------------------------
+[plan-a] Loadout cleanup deferred: SOCache enumeration failed
+[armory-inventory] preparing replacement set: 12 items
+[armory-inventory] replacement deferred: SOCache enumeration failed
+[plan-a] Loadout cleanup deferred: SOCache enumeration failed
+[armory-inventory] preparing replacement set: 12 items
+[armory-inventory] replacement deferred: SOCache enumeration failed
+[plan-a] Loadout cleanup deferred: SOCache enumeration failed
+[armory-inventory] preparing replacement set: 12 items
+[armory-inventory] replacement deferred: SOCache enumeration failed
+[plan-a] Loadout cleanup deferred: SOCache enumeration failed
+[armory-inventory] preparing replacement set: 12 items
+[armory-inventory] replacement deferred: SOCache enumeration failed
+[plan-a] Loadout cleanup deferred: SOCache enumeration failed
+[armory-inventory] preparing replacement set: 12 items
+[armory-inventory] replacement deferred: SOCache enumeration failed
+[plan-a] Loadout cleanup deferred: SOCache enumeration failed
+[armory-inventory] preparing replacement set: 12 items
+[armory-inventory] replacement deferred: SOCache enumeration failed
+[plan-a] Loadout cleanup deferred: SOCache enumeration failed
+[armory-inventory] preparing replacement set: 12 items
+[armory-inventory] replacement deferred: SOCache enumeration failed
+[plan-a] Loadout cleanup deferred: SOCache enumeration failed
+[armory-inventory] preparing replacement set: 12 items
+[armory-inventory] replacement deferred: SOCache enumeration failed
+[plan-a] Loadout cleanup deferred: SOCache enumeration failed
+[armory-inventory] preparing replacement set: 12 items
+[armory-inventory] replacement deferred: SOCache enumeration failed
+[plan-a] Loadout cleanup deferred: SOCache enumeration failed
+[armory-inventory] preparing replacement set: 12 items
+[armory-inventory] replacement deferred: SOCache enumeration failed
+[plan-a] Loadout cleanup deferred: SOCache enumeration failed
+[armory-inventory] preparing replacement set: 12 items
+[armory-inventory] replacement deferred: SOCache enumeration failed
+[plan-a] Loadout cleanup deferred: SOCache enumeration failed
+[armory-inventory] preparing replacement set: 12 items
+[armory-inventory] replacement deferred: SOCache enumeration failed
+[plan-a] Loadout cleanup deferred: SOCache enumeration failed
+[armory-inventory] preparing replacement set: 12 items
+[armory-inventory] replacement deferred: SOCache enumeration failed
+[plan-a] Loadout cleanup deferred: SOCache enumeration failed
+[armory-inventory] preparing replacement set: 12 items
+[armory-inventory] replacement deferred: SOCache enumeration failed
+[plan-a] Loadout cleanup deferred: SOCache enumeration failed
+[armory-inventory] preparing replacement set: 12 items
+[armory-inventory] replacement deferred: SOCache enumeration failed
+[plan-a] Loadout cleanup deferred: SOCache enumeration failed
+[armory-inventory] preparing replacement set: 12 items
+[armory-inventory] replacement deferred: SOCache enumeration failed
+[plan-a] Loadout cleanup deferred: SOCache enumeration failed
+[armory-inventory] preparing replacement set: 12 items
+[armory-inventory] replacement deferred: SOCache enumeration failed
+[plan-a] Loadout cleanup deferred: SOCache enumeration failed
+[armory-inventory] preparing replacement set: 12 items
+[armory-inventory] replacement deferred: SOCache enumeration failed
+[plan-a] Loadout cleanup deferred: SOCache enumeration failed
+[armory-inventory] preparing replacement set: 12 items
+[armory-inventory] replacement deferred: SOCache enumeration failed
+[plan-a] Loadout cleanup deferred: SOCache enumeration failed
+[armory-inventory] preparing replacement set: 12 items
+[armory-inventory] replacement deferred: SOCache enumeration failed
+[plan-a] Loadout cleanup deferred: SOCache enumeration failed
+[armory-inventory] preparing replacement set: 12 items
+[armory-inventory] replacement deferred: SOCache enumeration failed
+[plan-a] Loadout cleanup deferred: SOCache enumeration failed
+[armory-inventory] preparing replacement set: 12 items
+[armory-inventory] replacement deferred: SOCache enumeration failed
+[plan-a] Loadout cleanup deferred: SOCache enumeration failed
+[armory-inventory] preparing replacement set: 12 items
+[armory-inventory] replacement deferred: SOCache enumeration failed
+[plan-a] Loadout cleanup deferred: SOCache enumeration failed
+[armory-inventory] preparing replacement set: 12 items
+[armory-inventory] replacement deferred: SOCache enumeration failed
+[plan-a] Loadout cleanup deferred: SOCache enumeration failed
+[armory-inventory] preparing replacement set: 12 items
+[armory-inventory] replacement deferred: SOCache enumeration failed
+[plan-a] Loadout cleanup deferred: SOCache enumeration failed
+[armory-inventory] preparing replacement set: 12 items
+[armory-inventory] replacement deferred: SOCache enumeration failed
+[plan-a] Loadout cleanup deferred: SOCache enumeration failed
+[armory-inventory] preparing replacement set: 12 items
+[armory-inventory] replacement deferred: SOCache enumeration failed
+[plan-a] Loadout cleanup deferred: SOCache enumeration failed
+[armory-inventory] preparing replacement set: 12 items
+[armory-inventory] replacement deferred: SOCache enumeration failed
+[plan-a] Loadout cleanup deferred: SOCache enumeration failed
+[armory-inventory] preparing replacement set: 12 items
+[armory-inventory] replacement deferred: SOCache enumeration failed
+[plan-a] Loadout cleanup deferred: SOCache enumeration failed
+[armory-inventory] preparing replacement set: 12 items
+[armory-inventory] replacement deferred: SOCache enumeration failed
+[plan-a] Loadout cleanup deferred: SOCache enumeration failed
+[armory-inventory] preparing replacement set: 12 items
+[armory-inventory] replacement deferred: SOCache enumeration failed
+[plan-a] Loadout cleanup deferred: SOCache enumeration failed
+[armory-inventory] preparing replacement set: 12 items
+[armory-inventory] replacement deferred: SOCache enumeration failed
+[plan-a] Loadout cleanup deferred: SOCache enumeration failed
+[armory-inventory] preparing replacement set: 12 items
+[armory-inventory] replacement deferred: SOCache enumeration failed
+[plan-a] Loadout cleanup deferred: SOCache enumeration failed
+[armory-inventory] preparing replacement set: 12 items
+[armory-inventory] replacement deferred: SOCache enumeration failed
+[plan-a] Loadout cleanup deferred: SOCache enumeration failed
+[armory-inventory] preparing replacement set: 12 items
+[armory-inventory] replacement deferred: SOCache enumeration failed
+[plan-a] Loadout cleanup deferred: SOCache enumeration failed
+[armory-inventory] preparing replacement set: 12 items
+[armory-inventory] replacement deferred: SOCache enumeration failed
+[plan-a] Loadout cleanup deferred: SOCache enumeration failed
+[armory-inventory] preparing replacement set: 12 items
+[armory-inventory] replacement deferred: SOCache enumeration failed
+[plan-a] Loadout cleanup deferred: SOCache enumeration failed
+[armory-inventory] preparing replacement set: 12 items
+[armory-inventory] replacement deferred: SOCache enumeration failed
+[plan-a] Loadout cleanup deferred: SOCache enumeration failed
+[armory-inventory] preparing replacement set: 12 items
+[armory-inventory] replacement deferred: SOCache enumeration failed
+[plan-a] Loadout cleanup deferred: SOCache enumeration failed
+[armory-inventory] preparing replacement set: 12 items
+[armory-inventory] replacement deferred: SOCache enumeration failed
+[plan-a] Loadout cleanup deferred: SOCache enumeration failed
+[armory-inventory] preparing replacement set: 12 items
+[armory-inventory] replacement deferred: SOCache enumeration failed
+[plan-a] Loadout cleanup deferred: SOCache enumeration failed
+[armory-inventory] preparing replacement set: 12 items
+[armory-inventory] replacement deferred: SOCache enumeration failed
+[socache-diag] SOCache scan failed inv=0000053AD97C1000 cachedOffset=0x0 createTypeCache=0000000000000000 plausibleCandidates=1 typeCacheException=0
+[plan-a] Loadout cleanup deferred: SOCache enumeration failed
+[armory-inventory] preparing replacement set: 12 items
+[armory-inventory] replacement deferred: SOCache enumeration failed
+[plan-a] Loadout cleanup deferred: SOCache enumeration failed
+[armory-inventory] preparing replacement set: 12 items
+[armory-inventory] replacement deferred: SOCache enumeration failed
+[plan-a] Loadout cleanup deferred: SOCache enumeration failed
+[armory-inventory] preparing replacement set: 12 items
+[armory-inventory] replacement deferred: SOCache enumeration failed
+[plan-a] Loadout cleanup deferred: SOCache enumeration failed
+[armory-inventory] preparing replacement set: 12 items
+[armory-inventory] replacement deferred: SOCache enumeration failed
+[plan-a] Loadout cleanup deferred: SOCache enumeration failed
+[armory-inventory] preparing replacement set: 12 items
+[armory-inventory] replacement deferred: SOCache enumeration failed
+[plan-a] Loadout cleanup deferred: SOCache enumeration failed
+[armory-inventory] preparing replacement set: 12 items
+[armory-inventory] replacement deferred: SOCache enumeration failed
+[plan-a] Loadout cleanup deferred: SOCache enumeration failed
+[armory-inventory] preparing replacement set: 12 items
+[armory-inventory] replacement deferred: SOCache enumeration failed
+[armory-inventory] staged 12 items (applies outside an active match)
+[plan-a] Loadout cleanup deferred: SOCache enumeration failed
+[armory-inventory] preparing replacement set: 12 items
+[armory-inventory] replacement deferred: SOCache enumeration failed
+[plan-a] Loadout cleanup deferred: SOCache enumeration failed
+[armory-inventory] preparing replacement set: 12 items
+[armory-inventory] replacement deferred: SOCache enumeration failed
+[plan-a] Loadout cleanup deferred: SOCache enumeration failed
+[armory-inventory] preparing replacement set: 12 items
+[armory-inventory] replacement deferred: SOCache enumeration failed
+[plan-a] Loadout cleanup deferred: SOCache enumeration failed
+[armory-inventory] preparing replacement set: 12 items
+[armory-inventory] replacement deferred: SOCache enumeration failed
+[plan-a] Loadout cleanup deferred: SOCache enumeration failed
+[armory-inventory] preparing replacement set: 12 items
+[armory-inventory] replacement deferred: SOCache enumeration failed
+[plan-a] Loadout cleanup deferred: SOCache enumeration failed
+[armory-inventory] preparing replacement set: 12 items
+[armory-inventory] replacement deferred: SOCache enumeration failed
+[plan-a] Loadout cleanup deferred: SOCache enumeration failed
+[armory-inventory] preparing replacement set: 12 items
+[armory-inventory] replacement deferred: SOCache enumeration failed
+[plan-a] Loadout cleanup deferred: SOCache enumeration failed
+[armory-inventory] preparing replacement set: 12 items
+[armory-inventory] replacement deferred: SOCache enumeration failed
+[plan-a] Loadout cleanup deferred: SOCache enumeration failed
+[armory-inventory] preparing replacement set: 12 items
+[armory-inventory] replacement deferred: SOCache enumeration failed
+[plan-a] Loadout cleanup deferred: SOCache enumeration failed
+[armory-inventory] preparing replacement set: 12 items
+[armory-inventory] replacement deferred: SOCache enumeration failed
+[plan-a] Loadout cleanup deferred: SOCache enumeration failed
+[armory-inventory] preparing replacement set: 12 items
+[armory-inventory] replacement deferred: SOCache enumeration failed
+[plan-a] Loadout cleanup deferred: SOCache enumeration failed
+[armory-inventory] preparing replacement set: 12 items
+[armory-inventory] replacement deferred: SOCache enumeration failed
+[plan-a] Loadout cleanup deferred: SOCache enumeration failed
+[armory-inventory] preparing replacement set: 12 items
+[armory-inventory] replacement deferred: SOCache enumeration failed
+[plan-a] Loadout cleanup deferred: SOCache enumeration failed
+[armory-inventory] preparing replacement set: 12 items
+[armory-inventory] replacement deferred: SOCache enumeration failed
+[plan-a] Loadout cleanup deferred: SOCache enumeration failed
+[armory-inventory] preparing replacement set: 12 items
+[armory-inventory] replacement deferred: SOCache enumeration failed
+[plan-a] Loadout cleanup deferred: SOCache enumeration failed
+[armory-inventory] preparing replacement set: 12 items
+[armory-inventory] replacement deferred: SOCache enumeration failed
+[plan-a] Loadout cleanup deferred: SOCache enumeration failed
+[armory-inventory] preparing replacement set: 12 items
+[armory-inventory] replacement deferred: SOCache enumeration failed
+[plan-a] Loadout cleanup deferred: SOCache enumeration failed
+[armory-inventory] preparing replacement set: 12 items
+[armory-inventory] replacement deferred: SOCache enumeration failed
+[plan-a] Loadout cleanup deferred: SOCache enumeration failed
+[armory-inventory] preparing replacement set: 12 items
+[armory-inventory] replacement deferred: SOCache enumeration failed
+[plan-a] Loadout cleanup deferred: SOCache enumeration failed
+[armory-inventory] preparing replacement set: 12 items
+[armory-inventory] replacement deferred: SOCache enumeration failed
+[plan-a] Loadout cleanup deferred: SOCache enumeration failed
+[armory-inventory] preparing replacement set: 12 items
+[armory-inventory] replacement deferred: SOCache enumeration failed
+[plan-a] Loadout cleanup deferred: SOCache enumeration failed
+[armory-inventory] preparing replacement set: 12 items
+[armory-inventory] replacement deferred: SOCache enumeration failed
+[plan-a] Loadout cleanup deferred: SOCache enumeration failed
+[armory-inventory] preparing replacement set: 12 items
+[armory-inventory] replacement deferred: SOCache enumeration failed
+[plan-a] Loadout cleanup deferred: SOCache enumeration failed
+[armory-inventory] preparing replacement set: 12 items
+[armory-inventory] replacement deferred: SOCache enumeration failed
+[plan-a] Loadout cleanup deferred: SOCache enumeration failed
+[armory-inventory] preparing replacement set: 12 items
+[armory-inventory] replacement deferred: SOCache enumeration failed
+[plan-a] Loadout cleanup deferred: SOCache enumeration failed
+[armory-inventory] preparing replacement set: 12 items
+[armory-inventory] replacement deferred: SOCache enumeration failed
+[plan-a] Loadout cleanup deferred: SOCache enumeration failed
+[armory-inventory] preparing replacement set: 12 items
+[armory-inventory] replacement deferred: SOCache enumeration failed
+[plan-a] Loadout cleanup deferred: SOCache enumeration failed
+[armory-inventory] preparing replacement set: 12 items
+[armory-inventory] replacement deferred: SOCache enumeration failed
+[plan-a] Loadout cleanup deferred: SOCache enumeration failed
+[armory-inventory] preparing replacement set: 12 items
+[armory-inventory] replacement deferred: SOCache enumeration failed
+[plan-a] Loadout cleanup deferred: SOCache enumeration failed
+[armory-inventory] preparing replacement set: 12 items
+[armory-inventory] replacement deferred: SOCache enumeration failed
+[plan-a] Loadout cleanup deferred: SOCache enumeration failed
+[armory-inventory] preparing replacement set: 12 items
+[armory-inventory] replacement deferred: SOCache enumeration failed
+[plan-a] Loadout cleanup deferred: SOCache enumeration failed
+[armory-inventory] preparing replacement set: 12 items
+[armory-inventory] replacement deferred: SOCache enumeration failed
+[plan-a] Loadout cleanup deferred: SOCache enumeration failed
+[armory-inventory] preparing replacement set: 12 items
+[armory-inventory] replacement deferred: SOCache enumeration failed
+[plan-a] Loadout cleanup deferred: SOCache enumeration failed
+[armory-inventory] preparing replacement set: 12 items
+[armory-inventory] replacement deferred: SOCache enumeration failed
+[plan-a] Loadout cleanup deferred: SOCache enumeration failed
+[armory-inventory] preparing replacement set: 12 items
+[armory-inventory] replacement deferred: SOCache enumeration failed
+[plan-a] Loadout cleanup deferred: SOCache enumeration failed
+[armory-inventory] preparing replacement set: 12 items
+[armory-inventory] replacement deferred: SOCache enumeration failed
+[plan-a] Loadout cleanup deferred: SOCache enumeration failed
+[armory-inventory] preparing replacement set: 12 items
+[armory-inventory] replacement deferred: SOCache enumeration failed
+[plan-a] Loadout cleanup deferred: SOCache enumeration failed
+[armory-inventory] preparing replacement set: 12 items
+[armory-inventory] replacement deferred: SOCache enumeration failed
+[plan-a] Loadout cleanup deferred: SOCache enumeration failed
+[armory-inventory] preparing replacement set: 12 items
+[armory-inventory] replacement deferred: SOCache enumeration failed
+[plan-a] Loadout cleanup deferred: SOCache enumeration failed
+[armory-inventory] preparing replacement set: 12 items
+[armory-inventory] replacement deferred: SOCache enumeration failed
+[plan-a] Loadout cleanup deferred: SOCache enumeration failed
+[armory-inventory] preparing replacement set: 12 items
+[armory-inventory] replacement deferred: SOCache enumeration failed
+[plan-a] Loadout cleanup deferred: SOCache enumeration failed
+[armory-inventory] preparing replacement set: 12 items
+[armory-inventory] replacement deferred: SOCache enumeration failed
+[plan-a] Loadout cleanup deferred: SOCache enumeration failed
+[armory-inventory] preparing replacement set: 12 items
+[armory-inventory] replacement deferred: SOCache enumeration failed
+[plan-a] Loadout cleanup deferred: SOCache enumeration failed
+[armory-inventory] preparing replacement set: 12 items
+[armory-inventory] replacement deferred: SOCache enumeration failed
+[plan-a] Loadout cleanup deferred: SOCache enumeration failed
+[armory-inventory] preparing replacement set: 12 items
+[armory-inventory] replacement deferred: SOCache enumeration failed
+[plan-a] Loadout cleanup deferred: SOCache enumeration failed
+[armory-inventory] preparing replacement set: 12 items
+[armory-inventory] replacement deferred: SOCache enumeration failed
+[plan-a] Loadout cleanup deferred: SOCache enumeration failed
+[armory-inventory] preparing replacement set: 12 items
+[armory-inventory] replacement deferred: SOCache enumeration failed
+[plan-a] Loadout cleanup deferred: SOCache enumeration failed
+[armory-inventory] preparing replacement set: 12 items
+[armory-inventory] replacement deferred: SOCache enumeration failed
+[plan-a] Loadout cleanup deferred: SOCache enumeration failed
+[armory-inventory] preparing replacement set: 12 items
+[armory-inventory] replacement deferred: SOCache enumeration failed
+[plan-a] Loadout cleanup deferred: SOCache enumeration failed
+[armory-inventory] preparing replacement set: 12 items
+[armory-inventory] replacement deferred: SOCache enumeration failed
+[plan-a] Loadout cleanup deferred: SOCache enumeration failed
+[armory-inventory] preparing replacement set: 12 items
+[armory-inventory] replacement deferred: SOCache enumeration failed
+[plan-a] Loadout cleanup deferred: SOCache enumeration failed
+[armory-inventory] preparing replacement set: 12 items
+[armory-inventory] replacement deferred: SOCache enumeration failed
+[plan-a] Loadout cleanup deferred: SOCache enumeration failed
+[armory-inventory] preparing replacement set: 12 items
+[armory-inventory] replacement deferred: SOCache enumeration failed
+[plan-a] Loadout cleanup deferred: SOCache enumeration failed
+[armory-inventory] preparing replacement set: 12 items
+[armory-inventory] replacement deferred: SOCache enumeration failed
+[plan-a] Loadout cleanup deferred: SOCache enumeration failed
+[armory-inventory] preparing replacement set: 12 items
+[armory-inventory] replacement deferred: SOCache enumeration failed
+[plan-a] Loadout cleanup deferred: SOCache enumeration failed
+[armory-inventory] preparing replacement set: 12 items
+[armory-inventory] replacement deferred: SOCache enumeration failed
+[plan-a] Loadout cleanup deferred: SOCache enumeration failed
+[armory-inventory] preparing replacement set: 12 items
+[armory-inventory] replacement deferred: SOCache enumeration failed
+[plan-a] Loadout cleanup deferred: SOCache enumeration failed
+[armory-inventory] preparing replacement set: 12 items
+[armory-inventory] replacement deferred: SOCache enumeration failed
+[plan-a] Loadout cleanup deferred: SOCache enumeration failed
+[armory-inventory] preparing replacement set: 12 items
+[armory-inventory] replacement deferred: SOCache enumeration failed
+[plan-a] Loadout cleanup deferred: SOCache enumeration failed
+[armory-inventory] preparing replacement set: 12 items
+[armory-inventory] replacement deferred: SOCache enumeration failed
+[plan-a] Loadout cleanup deferred: SOCache enumeration failed
+[armory-inventory] preparing replacement set: 12 items
+[armory-inventory] replacement deferred: SOCache enumeration failed
+[plan-a] Loadout cleanup deferred: SOCache enumeration failed
+[armory-inventory] preparing replacement set: 12 items
+[armory-inventory] replacement deferred: SOCache enumeration failed
+[plan-a] Loadout cleanup deferred: SOCache enumeration failed
+[armory-inventory] preparing replacement set: 12 items
+[armory-inventory] replacement deferred: SOCache enumeration failed
+[plan-a] Loadout cleanup deferred: SOCache enumeration failed
+[armory-inventory] preparing replacement set: 12 items
+[armory-inventory] replacement deferred: SOCache enumeration failed
+[plan-a] Loadout cleanup deferred: SOCache enumeration failed
+[armory-inventory] preparing replacement set: 12 items
+[armory-inventory] replacement deferred: SOCache enumeration failed
+[plan-a] Loadout cleanup deferred: SOCache enumeration failed
+[armory-inventory] preparing replacement set: 12 items
+[armory-inventory] replacement deferred: SOCache enumeration failed
+[plan-a] Loadout cleanup deferred: SOCache enumeration failed
+[armory-inventory] preparing replacement set: 12 items
+[armory-inventory] replacement deferred: SOCache enumeration failed
+[plan-a] Loadout cleanup deferred: SOCache enumeration failed
+[armory-inventory] preparing replacement set: 12 items
+[armory-inventory] replacement deferred: SOCache enumeration failed
+[plan-a] Loadout cleanup deferred: SOCache enumeration failed
+[armory-inventory] preparing replacement set: 12 items
+[armory-inventory] replacement deferred: SOCache enumeration failed
+[plan-a] Loadout cleanup deferred: SOCache enumeration failed
+[armory-inventory] preparing replacement set: 12 items
+[armory-inventory] replacement deferred: SOCache enumeration failed
+[plan-a] Loadout cleanup deferred: SOCache enumeration failed
+[armory-inventory] preparing replacement set: 12 items
+[armory-inventory] replacement deferred: SOCache enumeration failed
+[plan-a] Loadout cleanup deferred: SOCache enumeration failed
+[armory-inventory] preparing replacement set: 12 items
+[armory-inventory] replacement deferred: SOCache enumeration failed
+[plan-a] Loadout cleanup deferred: SOCache enumeration failed
+[armory-inventory] preparing replacement set: 12 items
+[armory-inventory] replacement deferred: SOCache enumeration failed
+[plan-a] Loadout cleanup deferred: SOCache enumeration failed
+[armory-inventory] preparing replacement set: 12 items
+[armory-inventory] replacement deferred: SOCache enumeration failed
+[plan-a] Loadout cleanup deferred: SOCache enumeration failed
+[armory-inventory] preparing replacement set: 12 items
+[armory-inventory] replacement deferred: SOCache enumeration failed
+[plan-a] Loadout cleanup deferred: SOCache enumeration failed
+[armory-inventory] preparing replacement set: 12 items
+[armory-inventory] replacement deferred: SOCache enumeration failed
+[plan-a] Loadout cleanup deferred: SOCache enumeration failed
+[armory-inventory] preparing replacement set: 12 items
+[armory-inventory] replacement deferred: SOCache enumeration failed
+[plan-a] Loadout cleanup deferred: SOCache enumeration failed
+[armory-inventory] preparing replacement set: 12 items
+[armory-inventory] replacement deferred: SOCache enumeration failed
+[plan-a] Loadout cleanup deferred: SOCache enumeration failed
+[armory-inventory] preparing replacement set: 12 items
+[armory-inventory] replacement deferred: SOCache enumeration failed
+[plan-a] Loadout cleanup deferred: SOCache enumeration failed
+[armory-inventory] preparing replacement set: 12 items
+[armory-inventory] replacement deferred: SOCache enumeration failed
+[plan-a] Loadout cleanup deferred: SOCache enumeration failed
+[armory-inventory] preparing replacement set: 12 items
+[armory-inventory] replacement deferred: SOCache enumeration failed
+[plan-a] Loadout cleanup deferred: SOCache enumeration failed
+[armory-inventory] preparing replacement set: 12 items
+[armory-inventory] replacement deferred: SOCache enumeration failed
+[plan-a] Loadout cleanup deferred: SOCache enumeration failed
+[armory-inventory] preparing replacement set: 12 items
+[armory-inventory] replacement deferred: SOCache enumeration failed
+[plan-a] Loadout cleanup deferred: SOCache enumeration failed
+[armory-inventory] preparing replacement set: 12 items
+[armory-inventory] replacement deferred: SOCache enumeration failed
+[plan-a] Loadout cleanup deferred: SOCache enumeration failed
+[armory-inventory] preparing replacement set: 12 items
+[armory-inventory] replacement deferred: SOCache enumeration failed
+[plan-a] Loadout cleanup deferred: SOCache enumeration failed
