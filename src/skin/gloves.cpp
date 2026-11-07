@@ -176,6 +176,41 @@ namespace
         {
         }
     }
+
+    // RunGloves executes every frame, so Armory resolution is reported once per
+    // change instead of per tick.
+    void LogArmoryGloves(
+        ArmoryInventory::ArmoryMatch match,
+        std::uint8_t team,
+        std::uint16_t definition,
+        const std::string& detail)
+    {
+        static int lastMatch = -1;
+        static std::uint8_t lastTeam = 0xFF;
+        static std::uint16_t lastDefinition = 0;
+
+        const int current = static_cast<int>(match);
+        if (current == lastMatch && team == lastTeam &&
+            definition == lastDefinition)
+            return;
+
+        lastMatch = current;
+        lastTeam = team;
+        lastDefinition = definition;
+
+        const char* teamLabel =
+            (team == 2) ? "T" : (team == 3) ? "CT" : "unknown";
+
+        if (match == ArmoryInventory::ArmoryMatch::None)
+        {
+            Log("[armory-gloves] nothing applied team=%s (%s)",
+                teamLabel, detail.c_str());
+            return;
+        }
+
+        Log("[armory-gloves] applied def=%u team=%s (%s)",
+            definition, teamLabel, detail.c_str());
+    }
 }
 
 void RunGloves(std::uintptr_t pawn)
@@ -197,8 +232,9 @@ void RunGloves(std::uintptr_t pawn)
         !SafeReadFloat(pawn + g_off.PAWN_SpawnTime, spawnTime))
         return;
 
-    // In Armory mode, the glove item's native EconItemView ID identifies
-    // the exact owned instance equipped through CS2's own Loadout UI.
+    // In Armory mode the pawn's native glove view can never name an owned
+    // instance: this function is the only writer of that view. The equipment
+    // assignment for the team's gloves slot is the source of truth instead.
     const bool armoryMode =
         RuntimeModeState::Current() == RuntimeMode::Armory;
 
@@ -209,22 +245,20 @@ void RunGloves(std::uintptr_t pawn)
 
     if (armoryMode)
     {
-        std::uint32_t itemIdLow = 0, itemIdHigh = 0;
         TargetSkin target{};
-        const bool hasItemId =
-            SafeReadU32(item + g_off.EIV_ItemIDLow, itemIdLow) &&
-            SafeReadU32(item + g_off.EIV_ItemIDHigh, itemIdHigh);
-        const std::uint64_t equippedItemId =
-            (static_cast<std::uint64_t>(itemIdHigh) << 32) | itemIdLow;
+        std::string detail;
+        const ArmoryInventory::ArmoryMatch match =
+            ArmoryInventory::ResolveTargetForSlot("gloves", team, target, detail);
 
-        if (hasItemId &&
-            ArmoryInventory::GetTargetForItemId(equippedItemId, target))
+        if (match != ArmoryInventory::ArmoryMatch::None)
         {
             definition = target.defIndex;
             paintKit = target.paintKit;
             seed = (std::clamp)(target.resolvedSeed, 0, 1000);
             wear = (std::clamp)(target.wear, 0.0001f, 1.0f);
         }
+
+        LogArmoryGloves(match, team, target.defIndex, detail);
     }
     else
     {

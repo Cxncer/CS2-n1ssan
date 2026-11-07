@@ -212,6 +212,7 @@
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">false</ExcludedFromBuild>
     </ClCompile>
+    <ClCompile Include="src\skin\agents.cpp" />
     <ClCompile Include="src\skin\glove_model_refresh.cpp" />
     <ClCompile Include="src\skin\glove_attribute_manager.cpp" />
     <ClCompile Include="src\skin\glove_paintkit_schema.cpp" />
@@ -245,6 +246,7 @@
     <ClInclude Include="src\skin\apply.h" />
     <ClInclude Include="src\skin\dispatch.h" />
     <ClInclude Include="src\skin\gloves.h" />
+    <ClInclude Include="src\skin\agents.h" />
     <ClInclude Include="src\skin\glove_model_refresh.h" />
     <ClInclude Include="src\skin\glove_attribute_manager.h" />
     <ClInclude Include="src\skin\glove_paintkit_schema.h" />

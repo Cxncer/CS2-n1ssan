@@ -19,6 +19,7 @@
 #include "sdk/handles.h"
 #include "skin/dispatch.h"
 #include "skin/gloves.h"
+#include "skin/agents.h"
 #include "config/offsets.h"
 #include "config/auto_offsets.h"
 #include "diagnostics/log.h"
@@ -363,6 +364,10 @@ static void __fastcall FsnDetour(void* pClient, int stage)
 
             if (GloveAppliedThisTick())
                 g_gloveUpdatePending = true;
+
+            // Armory agents share the spawn/team transition with gloves: the
+            // model is only re-applied when the pawn, team or spawn changes.
+            Agents::Run(glovePawn);
         }
     }
 

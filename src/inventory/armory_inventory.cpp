@@ -75,6 +75,7 @@ namespace
     std::vector<EquipmentAssignment> g_assignments;
     std::unordered_map<uint32_t, uint64_t> g_equippedBySlot; // (team << 16) | def
     std::unordered_map<uint32_t, uint64_t> g_equippedKnife;  // team
+    std::unordered_map<uint32_t, uint64_t> g_equippedBySlotName; // (team << 16) | slot code
     std::unordered_map<uint16_t, DefinitionGroup> g_definitionGroups;
     std::string g_equipmentPath;
 
@@ -326,6 +327,17 @@ namespace
         return (static_cast<uint32_t>(team) << 16) | definition;
     }
 
+    // Gloves, agents and the zeus have no definition-keyed assignment: their
+    // slot name is the identity the Bridge assigns an instance to.
+    uint16_t SlotNameCode(const std::string& slot)
+    {
+        if (slot == "gloves" || slot == "glove") return 1;
+        if (slot == "agent") return 2;
+        if (slot == "zeus") return 3;
+        if (slot == "knife" || slot == "melee") return 4;
+        return 0;
+    }
+
     // Two owned instances are interchangeable only when applying either one
     // produces the same result in game.
     bool SameRenderable(const ArmoryItem& a, const ArmoryItem& b)
@@ -375,6 +387,7 @@ namespace
     {
         g_equippedBySlot.clear();
         g_equippedKnife.clear();
+        g_equippedBySlotName.clear();
         g_definitionGroups.clear();
 
         for (const auto& item : g_inventoryItems)
@@ -396,6 +409,7 @@ namespace
         int resolved = 0;
         int unresolved = 0;
         int duplicateSlots = 0;
+        int slotAssignments = 0;
 
         for (const auto& assignment : g_assignments)
         {
@@ -416,6 +430,12 @@ namespace
                 if (!g_equippedKnife.emplace(static_cast<uint32_t>(team), item->id).second)
                     ++duplicateSlots;
             }
+            else if (const uint16_t slotCode = SlotNameCode(assignment.slot))
+            {
+                if (!g_equippedBySlotName.emplace(SlotKey(team, slotCode), item->id).second)
+                    ++duplicateSlots;
+                ++slotAssignments;
+            }
             else
             {
                 if (!g_equippedBySlot.emplace(SlotKey(team, item->definition), item->id).second)
@@ -423,9 +443,9 @@ namespace
             }
         }
 
-        Log("[armory-equipment] index: assignments=%zu resolved=%d unresolved=%d conflicts=%d definitions=%zu",
+        Log("[armory-equipment] index: assignments=%zu resolved=%d unresolved=%d conflicts=%d definitions=%zu slots=%d",
             g_assignments.size(), resolved, unresolved, duplicateSlots,
-            g_definitionGroups.size());
+            g_definitionGroups.size(), slotAssignments);
     }
 
     void StartEquipmentWatcher()
@@ -717,8 +737,8 @@ namespace ArmoryInventory
         return !g_inventoryItems.empty();
     }
 
-    // Exact projected-item lookup remains available for non-weapon paths
-    // (notably gloves), whose identity is tied to the specific Armory item.
+    // Exact projected-item lookup by SOCache ID. Kept for diagnostics and any
+    // future path that holds a projected instance ID directly.
     bool GetTargetForItemId(uint64_t itemId, TargetSkin& target)
     {
         if (!itemId) return false;
@@ -856,5 +876,61 @@ namespace ArmoryInventory
             static_cast<unsigned>(group.count));
         detail = why;
         return ArmoryMatch::Equivalent;
+    }
+
+    // Slot-named equipment (gloves, agent, zeus). The live pawn carries no item
+    // identity for these slots that could name a projected instance, so only an
+    // explicit assignment resolves; nothing is guessed from the inventory.
+    ArmoryMatch ResolveTargetForSlot(
+        const char* slot,
+        uint8_t teamNumber,
+        TargetSkin& target,
+        std::string& detail)
+    {
+        target = TargetSkin{};
+        detail.clear();
+
+        const uint16_t code = SlotNameCode(slot ? slot : "");
+        if (!code)
+        {
+            detail = "unknown slot";
+            return ArmoryMatch::None;
+        }
+
+        const int team = (teamNumber == 2) ? 2 : (teamNumber == 3) ? 3 : 0;
+        if (!team)
+        {
+            detail = "team unknown";
+            return ArmoryMatch::None;
+        }
+
+        std::lock_guard<std::mutex> lock(g_mutex);
+
+        if (g_inventoryItems.empty())
+        {
+            detail = "no projected inventory";
+            return ArmoryMatch::None;
+        }
+
+        const auto assigned = g_equippedBySlotName.find(SlotKey(team, code));
+        if (assigned == g_equippedBySlotName.end())
+        {
+            detail = "no assignment for this slot";
+            return ArmoryMatch::None;
+        }
+
+        const ArmoryItem* item = FindByIdLocked(assigned->second);
+        if (!item)
+        {
+            detail = "assigned instance is not in the projected inventory";
+            return ArmoryMatch::None;
+        }
+
+        FillTarget(*item, target);
+        char why[160]{};
+        snprintf(why, sizeof(why), "assigned %s instance %016llX", slot,
+            static_cast<unsigned long long>(item->id));
+        detail = why;
+        return ArmoryMatch::Equipped;
     }
 }

@@ -8,4 +8,8 @@ namespace GloveModelRefresh
 
     // Must be called before the original FRAME_RENDER_END.
     void OnRenderEnd(void* pawn);
+
+    // Sets the player model of a pawn (precaches it and preserves collision
+    // bounds). Used by Armory agents; returns false when the swap was refused.
+    bool ApplyAgentModel(void* pawn, const char* modelName);
 }

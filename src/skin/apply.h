@@ -5,6 +5,7 @@
 
 #pragma once
 #include <cstdint>
+#include <string>
 #include "inventory/loadout.h"
 
 // Returns true when the weapon's skin identity/fallback data needed updating.
@@ -25,3 +26,7 @@ bool KnifeApply(uintptr_t weaponEnt, uintptr_t view, uint16_t targetDef);
 // Invalidate cached weapon world/HUD model state.
 // Call after glove body-group changes, pawn changes, or model swaps.
 void InvalidateWeaponModelCache();
+
+// Resolve the CEconItemSchema model path for any item definition index
+// (weapons, knives, agent player models).
+bool ResolveDefinitionModelName(uint16_t definitionIndex, std::string& modelName);

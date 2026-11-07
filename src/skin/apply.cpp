@@ -555,7 +555,7 @@ namespace
         // If the game already has attributes here, don't touch them.
         if (preCount > 0 && preCount < 1000 && preData > 0x10000)
         {
-            Log("[apply] %s view already has %u attrs — skipping write (game-owned)",
+            Log("[apply] %s view already has %u attrs ï¿½ skipping write (game-owned)",
                 which, preCount);
             return false;
         }
@@ -619,6 +619,11 @@ void InvalidateWeaponModelCache()
     g_weaponModelCache.clear();
 
     Log("[apply-cache] weapon model cache invalidated");
+}
+
+bool ResolveDefinitionModelName(uint16_t definitionIndex, std::string& modelName)
+{
+    return GetKnifeModelName(definitionIndex, modelName);
 }
 
 // ---- Weapon ----

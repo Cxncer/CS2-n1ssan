@@ -42,4 +42,14 @@ namespace ArmoryInventory
         bool knife,
         TargetSkin& target,
         std::string& detail);
+
+    // Resolve the owned instance assigned to a non-weapon slot ("gloves",
+    // "agent", "zeus") for one team. Those slots have no live item identity
+    // that could name an Armory instance, so the equipment document is their
+    // only authoritative source.
+    ArmoryMatch ResolveTargetForSlot(
+        const char* slot,
+        uint8_t teamNumber,
+        TargetSkin& target,
+        std::string& detail);
 }
