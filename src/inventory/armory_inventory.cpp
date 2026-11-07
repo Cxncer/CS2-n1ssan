@@ -440,6 +440,26 @@ namespace ArmoryInventory
         return !g_inventoryItems.empty();
     }
 
+    // Exact projected-item lookup remains available for non-weapon paths
+    // (notably gloves), whose identity is tied to the specific Armory item.
+    bool GetTargetForItemId(uint64_t itemId, TargetSkin& target)
+    {
+        if (!itemId) return false;
+        std::lock_guard<std::mutex> lock(g_mutex);
+        for (const auto& item : g_inventoryItems)
+        {
+            if (item.id != itemId) continue;
+            target = TargetSkin{};
+            target.paintKit = item.paintKit;
+            target.resolvedSeed = item.seed;
+            target.wear = item.wear;
+            target.statTrak = item.statTrak >= 0;
+            target.defIndex = item.definition;
+            return true;
+        }
+        return false;
+    }
+
     // Lootline-style live application resolves cosmetics from the live weapon
     // definition rather than assuming the weapon EconItemView ID equals our
     // projected SOCache ID. Armory may contain duplicate definitions; only
