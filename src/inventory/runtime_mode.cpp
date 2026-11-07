@@ -74,19 +74,16 @@ namespace RuntimeModeState
     {
         if (bridgeDirectory.empty())
         {
-            Log("[runtime-mode] bridge directory unavailable; defaulting to Loadout");
+            Log("[runtime-mode] bridge directory unavailable; mode remains Unknown");
             return;
         }
 
-        RuntimeMode initialMode = ReadFile(bridgeDirectory);
-        if (initialMode == RuntimeMode::Unknown)
-        {
-            initialMode = RuntimeMode::Loadout;
-            Log("[runtime-mode] no valid selection found; defaulting to Loadout");
-        }
-
+        const RuntimeMode initialMode = ReadFile(bridgeDirectory);
         g_mode.store(static_cast<int>(initialMode), std::memory_order_release);
-        Log("[runtime-mode] initial mode: %s", ModeName(Current()));
+        if (initialMode == RuntimeMode::Unknown)
+            Log("[runtime-mode] no valid selection yet; waiting for launcher");
+        else
+            Log("[runtime-mode] initial mode: %s", ModeName(initialMode));
 
         static std::atomic<bool> started{ false };
         if (started.exchange(true))
