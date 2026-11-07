@@ -6,6 +6,7 @@
 
 #include "diagnostics/log.h"
 #include "inventory/loadout.h"
+#include "inventory/loadout_api.h"
 #include "inventory/loot_socache.h"
 
 #include <windows.h>
@@ -314,6 +315,40 @@ namespace
         if (team == "T") return 2;
         if (team == "CT") return 3;
         return 0;
+    }
+
+    // CS2's own team names, as the LoadoutAPI natives take them.
+    const char* TeamApiName(int team)
+    {
+        if (team == 2) return "t";
+        if (team == 3) return "ct";
+        return nullptr;
+    }
+
+    // The loadout answers per frame; report a slot that holds something other
+    // than a projected instance only when that answer changes.
+    void NoteForeignEquipped(int team, const char* what, uint64_t itemId)
+    {
+        static int lastTeam = 0;
+        static std::string lastWhat;
+        static uint64_t lastItemId = 0;
+
+        if (team == lastTeam && lastWhat == what && itemId == lastItemId)
+            return;
+
+        lastTeam = team;
+        lastWhat = what;
+        lastItemId = itemId;
+
+        Log("[armory-loadout] team=%s %s holds item %llu, which is not a projected instance",
+            TeamApiName(team) ? TeamApiName(team) : "?", what,
+            static_cast<unsigned long long>(itemId));
+    }
+
+    // A live weapon's loadout identity for diagnostics: "def=61".
+    void DefinitionLabel(uint16_t definition, char (&label)[32])
+    {
+        snprintf(label, sizeof(label), "def=%u", definition);
     }
 
     bool IsKnifeAssignment(const EquipmentAssignment& assignment)
@@ -760,10 +795,11 @@ namespace ArmoryInventory
     // The live weapon's EconItemView is server-built, so its item ID never
     // identifies a projected SOCache instance (it is the default/fallback ID,
     // or 0 for weapons the client did not equip). Identity therefore comes from
-    // the Bridge's equipment document, which assigns one owned instance per
-    // team slot. A definition is only applied without an assignment when every
-    // owned instance for it renders identically, so no arbitrary duplicate is
-    // ever chosen.
+    // CS2's own loadout first: the player equips one owned instance per slot in
+    // the Loadout screen, and the LoadoutAPI natives name that instance. The
+    // equipment document is the fallback for slots the player never touched,
+    // and a definition is only applied without either when every owned instance
+    // for it renders identically, so no arbitrary duplicate is ever chosen.
     ArmoryMatch ResolveTargetForWeapon(
         uint16_t definition,
         uint8_t teamNumber,
@@ -791,7 +827,32 @@ namespace ArmoryInventory
         char why[128]{};
         const int team = (teamNumber == 2) ? 2 : (teamNumber == 3) ? 3 : 0;
 
-        // 1. Explicit equipment assignment.
+        // 1. What the player equipped in CS2's Loadout screen.
+        if (team)
+        {
+            const char* apiTeam = TeamApiName(team);
+            const uint64_t equippedId = knife
+                ? LoadoutApi::EquippedItemId(apiTeam, "melee")
+                : LoadoutApi::EquippedItemIdForDefinition(apiTeam, definition);
+
+            if (equippedId)
+            {
+                if (const ArmoryItem* item = FindByIdLocked(equippedId))
+                {
+                    FillTarget(*item, target);
+                    snprintf(why, sizeof(why), "equipped in game %016llX",
+                        static_cast<unsigned long long>(item->id));
+                    detail = why;
+                    return ArmoryMatch::EquippedInGame;
+                }
+
+                char label[32]{};
+                DefinitionLabel(definition, label);
+                NoteForeignEquipped(team, label, equippedId);
+            }
+        }
+
+        // 2. Explicit equipment assignment.
         if (knife && team)
         {
             const auto assigned = g_equippedKnife.find(static_cast<uint32_t>(team));
@@ -846,7 +907,7 @@ namespace ArmoryInventory
             }
         }
 
-        // 2. Equivalence fallback: only when the definition is unambiguous.
+        // 3. Equivalence fallback: only when the definition is unambiguous.
         const auto groupIt = g_definitionGroups.find(definition);
         if (groupIt == g_definitionGroups.end())
         {
@@ -879,8 +940,9 @@ namespace ArmoryInventory
     }
 
     // Slot-named equipment (gloves, agent, zeus). The live pawn carries no item
-    // identity for these slots that could name a projected instance, so only an
-    // explicit assignment resolves; nothing is guessed from the inventory.
+    // identity for these slots, so the player's in-game loadout decides; the
+    // equipment document covers slots the player never equipped in game and
+    // nothing is guessed from the inventory.
     ArmoryMatch ResolveTargetForSlot(
         const char* slot,
         uint8_t teamNumber,
@@ -912,10 +974,34 @@ namespace ArmoryInventory
             return ArmoryMatch::None;
         }
 
+        // 1. What the player equipped in CS2's Loadout screen ("clothing_hands",
+        // "customplayer", "melee").
+        if (const char* nativeSlot = LoadoutApi::NativeSlotName(slot))
+        {
+            const uint64_t equippedId =
+                LoadoutApi::EquippedItemId(TeamApiName(team), nativeSlot);
+
+            if (equippedId)
+            {
+                if (const ArmoryItem* item = FindByIdLocked(equippedId))
+                {
+                    FillTarget(*item, target);
+                    char why[160]{};
+                    snprintf(why, sizeof(why), "equipped in game %s instance %016llX",
+                        nativeSlot, static_cast<unsigned long long>(item->id));
+                    detail = why;
+                    return ArmoryMatch::EquippedInGame;
+                }
+
+                NoteForeignEquipped(team, nativeSlot, equippedId);
+            }
+        }
+
+        // 2. Assignment from the equipment document.
         const auto assigned = g_equippedBySlotName.find(SlotKey(team, code));
         if (assigned == g_equippedBySlotName.end())
         {
-            detail = "no assignment for this slot";
+            detail = "not equipped in game and no assignment for this slot";
             return ArmoryMatch::None;
         }
 

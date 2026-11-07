@@ -19,6 +19,7 @@
 #include "config/auto_offsets.h"
 #include "inventory/engine_schema_diagnostic.h"
 #include "inventory/armory_inventory.h"
+#include "inventory/loadout_api.h"
 #include "inventory/runtime_mode.h"
 #include "skin/glove_paintkit_schema.h"
 #include "skin/glove_schema.h"
@@ -205,6 +206,15 @@ static DWORD WINAPI InjectThread(LPVOID)
     // Both data sources can be watched while inactive. FrameStageNotify only
     // adopts the source that has been explicitly activated below.
     ArmoryInventory::StartWatcher();
+
+    // What the player wears in CS2's own Loadout decides which owned instance
+    // is applied. Resolving the natives here reports a broken build at start-up
+    // instead of silently falling back to the equipment document.
+    if (!LoadoutApi::Initialize())
+    {
+        Log("[loadout-api] unavailable, equipment document only: %s",
+            LoadoutApi::LastError());
+    }
 
     if (!InstallFSNHook())
     {
