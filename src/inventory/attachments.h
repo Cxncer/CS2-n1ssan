@@ -89,6 +89,7 @@ namespace Attachments
     // This avoids relying on the observer having captured a pre-apply baseline.
     void RecordApplied(
         std::uint64_t itemId,
+        const Set& applied,
         const char* sourceToolInstanceId,
         bool charm,
         int stickerSlot,
