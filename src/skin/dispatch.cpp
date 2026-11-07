@@ -9,9 +9,48 @@
 #include "inventory/armory_inventory.h"
 #include "inventory/runtime_mode.h"
 #include "memory/access.h"
+#include "sdk/entities.h"
+#include "sdk/handles.h"
+#include "skin/glove_schema.h"
 #include "diagnostics/log.h"
 
 #include <string>
+
+namespace
+{
+    // Lootline's IsOwnWeapon equivalent. Armory must not repaint an enemy's
+    // dropped weapon merely because it appears in the local weapon handle list.
+    // If schema/account ownership data is unavailable, preserve the existing
+    // fail-open behavior rather than suppressing the player's own cosmetics.
+    bool IsOwnArmoryWeapon(uintptr_t weaponEnt, uintptr_t pawn)
+    {
+        uint32_t ownerOffset = 0;
+        if (!GlovesSchema::TryGet(
+                "C_EconEntity", "m_OriginalOwnerXuidLow", ownerOffset) ||
+            ownerOffset == 0)
+            return true;
+
+        uint32_t originalOwner = 0;
+        if (!SafeReadU32(weaponEnt + ownerOffset, originalOwner) ||
+            originalOwner == 0)
+            return true;
+
+        uint32_t controllerHandle = 0;
+        if (!SafeReadU32(pawn + g_off.PAWN_hController, controllerHandle) ||
+            !HandleValid(controllerHandle))
+            return true;
+
+        const uintptr_t controller = GetEntityByHandle(controllerHandle);
+        uint64_t steamId = 0;
+        if (!controller ||
+            !SafeReadQword(controller + g_off.CTRL_SteamID, steamId))
+            return true;
+
+        const uint32_t localAccountId =
+            static_cast<uint32_t>(steamId & 0xFFFFFFFFull);
+        return localAccountId == 0 || originalOwner == localAccountId;
+    }
+}
 
 bool ProcessWeapon(uintptr_t weaponEnt, uintptr_t pawn)
 {
@@ -62,6 +101,13 @@ bool ProcessWeapon(uintptr_t weaponEnt, uintptr_t pawn)
 
     if (RuntimeModeState::Current() == RuntimeMode::Armory)
     {
+        if (!IsOwnArmoryWeapon(weaponEnt, pawn))
+        {
+            Log("[armory-apply] skipped non-owned weapon entity=%p def=%u",
+                (void*)weaponEnt, def);
+            return false;
+        }
+
         uint32_t itemIdLow = 0, itemIdHigh = 0;
         if (!SafeReadU32(view + g_off.EIV_ItemIDLow, itemIdLow) ||
             !SafeReadU32(view + g_off.EIV_ItemIDHigh, itemIdHigh))
