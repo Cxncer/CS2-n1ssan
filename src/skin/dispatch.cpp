@@ -108,24 +108,31 @@ bool ProcessWeapon(uintptr_t weaponEnt, uintptr_t pawn)
             return false;
         }
 
-        // Follow Lootline's live-weapon path: resolve the cosmetic from the
-        // weapon's current definition, then apply directly to this live entity.
-        // A definition with multiple Armory items is ambiguous and stays unapplied
-        // until native equipped-item identity can distinguish those instances.
-        TargetSkin equipped{};
-        const bool matched =
-            ArmoryInventory::GetUniqueTargetForDefinition(def, equipped);
+        // The live weapon view is server-built, so its EconItemView ID never
+        // identifies a projected instance. Resolve through the equipment
+        // assignment for this team; a definition only matches on its own when
+        // every owned instance for it renders identically.
+        const bool knife = IsKnifeDefinition(def);
+        const char* teamLabel = teamStr[0] ? teamStr : "unknown";
 
-        if (!matched)
+        TargetSkin equipped{};
+        std::string matchDetail;
+        const ArmoryInventory::ArmoryMatch match =
+            ArmoryInventory::ResolveTargetForWeapon(
+                def, team, knife, equipped, matchDetail);
+
+        if (match == ArmoryInventory::ArmoryMatch::None)
         {
-            Log("[armory-apply] no unique Armory target for live weapon def=%u", def);
+            Log("[armory-apply] no Armory target for live weapon def=%u team=%s (%s)",
+                def, teamLabel, matchDetail.c_str());
             return false;
         }
 
-        Log("[armory-apply] matched live weapon def=%u paintKit=%d",
-            def, equipped.paintKit);
+        Log("[armory-apply] %s live weapon def=%u team=%s paintKit=%d (%s)",
+            match == ArmoryInventory::ArmoryMatch::Equipped ? "assigned" : "equivalent",
+            def, teamLabel, equipped.paintKit, matchDetail.c_str());
 
-        if (IsKnifeDefinition(def))
+        if (knife)
         {
             const bool knifeChanged =
                 KnifeApply(weaponEnt, view, equipped.defIndex);

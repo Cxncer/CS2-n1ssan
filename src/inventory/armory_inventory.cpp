@@ -13,7 +13,9 @@
 #include <algorithm>
 
 #include <atomic>
+#include <cmath>
 #include <cstdint>
+#include <cstdio>
 #include <cstdlib>
 #include <cstring>
 #include <fstream>
@@ -21,6 +23,7 @@
 #include <sstream>
 #include <string>
 #include <thread>
+#include <unordered_map>
 #include <vector>
 
 namespace
@@ -41,11 +44,39 @@ namespace
         int         keychainSeed = 0;
     };
 
+    // One entry from the Bridge's canonical equipment document. Assignments
+    // name an owned instance per team slot; they are the only authoritative
+    // statement about which duplicate of a weapon the player equipped.
+    struct EquipmentAssignment
+    {
+        std::string team;
+        std::string slot;
+        std::string target;
+        std::string instanceId;
+    };
+
+    // Per-definition summary of the projected inventory, used by the
+    // equivalence fallback: a definition may only be applied without an
+    // assignment when every owned instance for it renders identically.
+    struct DefinitionGroup
+    {
+        uint64_t id = 0;
+        size_t   count = 0;
+        bool     equivalent = true;
+    };
+
     std::mutex g_mutex;
     std::vector<ArmoryItem> g_staged;
     std::vector<ArmoryItem> g_inventoryItems;
     std::atomic<bool> g_pending{ false };
     std::string g_path;
+
+    // All guarded by g_mutex.
+    std::vector<EquipmentAssignment> g_assignments;
+    std::unordered_map<uint32_t, uint64_t> g_equippedBySlot; // (team << 16) | def
+    std::unordered_map<uint32_t, uint64_t> g_equippedKnife;  // team
+    std::unordered_map<uint16_t, DefinitionGroup> g_definitionGroups;
+    std::string g_equipmentPath;
 
 
 
@@ -223,6 +254,246 @@ namespace
         out = buffer.str();
         return !out.empty();
     }
+
+    // Reads the equipment document's assignment array. Only the fields the
+    // native runtime needs are extracted; slot/target stay for diagnostics.
+    bool ParseAssignments(const std::string& text, std::vector<EquipmentAssignment>& out)
+    {
+        const size_t key = text.find("\"assignments\"");
+        if (key == std::string::npos) return false;
+
+        const size_t arrayStart = text.find('[', key);
+        if (arrayStart == std::string::npos) return false;
+
+        size_t i = arrayStart + 1;
+
+        while (i < text.size())
+        {
+            while (i < text.size() && (text[i] == ' ' || text[i] == '\t' ||
+                                       text[i] == '\r' || text[i] == '\n' ||
+                                       text[i] == ','))
+            {
+                ++i;
+            }
+
+            if (i >= text.size() || text[i] == ']') break;
+            if (text[i] != '{') return false;
+
+            const size_t start = i;
+            int depth = 0;
+
+            for (; i < text.size(); ++i)
+            {
+                if (text[i] == '{') ++depth;
+                else if (text[i] == '}')
+                {
+                    if (--depth == 0) { ++i; break; }
+                }
+            }
+
+            const std::string object = text.substr(start, i - start);
+
+            EquipmentAssignment assignment;
+            ExtractString(object, "team", assignment.team);
+            ExtractString(object, "slot", assignment.slot);
+            ExtractString(object, "target", assignment.target);
+
+            if (ExtractString(object, "itemInstanceId", assignment.instanceId) &&
+                !assignment.instanceId.empty())
+            {
+                out.push_back(std::move(assignment));
+            }
+        }
+
+        return i < text.size() && text[i] == ']';
+    }
+
+    int TeamNumberFor(const std::string& team)
+    {
+        if (team == "T") return 2;
+        if (team == "CT") return 3;
+        return 0;
+    }
+
+    bool IsKnifeAssignment(const EquipmentAssignment& assignment)
+    {
+        return assignment.slot == "knife" || assignment.slot == "melee" ||
+            assignment.target == "knife" || assignment.target == "melee";
+    }
+
+    uint32_t SlotKey(int team, uint16_t definition)
+    {
+        return (static_cast<uint32_t>(team) << 16) | definition;
+    }
+
+    // Two owned instances are interchangeable only when applying either one
+    // produces the same result in game.
+    bool SameRenderable(const ArmoryItem& a, const ArmoryItem& b)
+    {
+        return a.definition == b.definition &&
+            a.quality == b.quality &&
+            a.paintKit == b.paintKit &&
+            a.seed == b.seed &&
+            std::fabs(a.wear - b.wear) <= 0.0001f &&
+            a.statTrak == b.statTrak &&
+            a.stickerKit == b.stickerKit &&
+            a.keychain == b.keychain &&
+            a.keychainSeed == b.keychainSeed;
+    }
+
+    const ArmoryItem* FindByIdLocked(uint64_t id)
+    {
+        for (const auto& item : g_inventoryItems)
+        {
+            if (item.id == id) return &item;
+        }
+        return nullptr;
+    }
+
+    const ArmoryItem* FindByInstanceIdLocked(const std::string& instanceId)
+    {
+        for (const auto& item : g_inventoryItems)
+        {
+            if (item.instanceId == instanceId) return &item;
+        }
+        return nullptr;
+    }
+
+    void FillTarget(const ArmoryItem& item, TargetSkin& target)
+    {
+        target = TargetSkin{};
+        target.paintKit = item.paintKit;
+        target.resolvedSeed = item.seed;
+        target.wear = item.wear;
+        target.statTrak = item.statTrak >= 0;
+        target.defIndex = item.definition;
+    }
+
+    // Rebuilds both derived indexes from the committed inventory. Caller holds
+    // g_mutex. Cheap enough to run on every inventory commit / equipment reload.
+    void RebuildIndexesLocked()
+    {
+        g_equippedBySlot.clear();
+        g_equippedKnife.clear();
+        g_definitionGroups.clear();
+
+        for (const auto& item : g_inventoryItems)
+        {
+            DefinitionGroup& group = g_definitionGroups[item.definition];
+            if (group.count == 0)
+            {
+                group.id = item.id;
+            }
+            else if (group.equivalent)
+            {
+                const ArmoryItem* first = FindByIdLocked(group.id);
+                if (!first || !SameRenderable(*first, item))
+                    group.equivalent = false;
+            }
+            ++group.count;
+        }
+
+        int resolved = 0;
+        int unresolved = 0;
+        int duplicateSlots = 0;
+
+        for (const auto& assignment : g_assignments)
+        {
+            const int team = TeamNumberFor(assignment.team);
+            if (!team) continue;
+
+            const ArmoryItem* item = FindByInstanceIdLocked(assignment.instanceId);
+            if (!item)
+            {
+                ++unresolved;
+                continue;
+            }
+
+            ++resolved;
+
+            if (IsKnifeAssignment(assignment))
+            {
+                if (!g_equippedKnife.emplace(static_cast<uint32_t>(team), item->id).second)
+                    ++duplicateSlots;
+            }
+            else
+            {
+                if (!g_equippedBySlot.emplace(SlotKey(team, item->definition), item->id).second)
+                    ++duplicateSlots;
+            }
+        }
+
+        Log("[armory-equipment] index: assignments=%zu resolved=%d unresolved=%d conflicts=%d definitions=%zu",
+            g_assignments.size(), resolved, unresolved, duplicateSlots,
+            g_definitionGroups.size());
+    }
+
+    void StartEquipmentWatcher()
+    {
+        static std::atomic<bool> started{ false };
+        if (started.exchange(true))
+            return;
+
+        g_equipmentPath = g_bridgeDirectory + "armory-equipment.json";
+        Log("[armory-equipment] watching for loadout assignments: %s",
+            g_equipmentPath.c_str());
+
+        std::thread([]()
+        {
+            FILETIME lastWrite{};
+            ULONGLONG lastSize = 0;
+            bool haveBaseline = false;
+
+            for (;;)
+            {
+                Sleep(2000);
+
+                WIN32_FILE_ATTRIBUTE_DATA info{};
+                if (!GetFileAttributesExA(g_equipmentPath.c_str(), GetFileExInfoStandard, &info))
+                    continue;
+
+                ULARGE_INTEGER size{};
+                size.HighPart = info.nFileSizeHigh;
+                size.LowPart = info.nFileSizeLow;
+
+                if (size.QuadPart == 0)
+                    continue;
+
+                if (haveBaseline &&
+                    CompareFileTime(&info.ftLastWriteTime, &lastWrite) == 0 &&
+                    size.QuadPart == lastSize)
+                {
+                    continue;
+                }
+
+                lastWrite = info.ftLastWriteTime;
+                lastSize = size.QuadPart;
+                haveBaseline = true;
+
+                std::string text;
+                if (!ReadFileText(g_equipmentPath, text))
+                {
+                    Log("[armory-equipment] reload skipped: file unreadable");
+                    continue;
+                }
+
+                std::vector<EquipmentAssignment> assignments;
+                if (!ParseAssignments(text, assignments))
+                {
+                    Log("[armory-equipment] reload skipped: malformed equipment document");
+                    continue;
+                }
+
+                {
+                    std::lock_guard<std::mutex> lock(g_mutex);
+                    g_assignments = std::move(assignments);
+                    RebuildIndexesLocked();
+                }
+
+                Log("[armory-equipment] reloaded equipment document");
+            }
+        }).detach();
+    }
 }
 
 namespace ArmoryInventory
@@ -241,6 +512,8 @@ namespace ArmoryInventory
 
         g_path = g_bridgeDirectory + "armory-inventory.json";
         Log("[armory-inventory] watching for inventory changes: %s", g_path.c_str());
+
+        StartEquipmentWatcher();
 
         std::thread([]()
         {
@@ -426,6 +699,10 @@ namespace ArmoryInventory
         // being used to resolve live entities before its SOCache commit.
         g_inventoryItems = g_staged;
 
+        // Equipment assignments resolve against the committed inventory, so
+        // both derived indexes are rebuilt together with it.
+        RebuildIndexesLocked();
+
         Log("[armory-inventory] replacement committed: desired=%zu created=%zu retained=%zu removed=%d removeFailed=%d",
             desiredIds.size(), createdIds.size(), desiredIds.size() - createdIds.size(),
             removed, removeFailed);
@@ -460,32 +737,124 @@ namespace ArmoryInventory
         return false;
     }
 
-    // Lootline-style live application resolves cosmetics from the live weapon
-    // definition rather than assuming the weapon EconItemView ID equals our
-    // projected SOCache ID. Armory may contain duplicate definitions; only
-    // return a target when the definition maps to exactly one owned item.
-    bool GetUniqueTargetForDefinition(uint16_t definition, TargetSkin& target)
+    // The live weapon's EconItemView is server-built, so its item ID never
+    // identifies a projected SOCache instance (it is the default/fallback ID,
+    // or 0 for weapons the client did not equip). Identity therefore comes from
+    // the Bridge's equipment document, which assigns one owned instance per
+    // team slot. A definition is only applied without an assignment when every
+    // owned instance for it renders identically, so no arbitrary duplicate is
+    // ever chosen.
+    ArmoryMatch ResolveTargetForWeapon(
+        uint16_t definition,
+        uint8_t teamNumber,
+        bool knife,
+        TargetSkin& target,
+        std::string& detail)
     {
-        if (!definition) return false;
-        std::lock_guard<std::mutex> lock(g_mutex);
+        target = TargetSkin{};
+        detail.clear();
 
-        const ArmoryItem* match = nullptr;
-        for (const auto& item : g_inventoryItems)
+        if (!definition)
         {
-            if (item.definition != definition) continue;
-            if (match)
-                return false; // ambiguous: never choose an arbitrary duplicate
-            match = &item;
+            detail = "no definition";
+            return ArmoryMatch::None;
         }
 
-        if (!match) return false;
+        std::lock_guard<std::mutex> lock(g_mutex);
 
-        target = TargetSkin{};
-        target.paintKit = match->paintKit;
-        target.resolvedSeed = match->seed;
-        target.wear = match->wear;
-        target.statTrak = match->statTrak >= 0;
-        target.defIndex = match->definition;
-        return true;
+        if (g_inventoryItems.empty())
+        {
+            detail = "no projected inventory";
+            return ArmoryMatch::None;
+        }
+
+        char why[128]{};
+        const int team = (teamNumber == 2) ? 2 : (teamNumber == 3) ? 3 : 0;
+
+        // 1. Explicit equipment assignment.
+        if (knife && team)
+        {
+            const auto assigned = g_equippedKnife.find(static_cast<uint32_t>(team));
+            if (assigned != g_equippedKnife.end())
+            {
+                if (const ArmoryItem* item = FindByIdLocked(assigned->second))
+                {
+                    FillTarget(*item, target);
+                    snprintf(why, sizeof(why), "assigned knife instance %016llX",
+                        static_cast<unsigned long long>(item->id));
+                    detail = why;
+                    return ArmoryMatch::Equipped;
+                }
+            }
+        }
+        else if (team)
+        {
+            const auto assigned = g_equippedBySlot.find(SlotKey(team, definition));
+            if (assigned != g_equippedBySlot.end())
+            {
+                if (const ArmoryItem* item = FindByIdLocked(assigned->second))
+                {
+                    FillTarget(*item, target);
+                    snprintf(why, sizeof(why), "assigned instance %016llX",
+                        static_cast<unsigned long long>(item->id));
+                    detail = why;
+                    return ArmoryMatch::Equipped;
+                }
+            }
+        }
+        else
+        {
+            // Unknown team: accept only when both teams agree on one instance.
+            const auto t = g_equippedBySlot.find(SlotKey(2, definition));
+            const auto ct = g_equippedBySlot.find(SlotKey(3, definition));
+            const bool hasT = t != g_equippedBySlot.end();
+            const bool hasCt = ct != g_equippedBySlot.end();
+
+            if (hasT && hasCt && t->second == ct->second)
+            {
+                if (const ArmoryItem* item = FindByIdLocked(t->second))
+                {
+                    FillTarget(*item, target);
+                    detail = "both teams assigned the same instance";
+                    return ArmoryMatch::Equipped;
+                }
+            }
+            else if (hasT || hasCt)
+            {
+                detail = "team unknown and the teams are assigned different instances";
+                return ArmoryMatch::None;
+            }
+        }
+
+        // 2. Equivalence fallback: only when the definition is unambiguous.
+        const auto groupIt = g_definitionGroups.find(definition);
+        if (groupIt == g_definitionGroups.end())
+        {
+            detail = "not owned in the projected profile";
+            return ArmoryMatch::None;
+        }
+
+        const DefinitionGroup& group = groupIt->second;
+        if (!group.equivalent)
+        {
+            snprintf(why, sizeof(why),
+                "%u owned instances render differently and none is assigned",
+                static_cast<unsigned>(group.count));
+            detail = why;
+            return ArmoryMatch::None;
+        }
+
+        const ArmoryItem* item = FindByIdLocked(group.id);
+        if (!item)
+        {
+            detail = "owned instance unavailable";
+            return ArmoryMatch::None;
+        }
+
+        FillTarget(*item, target);
+        snprintf(why, sizeof(why), "%u owned instance(s) render identically",
+            static_cast<unsigned>(group.count));
+        detail = why;
+        return ArmoryMatch::Equivalent;
     }
 }
