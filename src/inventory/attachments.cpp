@@ -4,6 +4,8 @@
 #include "inventory/armory_inventory.h"
 #include "inventory/loot_schema.h"
 #include "inventory/loot_socache.h"
+#include "inventory/loot_patterns.h"
+#include "memory/scanner.h"
 #include "sdk/item_view.h"
 
 #include <Windows.h>
@@ -50,6 +52,31 @@ namespace Attachments
         // schema, a charm's sealed sticker or highlight) are written only when
         // the client actually has them.
         std::unordered_map<std::string, bool> g_names;
+        using ItemViewByIdFn = void* (__fastcall*)(std::uint64_t);
+        using StickerIntFn = int(__fastcall*)(void*, int, int, int);
+        using StickerFloatFn = float(__fastcall*)(void*, int, int, float);
+        constexpr int VFUNC_ITEM_STICKER_FLOAT = 6;
+        constexpr int VFUNC_ITEM_STICKER_INT = 7;
+        ItemViewByIdFn g_itemViewById = nullptr;
+        bool g_itemViewLookupAttempted = false;
+
+        bool ResolveItemViewLookup()
+        {
+            if (g_itemViewById) return true;
+            if (g_itemViewLookupAttempted) return false;
+            g_itemViewLookupAttempted = true;
+            const ModuleInfo client = GetClientModule();
+            if (!client.valid()) return false;
+            const uintptr_t address = ScanPattern(client, LootPatterns::ItemViewById);
+            if (!address)
+            {
+                Log("[attach] Lootline ItemViewById signature not found");
+                return false;
+            }
+            g_itemViewById = reinterpret_cast<ItemViewByIdFn>(address);
+            Log("[attach] Lootline ItemViewById resolved @ %p", reinterpret_cast<void*>(address));
+            return true;
+        }
 
         bool NameOk(const char* name)
         {
@@ -598,6 +625,44 @@ namespace Attachments
         }
 
         return true;
+    }
+
+    bool ReadStickerSlotsViaItemView(std::uint64_t itemId, Set& out)
+    {
+        out = Set{};
+        if (!itemId || !ResolveItemViewLookup()) return false;
+        __try
+        {
+            void* view = g_itemViewById(itemId);
+            if (!view) return false;
+            void** vtable = *reinterpret_cast<void***>(view);
+            if (!vtable || !vtable[VFUNC_ITEM_STICKER_INT] || !vtable[VFUNC_ITEM_STICKER_FLOAT]) return false;
+            const auto getInt = reinterpret_cast<StickerIntFn>(vtable[VFUNC_ITEM_STICKER_INT]);
+            const auto getFloat = reinterpret_cast<StickerFloatFn>(vtable[VFUNC_ITEM_STICKER_FLOAT]);
+            for (int slot = 0; slot < STICKER_SLOTS; ++slot)
+            {
+                StickerSlot& sticker = out.stickers[slot];
+                sticker.kit = getInt(view, slot, 0, 0);
+                if (sticker.kit <= 0 || sticker.kit > MAX_KIT) { sticker = StickerSlot{}; continue; }
+                sticker.present = true;
+                sticker.wear = Clamp01(getFloat(view, slot, 1, 0.0f));
+                sticker.scale = getFloat(view, slot, 2, 1.0f);
+                if (!std::isfinite(sticker.scale) || sticker.scale <= 0.0f) sticker.scale = 1.0f;
+                sticker.rotation = getFloat(view, slot, 3, 0.0f);
+                sticker.offsetX = getFloat(view, slot, 4, 0.0f);
+                sticker.offsetY = getFloat(view, slot, 5, 0.0f);
+                sticker.schema = getInt(view, slot, 6, slot);
+                sticker.hasSchema = true;
+            }
+            Log("[attach] ItemViewById read %016llX via CS2 getters", static_cast<unsigned long long>(itemId));
+            return true;
+        }
+        __except (EXCEPTION_EXECUTE_HANDLER)
+        {
+            out = Set{};
+            Log("[attach] ItemViewById sticker read exception for %016llX", static_cast<unsigned long long>(itemId));
+            return false;
+        }
     }
 
     std::size_t Append(void* attributeArray, std::size_t index, const Set& set)
