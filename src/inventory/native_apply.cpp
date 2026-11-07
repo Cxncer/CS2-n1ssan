@@ -1231,17 +1231,10 @@ namespace NativeApply
 
             const bool charm = tool->definition == DEF_KEYCHAIN;
 
-            // Valve can never answer for either id, so the request is answered
-            // here even when it cannot be carried out: an unanswered request is
-            // the spinner this hook exists to stop.
-            Attachments::Set toolSet;
-            if (!LootSOCache::ReadAttachments(toolId, toolSet))
-            {
-                Log("[use-tool] %016llX could not be read - answered locally, nothing applied",
-                    static_cast<unsigned long long>(toolId));
-                return true;
-            }
-
+            // The Armory projection stores a sticker/charm tool's kit identity
+            // in its native tool fields (stickerKit / keychain / keychainSeed).
+            // Attachments::Read is for attachments already applied to a weapon;
+            // reading the tool as an attachment-bearing weapon always misses.
             Job job;
             job.charm = charm;
             job.toolId = toolId;
@@ -1250,15 +1243,15 @@ namespace NativeApply
 
             if (charm)
             {
-                if (!toolSet.charm.present || toolSet.charm.kit <= 0)
+                if (tool->keychain <= 0)
                 {
-                    Log("[use-tool] charm %016llX has no kit - answered locally, nothing applied",
-                        static_cast<unsigned long long>(toolId));
-                    return true;
+                    Log("[use-tool] charm tool %016llX has no projected keychain kit (keychain=%d) - forwarding",
+                        static_cast<unsigned long long>(toolId), tool->keychain);
+                    return false;
                 }
 
-                job.kit = toolSet.charm.kit;
-                job.seed = toolSet.charm.seed;
+                job.kit = tool->keychain;
+                job.seed = tool->keychainSeed;
 
                 PlacementValues placement;
                 job.placed = ReadKeychainPlacement(placement);
@@ -1274,14 +1267,15 @@ namespace NativeApply
             }
             else
             {
-                if (!toolSet.stickers[0].present || toolSet.stickers[0].kit <= 0)
+                if (tool->stickerKit <= 0)
                 {
-                    Log("[use-tool] sticker %016llX has no kit - answered locally, nothing applied",
-                        static_cast<unsigned long long>(toolId));
-                    return true;
+                    Log("[use-tool] sticker tool %016llX has no projected sticker kit (stickerKit=%d) - forwarding",
+                        static_cast<unsigned long long>(toolId), tool->stickerKit);
+                    return false;
                 }
 
-                job.kit = toolSet.stickers[0].kit;
+                job.kit = tool->stickerKit;
+                job.wear = tool->wear;
 
                 int popupSlot = -1;
                 PlacementValues placement;
