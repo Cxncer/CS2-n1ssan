@@ -440,21 +440,32 @@ namespace ArmoryInventory
         return !g_inventoryItems.empty();
     }
 
-    bool GetTargetForItemId(uint64_t itemId, TargetSkin& target)
+    // Lootline-style live application resolves cosmetics from the live weapon
+    // definition rather than assuming the weapon EconItemView ID equals our
+    // projected SOCache ID. Armory may contain duplicate definitions; only
+    // return a target when the definition maps to exactly one owned item.
+    bool GetUniqueTargetForDefinition(uint16_t definition, TargetSkin& target)
     {
-        if (!itemId) return false;
+        if (!definition) return false;
         std::lock_guard<std::mutex> lock(g_mutex);
+
+        const ArmoryItem* match = nullptr;
         for (const auto& item : g_inventoryItems)
         {
-            if (item.id != itemId) continue;
-            target = TargetSkin{};
-            target.paintKit = item.paintKit;
-            target.resolvedSeed = item.seed;
-            target.wear = item.wear;
-            target.statTrak = item.statTrak >= 0;
-            target.defIndex = item.definition;
-            return true;
+            if (item.definition != definition) continue;
+            if (match)
+                return false; // ambiguous: never choose an arbitrary duplicate
+            match = &item;
         }
-        return false;
+
+        if (!match) return false;
+
+        target = TargetSkin{};
+        target.paintKit = match->paintKit;
+        target.resolvedSeed = match->seed;
+        target.wear = match->wear;
+        target.statTrak = match->statTrak >= 0;
+        target.defIndex = match->definition;
+        return true;
     }
 }

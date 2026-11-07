@@ -13,5 +13,5 @@ namespace ArmoryInventory
     bool HasPending();
     void AdoptPending();
     bool HasItems();
-    bool GetTargetForItemId(uint64_t itemId, TargetSkin& target);
+    bool GetUniqueTargetForDefinition(uint16_t definition, TargetSkin& target);
 }

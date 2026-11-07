@@ -108,31 +108,22 @@ bool ProcessWeapon(uintptr_t weaponEnt, uintptr_t pawn)
             return false;
         }
 
-        uint32_t itemIdLow = 0, itemIdHigh = 0;
-        if (!SafeReadU32(view + g_off.EIV_ItemIDLow, itemIdLow) ||
-            !SafeReadU32(view + g_off.EIV_ItemIDHigh, itemIdHigh))
-            return false;
-
-        const uint64_t equippedItemId =
-            (static_cast<uint64_t>(itemIdHigh) << 32) | itemIdLow;
+        // Follow Lootline's live-weapon path: resolve the cosmetic from the
+        // weapon's current definition, then apply directly to this live entity.
+        // A definition with multiple Armory items is ambiguous and stays unapplied
+        // until native equipped-item identity can distinguish those instances.
         TargetSkin equipped{};
-        // Armory is strictly native-equipment driven. An owned item with the
-        // same definition is not proof that CS2 selected that specific instance.
-        // If the live EconItemView ID cannot be resolved to our projected item,
-        // fail closed rather than applying an arbitrary owned skin.
         const bool matched =
-            ArmoryInventory::GetTargetForItemId(equippedItemId, equipped);
+            ArmoryInventory::GetUniqueTargetForDefinition(def, equipped);
 
         if (!matched)
         {
-            Log("[armory-apply] no unambiguous owned Armory item for entity def=%u id=%016llX",
-                def, static_cast<unsigned long long>(equippedItemId));
+            Log("[armory-apply] no unique Armory target for live weapon def=%u", def);
             return false;
         }
 
-        Log("[armory-apply] matched equipped item id=%016llX def=%u paintKit=%d",
-            static_cast<unsigned long long>(equippedItemId),
-            equipped.defIndex, equipped.paintKit);
+        Log("[armory-apply] matched live weapon def=%u paintKit=%d",
+            def, equipped.paintKit);
 
         if (IsKnifeDefinition(def))
         {
