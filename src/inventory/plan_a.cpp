@@ -104,6 +104,13 @@ namespace PlanA
             Log("[plan-a] LootSchema init failed: %s", LootSchema::LastError());
             return false;
         }
+        // Resolve the shared-object cache helper even in neutral mode. Armory
+        // enumeration must not depend on Loadout's WaitForInventory path.
+        if (!LootSOCache::Initialize())
+        {
+            Log("[plan-a] SOCache initialization failed");
+            return false;
+        }
         g_initialized = true;
         if (injectLoadout)
         {
