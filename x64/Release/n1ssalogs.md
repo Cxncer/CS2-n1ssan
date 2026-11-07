@@ -34845,3 +34845,1494 @@ N1SSAN_STATUS|1|2026-11-07T05:08:42Z|10568|armory-obsidian-3.0|READY|reason=runt
 [pw] weapon 0x000005E61CAC0000 def=61
 [armory-apply] no unambiguous owned Armory item for entity def=61 id=0000000C194D1E34
 [apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[status-path] selected=C:\Users\mirac\AppData\Local\n1ssan\status\cs2-28388.status source=LOCALAPPDATA
+
+# n1ssan diagnostic session
+[build] armory-obsidian-3.0
+[build] Operation Armory x Obsidian Build 3.0 | Nov  7 2026 12:21:12
+N1SSAN_STATUS|1|2026-11-07T05:22:13Z|28388|armory-obsidian-3.0|INITIALIZING|reason=worker_started
+[status-write] begin state=INITIALIZING path=C:\Users\mirac\AppData\Local\n1ssan\status\cs2-28388.status
+[status-write] success state=INITIALIZING error=0
+[off] PAWN_MyWearables = 0x1268
+[off] field offsets populated
+[auto-off] dwEntityList                 hit 0x00007FF89FDE93CB -> rva 0x271FBB8 (val=0000042DB1469000)
+[auto-off] dwLocalPlayerController      hit 0x00007FF89FD05750 -> rva 0x2542548 (val=0000042E3DE73000)
+[auto-off] dwLocalPlayerPawn            hit 0x00007FF89F521615 -> rva 0x27391E0 (val=0000042DCE282E00)
+[auto-off] summary: matched=3/3
+[off] RVA_ENTITY_LIST           = 0x00007FF8A1AEFBB8
+[off] RVA_LOCALPLAYERCONTROLLER = 0x00007FF8A1912548
+[off] RVA_LOCALPLAYERPAWN       = 0x00007FF8A1B091E0
+[bridge] discovered Bridge directory: E:\Vibe Coding\CS2 Lore\CS2 n1ssan\development\n1ssan-web-bridge\
+[runtime-mode] no valid selection yet; waiting for launcher
+[runtime-mode] initialized in neutral mode; waiting for DOMINATE selection
+[schema-live] m_nSubclassID runtime=0x380 hardcoded=0x38C MISMATCH
+[schema-live] subclass resolver ready: 0x380
+[schema-gloves] C_CSPlayerPawn->m_EconGloves = 0x1770
+[schema-gloves] C_CSPlayerPawn->m_bNeedToReApplyGloves = 0x176D
+[schema-gloves] C_EconItemView->m_iItemDefinitionIndex = 0x1BA
+[schema-gloves] C_EconItemView->m_iEntityQuality = 0x1BC
+[schema-gloves] C_EconItemView->m_iItemIDHigh = 0x1D0
+[schema-gloves] C_EconItemView->m_bInitialized = 0x1E8
+[schema-gloves] C_EconItemView->m_bDisallowSOC = 0x1E9
+[schema-gloves] C_EconItemView->m_bRestoreCustomMaterialAfterPrecache = 0x1B8
+[schema-gloves] C_EconItemView->m_AttributeList = 0x208
+[schema-gloves] C_EconItemView->m_NetworkedDynamicAttributes = 0x280
+[schema-gloves] CAttributeList->m_Attributes = 0x8
+[schema-gloves] READY
+[resolve] InvalidateDescription          @ 0x00007FF8A0571350
+[resolve] BuildModernSkin                @ 0x00007FF8A0215B10
+[resolve] SetMeshGroupMask               @ 0x00007FF89FE95A90
+[resolve] RegenerateSkins                @ 0x00007FF89FBFB4B0
+[resolve] ReleaseCompositeMaterials      @ 0x00007FF8A08BC4A0
+[resolve] GloveCreatePaintKit            @ 0x00007FF8A05613D0
+[resolve] AgentSetModel                  @ 0x00007FF89FD35C90
+[resolve] KnifeUpdateSubclass            @ 0x00007FF89F5D9000
+[resolve] GloveSetBodyGroup              @ 0x00007FF89FD34BB0
+[resolve] MemAlloc                       @ 0x00007FF8E367DD30
+[resolve] MemFree                        @ 0x00007FF8E367DD70
+[resolve] CSkeletonInstance->m_modelState = 0x140 (hardcoded)
+[resolve] CModelState->m_hModel = 0xA0 (hardcoded)
+[resolve] entityList @ 0x00007FF8A1AEFBB8 -> 0x0000042DB1469000
+[glove-paintkit-schema] READY
+[glove-schema] READY
+[plan-a] CEconItemSystem* = 0x0000042D23B32F50 (stored)
+[loot-schema] GetAttributeDefinitionByName @ 0x00007FF8A05030F0
+[loot-schema] OK (invOffset=0x528D0, setUint=00007FF8A04B8E70, setFloat=00007FF8A04B9080)
+[socache] CreateBaseTypeCache initialized @ 00007FF8A09FB820
+[plan-a] shared inventory runtime ready; Loadout injection disabled
+[armory-inventory] watching for inventory changes: E:\Vibe Coding\CS2 Lore\CS2 n1ssan\development\n1ssan-web-bridge\armory-inventory.json
+[fsn] pClient=0x00007FF8A1934620 vtable=0x00007FF8A1038230 fn=0x00007FF89FF3EFE0 slot=36
+[fsn] hooked (vtable overwrite)
+[fsn] first stage call seen
+
+=== SNAPSHOT ===
+[snap] fsnCount=1 lastStage=0 stage5Count=0
+[snap] stage histogram:
+[snap]   stage  0: 1 frames
+[snap] dwLocalPlayerController @ 0x00007FF8A1912548 -> 0x0000042E3DE73000 
+[snap] dwLocalPlayerPawn       @ 0x00007FF8A1B091E0 -> 0x0000042DCE282E00 
+[snap] pawn: vtable=0x00007FF8A9E53740 inClient=0 health=1070
+[snap] ctrl: vtable=0x00007FF8A0FE1680 inClient=1 m_hPlayerPawn@0x92C = 0x017F800B (idx=11)
+[snap] entitySystem @ 0x00007FF8A1AEFBB8 = 0x0000042DB1469000 highestEntityIndex=13
+[snap] entity resolution: 12/16 of indices 1..16 valid
+[snap] ctrl->pawn handle resolve: 0x017F800B -> 0x0000042E3DCB2800
+[snap] ----------------------------------------
+N1SSAN_STATUS|1|2026-11-07T05:22:14Z|28388|armory-obsidian-3.0|CHECKS_PASSED|reason=required_initialization_checks_passed
+[status-write] begin state=CHECKS_PASSED path=C:\Users\mirac\AppData\Local\n1ssan\status\cs2-28388.status
+[status-write] success state=CHECKS_PASSED error=0
+[knife-anim] stage=6 reached
+[diagnostic] runtime=unknown targets=0; awaiting DOMINATE selection
+[glove-observe] pawn=0000042E3DCB2800 reapply=0 changed=0 def=0 init=0 idHigh=0x0
+N1SSAN_STATUS|1|2026-11-07T05:22:14Z|28388|armory-obsidian-3.0|READY|reason=runtime_worker_heartbeat
+[match] network signOn=6 maxClients=1 backgroundMap=0 connected=0 alive=0
+[status-write] begin state=READY path=C:\Users\mirac\AppData\Local\n1ssan\status\cs2-28388.status
+[status-write] success state=READY error=0
+[knife-anim] stage=6 reached
+[knife-anim] stage=6 reached
+[armory-inventory] staged 14 items (applies outside an active match)
+
+=== SNAPSHOT ===
+[snap] fsnCount=2613 lastStage=10 stage5Count=219
+[snap] stage histogram:
+[snap]   stage  0: 321 frames
+[snap]   stage  1: 219 frames
+[snap]   stage  2: 219 frames
+[snap]   stage  3: 219 frames
+[snap]   stage  5: 219 frames
+[snap]   stage  6: 219 frames
+[snap]   stage  7: 219 frames
+[snap]   stage  8: 219 frames
+[snap]   stage 10: 220 frames
+[snap]   stage 11: 320 frames
+[snap]   stage 12: 219 frames
+[snap] dwLocalPlayerController @ 0x00007FF8A1912548 -> 0x0000042E3DE73000 
+[snap] dwLocalPlayerPawn       @ 0x00007FF8A1B091E0 -> 0x0000042DCE282E00 
+[snap] pawn: vtable=0x00007FF8A9E53740 inClient=0 health=1070
+[snap] ctrl: vtable=0x00007FF8A0FE1680 inClient=1 m_hPlayerPawn@0x92C = 0x017F800B (idx=11)
+[snap] entitySystem @ 0x00007FF8A1AEFBB8 = 0x0000042DB1469000 highestEntityIndex=13
+[snap] entity resolution: 12/16 of indices 1..16 valid
+[snap] ctrl->pawn handle resolve: 0x017F800B -> 0x0000042E3DCB2800
+[snap] ----------------------------------------
+[runtime-mode] switched to armory
+[runtime-mode] preparing requested mode: armory
+[runtime-mode] active mode: armory
+[socache-diag] SOCache resolved inv=0000042DB17CF000 offset=0x68 cache=0000042E2320A0C0 typeCache=0000042E233412A0
+[plan-a] Loadout cleanup: found=0 removed=0 failed=0
+[armory-inventory] preparing replacement set: 14 items
+[loot-schema] attr 'set item texture prefab' (idx 6) -> 0x0000042E1D32EFC0
+[loot-schema] attr 6 kind=2 (0=float,1=uint32,2=default,3=other)
+[loot-schema] attr 'set item texture seed' (idx 7) -> 0x0000042E1D32F060
+[loot-schema] attr 7 kind=2 (0=float,1=uint32,2=default,3=other)
+[loot-schema] attr 'set item texture wear' (idx 8) -> 0x0000042E1D32F100
+[loot-schema] attr 8 kind=2 (0=float,1=uint32,2=default,3=other)
+[loot-schema] attr 'kill eater' (idx 80) -> 0x0000042E1E2F1CA0
+[loot-schema] attr 'kill eater score type' (idx 81) -> 0x0000042E1E2F1D40
+[armory-inventory] replacement committed: desired=14 created=14 retained=0 removed=0 removeFailed=0
+[detect] pawn=0x0000042E3DCB2800 hp=100 signOn=6 bg=0
+[armory-inventory] staged 14 items (applies outside an active match)
+[armory-inventory] preparing replacement set: 14 items
+[armory-inventory] retained item id=95A9B496DD0863FF def=5404
+[armory-inventory] retained item id=9716366248F075D7 def=5034
+[armory-inventory] retained item id=9502E287D965BBF2 def=5034
+[armory-inventory] retained item id=99E1BAF01502BE2C def=61
+[armory-inventory] retained item id=985A3F279B62E8B7 def=515
+[armory-inventory] retained item id=93F6DB09F3D56591 def=5502
+[armory-inventory] retained item id=94D37271449A4D93 def=7
+[armory-inventory] retained item id=977AA887CD1B96DE def=4
+[armory-inventory] retained item id=9AF567D70D34A997 def=525
+[armory-inventory] retained item id=97AF86D31CBA8FDC def=5030
+[armory-inventory] retained item id=9879654D0B275492 def=5405
+[armory-inventory] retained item id=9928CB3A6CE76E73 def=16
+[armory-inventory] retained item id=9A15AE7E0C8A436C def=16
+[armory-inventory] retained item id=916BBFE2596513DA def=9
+[armory-inventory] replacement committed: desired=14 created=0 retained=14 removed=0 removeFailed=0
+[armory-inventory] staged 14 items (applies outside an active match)
+[armory-inventory] preparing replacement set: 14 items
+[armory-inventory] retained item id=95A9B496DD0863FF def=5404
+[armory-inventory] retained item id=9716366248F075D7 def=5034
+[armory-inventory] retained item id=9502E287D965BBF2 def=5034
+[armory-inventory] retained item id=99E1BAF01502BE2C def=61
+[armory-inventory] retained item id=985A3F279B62E8B7 def=515
+[armory-inventory] retained item id=93F6DB09F3D56591 def=5502
+[armory-inventory] retained item id=94D37271449A4D93 def=7
+[armory-inventory] retained item id=977AA887CD1B96DE def=4
+[armory-inventory] retained item id=9AF567D70D34A997 def=525
+[armory-inventory] retained item id=97AF86D31CBA8FDC def=5030
+[armory-inventory] retained item id=9879654D0B275492 def=5405
+[armory-inventory] retained item id=9928CB3A6CE76E73 def=16
+[armory-inventory] retained item id=9A15AE7E0C8A436C def=16
+[armory-inventory] retained item id=916BBFE2596513DA def=9
+[armory-inventory] replacement committed: desired=14 created=0 retained=14 removed=0 removeFailed=0
+
+=== SNAPSHOT ===
+[snap] fsnCount=5187 lastStage=0 stage5Count=434
+[snap] stage histogram:
+[snap]   stage  0: 641 frames
+[snap]   stage  1: 434 frames
+[snap]   stage  2: 434 frames
+[snap]   stage  3: 434 frames
+[snap]   stage  5: 434 frames
+[snap]   stage  6: 434 frames
+[snap]   stage  7: 434 frames
+[snap]   stage  8: 434 frames
+[snap]   stage 10: 434 frames
+[snap]   stage 11: 640 frames
+[snap]   stage 12: 434 frames
+[snap] dwLocalPlayerController @ 0x00007FF8A1912548 -> 0x0000042E3DE73000 
+[snap] dwLocalPlayerPawn       @ 0x00007FF8A1B091E0 -> 0x0000042DCE282E00 
+[snap] pawn: vtable=0x00007FF8A9E53740 inClient=0 health=1070
+[snap] ctrl: vtable=0x00007FF8A0FE1680 inClient=1 m_hPlayerPawn@0x92C = 0x017F800B (idx=11)
+[snap] entitySystem @ 0x00007FF8A1AEFBB8 = 0x0000042DB1469000 highestEntityIndex=13
+[snap] entity resolution: 12/16 of indices 1..16 valid
+[snap] ctrl->pawn handle resolve: 0x017F800B -> 0x0000042E3DCB2800
+[snap] ----------------------------------------
+N1SSAN_STATUS|1|2026-11-07T05:22:24Z|28388|armory-obsidian-3.0|READY|reason=runtime_worker_heartbeat
+[status-write] begin state=READY path=C:\Users\mirac\AppData\Local\n1ssan\status\cs2-28388.status
+[status-write] success state=READY error=0
+[armory-inventory] staged 14 items (applies outside an active match)
+[armory-inventory] preparing replacement set: 14 items
+[armory-inventory] retained item id=95A9B496DD0863FF def=5404
+[armory-inventory] retained item id=9716366248F075D7 def=5034
+[armory-inventory] retained item id=9502E287D965BBF2 def=5034
+[armory-inventory] retained item id=99E1BAF01502BE2C def=61
+[armory-inventory] retained item id=985A3F279B62E8B7 def=515
+[armory-inventory] retained item id=93F6DB09F3D56591 def=5502
+[armory-inventory] retained item id=94D37271449A4D93 def=7
+[armory-inventory] retained item id=977AA887CD1B96DE def=4
+[armory-inventory] retained item id=9AF567D70D34A997 def=525
+[armory-inventory] retained item id=97AF86D31CBA8FDC def=5030
+[armory-inventory] retained item id=9879654D0B275492 def=5405
+[armory-inventory] retained item id=9928CB3A6CE76E73 def=16
+[armory-inventory] retained item id=9A15AE7E0C8A436C def=16
+[armory-inventory] retained item id=916BBFE2596513DA def=9
+[armory-inventory] replacement committed: desired=14 created=0 retained=14 removed=0 removeFailed=0
+
+=== SNAPSHOT ===
+[snap] fsnCount=7993 lastStage=0 stage5Count=662
+[snap] stage histogram:
+[snap]   stage  0: 1018 frames
+[snap]   stage  1: 662 frames
+[snap]   stage  2: 662 frames
+[snap]   stage  3: 662 frames
+[snap]   stage  5: 662 frames
+[snap]   stage  6: 662 frames
+[snap]   stage  7: 662 frames
+[snap]   stage  8: 662 frames
+[snap]   stage 10: 662 frames
+[snap]   stage 11: 961 frames
+[snap]   stage 12: 718 frames
+[snap] dwLocalPlayerController @ 0x00007FF8A1912548 -> 0x0000042E3DE73000 
+[snap] dwLocalPlayerPawn       @ 0x00007FF8A1B091E0 -> 0x0000042DCE282E00 
+[snap] pawn: vtable=0x00007FF8A9E53740 inClient=0 health=1070
+[snap] ctrl: vtable=0x00007FF8A0FE1680 inClient=1 m_hPlayerPawn@0x92C = 0x017F800B (idx=11)
+[snap] entitySystem @ 0x00007FF8A1AEFBB8 = 0x0000042DB1469000 highestEntityIndex=13
+[snap] entity resolution: 12/16 of indices 1..16 valid
+[snap] ctrl->pawn handle resolve: 0x017F800B -> 0x0000042E3DCB2800
+[snap] ----------------------------------------
+[detect] pawn=0x0000042E3DCB2800 hp=100 signOn=6 bg=0
+
+=== SNAPSHOT ===
+[snap] fsnCount=12082 lastStage=0 stage5Count=961
+[snap] stage histogram:
+[snap]   stage  0: 1717 frames
+[snap]   stage  1: 961 frames
+[snap]   stage  2: 961 frames
+[snap]   stage  3: 961 frames
+[snap]   stage  5: 961 frames
+[snap]   stage  6: 961 frames
+[snap]   stage  7: 961 frames
+[snap]   stage  8: 961 frames
+[snap]   stage 10: 961 frames
+[snap]   stage 11: 1276 frames
+[snap]   stage 12: 1401 frames
+[snap] dwLocalPlayerController @ 0x00007FF8A1912548 -> 0x0000042E3DE73000 
+[snap] dwLocalPlayerPawn       @ 0x00007FF8A1B091E0 -> 0x0000042DCE282E00 
+[snap] pawn: vtable=0x00007FF8A9E53740 inClient=0 health=1070
+[snap] ctrl: vtable=0x00007FF8A0FE1680 inClient=1 m_hPlayerPawn@0x92C = 0x017F800B (idx=11)
+[snap] entitySystem @ 0x00007FF8A1AEFBB8 = 0x0000042DB1469000 highestEntityIndex=13
+[snap] entity resolution: 12/16 of indices 1..16 valid
+[snap] ctrl->pawn handle resolve: 0x017F800B -> 0x0000042E3DCB2800
+[snap] ----------------------------------------
+N1SSAN_STATUS|1|2026-11-07T05:22:34Z|28388|armory-obsidian-3.0|READY|reason=runtime_worker_heartbeat
+[status-write] begin state=READY path=C:\Users\mirac\AppData\Local\n1ssan\status\cs2-28388.status
+[status-write] success state=READY error=0
+
+=== SNAPSHOT ===
+[snap] fsnCount=16317 lastStage=0 stage5Count=1278
+[snap] stage histogram:
+[snap]   stage  0: 2408 frames
+[snap]   stage  1: 1278 frames
+[snap]   stage  2: 1278 frames
+[snap]   stage  3: 1278 frames
+[snap]   stage  5: 1278 frames
+[snap]   stage  6: 1278 frames
+[snap]   stage  7: 1278 frames
+[snap]   stage  8: 1278 frames
+[snap]   stage 10: 1278 frames
+[snap]   stage 11: 1596 frames
+[snap]   stage 12: 2089 frames
+[snap] dwLocalPlayerController @ 0x00007FF8A1912548 -> 0x0000042E3DE73000 
+[snap] dwLocalPlayerPawn       @ 0x00007FF8A1B091E0 -> 0x0000042DCE282E00 
+[snap] pawn: vtable=0x00007FF8A9E53740 inClient=0 health=1070
+[snap] ctrl: vtable=0x00007FF8A0FE1680 inClient=1 m_hPlayerPawn@0x92C = 0x017F800B (idx=11)
+[snap] entitySystem @ 0x00007FF8A1AEFBB8 = 0x0000042DB1469000 highestEntityIndex=13
+[snap] entity resolution: 12/16 of indices 1..16 valid
+[snap] ctrl->pawn handle resolve: 0x017F800B -> 0x0000042E3DCB2800
+[snap] ----------------------------------------
+[detect] pawn=0x0000042E3DCB2800 hp=100 signOn=6 bg=0
+
+=== SNAPSHOT ===
+[snap] fsnCount=20622 lastStage=0 stage5Count=1597
+[snap] stage histogram:
+[snap]   stage  0: 3125 frames
+[snap]   stage  1: 1597 frames
+[snap]   stage  2: 1597 frames
+[snap]   stage  3: 1597 frames
+[snap]   stage  5: 1597 frames
+[snap]   stage  6: 1597 frames
+[snap]   stage  7: 1597 frames
+[snap]   stage  8: 1597 frames
+[snap]   stage 10: 1597 frames
+[snap]   stage 11: 1916 frames
+[snap]   stage 12: 2805 frames
+[snap] dwLocalPlayerController @ 0x00007FF8A1912548 -> 0x0000042E3DE73000 
+[snap] dwLocalPlayerPawn       @ 0x00007FF8A1B091E0 -> 0x0000042DCE282E00 
+[snap] pawn: vtable=0x00007FF8A9E53740 inClient=0 health=1070
+[snap] ctrl: vtable=0x00007FF8A0FE1680 inClient=1 m_hPlayerPawn@0x92C = 0x017F800B (idx=11)
+[snap] entitySystem @ 0x00007FF8A1AEFBB8 = 0x0000042DB1469000 highestEntityIndex=13
+[snap] entity resolution: 12/16 of indices 1..16 valid
+[snap] ctrl->pawn handle resolve: 0x017F800B -> 0x0000042E3DCB2800
+[snap] ----------------------------------------
+N1SSAN_STATUS|1|2026-11-07T05:22:44Z|28388|armory-obsidian-3.0|READY|reason=runtime_worker_heartbeat
+[status-write] begin state=READY path=C:\Users\mirac\AppData\Local\n1ssan\status\cs2-28388.status
+[status-write] success state=READY error=0
+
+=== SNAPSHOT ===
+[snap] fsnCount=25061 lastStage=0 stage5Count=1914
+[snap] stage histogram:
+[snap]   stage  0: 3918 frames
+[snap]   stage  1: 1914 frames
+[snap]   stage  2: 1914 frames
+[snap]   stage  3: 1914 frames
+[snap]   stage  5: 1914 frames
+[snap]   stage  6: 1914 frames
+[snap]   stage  7: 1914 frames
+[snap]   stage  8: 1914 frames
+[snap]   stage 10: 1914 frames
+[snap]   stage 11: 2236 frames
+[snap]   stage 12: 3595 frames
+[snap] dwLocalPlayerController @ 0x00007FF8A1912548 -> 0x0000042E3DE73000 
+[snap] dwLocalPlayerPawn       @ 0x00007FF8A1B091E0 -> 0x0000042DCE282E00 
+[snap] pawn: vtable=0x00007FF8A9E53740 inClient=0 health=1070
+[snap] ctrl: vtable=0x00007FF8A0FE1680 inClient=1 m_hPlayerPawn@0x92C = 0x017F800B (idx=11)
+[snap] entitySystem @ 0x00007FF8A1AEFBB8 = 0x0000042DB1469000 highestEntityIndex=13
+[snap] entity resolution: 12/16 of indices 1..16 valid
+[snap] ctrl->pawn handle resolve: 0x017F800B -> 0x0000042E3DCB2800
+[snap] ----------------------------------------
+[detect] pawn=0x0000042E3DCB2800 hp=100 signOn=6 bg=0
+[glove-observe] pawn=0000042DCE282E00 reapply=114 changed=0 def=24948 init=115 idHigh=0x726F482C
+[glove-observe] pawn=0000042E3F0C8000 reapply=0 changed=0 def=0 init=0 idHigh=0x0
+
+=== SNAPSHOT ===
+[snap] fsnCount=28656 lastStage=12 stage5Count=2104
+[snap] stage histogram:
+[snap]   stage  0: 4709 frames
+[snap]   stage  1: 2192 frames
+[snap]   stage  2: 2192 frames
+[snap]   stage  3: 2188 frames
+[snap]   stage  4: 1 frames
+[snap]   stage  5: 2104 frames
+[snap]   stage  6: 2104 frames
+[snap]   stage  7: 2104 frames
+[snap]   stage  8: 2104 frames
+[snap]   stage 10: 2104 frames
+[snap]   stage 11: 2434 frames
+[snap]   stage 12: 4420 frames
+[snap] dwLocalPlayerController @ 0x00007FF8A1912548 -> 0x0000042E499C7400 
+[snap] dwLocalPlayerPawn       @ 0x00007FF8A1B091E0 -> 0x0000042DCE282E00 
+[snap] pawn: vtable=0x00007FF8A9E53740 inClient=0 health=1070
+[snap] ctrl: vtable=0x00007FF8A0FE1680 inClient=1 m_hPlayerPawn@0x92C = 0x006601A1 (idx=417)
+[snap] entitySystem @ 0x00007FF8A1AEFBB8 = 0x0000042DB1469000 highestEntityIndex=205
+[snap] entity resolution: 1/16 of indices 1..16 valid
+[snap] ctrl->pawn handle resolve: 0x006601A1 -> 0x0000042E3F0C8000
+[snap] ----------------------------------------
+N1SSAN_STATUS|1|2026-11-07T05:22:54Z|28388|armory-obsidian-3.0|READY|reason=runtime_worker_heartbeat
+[status-write] begin state=READY path=C:\Users\mirac\AppData\Local\n1ssan\status\cs2-28388.status
+[status-write] success state=READY error=0
+[apply-cache] weapon model cache invalidated
+[apply-cache] pawn changed: 0000042E3F0C8000
+[match] FOUND pawn=0x0000042E3F0C8000 hp=100 signOn=6 bg=0 connected=0
+[apply] tick pawn=0x0000042E3F0C8000
+[apply] wData=0x0000000000000002 count=1161292384
+[apply] activeHandle=0x007B80EC
+[apply] active 0x0000042E3FBE2000
+[pw] weapon=0x0000042E3FBE2000 view=0x0000042E3FBE32E0
+[pw]   view+0x00 = 0xA10E55F0
+[pw]   view+0x04 = 0x00007FF8
+[pw]   view+0x08 = 0x00000000
+[pw]   view+0x0C = 0x00000000
+[pw]   view+0x10 = 0xFFFFFFFE
+[pw]   view+0x14 = 0x00000000
+[pw]   view+0x18 = 0x00000000
+[pw]   view+0x1C = 0x00000000
+[pw]   view+0x20 = 0x00000000
+[pw]   view+0x24 = 0x00000000
+[pw]   view+0x28 = 0x00000000
+[pw]   view+0x2C = 0x00000000
+[pw]   view+0x30 = 0x00000000
+[pw]   view+0x34 = 0x00000000
+[pw]   view+0x38 = 0x00000000
+[pw]   view+0x3C = 0x00000000
+[pw] weapon+0x1290..0x12F0:
+[pw]   +0x1290 = 0x00007FF8A10E5790
+[pw]   +0x1298 = 0x0000000000000000
+[pw]   +0x12A0 = 0x0000000000000000
+[pw]   +0x12A8 = 0x0000000000000000
+[pw]   +0x12B0 = 0x007B80EC00000001
+[pw]   +0x12B8 = 0x0000000100000000
+[pw]   +0x12C0 = 0x0000000000000000
+[pw]   +0x12C8 = 0x0000000000000000
+[pw]   +0x12D0 = 0x0000000000000000
+[pw]   +0x12D8 = 0x0000000000000000
+[pw]   +0x12E0 = 0x00007FF8A10E55F0
+[pw]   +0x12E8 = 0x0000000000000000
+[pw] weapon 0x0000042E3FBE2000 def=32
+[team] pawn=0x0000042E3F0C8000, scanning +0x380..0x400:
+[team]   pawn+0x3BC (u8)  = 1
+[armory-apply] no unambiguous owned Armory item for entity def=32 id=0000000000000000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x0000042E3F0C8000
+[apply] active 0x0000042E3FBE2000
+[pw] weapon 0x0000042E3FBE2000 def=32
+[armory-apply] no unambiguous owned Armory item for entity def=32 id=0000000000000000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x0000042E3F0C8000
+[apply] active 0x0000042E3FBE2000
+[pw] weapon 0x0000042E3FBE2000 def=32
+[armory-apply] no unambiguous owned Armory item for entity def=32 id=0000000000000000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x0000042E3F0C8000
+[apply] active 0x0000042E3FBE2000
+[pw] weapon 0x0000042E3FBE2000 def=32
+[armory-apply] no unambiguous owned Armory item for entity def=32 id=0000000000000000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x0000042E3F0C8000
+[apply] active 0x0000042E3FBE2000
+[pw] weapon 0x0000042E3FBE2000 def=32
+[armory-apply] no unambiguous owned Armory item for entity def=32 id=0000000000000000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x0000042E3F0C8000
+[apply] active 0x0000042E3FBE2000
+[pw] weapon 0x0000042E3FBE2000 def=32
+[armory-apply] no unambiguous owned Armory item for entity def=32 id=0000000000000000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x0000042E3F0C8000
+[apply] active 0x0000042E3FBE2000
+[pw] weapon 0x0000042E3FBE2000 def=32
+[armory-apply] no unambiguous owned Armory item for entity def=32 id=0000000000000000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x0000042E3F0C8000
+[apply] active 0x0000042E3FBE2000
+[pw] weapon 0x0000042E3FBE2000 def=32
+[armory-apply] no unambiguous owned Armory item for entity def=32 id=0000000000000000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x0000042E3F0C8000
+[apply] active 0x0000042E3FBE0000
+[pw] weapon 0x0000042E3FBE0000 def=42
+[armory-apply] no unambiguous owned Armory item for entity def=42 id=0000000000000000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x0000042E3F0C8000
+[apply] active 0x0000042E3FBE0000
+[pw] weapon 0x0000042E3FBE0000 def=42
+[armory-apply] no unambiguous owned Armory item for entity def=42 id=0000000000000000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x0000042E3F0C8000
+[apply] active 0x0000042E3FBE0000
+[pw] weapon 0x0000042E3FBE0000 def=42
+[armory-apply] no unambiguous owned Armory item for entity def=42 id=0000000000000000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+
+=== SNAPSHOT ===
+[snap] fsnCount=34670 lastStage=12 stage5Count=2418
+[snap] stage histogram:
+[snap]   stage  0: 6303 frames
+[snap]   stage  1: 2506 frames
+[snap]   stage  2: 2506 frames
+[snap]   stage  3: 2502 frames
+[snap]   stage  4: 1 frames
+[snap]   stage  5: 2418 frames
+[snap]   stage  6: 2418 frames
+[snap]   stage  7: 2418 frames
+[snap]   stage  8: 2418 frames
+[snap]   stage 10: 2418 frames
+[snap]   stage 11: 2753 frames
+[snap]   stage 12: 6009 frames
+[snap] dwLocalPlayerController @ 0x00007FF8A1912548 -> 0x0000042E499C7400 
+[snap] dwLocalPlayerPawn       @ 0x00007FF8A1B091E0 -> 0x0000042DCE282E00 
+[snap] pawn: vtable=0x00007FF8A9E53740 inClient=0 health=1070
+[snap] ctrl: vtable=0x00007FF8A0FE1680 inClient=1 m_hPlayerPawn@0x92C = 0x006601A1 (idx=417)
+[snap] entitySystem @ 0x00007FF8A1AEFBB8 = 0x0000042DB1469000 highestEntityIndex=211
+[snap] entity resolution: 1/16 of indices 1..16 valid
+[snap] ctrl->pawn handle resolve: 0x006601A1 -> 0x0000042E3F0C8000
+[snap] ----------------------------------------
+[apply] tick pawn=0x0000042E3F0C8000
+[apply] active 0x0000042E3FBE0000
+[pw] weapon 0x0000042E3FBE0000 def=42
+[armory-apply] no unambiguous owned Armory item for entity def=42 id=0000000000000000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x0000042E3F0C8000
+[apply] active 0x0000042E3FBE0000
+[pw] weapon 0x0000042E3FBE0000 def=42
+[armory-apply] no unambiguous owned Armory item for entity def=42 id=0000000000000000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x0000042E3F0C8000
+[apply] active 0x0000042E3FBE2000
+[pw] weapon 0x0000042E3FBE2000 def=32
+[armory-apply] no unambiguous owned Armory item for entity def=32 id=0000000000000000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x0000042E3F0C8000
+[apply] active 0x0000042E3FBE2000
+[pw] weapon 0x0000042E3FBE2000 def=32
+[armory-apply] no unambiguous owned Armory item for entity def=32 id=0000000000000000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x0000042E3F0C8000
+[apply] active 0x0000042E3FBE2000
+[pw] weapon 0x0000042E3FBE2000 def=32
+[armory-apply] no unambiguous owned Armory item for entity def=32 id=0000000000000000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x0000042E3F0C8000
+[apply] active 0x0000042E3FBE2000
+[pw] weapon 0x0000042E3FBE2000 def=32
+[armory-apply] no unambiguous owned Armory item for entity def=32 id=0000000000000000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x0000042E3F0C8000
+[apply] active 0x0000042E3FBE0000
+[pw] weapon 0x0000042E3FBE0000 def=42
+[armory-apply] no unambiguous owned Armory item for entity def=42 id=0000000000000000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x0000042E3F0C8000
+[apply] active 0x0000042E3FBE0000
+[pw] weapon 0x0000042E3FBE0000 def=42
+[armory-apply] no unambiguous owned Armory item for entity def=42 id=0000000000000000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x0000042E3F0C8000
+[apply] active 0x0000042E3FBE0000
+[pw] weapon 0x0000042E3FBE0000 def=42
+[armory-apply] no unambiguous owned Armory item for entity def=42 id=0000000000000000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x0000042E3F0C8000
+[apply] active 0x0000042E3FBE0000
+[pw] weapon 0x0000042E3FBE0000 def=42
+[armory-apply] no unambiguous owned Armory item for entity def=42 id=0000000000000000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x0000042E3F0C8000
+[apply] active 0x0000042E3AC9E000
+[pw] weapon 0x0000042E3AC9E000 def=32
+[armory-apply] no unambiguous owned Armory item for entity def=32 id=0000000000000000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x0000042E3F0C8000
+[apply] active 0x0000042E3AC9E000
+[pw] weapon 0x0000042E3AC9E000 def=32
+[armory-apply] no unambiguous owned Armory item for entity def=32 id=0000000000000000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x0000042E3F0C8000
+[apply] active 0x0000042E3AC9E000
+[pw] weapon 0x0000042E3AC9E000 def=32
+[armory-apply] no unambiguous owned Armory item for entity def=32 id=0000000000000000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x0000042E3F0C8000
+[apply] active 0x0000042E3AC9E000
+[pw] weapon 0x0000042E3AC9E000 def=32
+[armory-apply] no unambiguous owned Armory item for entity def=32 id=0000000000000000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x0000042E3F0C8000
+[apply] active 0x0000042E3AC9E000
+[pw] weapon 0x0000042E3AC9E000 def=32
+[armory-apply] no unambiguous owned Armory item for entity def=32 id=0000000000000000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x0000042E3F0C8000
+[apply] active 0x0000042E3AC9E000
+[pw] weapon 0x0000042E3AC9E000 def=32
+[armory-apply] no unambiguous owned Armory item for entity def=32 id=0000000000000000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x0000042E3F0C8000
+[apply] active 0x0000042E3AC9E000
+[pw] weapon 0x0000042E3AC9E000 def=32
+[armory-apply] no unambiguous owned Armory item for entity def=32 id=0000000000000000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x0000042E3F0C8000
+[apply] active 0x0000042E3FBE0000
+[pw] weapon 0x0000042E3FBE0000 def=42
+[armory-apply] no unambiguous owned Armory item for entity def=42 id=0000000000000000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x0000042E3F0C8000
+[apply] active 0x0000042E3FBE0000
+[pw] weapon 0x0000042E3FBE0000 def=42
+[armory-apply] no unambiguous owned Armory item for entity def=42 id=0000000000000000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+
+=== SNAPSHOT ===
+[snap] fsnCount=40548 lastStage=7 stage5Count=2737
+[snap] stage histogram:
+[snap]   stage  0: 7808 frames
+[snap]   stage  1: 2825 frames
+[snap]   stage  2: 2825 frames
+[snap]   stage  3: 2820 frames
+[snap]   stage  4: 1 frames
+[snap]   stage  5: 2737 frames
+[snap]   stage  6: 2737 frames
+[snap]   stage  7: 2737 frames
+[snap]   stage  8: 2736 frames
+[snap]   stage 10: 2737 frames
+[snap]   stage 11: 3073 frames
+[snap]   stage 12: 7512 frames
+[snap] dwLocalPlayerController @ 0x00007FF8A1912548 -> 0x0000042E499C7400 
+[snap] dwLocalPlayerPawn       @ 0x00007FF8A1B091E0 -> 0x0000042DCE282E00 
+[snap] pawn: vtable=0x00007FF8A9E53740 inClient=0 health=1070
+[snap] ctrl: vtable=0x00007FF8A0FE1680 inClient=1 m_hPlayerPawn@0x92C = 0x006601A1 (idx=417)
+[snap] entitySystem @ 0x00007FF8A1AEFBB8 = 0x0000042DB1469000 highestEntityIndex=212
+[snap] entity resolution: 1/16 of indices 1..16 valid
+[snap] ctrl->pawn handle resolve: 0x006601A1 -> 0x0000042E3F0C8000
+[snap] ----------------------------------------
+N1SSAN_STATUS|1|2026-11-07T05:23:04Z|28388|armory-obsidian-3.0|READY|reason=runtime_worker_heartbeat
+[status-write] begin state=READY path=C:\Users\mirac\AppData\Local\n1ssan\status\cs2-28388.status
+[status-write] success state=READY error=0
+[apply] tick pawn=0x0000042E3F0C8000
+[apply] active 0x0000042E3FBE0000
+[pw] weapon 0x0000042E3FBE0000 def=42
+[armory-apply] no unambiguous owned Armory item for entity def=42 id=0000000000000000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x0000042E3F0C8000
+[apply] active 0x0000042E3FBE0000
+[pw] weapon 0x0000042E3FBE0000 def=42
+[armory-apply] no unambiguous owned Armory item for entity def=42 id=0000000000000000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x0000042E3F0C8000
+[apply] active 0x0000042E3FBE0000
+[pw] weapon 0x0000042E3FBE0000 def=42
+[armory-apply] no unambiguous owned Armory item for entity def=42 id=0000000000000000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x0000042E3F0C8000
+[apply] active 0x0000042E3FBE0000
+[pw] weapon 0x0000042E3FBE0000 def=42
+[armory-apply] no unambiguous owned Armory item for entity def=42 id=0000000000000000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x0000042E3F0C8000
+[apply] active 0x0000042E3FBE0000
+[pw] weapon 0x0000042E3FBE0000 def=42
+[armory-apply] no unambiguous owned Armory item for entity def=42 id=0000000000000000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x0000042E3F0C8000
+[apply] active 0x0000042E87684000
+[pw] weapon 0x0000042E87684000 def=32
+[armory-apply] no unambiguous owned Armory item for entity def=32 id=0000000000000000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x0000042E3F0C8000
+[apply] active 0x0000042E87684000
+[pw] weapon 0x0000042E87684000 def=32
+[armory-apply] no unambiguous owned Armory item for entity def=32 id=0000000000000000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x0000042E3F0C8000
+[apply] active 0x0000042E87684000
+[pw] weapon 0x0000042E87684000 def=32
+[armory-apply] no unambiguous owned Armory item for entity def=32 id=0000000000000000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x0000042E3F0C8000
+[apply] active 0x0000042E87684000
+[pw] weapon 0x0000042E87684000 def=32
+[armory-apply] no unambiguous owned Armory item for entity def=32 id=0000000000000000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x0000042E3F0C8000
+[apply] active 0x0000042E3FBE0000
+[pw] weapon 0x0000042E3FBE0000 def=42
+[armory-apply] no unambiguous owned Armory item for entity def=42 id=0000000000000000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x0000042E3F0C8000
+[apply] active 0x0000042E3FBE0000
+[pw] weapon 0x0000042E3FBE0000 def=42
+[armory-apply] no unambiguous owned Armory item for entity def=42 id=0000000000000000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x0000042E3F0C8000
+[apply] active 0x0000042E87684000
+[pw] weapon 0x0000042E87684000 def=32
+[armory-apply] no unambiguous owned Armory item for entity def=32 id=0000000000000000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x0000042E3F0C8000
+[apply] active 0x0000042E87684000
+[pw] weapon 0x0000042E87684000 def=32
+[armory-apply] no unambiguous owned Armory item for entity def=32 id=0000000000000000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x0000042E3F0C8000
+[apply] active 0x0000042E87684000
+[pw] weapon 0x0000042E87684000 def=32
+[armory-apply] no unambiguous owned Armory item for entity def=32 id=0000000000000000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x0000042E3F0C8000
+[apply] active 0x0000042E87684000
+[pw] weapon 0x0000042E87684000 def=32
+[armory-apply] no unambiguous owned Armory item for entity def=32 id=0000000000000000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x0000042E3F0C8000
+[apply] active 0x0000042E87684000
+[pw] weapon 0x0000042E87684000 def=32
+[armory-apply] no unambiguous owned Armory item for entity def=32 id=0000000000000000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x0000042E3F0C8000
+[apply] active 0x0000042E87684000
+[pw] weapon 0x0000042E87684000 def=32
+[armory-apply] no unambiguous owned Armory item for entity def=32 id=0000000000000000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x0000042E3F0C8000
+[apply] active 0x0000042E87684000
+[pw] weapon 0x0000042E87684000 def=32
+[armory-apply] no unambiguous owned Armory item for entity def=32 id=0000000000000000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x0000042E3F0C8000
+[apply] active 0x0000042E87684000
+[pw] weapon 0x0000042E87684000 def=32
+[armory-apply] no unambiguous owned Armory item for entity def=32 id=0000000000000000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x0000042E3F0C8000
+[apply] active 0x0000042E87684000
+[pw] weapon 0x0000042E87684000 def=32
+[armory-apply] no unambiguous owned Armory item for entity def=32 id=0000000000000000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+
+=== SNAPSHOT ===
+[snap] fsnCount=46551 lastStage=12 stage5Count=3057
+[snap] stage histogram:
+[snap]   stage  0: 9368 frames
+[snap]   stage  1: 3145 frames
+[snap]   stage  2: 3145 frames
+[snap]   stage  3: 3141 frames
+[snap]   stage  4: 1 frames
+[snap]   stage  5: 3057 frames
+[snap]   stage  6: 3057 frames
+[snap]   stage  7: 3057 frames
+[snap]   stage  8: 3057 frames
+[snap]   stage 10: 3057 frames
+[snap]   stage 11: 3393 frames
+[snap]   stage 12: 9073 frames
+[snap] dwLocalPlayerController @ 0x00007FF8A1912548 -> 0x0000042E499C7400 
+[snap] dwLocalPlayerPawn       @ 0x00007FF8A1B091E0 -> 0x0000042DCE282E00 
+[snap] pawn: vtable=0x00007FF8A9E53740 inClient=0 health=1070
+[snap] ctrl: vtable=0x00007FF8A0FE1680 inClient=1 m_hPlayerPawn@0x92C = 0x006601A1 (idx=417)
+[snap] entitySystem @ 0x00007FF8A1AEFBB8 = 0x0000042DB1469000 highestEntityIndex=213
+[snap] entity resolution: 1/16 of indices 1..16 valid
+[snap] ctrl->pawn handle resolve: 0x006601A1 -> 0x0000042E3F0C8000
+[snap] ----------------------------------------
+[apply] tick pawn=0x0000042E3F0C8000
+[apply] active 0x0000042E87684000
+[pw] weapon 0x0000042E87684000 def=32
+[armory-apply] no unambiguous owned Armory item for entity def=32 id=0000000000000000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x0000042E3F0C8000
+[apply] active 0x0000042E87684000
+[pw] weapon 0x0000042E87684000 def=32
+[armory-apply] no unambiguous owned Armory item for entity def=32 id=0000000000000000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x0000042E3F0C8000
+[apply] active 0x0000042E87684000
+[pw] weapon 0x0000042E87684000 def=32
+[armory-apply] no unambiguous owned Armory item for entity def=32 id=0000000000000000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x0000042E3F0C8000
+[apply] active 0x0000042E87684000
+[pw] weapon 0x0000042E87684000 def=32
+[armory-apply] no unambiguous owned Armory item for entity def=32 id=0000000000000000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x0000042E3F0C8000
+[apply] active 0x0000042E87684000
+[pw] weapon 0x0000042E87684000 def=32
+[armory-apply] no unambiguous owned Armory item for entity def=32 id=0000000000000000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x0000042E3F0C8000
+[apply] active 0x0000042E87684000
+[pw] weapon 0x0000042E87684000 def=32
+[armory-apply] no unambiguous owned Armory item for entity def=32 id=0000000000000000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x0000042E3F0C8000
+[apply] active 0x0000042E87684000
+[pw] weapon 0x0000042E87684000 def=32
+[armory-apply] no unambiguous owned Armory item for entity def=32 id=0000000000000000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x0000042E3F0C8000
+[apply] active 0x0000042E87684000
+[pw] weapon 0x0000042E87684000 def=32
+[armory-apply] no unambiguous owned Armory item for entity def=32 id=0000000000000000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x0000042E3F0C8000
+[apply] active 0x0000042E87684000
+[pw] weapon 0x0000042E87684000 def=32
+[armory-apply] no unambiguous owned Armory item for entity def=32 id=0000000000000000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x0000042E3F0C8000
+[apply] active 0x0000042E87684000
+[pw] weapon 0x0000042E87684000 def=32
+[armory-apply] no unambiguous owned Armory item for entity def=32 id=0000000000000000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x0000042E3F0C8000
+[apply] active 0x0000042E87684000
+[pw] weapon 0x0000042E87684000 def=32
+[armory-apply] no unambiguous owned Armory item for entity def=32 id=0000000000000000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x0000042E3F0C8000
+[apply] active 0x0000042E87684000
+[pw] weapon 0x0000042E87684000 def=32
+[armory-apply] no unambiguous owned Armory item for entity def=32 id=0000000000000000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x0000042E3F0C8000
+[apply] active 0x0000042E87684000
+[pw] weapon 0x0000042E87684000 def=32
+[armory-apply] no unambiguous owned Armory item for entity def=32 id=0000000000000000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x0000042E3F0C8000
+[apply] active 0x0000042E87684000
+[pw] weapon 0x0000042E87684000 def=32
+[armory-apply] no unambiguous owned Armory item for entity def=32 id=0000000000000000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x0000042E3F0C8000
+[apply] active 0x0000042E87684000
+[pw] weapon 0x0000042E87684000 def=32
+[armory-apply] no unambiguous owned Armory item for entity def=32 id=0000000000000000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x0000042E3F0C8000
+[apply] active 0x0000042E87684000
+[pw] weapon 0x0000042E87684000 def=32
+[armory-apply] no unambiguous owned Armory item for entity def=32 id=0000000000000000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+
+=== SNAPSHOT ===
+[snap] fsnCount=51707 lastStage=1 stage5Count=3325
+[snap] stage histogram:
+[snap]   stage  0: 10566 frames
+[snap]   stage  1: 3516 frames
+[snap]   stage  2: 3515 frames
+[snap]   stage  3: 3507 frames
+[snap]   stage  4: 1 frames
+[snap]   stage  5: 3325 frames
+[snap]   stage  6: 3325 frames
+[snap]   stage  7: 3325 frames
+[snap]   stage  8: 3325 frames
+[snap]   stage 10: 3325 frames
+[snap]   stage 11: 3663 frames
+[snap]   stage 12: 10314 frames
+[snap] dwLocalPlayerController @ 0x00007FF8A1912548 -> 0x0000000000000000 
+[snap] dwLocalPlayerPawn       @ 0x00007FF8A1B091E0 -> 0x0000042DCE282E00 
+[snap] pawn: vtable=0x00007FF8A9E53740 inClient=0 health=1070
+[snap] ctrl: null or below 0x10000 - not connected
+[snap] entitySystem @ 0x00007FF8A1AEFBB8 = 0x0000042DB1469000 highestEntityIndex=0
+[snap] entity resolution: 0/16 of indices 1..16 valid
+[snap] ----------------------------------------
+N1SSAN_STATUS|1|2026-11-07T05:23:14Z|28388|armory-obsidian-3.0|READY|reason=runtime_worker_heartbeat
+[status-write] begin state=READY path=C:\Users\mirac\AppData\Local\n1ssan\status\cs2-28388.status
+[status-write] success state=READY error=0
+[glove-observe] pawn=0000042DCE282E00 reapply=114 changed=0 def=24948 init=115 idHigh=0x726F482C
+[apply-cache] weapon model cache invalidated
+[apply-cache] left active match pawn
+[glove-observe] pawn=0000042E45D13800 reapply=0 changed=0 def=0 init=0 idHigh=0x0
+[match] LOST pawn=0x0000042E45D13800 hp=100
+[detect] pawn=0x0000042E45D13800 hp=100 signOn=6 bg=0
+
+=== SNAPSHOT ===
+[snap] fsnCount=56265 lastStage=0 stage5Count=3601
+[snap] stage histogram:
+[snap]   stage  0: 11353 frames
+[snap]   stage  1: 3933 frames
+[snap]   stage  2: 3933 frames
+[snap]   stage  3: 3925 frames
+[snap]   stage  4: 2 frames
+[snap]   stage  5: 3601 frames
+[snap]   stage  6: 3601 frames
+[snap]   stage  7: 3601 frames
+[snap]   stage  8: 3601 frames
+[snap]   stage 10: 3601 frames
+[snap]   stage 11: 3949 frames
+[snap]   stage 12: 11165 frames
+[snap] dwLocalPlayerController @ 0x00007FF8A1912548 -> 0x0000042E19B6D000 
+[snap] dwLocalPlayerPawn       @ 0x00007FF8A1B091E0 -> 0x0000042DCE282E00 
+[snap] pawn: vtable=0x00007FF8A9E53740 inClient=0 health=1070
+[snap] ctrl: vtable=0x00007FF8A0FE1680 inClient=1 m_hPlayerPawn@0x92C = 0x01B000F9 (idx=249)
+[snap] entitySystem @ 0x00007FF8A1AEFBB8 = 0x0000042DB1469000 highestEntityIndex=13
+[snap] entity resolution: 1/16 of indices 1..16 valid
+[snap] ctrl->pawn handle resolve: 0x01B000F9 -> 0x0000042E45D13800
+[snap] ----------------------------------------
+
+=== SNAPSHOT ===
+[snap] fsnCount=61346 lastStage=0 stage5Count=3922
+[snap] stage histogram:
+[snap]   stage  0: 12449 frames
+[snap]   stage  1: 4254 frames
+[snap]   stage  2: 4254 frames
+[snap]   stage  3: 4246 frames
+[snap]   stage  4: 2 frames
+[snap]   stage  5: 3922 frames
+[snap]   stage  6: 3922 frames
+[snap]   stage  7: 3922 frames
+[snap]   stage  8: 3922 frames
+[snap]   stage 10: 3922 frames
+[snap]   stage 11: 4270 frames
+[snap]   stage 12: 12261 frames
+[snap] dwLocalPlayerController @ 0x00007FF8A1912548 -> 0x0000042E19B6D000 
+[snap] dwLocalPlayerPawn       @ 0x00007FF8A1B091E0 -> 0x0000042DCE282E00 
+[snap] pawn: vtable=0x00007FF8A9E53740 inClient=0 health=1070
+[snap] ctrl: vtable=0x00007FF8A0FE1680 inClient=1 m_hPlayerPawn@0x92C = 0x01B000F9 (idx=249)
+[snap] entitySystem @ 0x00007FF8A1AEFBB8 = 0x0000042DB1469000 highestEntityIndex=13
+[snap] entity resolution: 1/16 of indices 1..16 valid
+[snap] ctrl->pawn handle resolve: 0x01B000F9 -> 0x0000042E45D13800
+[snap] ----------------------------------------
+N1SSAN_STATUS|1|2026-11-07T05:23:24Z|28388|armory-obsidian-3.0|READY|reason=runtime_worker_heartbeat
+[status-write] begin state=READY path=C:\Users\mirac\AppData\Local\n1ssan\status\cs2-28388.status
+[status-write] success state=READY error=0
+[glove-observe] pawn=0000042DCE282E00 reapply=114 changed=0 def=24948 init=115 idHigh=0x726F482C
+[detect] pawn=0x0000042DCE282E00 hp=1070 signOn=5 bg=0
+[glove-observe] pawn=0000042E3FD86000 reapply=0 changed=0 def=0 init=0 idHigh=0x0
+
+=== SNAPSHOT ===
+[snap] fsnCount=65438 lastStage=0 stage5Count=4135
+[snap] stage histogram:
+[snap]   stage  0: 13410 frames
+[snap]   stage  1: 4541 frames
+[snap]   stage  2: 4541 frames
+[snap]   stage  3: 4529 frames
+[snap]   stage  4: 3 frames
+[snap]   stage  5: 4135 frames
+[snap]   stage  6: 4135 frames
+[snap]   stage  7: 4135 frames
+[snap]   stage  8: 4135 frames
+[snap]   stage 10: 4135 frames
+[snap]   stage 11: 4488 frames
+[snap]   stage 12: 13251 frames
+[snap] dwLocalPlayerController @ 0x00007FF8A1912548 -> 0x0000042E3DF40000 
+[snap] dwLocalPlayerPawn       @ 0x00007FF8A1B091E0 -> 0x0000042DCE282E00 
+[snap] pawn: vtable=0x00007FF8A9E53740 inClient=0 health=1070
+[snap] ctrl: vtable=0x00007FF8A0FE1680 inClient=1 m_hPlayerPawn@0x92C = 0x00F1012B (idx=299)
+[snap] entitySystem @ 0x00007FF8A1AEFBB8 = 0x0000042DB1469000 highestEntityIndex=205
+[snap] entity resolution: 1/16 of indices 1..16 valid
+[snap] ctrl->pawn handle resolve: 0x00F1012B -> 0x0000042E3FD86000
+[snap] ----------------------------------------
+[apply-cache] weapon model cache invalidated
+[apply-cache] pawn changed: 0000042E3FD86000
+[match] FOUND pawn=0x0000042E3FD86000 hp=100 signOn=6 bg=0 connected=0
+[apply] tick pawn=0x0000042E3FD86000
+[apply] active 0x0000042E17DC0000
+[pw] weapon 0x0000042E17DC0000 def=32
+[armory-apply] no unambiguous owned Armory item for entity def=32 id=0000000000000000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x0000042E3FD86000
+[apply] active 0x0000042E17DC0000
+[pw] weapon 0x0000042E17DC0000 def=32
+[armory-apply] no unambiguous owned Armory item for entity def=32 id=0000000000000000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x0000042E3FD86000
+[apply] active 0x0000042E17DC0000
+[pw] weapon 0x0000042E17DC0000 def=32
+[armory-apply] no unambiguous owned Armory item for entity def=32 id=0000000000000000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x0000042E3FD86000
+[apply] active 0x0000042E17DC0000
+[pw] weapon 0x0000042E17DC0000 def=32
+[armory-apply] no unambiguous owned Armory item for entity def=32 id=0000000000000000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x0000042E3FD86000
+[apply] active 0x0000042E17DC0000
+[pw] weapon 0x0000042E17DC0000 def=32
+[armory-apply] no unambiguous owned Armory item for entity def=32 id=0000000000000000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x0000042E3FD86000
+[apply] active 0x0000042E17DC0000
+[pw] weapon 0x0000042E17DC0000 def=32
+[armory-apply] no unambiguous owned Armory item for entity def=32 id=0000000000000000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x0000042E3FD86000
+[apply] active 0x0000042E17DC0000
+[pw] weapon 0x0000042E17DC0000 def=32
+[armory-apply] no unambiguous owned Armory item for entity def=32 id=0000000000000000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x0000042E3FD86000
+[apply] active 0x0000042E8689E000
+[pw] weapon 0x0000042E8689E000 def=42
+[armory-apply] no unambiguous owned Armory item for entity def=42 id=0000000000000000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x0000042E3FD86000
+[apply] active 0x0000042E8689E000
+[pw] weapon 0x0000042E8689E000 def=42
+[armory-apply] no unambiguous owned Armory item for entity def=42 id=0000000000000000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x0000042E3FD86000
+[apply] active 0x0000042E8689E000
+[pw] weapon 0x0000042E8689E000 def=42
+[armory-apply] no unambiguous owned Armory item for entity def=42 id=0000000000000000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x0000042E3FD86000
+[apply] active 0x0000042E8689E000
+[pw] weapon 0x0000042E8689E000 def=42
+[armory-apply] no unambiguous owned Armory item for entity def=42 id=0000000000000000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x0000042E3FD86000
+[apply] active 0x0000042E8689E000
+[pw] weapon 0x0000042E8689E000 def=42
+[armory-apply] no unambiguous owned Armory item for entity def=42 id=0000000000000000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x0000042E3FD86000
+[apply] active 0x0000042E8689E000
+[pw] weapon 0x0000042E8689E000 def=42
+[armory-apply] no unambiguous owned Armory item for entity def=42 id=0000000000000000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x0000042E3FD86000
+[apply] active 0x0000042E8689E000
+[pw] weapon 0x0000042E8689E000 def=42
+[armory-apply] no unambiguous owned Armory item for entity def=42 id=0000000000000000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x0000042E3FD86000
+[apply] active 0x0000042E8689E000
+[pw] weapon 0x0000042E8689E000 def=42
+[armory-apply] no unambiguous owned Armory item for entity def=42 id=0000000000000000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x0000042E3FD86000
+[apply] active 0x0000042E8689E000
+[pw] weapon 0x0000042E8689E000 def=42
+[armory-apply] no unambiguous owned Armory item for entity def=42 id=0000000000000000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x0000042E3FD86000
+[apply] active 0x0000042E8689E000
+[pw] weapon 0x0000042E8689E000 def=42
+[armory-apply] no unambiguous owned Armory item for entity def=42 id=0000000000000000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x0000042E3FD86000
+[apply] active 0x0000042E8689E000
+[pw] weapon 0x0000042E8689E000 def=42
+[armory-apply] no unambiguous owned Armory item for entity def=42 id=0000000000000000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x0000042E3FD86000
+[apply] active 0x0000042E8689E000
+[pw] weapon 0x0000042E8689E000 def=42
+[armory-apply] no unambiguous owned Armory item for entity def=42 id=0000000000000000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x0000042E3FD86000
+[apply] active 0x0000042E8689E000
+[pw] weapon 0x0000042E8689E000 def=42
+[armory-apply] no unambiguous owned Armory item for entity def=42 id=0000000000000000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+
+=== SNAPSHOT ===
+[snap] fsnCount=70755 lastStage=0 stage5Count=4451
+[snap] stage histogram:
+[snap]   stage  0: 14649 frames
+[snap]   stage  1: 4856 frames
+[snap]   stage  2: 4856 frames
+[snap]   stage  3: 4844 frames
+[snap]   stage  4: 3 frames
+[snap]   stage  5: 4451 frames
+[snap]   stage  6: 4451 frames
+[snap]   stage  7: 4451 frames
+[snap]   stage  8: 4451 frames
+[snap]   stage 10: 4450 frames
+[snap]   stage 11: 4808 frames
+[snap]   stage 12: 14485 frames
+[snap] dwLocalPlayerController @ 0x00007FF8A1912548 -> 0x0000042E3DF40000 
+[snap] dwLocalPlayerPawn       @ 0x00007FF8A1B091E0 -> 0x0000042DCE282E00 
+[snap] pawn: vtable=0x00007FF8A9E53740 inClient=0 health=1070
+[snap] ctrl: vtable=0x00007FF8A0FE1680 inClient=1 m_hPlayerPawn@0x92C = 0x00F1012B (idx=299)
+[snap] entitySystem @ 0x00007FF8A1AEFBB8 = 0x0000042DB1469000 highestEntityIndex=211
+[snap] entity resolution: 1/16 of indices 1..16 valid
+[snap] ctrl->pawn handle resolve: 0x00F1012B -> 0x0000042E3FD86000
+[snap] ----------------------------------------
+N1SSAN_STATUS|1|2026-11-07T05:23:34Z|28388|armory-obsidian-3.0|READY|reason=runtime_worker_heartbeat
+[status-write] begin state=READY path=C:\Users\mirac\AppData\Local\n1ssan\status\cs2-28388.status
+[status-write] success state=READY error=0
+[apply] tick pawn=0x0000042E3FD86000
+[apply] active 0x0000042E8689E000
+[pw] weapon 0x0000042E8689E000 def=42
+[armory-apply] no unambiguous owned Armory item for entity def=42 id=0000000000000000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x0000042E3FD86000
+[apply] active 0x0000042E8689E000
+[pw] weapon 0x0000042E8689E000 def=42
+[armory-apply] no unambiguous owned Armory item for entity def=42 id=0000000000000000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x0000042E3FD86000
+[apply] active 0x0000042E8689E000
+[pw] weapon 0x0000042E8689E000 def=42
+[armory-apply] no unambiguous owned Armory item for entity def=42 id=0000000000000000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x0000042E3FD86000
+[apply] active 0x0000042E17DCE000
+[pw] weapon 0x0000042E17DCE000 def=2
+[armory-apply] no unambiguous owned Armory item for entity def=2 id=0000000000000000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x0000042E3FD86000
+[apply] active 0x0000042E17DCE000
+[pw] weapon 0x0000042E17DCE000 def=2
+[armory-apply] no unambiguous owned Armory item for entity def=2 id=0000000000000000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x0000042E3FD86000
+[apply] active 0x0000042E17DCE000
+[pw] weapon 0x0000042E17DCE000 def=2
+[armory-apply] no unambiguous owned Armory item for entity def=2 id=0000000000000000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x0000042E3FD86000
+[apply] active 0x0000042E17DCE000
+[pw] weapon 0x0000042E17DCE000 def=2
+[armory-apply] no unambiguous owned Armory item for entity def=2 id=0000000000000000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x0000042E3FD86000
+[apply] active 0x0000042E17DCE000
+[pw] weapon 0x0000042E17DCE000 def=2
+[armory-apply] no unambiguous owned Armory item for entity def=2 id=0000000000000000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x0000042E3FD86000
+[apply] active 0x0000042E8689E000
+[pw] weapon 0x0000042E8689E000 def=42
+[armory-apply] no unambiguous owned Armory item for entity def=42 id=0000000000000000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x0000042E3FD86000
+[apply] active 0x0000042E17DCE000
+[pw] weapon 0x0000042E17DCE000 def=2
+[armory-apply] no unambiguous owned Armory item for entity def=2 id=0000000000000000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x0000042E3FD86000
+[apply] active 0x0000042E17DCE000
+[pw] weapon 0x0000042E17DCE000 def=2
+[armory-apply] no unambiguous owned Armory item for entity def=2 id=0000000000000000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x0000042E3FD86000
+[apply] active 0x0000042E17DCE000
+[pw] weapon 0x0000042E17DCE000 def=2
+[armory-apply] no unambiguous owned Armory item for entity def=2 id=0000000000000000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x0000042E3FD86000
+[apply] active 0x0000042E17DCE000
+[pw] weapon 0x0000042E17DCE000 def=2
+[armory-apply] no unambiguous owned Armory item for entity def=2 id=0000000000000000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x0000042E3FD86000
+[apply] active 0x0000042E17DCE000
+[pw] weapon 0x0000042E17DCE000 def=2
+[armory-apply] no unambiguous owned Armory item for entity def=2 id=0000000000000000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x0000042E3FD86000
+[apply] active 0x0000042E17DCE000
+[pw] weapon 0x0000042E17DCE000 def=2
+[armory-apply] no unambiguous owned Armory item for entity def=2 id=0000000000000000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x0000042E3FD86000
+[apply] active 0x0000042E17DCE000
+[pw] weapon 0x0000042E17DCE000 def=2
+[armory-apply] no unambiguous owned Armory item for entity def=2 id=0000000000000000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x0000042E3FD86000
+[apply] active 0x0000042E17DCE000
+[pw] weapon 0x0000042E17DCE000 def=2
+[armory-apply] no unambiguous owned Armory item for entity def=2 id=0000000000000000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x0000042E3FD86000
+[apply] active 0x0000042E17DCE000
+[pw] weapon 0x0000042E17DCE000 def=2
+[armory-apply] no unambiguous owned Armory item for entity def=2 id=0000000000000000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x0000042E3FD86000
+[apply] active 0x0000042E17DCE000
+[pw] weapon 0x0000042E17DCE000 def=2
+[armory-apply] no unambiguous owned Armory item for entity def=2 id=0000000000000000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+
+=== SNAPSHOT ===
+[snap] fsnCount=76290 lastStage=0 stage5Count=4770
+[snap] stage histogram:
+[snap]   stage  0: 15981 frames
+[snap]   stage  1: 5175 frames
+[snap]   stage  2: 5175 frames
+[snap]   stage  3: 5163 frames
+[snap]   stage  4: 3 frames
+[snap]   stage  5: 4770 frames
+[snap]   stage  6: 4770 frames
+[snap]   stage  7: 4770 frames
+[snap]   stage  8: 4770 frames
+[snap]   stage 10: 4769 frames
+[snap]   stage 11: 5128 frames
+[snap]   stage 12: 15816 frames
+[snap] dwLocalPlayerController @ 0x00007FF8A1912548 -> 0x0000042E3DF40000 
+[snap] dwLocalPlayerPawn       @ 0x00007FF8A1B091E0 -> 0x0000042DCE282E00 
+[snap] pawn: vtable=0x00007FF8A9E53740 inClient=0 health=1070
+[snap] ctrl: vtable=0x00007FF8A0FE1680 inClient=1 m_hPlayerPawn@0x92C = 0x00F1012B (idx=299)
+[snap] entitySystem @ 0x00007FF8A1AEFBB8 = 0x0000042DB1469000 highestEntityIndex=212
+[snap] entity resolution: 1/16 of indices 1..16 valid
+[snap] ctrl->pawn handle resolve: 0x00F1012B -> 0x0000042E3FD86000
+[snap] ----------------------------------------
+[apply] tick pawn=0x0000042E3FD86000
+[apply] active 0x0000042E17DCE000
+[pw] weapon 0x0000042E17DCE000 def=2
+[armory-apply] no unambiguous owned Armory item for entity def=2 id=0000000000000000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x0000042E3FD86000
+[apply] active 0x0000042E17DCE000
+[pw] weapon 0x0000042E17DCE000 def=2
+[armory-apply] no unambiguous owned Armory item for entity def=2 id=0000000000000000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x0000042E3FD86000
+[apply] active 0x0000042E17DCE000
+[pw] weapon 0x0000042E17DCE000 def=2
+[armory-apply] no unambiguous owned Armory item for entity def=2 id=0000000000000000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x0000042E3FD86000
+[apply] active 0x0000042E8689E000
+[pw] weapon 0x0000042E8689E000 def=42
+[armory-apply] no unambiguous owned Armory item for entity def=42 id=0000000000000000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x0000042E3FD86000
+[apply] active 0x0000042E17DCE000
+[pw] weapon 0x0000042E17DCE000 def=2
+[armory-apply] no unambiguous owned Armory item for entity def=2 id=0000000000000000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x0000042E3FD86000
+[apply] active 0x0000042E17DCE000
+[pw] weapon 0x0000042E17DCE000 def=2
+[armory-apply] no unambiguous owned Armory item for entity def=2 id=0000000000000000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x0000042E3FD86000
+[apply] active 0x0000042E17DCE000
+[pw] weapon 0x0000042E17DCE000 def=2
+[armory-apply] no unambiguous owned Armory item for entity def=2 id=0000000000000000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x0000042E3FD86000
+[apply] active 0x0000042E17DCE000
+[pw] weapon 0x0000042E17DCE000 def=2
+[armory-apply] no unambiguous owned Armory item for entity def=2 id=0000000000000000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x0000042E3FD86000
+[apply] active 0x0000042E17DCE000
+[pw] weapon 0x0000042E17DCE000 def=2
+[armory-apply] no unambiguous owned Armory item for entity def=2 id=0000000000000000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x0000042E3FD86000
+[apply] active 0x0000042E45556000
+[pw] weapon 0x0000042E45556000 def=60
+[armory-apply] no unambiguous owned Armory item for entity def=60 id=0000000BEB86AC63
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x0000042E3FD86000
+[apply] active 0x0000042E45556000
+[pw] weapon 0x0000042E45556000 def=60
+[armory-apply] no unambiguous owned Armory item for entity def=60 id=0000000BEB86AC63
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x0000042E3FD86000
+[apply] active 0x0000042E45556000
+[pw] weapon 0x0000042E45556000 def=60
+[armory-apply] no unambiguous owned Armory item for entity def=60 id=0000000BEB86AC63
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x0000042E3FD86000
+[apply] active 0x0000042E45556000
+[pw] weapon 0x0000042E45556000 def=60
+[armory-apply] no unambiguous owned Armory item for entity def=60 id=0000000BEB86AC63
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x0000042E3FD86000
+[apply] active 0x0000042E45556000
+[pw] weapon 0x0000042E45556000 def=60
+[armory-apply] no unambiguous owned Armory item for entity def=60 id=0000000BEB86AC63
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x0000042E3FD86000
+[apply] active 0x0000042E45556000
+[pw] weapon 0x0000042E45556000 def=60
+[armory-apply] no unambiguous owned Armory item for entity def=60 id=0000000BEB86AC63
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x0000042E3FD86000
+[apply] active 0x0000042E45556000
+[pw] weapon 0x0000042E45556000 def=60
+[armory-apply] no unambiguous owned Armory item for entity def=60 id=0000000BEB86AC63
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x0000042E3FD86000
+[apply] active 0x0000042E45556000
+[pw] weapon 0x0000042E45556000 def=60
+[armory-apply] no unambiguous owned Armory item for entity def=60 id=0000000BEB86AC63
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x0000042E3FD86000
+[apply] active 0x0000042E45556000
+[pw] weapon 0x0000042E45556000 def=60
+[armory-apply] no unambiguous owned Armory item for entity def=60 id=0000000BEB86AC63
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x0000042E3FD86000
+[apply] active 0x0000042E45556000
+[pw] weapon 0x0000042E45556000 def=60
+[armory-apply] no unambiguous owned Armory item for entity def=60 id=0000000BEB86AC63
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x0000042E3FD86000
+[apply] active 0x0000042E45556000
+[pw] weapon 0x0000042E45556000 def=60
+[armory-apply] no unambiguous owned Armory item for entity def=60 id=0000000BEB86AC63
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+
+=== SNAPSHOT ===
+[snap] fsnCount=81613 lastStage=0 stage5Count=5089
+[snap] stage histogram:
+[snap]   stage  0: 17207 frames
+[snap]   stage  1: 5494 frames
+[snap]   stage  2: 5494 frames
+[snap]   stage  3: 5482 frames
+[snap]   stage  4: 3 frames
+[snap]   stage  5: 5089 frames
+[snap]   stage  6: 5089 frames
+[snap]   stage  7: 5089 frames
+[snap]   stage  8: 5089 frames
+[snap]   stage 10: 5088 frames
+[snap]   stage 11: 5448 frames
+[snap]   stage 12: 17041 frames
+[snap] dwLocalPlayerController @ 0x00007FF8A1912548 -> 0x0000042E3DF40000 
+[snap] dwLocalPlayerPawn       @ 0x00007FF8A1B091E0 -> 0x0000042DCE282E00 
+[snap] pawn: vtable=0x00007FF8A9E53740 inClient=0 health=1070
+[snap] ctrl: vtable=0x00007FF8A0FE1680 inClient=1 m_hPlayerPawn@0x92C = 0x00F1012B (idx=299)
+[snap] entitySystem @ 0x00007FF8A1AEFBB8 = 0x0000042DB1469000 highestEntityIndex=213
+[snap] entity resolution: 1/16 of indices 1..16 valid
+[snap] ctrl->pawn handle resolve: 0x00F1012B -> 0x0000042E3FD86000
+[snap] ----------------------------------------
+N1SSAN_STATUS|1|2026-11-07T05:23:44Z|28388|armory-obsidian-3.0|READY|reason=runtime_worker_heartbeat
+[status-write] begin state=READY path=C:\Users\mirac\AppData\Local\n1ssan\status\cs2-28388.status
+[status-write] success state=READY error=0
+[apply] tick pawn=0x0000042E3FD86000
+[apply] active 0x0000042E45556000
+[pw] weapon 0x0000042E45556000 def=60
+[armory-apply] no unambiguous owned Armory item for entity def=60 id=0000000BEB86AC63
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x0000042E3FD86000
+[apply] active 0x0000042E45556000
+[pw] weapon 0x0000042E45556000 def=60
+[armory-apply] no unambiguous owned Armory item for entity def=60 id=0000000BEB86AC63
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x0000042E3FD86000
+[apply] active 0x0000042E45556000
+[pw] weapon 0x0000042E45556000 def=60
+[armory-apply] no unambiguous owned Armory item for entity def=60 id=0000000BEB86AC63
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x0000042E3FD86000
+[apply] active 0x0000042E4555C000
+[pw] weapon 0x0000042E4555C000 def=16
+[armory-apply] no unambiguous owned Armory item for entity def=16 id=0000000C194D1E31
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x0000042E3FD86000
+[apply] active 0x0000042E4555C000
+[pw] weapon 0x0000042E4555C000 def=16
+[armory-apply] no unambiguous owned Armory item for entity def=16 id=0000000C194D1E31
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x0000042E3FD86000
+[apply] active 0x0000042E4555C000
+[pw] weapon 0x0000042E4555C000 def=16
+[armory-apply] no unambiguous owned Armory item for entity def=16 id=0000000C194D1E31
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x0000042E3FD86000
+[apply] active 0x0000042E4555C000
+[pw] weapon 0x0000042E4555C000 def=16
+[armory-apply] no unambiguous owned Armory item for entity def=16 id=0000000C194D1E31
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x0000042E3FD86000
+[apply] active 0x0000042E4555C000
+[pw] weapon 0x0000042E4555C000 def=16
+[armory-apply] no unambiguous owned Armory item for entity def=16 id=0000000C194D1E31
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x0000042E3FD86000
+[apply] active 0x0000042E4555C000
+[pw] weapon 0x0000042E4555C000 def=16
+[armory-apply] no unambiguous owned Armory item for entity def=16 id=0000000C194D1E31
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x0000042E3FD86000
+[apply] active 0x0000042E4555C000
+[pw] weapon 0x0000042E4555C000 def=16
+[armory-apply] no unambiguous owned Armory item for entity def=16 id=0000000C194D1E31
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x0000042E3FD86000
+[apply] active 0x0000042E4555C000
+[pw] weapon 0x0000042E4555C000 def=16
+[armory-apply] no unambiguous owned Armory item for entity def=16 id=0000000C194D1E31
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x0000042E3FD86000
+[apply] active 0x0000042E4555C000
+[pw] weapon 0x0000042E4555C000 def=16
+[armory-apply] no unambiguous owned Armory item for entity def=16 id=0000000C194D1E31
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x0000042E3FD86000
+[apply] active 0x0000042E4555C000
+[pw] weapon 0x0000042E4555C000 def=16
+[armory-apply] no unambiguous owned Armory item for entity def=16 id=0000000C194D1E31
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x0000042E3FD86000
+[apply] active 0x0000042E4555C000
+[pw] weapon 0x0000042E4555C000 def=16
+[armory-apply] no unambiguous owned Armory item for entity def=16 id=0000000C194D1E31
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x0000042E3FD86000
+[apply] active 0x0000042E4555C000
+[pw] weapon 0x0000042E4555C000 def=16
+[armory-apply] no unambiguous owned Armory item for entity def=16 id=0000000C194D1E31
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x0000042E3FD86000
+[apply] active 0x0000042E4555C000
+[pw] weapon 0x0000042E4555C000 def=16
+[armory-apply] no unambiguous owned Armory item for entity def=16 id=0000000C194D1E31
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x0000042E3FD86000
+[apply] active 0x0000042E4555C000
+[pw] weapon 0x0000042E4555C000 def=16
+[armory-apply] no unambiguous owned Armory item for entity def=16 id=0000000C194D1E31
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x0000042E3FD86000
+[apply] active 0x0000042E4555C000
+[pw] weapon 0x0000042E4555C000 def=16
+[armory-apply] no unambiguous owned Armory item for entity def=16 id=0000000C194D1E31
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x0000042E3FD86000
+[apply] active 0x0000042E4555C000
+[pw] weapon 0x0000042E4555C000 def=16
+[armory-apply] no unambiguous owned Armory item for entity def=16 id=0000000C194D1E31
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+
+=== SNAPSHOT ===
+[snap] fsnCount=86754 lastStage=0 stage5Count=5408
+[snap] stage histogram:
+[snap]   stage  0: 18342 frames
+[snap]   stage  1: 5813 frames
+[snap]   stage  2: 5813 frames
+[snap]   stage  3: 5801 frames
+[snap]   stage  4: 3 frames
+[snap]   stage  5: 5408 frames
+[snap]   stage  6: 5408 frames
+[snap]   stage  7: 5408 frames
+[snap]   stage  8: 5408 frames
+[snap]   stage 10: 5407 frames
+[snap]   stage 11: 5768 frames
+[snap]   stage 12: 18175 frames
+[snap] dwLocalPlayerController @ 0x00007FF8A1912548 -> 0x0000042E3DF40000 
+[snap] dwLocalPlayerPawn       @ 0x00007FF8A1B091E0 -> 0x0000042DCE282E00 
+[snap] pawn: vtable=0x00007FF8A9E53740 inClient=0 health=1070
+[snap] ctrl: vtable=0x00007FF8A0FE1680 inClient=1 m_hPlayerPawn@0x92C = 0x00F1012B (idx=299)
+[snap] entitySystem @ 0x00007FF8A1AEFBB8 = 0x0000042DB1469000 highestEntityIndex=215
+[snap] entity resolution: 1/16 of indices 1..16 valid
+[snap] ctrl->pawn handle resolve: 0x00F1012B -> 0x0000042E3FD86000
+[snap] ----------------------------------------
+[apply] tick pawn=0x0000042E3FD86000
+[apply] active 0x0000042E4555A000
+[pw] weapon 0x0000042E4555A000 def=61
+[armory-apply] no unambiguous owned Armory item for entity def=61 id=0000000C194D1E34
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x0000042E3FD86000
+[apply] active 0x0000042E4555A000
+[pw] weapon 0x0000042E4555A000 def=61
+[armory-apply] no unambiguous owned Armory item for entity def=61 id=0000000C194D1E34
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x0000042E3FD86000
+[apply] active 0x0000042E4555A000
+[pw] weapon 0x0000042E4555A000 def=61
+[armory-apply] no unambiguous owned Armory item for entity def=61 id=0000000C194D1E34
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x0000042E3FD86000
+[apply] active 0x0000042E4555A000
+[pw] weapon 0x0000042E4555A000 def=61
+[armory-apply] no unambiguous owned Armory item for entity def=61 id=0000000C194D1E34
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x0000042E3FD86000
+[apply] active 0x0000042E4555A000
+[pw] weapon 0x0000042E4555A000 def=61
+[armory-apply] no unambiguous owned Armory item for entity def=61 id=0000000C194D1E34
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x0000042E3FD86000
+[apply] active 0x0000042E4555A000
+[pw] weapon 0x0000042E4555A000 def=61
+[armory-apply] no unambiguous owned Armory item for entity def=61 id=0000000C194D1E34
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x0000042E3FD86000
+[apply] active 0x0000042E4555A000
+[pw] weapon 0x0000042E4555A000 def=61
+[armory-apply] no unambiguous owned Armory item for entity def=61 id=0000000C194D1E34
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x0000042E3FD86000
+[apply] active 0x0000042E4555A000
+[pw] weapon 0x0000042E4555A000 def=61
+[armory-apply] no unambiguous owned Armory item for entity def=61 id=0000000C194D1E34
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x0000042E3FD86000
+[apply] active 0x0000042E4555A000
+[pw] weapon 0x0000042E4555A000 def=61
+[armory-apply] no unambiguous owned Armory item for entity def=61 id=0000000C194D1E34
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x0000042E3FD86000
+[apply] active 0x0000042E4555A000
+[pw] weapon 0x0000042E4555A000 def=61
+[armory-apply] no unambiguous owned Armory item for entity def=61 id=0000000C194D1E34
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x0000042E3FD86000
+[apply] active 0x0000042E4555A000
+[pw] weapon 0x0000042E4555A000 def=61
+[armory-apply] no unambiguous owned Armory item for entity def=61 id=0000000C194D1E34
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x0000042E3FD86000
+[apply] active 0x0000042E4555A000
+[pw] weapon 0x0000042E4555A000 def=61
+[armory-apply] no unambiguous owned Armory item for entity def=61 id=0000000C194D1E34
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x0000042E3FD86000
+[apply] active 0x0000042E4555A000
+[pw] weapon 0x0000042E4555A000 def=61
+[armory-apply] no unambiguous owned Armory item for entity def=61 id=0000000C194D1E34
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x0000042E3FD86000
+[apply] active 0x0000042E4555A000
+[pw] weapon 0x0000042E4555A000 def=61
+[armory-apply] no unambiguous owned Armory item for entity def=61 id=0000000C194D1E34
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x0000042E3FD86000
+[apply] active 0x0000042E4555A000
+[pw] weapon 0x0000042E4555A000 def=61
+[armory-apply] no unambiguous owned Armory item for entity def=61 id=0000000C194D1E34
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x0000042E3FD86000
+[apply] active 0x0000042E4555A000
+[pw] weapon 0x0000042E4555A000 def=61
+[armory-apply] no unambiguous owned Armory item for entity def=61 id=0000000C194D1E34
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x0000042E3FD86000
+[apply] active 0x0000042E4555A000
+[pw] weapon 0x0000042E4555A000 def=61
+[armory-apply] no unambiguous owned Armory item for entity def=61 id=0000000C194D1E34
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x0000042E3FD86000
+[apply] active 0x0000042E4555A000
+[pw] weapon 0x0000042E4555A000 def=61
+[armory-apply] no unambiguous owned Armory item for entity def=61 id=0000000C194D1E34
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
