@@ -282,14 +282,35 @@ namespace
 
 namespace LootSOCache
 {
-    bool WaitForInventory(int timeoutMs)
+    bool Initialize()
     {
+        if (g_createTypeCache)
+            return true;
+
         ModuleInfo client = GetClientModule();
-        if (!client.valid()) return false;
+        if (!client.valid())
+        {
+            Log("[socache] client module unavailable during initialization");
+            return false;
+        }
 
         g_createTypeCache = reinterpret_cast<CreateTypeCacheFn>(
             ScanPattern(client, LootPatterns::CreateBaseTypeCache));
-        if (!g_createTypeCache) { Log("[socache] CreateBaseTypeCache not found"); return false; }
+        if (!g_createTypeCache)
+        {
+            Log("[socache] CreateBaseTypeCache not found");
+            return false;
+        }
+
+        Log("[socache] CreateBaseTypeCache initialized @ %p",
+            reinterpret_cast<void*>(g_createTypeCache));
+        return true;
+    }
+
+    bool WaitForInventory(int timeoutMs)
+    {
+        if (!Initialize())
+            return false;
 
         const DWORD start = GetTickCount();
         while (GetTickCount() - start < (DWORD)timeoutMs)
