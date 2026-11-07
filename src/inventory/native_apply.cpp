@@ -1026,6 +1026,7 @@ namespace NativeApply
             int      kit = 0;
             int      seed = 0;
             int      position = -1;   // the popup's slot: where the sticker is drawn from
+            char     toolInstanceId[128]{};
             bool     placed = false;
             float    wear = 0.0f;
             float    rotation = 0.0f;
@@ -1092,6 +1093,8 @@ namespace NativeApply
                 Log("[use-tool] consumed sticker item %016llX removal=%s",
                     static_cast<unsigned long long>(job.toolId), toolRemoved ? "SUCCESS" : "FAILED");
                 if (toolRemoved) RememberConsumed(job.toolId);
+                Attachments::RecordApplied(
+                    job.targetId, job.toolInstanceId, false, slot, toolRemoved);
             }
 
             const bool notified = written &&
@@ -1144,6 +1147,8 @@ namespace NativeApply
                 Log("[use-tool] consumed charm item %016llX removal=%s",
                     static_cast<unsigned long long>(job.toolId), toolRemoved ? "SUCCESS" : "FAILED");
                 if (toolRemoved) RememberConsumed(job.toolId);
+                Attachments::RecordApplied(
+                    job.targetId, job.toolInstanceId, true, -1, toolRemoved);
             }
 
             const bool notified = written &&
@@ -1257,6 +1262,8 @@ namespace NativeApply
             job.charm = charm;
             job.toolId = toolId;
             job.targetId = targetId;
+            strncpy_s(job.toolInstanceId, sizeof(job.toolInstanceId),
+                tool->instanceId.c_str(), _TRUNCATE);
             job.dueMs = NowMs() + APPLY_DELAY_MS;
 
             if (charm)
