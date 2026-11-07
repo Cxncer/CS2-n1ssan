@@ -77,6 +77,10 @@ bool ProcessWeapon(uintptr_t weaponEnt, uintptr_t pawn)
             return false;
         }
 
+        Log("[armory-apply] matched equipped item id=%016llX def=%u paintKit=%d",
+            static_cast<unsigned long long>(equippedItemId),
+            equipped.defIndex, equipped.paintKit);
+
         if (IsKnifeDefinition(def))
         {
             const bool knifeChanged =
