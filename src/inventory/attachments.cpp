@@ -398,7 +398,7 @@ namespace Attachments
                 char head[192];
                 std::snprintf(head, sizeof(head),
                     "    {\"seq\":%llu,\"projectedItemId\":\"%llu\","
-                    "\"complete\":true,\"stableForMs\":%u,\"attachments\":",
+                    "\"complete\":true,\"stableForMs\":%u,",
                     static_cast<unsigned long long>(record.seq),
                     static_cast<unsigned long long>(record.itemId), record.stableMs);
                 json += head;
