@@ -259,9 +259,11 @@ namespace NativeApply
             static constexpr uint8_t slotOpcode[] = { 0x8B, 0x05 };
             static constexpr uint8_t floatOpcode[] = { 0xF3, 0x0F, 0x10, 0x05 };
 
-            if (const uintptr_t raw = ScanPattern(client, LootPatterns::StickerPlacement))
+            const uintptr_t stickerRaw = ScanPattern(client, LootPatterns::StickerPlacement);
+            Log("[use-tool] placement probe: sticker signature=%s", stickerRaw ? "FOUND" : "MISSING");
+            if (stickerRaw)
             {
-                const auto* p = reinterpret_cast<const uint8_t*>(raw);
+                const auto* p = reinterpret_cast<const uint8_t*>(stickerRaw);
 
                 __try
                 {
@@ -281,9 +283,11 @@ namespace NativeApply
                 }
             }
 
-            if (const uintptr_t raw = ScanPattern(client, LootPatterns::KeychainPlacement))
+            const uintptr_t keychainRaw = ScanPattern(client, LootPatterns::KeychainPlacement);
+            Log("[use-tool] placement probe: keychain signature=%s", keychainRaw ? "FOUND" : "MISSING");
+            if (keychainRaw)
             {
-                const auto* p = reinterpret_cast<const uint8_t*>(raw);
+                const auto* p = reinterpret_cast<const uint8_t*>(keychainRaw);
 
                 __try
                 {
@@ -1081,10 +1085,11 @@ namespace NativeApply
             if (written)
             {
                 announced = LootSOCache::NotifyUpdated(job.targetId);
-                // A sticker is used up when it is applied. The object itself is
-                // left alone: CS2's inventory was showing it a moment ago.
-                LootSOCache::Remove(job.toolId, false);
-                RememberConsumed(job.toolId);
+                // Verify the local inventory actually detached the consumed tool.
+                const bool toolRemoved = LootSOCache::Remove(job.toolId, false);
+                Log("[use-tool] consumed sticker item %016llX removal=%s",
+                    static_cast<unsigned long long>(job.toolId), toolRemoved ? "SUCCESS" : "FAILED");
+                if (toolRemoved) RememberConsumed(job.toolId);
             }
 
             const bool notified = written &&
@@ -1132,9 +1137,11 @@ namespace NativeApply
             if (written)
             {
                 announced = LootSOCache::NotifyUpdated(job.targetId);
-                // A charm is used up when it is hung on; the object stays.
-                LootSOCache::Remove(job.toolId, false);
-                RememberConsumed(job.toolId);
+                // Verify the local inventory actually detached the consumed tool.
+                const bool toolRemoved = LootSOCache::Remove(job.toolId, false);
+                Log("[use-tool] consumed charm item %016llX removal=%s",
+                    static_cast<unsigned long long>(job.toolId), toolRemoved ? "SUCCESS" : "FAILED");
+                if (toolRemoved) RememberConsumed(job.toolId);
             }
 
             const bool notified = written &&
@@ -1454,6 +1461,11 @@ namespace NativeApply
 
         Log("[use-tool] hook: ok at 0x%p via %s (CS2's inventory applies Armory stickers and charms)",
             (void*)function, source);
+        Log("[use-tool] placement pointers: sticker slot=%p x=%p y=%p rotation=%p wear=%p; charm x=%p y=%p z=%p",
+            static_cast<const void*>(g_stickerSlot), static_cast<const void*>(g_stickerOffsetX),
+            static_cast<const void*>(g_stickerOffsetY), static_cast<const void*>(g_stickerRotation),
+            static_cast<const void*>(g_stickerWear), static_cast<const void*>(g_keychainOffsetX),
+            static_cast<const void*>(g_keychainOffsetY), static_cast<const void*>(g_keychainOffsetZ));
         Log("[use-tool] placement: sticker %s, charm %s",
             (g_stickerSlot && g_stickerOffsetX && g_stickerOffsetY && g_stickerRotation && g_stickerWear)
                 ? "ok" : "NOT found - first free slot, default position",
