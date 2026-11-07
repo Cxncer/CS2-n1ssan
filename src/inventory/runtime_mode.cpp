@@ -18,6 +18,7 @@ namespace
 {
     std::atomic<int> g_mode{ static_cast<int>(RuntimeMode::Unknown) };
     std::atomic<int> g_requestedMode{ static_cast<int>(RuntimeMode::Unknown) };
+    std::string g_bridgeDirectory;
 
     std::string DirectoryOf(const std::string& path)
     {
@@ -79,6 +80,9 @@ namespace RuntimeModeState
             return;
         }
 
+        g_bridgeDirectory = bridgeDirectory;
+        DeleteFileA((g_bridgeDirectory + "runtime-mode-active.json").c_str());
+
         const RuntimeMode initialMode = ReadFile(bridgeDirectory);
         g_requestedMode.store(static_cast<int>(initialMode), std::memory_order_release);
         if (initialMode == RuntimeMode::Unknown)
@@ -122,5 +126,18 @@ namespace RuntimeModeState
     void SetCurrent(RuntimeMode mode)
     {
         g_mode.store(static_cast<int>(mode), std::memory_order_release);
+
+        if (g_bridgeDirectory.empty() || mode == RuntimeMode::Unknown)
+            return;
+
+        std::ofstream ack(g_bridgeDirectory + "runtime-mode-active.json",
+            std::ios::binary | std::ios::trunc);
+        if (ack)
+        {
+            ack << "{\"mode\":\"" << ModeName(mode) << "\"}";
+            ack.flush();
+        }
+        if (!ack)
+            Log("[runtime-mode] could not write active-mode acknowledgement");
     }
 }
