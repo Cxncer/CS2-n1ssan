@@ -70,13 +70,12 @@ bool ProcessWeapon(uintptr_t weaponEnt, uintptr_t pawn)
         const uint64_t equippedItemId =
             (static_cast<uint64_t>(itemIdHigh) << 32) | itemIdLow;
         TargetSkin equipped{};
-        bool matched = ArmoryInventory::GetTargetForItemId(equippedItemId, equipped);
-        // Some CS2 weapon EconItemViews expose a server/native item ID that does
-        // not equal the locally projected SOCache ID. If the weapon definition
-        // maps to exactly one Armory item, it is still unambiguous which
-        // cosmetic can be applied. Never guess when duplicate definitions exist.
-        if (!matched && !IsKnifeDefinition(def))
-            matched = ArmoryInventory::GetUniqueTargetForDefinition(def, equipped);
+        // Armory is strictly native-equipment driven. An owned item with the
+        // same definition is not proof that CS2 selected that specific instance.
+        // If the live EconItemView ID cannot be resolved to our projected item,
+        // fail closed rather than applying an arbitrary owned skin.
+        const bool matched =
+            ArmoryInventory::GetTargetForItemId(equippedItemId, equipped);
 
         if (!matched)
         {

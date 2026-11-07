@@ -399,35 +399,6 @@ namespace ArmoryInventory
         return !g_inventoryItems.empty();
     }
 
-    bool GetUniqueTargetForDefinition(uint16_t definition, TargetSkin& target)
-    {
-        if (!definition) return false;
-        std::lock_guard<std::mutex> lock(g_mutex);
-
-        const ArmoryItem* match = nullptr;
-        for (const auto& item : g_inventoryItems)
-        {
-            if (item.definition != definition) continue;
-            if (match)
-            {
-                Log("[armory-apply] ambiguous definition fallback def=%u; multiple owned items", definition);
-                return false;
-            }
-            match = &item;
-        }
-
-        if (!match) return false;
-        target = TargetSkin{};
-        target.paintKit = match->paintKit;
-        target.resolvedSeed = match->seed;
-        target.wear = match->wear;
-        target.statTrak = match->statTrak >= 0;
-        target.defIndex = match->definition;
-        Log("[armory-apply] unique-definition fallback def=%u id=%016llX",
-            definition, static_cast<unsigned long long>(match->id));
-        return true;
-    }
-
     bool GetTargetForItemId(uint64_t itemId, TargetSkin& target)
     {
         if (!itemId) return false;
