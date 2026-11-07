@@ -410,7 +410,21 @@ static void __fastcall FsnDetour(void* pClient, int stage)
     if (stage != 6) return;
 
     const RuntimeMode runtimeMode = RuntimeModeState::Current();
-    const bool loadoutMode = runtimeMode != RuntimeMode::Armory;
+    const bool loadoutMode = runtimeMode == RuntimeMode::Loadout;
+
+    // Armory uses a separate generated-ID namespace. On first entry (including
+    // an Armory-first launch), remove only stale PlanA Loadout entries. Retry
+    // on subsequent frames if SOCache cleanup cannot complete safely.
+    static RuntimeMode lastStableMode = RuntimeMode::Unknown;
+    if (runtimeMode == RuntimeMode::Armory && lastStableMode != RuntimeMode::Armory)
+    {
+        if (PlanA::RemoveAllLoadoutItems())
+            lastStableMode = RuntimeMode::Armory;
+    }
+    else if (runtimeMode == RuntimeMode::Loadout)
+    {
+        lastStableMode = RuntimeMode::Loadout;
+    }
 
     uintptr_t observedPawn = MatchdetectGetPawn();
     if (observedPawn > 0x10000)
