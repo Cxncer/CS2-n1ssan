@@ -421,8 +421,13 @@ static void __fastcall FsnDetour(void* pClient, int stage)
         if (PlanA::RemoveAllLoadoutItems())
             lastStableMode = RuntimeMode::Armory;
     }
-    else if (runtimeMode == RuntimeMode::Loadout)
+    else if (runtimeMode == RuntimeMode::Loadout &&
+             lastStableMode != RuntimeMode::Loadout &&
+             !g_targets.empty())
     {
+        // The worker has completed Loadout parsing and compatibility checks.
+        // Create its managed items now, on the game thread.
+        PlanA::ReconcileAllItems();
         lastStableMode = RuntimeMode::Loadout;
     }
 
