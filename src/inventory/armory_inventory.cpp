@@ -81,20 +81,26 @@ namespace
         if (k == std::string::npos) return false;
         const size_t colon = object.find(':', k + needle.size());
         if (colon == std::string::npos) return false;
+
         size_t quote = colon + 1;
         while (quote < object.size() &&
-            (object[quote] == ' ' || object[quote] == '\\t' ||
-             object[quote] == '\\r' || object[quote] == '\\n'))
+            (object[quote] == ' ' || object[quote] == '\t' ||
+             object[quote] == '\r' || object[quote] == '\n'))
             ++quote;
         if (quote >= object.size() || object[quote] != '"') return false;
 
         std::string value;
         for (size_t i = quote + 1; i < object.size(); ++i)
         {
-            const char c = object[i];
-            if (c == '\\' && i + 1 < object.size()) { value.push_back(object[i + 1]); ++i; continue; }
-            if (c == '"') break;
-            value.push_back(c);
+            const char ch = object[i];
+            if (ch == '\\' && i + 1 < object.size())
+            {
+                value.push_back(object[i + 1]);
+                ++i;
+                continue;
+            }
+            if (ch == '"') break;
+            value.push_back(ch);
         }
 
         out = value;
@@ -223,7 +229,7 @@ namespace
         std::vector<std::string>& objects)
     {
         objects.clear();
-        const std::string needle = std::string("\\\"") + key + "\\\"";
+        const std::string needle = std::string("\"") + key + "\"";
         const size_t keyAt = text.find(needle);
         if (keyAt == std::string::npos) return false;
         const size_t arrayAt = text.find('[', keyAt + needle.size());
@@ -233,8 +239,8 @@ namespace
         while (i < text.size())
         {
             while (i < text.size() &&
-                (text[i] == ' ' || text[i] == '\\t' || text[i] == '\\r' ||
-                 text[i] == '\\n' || text[i] == ','))
+                (text[i] == ' ' || text[i] == '\t' || text[i] == '\r' ||
+                 text[i] == '\n' || text[i] == ','))
                 ++i;
 
             if (i >= text.size()) return false;
@@ -251,7 +257,7 @@ namespace
                 if (quoted)
                 {
                     if (escaped) escaped = false;
-                    else if (ch == '\\\\') escaped = true;
+                    else if (ch == '\\') escaped = true;
                     else if (ch == '"') quoted = false;
                     continue;
                 }
