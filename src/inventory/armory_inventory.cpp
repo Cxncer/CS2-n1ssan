@@ -909,6 +909,10 @@ namespace ArmoryInventory
             managed.id = item.id;
             managed.instanceId = item.instanceId;
             managed.definition = item.definition;
+            managed.stickerKit = item.stickerKit;
+            managed.keychain = item.keychain;
+            managed.keychainSeed = item.keychainSeed;
+            managed.wear = item.wear;
             managed.attachments = item.attachments;
             out.push_back(std::move(managed));
         }
