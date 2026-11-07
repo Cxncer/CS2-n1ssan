@@ -720,10 +720,22 @@ namespace NativeApply
             for (int count = 0; count < 64 && at < p + 0x100 && !found.setString; ++count)
             {
                 Decoded decoded;
-                if (!Decode(at, 0x100 - static_cast<size_t>(at - p), decoded))
+                const size_t offset = static_cast<size_t>(at - p);
+                if (!Decode(at, 0x100 - offset, decoded))
                 {
-                    Log("[use-tool] notification: instruction %d after the signature could not be decoded",
-                        count);
+                    char bytes[64]{};
+                    const size_t dumpCount = (std::min)(static_cast<size_t>(16), 0x100 - offset);
+                    size_t used = 0;
+                    for (size_t i = 0; i < dumpCount && used + 4 < sizeof(bytes); ++i)
+                    {
+                        const int written = std::snprintf(
+                            bytes + used, sizeof(bytes) - used, "%02X%s",
+                            at[i], i + 1 == dumpCount ? "" : " ");
+                        if (written <= 0) break;
+                        used += static_cast<size_t>(written);
+                    }
+                    Log("[use-tool] notification: decode failed at instruction %d offset=0x%zX phase=%d bytes=[%s]",
+                        count, offset, phase, bytes);
                     return false;
                 }
 
