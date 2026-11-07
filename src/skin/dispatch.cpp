@@ -60,23 +60,52 @@ bool ProcessWeapon(uintptr_t weaponEnt, uintptr_t pawn)
     SafeReadU8(pawn + g_off.PAWN_TeamNum, team);
     const char* teamStr = (team == 2) ? "T" : (team == 3) ? "CT" : "";
 
+    if (RuntimeModeState::Current() == RuntimeMode::Armory)
+    {
+        uint32_t itemIdLow = 0, itemIdHigh = 0;
+        if (!SafeReadU32(view + g_off.EIV_ItemIDLow, itemIdLow) ||
+            !SafeReadU32(view + g_off.EIV_ItemIDHigh, itemIdHigh))
+            return false;
+
+        const uint64_t equippedItemId =
+            (static_cast<uint64_t>(itemIdHigh) << 32) | itemIdLow;
+        TargetSkin equipped{};
+        if (!ArmoryInventory::GetTargetForItemId(equippedItemId, equipped))
+        {
+            Log("[armory-apply] no owned Armory item for entity def=%u id=%016llX",
+                def, static_cast<unsigned long long>(equippedItemId));
+            return false;
+        }
+
+        if (IsKnifeDefinition(def))
+        {
+            const bool knifeChanged =
+                KnifeApply(weaponEnt, view, equipped.defIndex);
+            const bool skinChanged =
+                ApplyWeaponSkin(weaponEnt, pawn, equipped);
+            return knifeChanged || skinChanged;
+        }
+
+        if (equipped.defIndex != def)
+        {
+            Log("[armory-apply] equipped item definition mismatch entity=%u item=%u",
+                def, equipped.defIndex);
+            return false;
+        }
+
+        return ApplyWeaponSkin(weaponEnt, pawn, equipped);
+    }
+
     // Knife: look up knife target by slot, not def
     if (IsKnifeDefinition(def)) {
         TargetSkin kt;
         bool kfound = false;
-        if (RuntimeModeState::Current() == RuntimeMode::Armory)
-        {
-            kfound = ArmoryInventory::GetEquippedKnifeTarget(teamStr, kt);
-        }
-        else
-        {
-            for (auto& [k, tgt] : g_targets) {
-                if (tgt.slot == "knife" &&
-                    ((tgt.team == "T" && team == 2) || (tgt.team == "CT" && team == 3))) {
-                    kt = tgt;
-                    kfound = true;
-                    break;
-                }
+        for (auto& [k, tgt] : g_targets) {
+            if (tgt.slot == "knife" &&
+                ((tgt.team == "T" && team == 2) || (tgt.team == "CT" && team == 3))) {
+                kt = tgt;
+                kfound = true;
+                break;
             }
         }
         if (kfound)
@@ -101,19 +130,11 @@ bool ProcessWeapon(uintptr_t weaponEnt, uintptr_t pawn)
     TargetSkin t;
     bool found = false;
 
-    if (RuntimeModeState::Current() == RuntimeMode::Armory)
-    {
-        found = ArmoryInventory::GetEquippedTarget(def, teamStr, t);
-        if (found) Log("[pw] matched equipped Armory item for team '%s'", teamStr);
-    }
-    else
-    {
-        auto it = g_targets.find(TargetKey(def, teamStr));
-        if (it != g_targets.end()) { t = it->second; found = true; Log("[pw] matched team '%s'", teamStr); }
-        else {
-            auto itAny = g_targets.find(TargetKey(def, ""));
-            if (itAny != g_targets.end()) { t = itAny->second; found = true; Log("[pw] matched any-team"); }
-        }
+    auto it = g_targets.find(TargetKey(def, teamStr));
+    if (it != g_targets.end()) { t = it->second; found = true; Log("[pw] matched team '%s'", teamStr); }
+    else {
+        auto itAny = g_targets.find(TargetKey(def, ""));
+        if (itAny != g_targets.end()) { t = itAny->second; found = true; Log("[pw] matched any-team"); }
     }
 
     if (!found)
