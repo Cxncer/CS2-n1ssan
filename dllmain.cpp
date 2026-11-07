@@ -113,9 +113,25 @@ static DWORD WINAPI InjectThread(LPVOID)
     g_bridgeDirectory = bridgeDirectory;
     RuntimeModeState::StartWatcher(bridgeDirectory);
 
-    const RuntimeMode runtimeMode = RuntimeModeState::Current();
-    const bool loadoutMode = runtimeMode == RuntimeMode::Loadout;
+    // DOMINATE may publish runtime-mode.json just after injection starts.
+    // Do not guess Loadout or Armory: wait for the user's explicit selection.
+    RuntimeMode runtimeMode = RuntimeModeState::Current();
+    for (int i = 0; runtimeMode == RuntimeMode::Unknown && i < 300; ++i)
+    {
+        if (i % 50 == 0)
+            Log("[runtime-mode] waiting for an explicit Loadout/Armory selection");
+        Sleep(100);
+        runtimeMode = RuntimeModeState::Current();
+    }
 
+    if (runtimeMode == RuntimeMode::Unknown)
+    {
+        Log("[fatal] no valid runtime mode was selected within 30 seconds");
+        LogStatus("FAILED", "runtime_mode_unavailable");
+        return 0;
+    }
+
+    const bool loadoutMode = runtimeMode == RuntimeMode::Loadout;
     Log("[runtime-mode] selected=%s",
         loadoutMode ? "loadout" : "armory");
 
