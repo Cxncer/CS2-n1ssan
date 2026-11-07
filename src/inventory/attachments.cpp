@@ -207,6 +207,9 @@ namespace Attachments
             Set         set;
             unsigned    stableMs = 0;
             std::string observedAt;
+            std::string consumedToolInstanceId;
+            bool        consumedCharm = false;
+            int         sourceStickerSlot = -1;
         };
 
         struct Pending
@@ -235,21 +238,55 @@ namespace Attachments
             return text;
         }
 
-        void AppendStickerJson(std::string& json, int slot, const StickerSlot& sticker)
+        std::string JsonString(const std::string& value)
+        {
+            std::string escaped;
+            escaped.reserve(value.size() + 2);
+            escaped += '"';
+            for (unsigned char ch : value)
+            {
+                switch (ch)
+                {
+                case '"': escaped += "\\\""; break;
+                case '\\\\': escaped += "\\\\\\"; break;
+                case '\\b': escaped += "\\b"; break;
+                case '\\f': escaped += "\\f"; break;
+                case '\\n': escaped += "\\n"; break;
+                case '\\r': escaped += "\\r"; break;
+                case '\\t': escaped += "\\t"; break;
+                default:
+                    if (ch < 0x20)
+                    {
+                        char code[7]{};
+                        std::snprintf(code, sizeof(code), "\\u%04X", ch);
+                        escaped += code;
+                    }
+                    else escaped += static_cast<char>(ch);
+                    break;
+                }
+            }
+            escaped += '"';
+            return escaped;
+        }
+
+        void AppendStickerJson(
+            std::string& json, int slot, const StickerSlot& sticker, const std::string& sourceId)
         {
             char part[320];
             std::snprintf(part, sizeof(part),
                 "{\"slot\":%d,\"kitId\":%d,\"wear\":%.6f,\"scale\":%.6f,\"rotation\":%.6f,"
-                "\"offsetX\":%.6f,\"offsetY\":%.6f,\"schema\":%s}",
+                "\"offsetX\":%.6f,\"offsetY\":%.6f,\"schema\":%s,\"sourceInstanceId\":",
                 slot, sticker.kit, Clamp01(sticker.wear),
                 sticker.scale > 0.0f ? sticker.scale : 1.0f,
                 sticker.rotation, sticker.offsetX, sticker.offsetY,
                 sticker.hasSchema ? std::to_string(sticker.schema).c_str() : "null");
             json += part;
+            json += sourceId.empty() ? "null}" : JsonString(sourceId) + "}";
         }
 
-        void AppendSetJson(std::string& json, const Set& set)
+        void AppendSetJson(std::string& json, const Record& record)
         {
+            const Set& set = record.set;
             json += "{\"stickers\":[";
             bool first = true;
             for (int slot = 0; slot < STICKER_SLOTS; ++slot)
@@ -257,7 +294,10 @@ namespace Attachments
                 if (!set.stickers[slot].present) continue;
                 if (!first) json += ",";
                 first = false;
-                AppendStickerJson(json, slot, set.stickers[slot]);
+                const std::string source =
+                    !record.consumedCharm && record.sourceStickerSlot == slot
+                        ? record.consumedToolInstanceId : std::string{};
+                AppendStickerJson(json, slot, set.stickers[slot], source);
             }
             json += "],\"charm\":";
 
@@ -270,11 +310,14 @@ namespace Attachments
             char part[320];
             std::snprintf(part, sizeof(part),
                 "{\"kitId\":%d,\"seed\":%d,\"x\":%.6f,\"y\":%.6f,\"z\":%.6f,"
-                "\"stickerKitId\":%s,\"highlightId\":%s}}",
+                "\"stickerKitId\":%s,\"highlightId\":%s,\"sourceInstanceId\":",
                 set.charm.kit, set.charm.seed, set.charm.x, set.charm.y, set.charm.z,
                 set.charm.hasSticker ? std::to_string(set.charm.sticker).c_str() : "null",
                 set.charm.hasHighlight ? std::to_string(set.charm.highlight).c_str() : "null");
             json += part;
+            json += record.consumedCharm && !record.consumedToolInstanceId.empty()
+                ? JsonString(record.consumedToolInstanceId) + "}}"
+                : "null}}";
         }
 
         std::string DetectionPath()
@@ -354,13 +397,22 @@ namespace Attachments
                 const Record& record = g_records[i];
                 char head[192];
                 std::snprintf(head, sizeof(head),
-                    "    {\"seq\":%llu,\"instanceId\":\"%s\",\"projectedItemId\":\"%llu\","
-                    "\"complete\":true,\"stableForMs\":%u,\"observedAt\":\"%s\",\"attachments\":",
-                    static_cast<unsigned long long>(record.seq), record.instanceId.c_str(),
-                    static_cast<unsigned long long>(record.itemId),
-                    record.stableMs, record.observedAt.c_str());
+                    "    {\"seq\":%llu,\"projectedItemId\":\"%llu\","
+                    "\"complete\":true,\"stableForMs\":%u,\"attachments\":",
+                    static_cast<unsigned long long>(record.seq),
+                    static_cast<unsigned long long>(record.itemId), record.stableMs);
                 json += head;
-                AppendSetJson(json, record.set);
+                json += "\"instanceId\":" + JsonString(record.instanceId);
+                json += ",\"observedAt\":" + JsonString(record.observedAt);
+                if (!record.consumedToolInstanceId.empty())
+                {
+                    json += ",\"consumedToolInstanceId\":" + JsonString(record.consumedToolInstanceId);
+                    json += record.consumedCharm
+                        ? ",\"consumedToolKind\":\"charm\""
+                        : ",\"consumedToolKind\":\"sticker\"";
+                }
+                json += ",\"attachments\":";
+                AppendSetJson(json, record);
                 json += i + 1 == g_records.size() ? "}\n" : "},\n";
             }
 
