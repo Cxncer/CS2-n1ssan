@@ -561,8 +561,8 @@ static void __fastcall FsnDetour(void* pClient, int stage)
     if (!inMatch && runtimeMode == RuntimeMode::Armory)
         ArmoryInventory::AdoptPending();
 
-    // Keep the two data sources isolated, but run the same in-match entity
-    // application pipeline for whichever mode the user explicitly selected.
+    // Keep the sources isolated while allowing Armory's currently equipped
+    // native inventory item to pass through the same entity apply pipeline.
     if (runtimeMode != RuntimeMode::Loadout &&
         runtimeMode != RuntimeMode::Armory)
         return;
@@ -571,7 +571,7 @@ static void __fastcall FsnDetour(void* pClient, int stage)
         return;
 
     if (runtimeMode == RuntimeMode::Armory &&
-        !ArmoryInventory::HasEquippedTargets())
+        !ArmoryInventory::HasItems())
         return;
 
     if (g_matchState == MatchState::IDLE)
