@@ -271,7 +271,8 @@ namespace NativeApply
                         g_stickerSlot = RipTarget<int32_t>(p + 0x05, 2, 6, client);
                     if (Bytes(p + 0x1C, floatOpcode, sizeof(floatOpcode)))
                         g_stickerOffsetX = RipTarget<float>(p + 0x1C, 4, 8, client);
-                    if (Bytes(p + 0x35, floatOpcode, sizeof(floatOpcode)))
+                    static constexpr uint8_t floatOpcodeY[] = { 0xF3, 0x0F, 0x10, 0x0D };
+                    if (Bytes(p + 0x35, floatOpcodeY, sizeof(floatOpcodeY)))
                         g_stickerOffsetY = RipTarget<float>(p + 0x35, 4, 8, client);
                     if (Bytes(p + 0x4C, floatOpcode, sizeof(floatOpcode)))
                         g_stickerRotation = RipTarget<float>(p + 0x4C, 4, 8, client);
@@ -293,7 +294,8 @@ namespace NativeApply
                 {
                     if (Bytes(p, floatOpcode, sizeof(floatOpcode)))
                         g_keychainOffsetX = RipTarget<float>(p, 4, 8, client);
-                    if (Bytes(p + 0x27, floatOpcode, sizeof(floatOpcode)))
+                    static constexpr uint8_t floatOpcodeY[] = { 0xF3, 0x0F, 0x10, 0x0D };
+                    if (Bytes(p + 0x27, floatOpcodeY, sizeof(floatOpcodeY)))
                         g_keychainOffsetY = RipTarget<float>(p + 0x27, 4, 8, client);
                     if (Bytes(p + 0x40, floatOpcode, sizeof(floatOpcode)))
                         g_keychainOffsetZ = RipTarget<float>(p + 0x40, 4, 8, client);
