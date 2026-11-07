@@ -54,6 +54,17 @@ namespace
     CreateTypeCacheFn g_createTypeCache = nullptr;
     uint32_t g_soCacheOffset = 0;
 
+    bool ShouldLogSocacheDiagnostic()
+    {
+        // Keep watcher-driven diagnostics useful without flooding the log.
+        static DWORD lastLog = 0;
+        const DWORD now = GetTickCount();
+        if (now - lastLog < 2000)
+            return false;
+        lastLog = now;
+        return true;
+    }
+
     bool ReadOwner(const void* inv, SOID& o)
     {
         __try { o = *reinterpret_cast<const SOID*>(static_cast<const uint8_t*>(inv) + 0x10); return o.id != 0; }
@@ -75,15 +86,26 @@ namespace
 
     void* SharedObjectCache(void* inv)
     {
-        if (!inv) return nullptr;
+        if (!inv)
+        {
+            if (ShouldLogSocacheDiagnostic())
+                Log("[socache-diag] inventory pointer is null");
+            return nullptr;
+        }
         if (g_soCacheOffset)
         {
             void* c = nullptr;
+            bool readFailed = false;
             __try { c = *reinterpret_cast<void* const*>(static_cast<const uint8_t*>(inv) + g_soCacheOffset); }
-            __except (EXCEPTION_EXECUTE_HANDLER) {}
+            __except (EXCEPTION_EXECUTE_HANDLER) { readFailed = true; }
             if (c && reinterpret_cast<uintptr_t>(c) > 0x10000) return c;
+            if (ShouldLogSocacheDiagnostic())
+                Log("[socache-diag] cached SOCache offset failed inv=%p offset=0x%X value=%p readException=%d",
+                    inv, g_soCacheOffset, c, readFailed ? 1 : 0);
         }
         // Try 0x68 first (Loot's hardcoded default), then walk 8-byte offsets up to 0x200
+        bool sawPlausibleCandidate = false;
+        bool sawTypeCacheException = false;
         for (uint32_t off = 0x68; off < 0x200; off += (off == 0x68 ? 0x20 : 8))
         {
             void* c = nullptr;
@@ -91,49 +113,99 @@ namespace
             __except (EXCEPTION_EXECUTE_HANDLER) {}
             if (c && reinterpret_cast<uintptr_t>(c) > 0x10000)
             {
+                sawPlausibleCandidate = true;
                 // sanity: type cache should be resolvable
                 if (g_createTypeCache)
                 {
                     void* tc = nullptr;
+                    bool typeCacheException = false;
                     __try { tc = g_createTypeCache(c, CLASS_ECON_ITEM); }
-                    __except (EXCEPTION_EXECUTE_HANDLER) {}
+                    __except (EXCEPTION_EXECUTE_HANDLER) { typeCacheException = true; }
+                    sawTypeCacheException = sawTypeCacheException || typeCacheException;
                     if (tc && reinterpret_cast<uintptr_t>(tc) > 0x10000)
                     {
                         g_soCacheOffset = off;
+                        if (ShouldLogSocacheDiagnostic())
+                            Log("[socache-diag] SOCache resolved inv=%p offset=0x%X cache=%p typeCache=%p",
+                                inv, off, c, tc);
                         return c;
                     }
                 }
             }
         }
+        if (ShouldLogSocacheDiagnostic())
+            Log("[socache-diag] SOCache scan failed inv=%p cachedOffset=0x%X createTypeCache=%p plausibleCandidates=%d typeCacheException=%d",
+                inv, g_soCacheOffset, reinterpret_cast<void*>(g_createTypeCache),
+                sawPlausibleCandidate ? 1 : 0, sawTypeCacheException ? 1 : 0);
         return nullptr;
     }
 
     void* ItemTypeCache(void* inv)
     {
         void* soCache = SharedObjectCache(inv);
-        if (!soCache || !g_createTypeCache) return nullptr;
-        __try { return g_createTypeCache(soCache, CLASS_ECON_ITEM); }
-        __except (EXCEPTION_EXECUTE_HANDLER) { return nullptr; }
+        if (!soCache || !g_createTypeCache)
+        {
+            if (ShouldLogSocacheDiagnostic())
+                Log("[socache-diag] type-cache lookup skipped inv=%p soCache=%p createTypeCache=%p",
+                    inv, soCache, reinterpret_cast<void*>(g_createTypeCache));
+            return nullptr;
+        }
+        void* typeCache = nullptr;
+        bool threw = false;
+        __try { typeCache = g_createTypeCache(soCache, CLASS_ECON_ITEM); }
+        __except (EXCEPTION_EXECUTE_HANDLER) { threw = true; }
+        if ((!typeCache || reinterpret_cast<uintptr_t>(typeCache) <= 0x10000 || threw) &&
+            ShouldLogSocacheDiagnostic())
+            Log("[socache-diag] type-cache lookup failed inv=%p soCache=%p typeCache=%p exception=%d",
+                inv, soCache, typeCache, threw ? 1 : 0);
+        return threw ? nullptr : typeCache;
     }
 
     bool ForEachItem(void* tc, bool (*visit)(void* item, uint64_t id, void* user), void* user)
     {
-        if (!tc) return false;
+        if (!tc)
+        {
+            if (ShouldLogSocacheDiagnostic())
+                Log("[socache-diag] enumeration failed: type-cache pointer is null");
+            return false;
+        }
         int count = 0; void** elements = nullptr;
         __try
         {
             count = *reinterpret_cast<const int*>(static_cast<const uint8_t*>(tc) + 0x8);
             elements = *reinterpret_cast<void** const*>(static_cast<const uint8_t*>(tc) + 0x10);
         }
-        __except (EXCEPTION_EXECUTE_HANDLER) { return false; }
-        if (count < 0 || count > 200000) return false;
+        __except (EXCEPTION_EXECUTE_HANDLER)
+        {
+            if (ShouldLogSocacheDiagnostic())
+                Log("[socache-diag] enumeration failed: type-cache header read exception tc=%p", tc);
+            return false;
+        }
+        if (count < 0 || count > 200000)
+        {
+            if (ShouldLogSocacheDiagnostic())
+                Log("[socache-diag] enumeration failed: invalid count tc=%p count=%d elements=%p",
+                    tc, count, elements);
+            return false;
+        }
         if (count == 0) return true;
-        if (!elements) return false;
+        if (!elements)
+        {
+            if (ShouldLogSocacheDiagnostic())
+                Log("[socache-diag] enumeration failed: null elements array tc=%p count=%d", tc, count);
+            return false;
+        }
         for (int i = 0; i < count; ++i)
         {
             void* item = nullptr; uint64_t id = 0;
             __try { item = elements[i]; if (item) id = static_cast<EconItem*>(item)->id; }
-            __except (EXCEPTION_EXECUTE_HANDLER) { return false; }
+            __except (EXCEPTION_EXECUTE_HANDLER)
+            {
+                if (ShouldLogSocacheDiagnostic())
+                    Log("[socache-diag] enumeration failed: item read exception tc=%p elements=%p count=%d index=%d",
+                        tc, elements, count, i);
+                return false;
+            }
             if (item && !visit(item, id, user)) return false;
         }
         return true;
