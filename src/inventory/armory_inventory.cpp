@@ -575,4 +575,38 @@ namespace ArmoryInventory
         g_staged.clear();
         g_pending.store(false, std::memory_order_release);
     }
+
+    bool HasEquippedTargets()
+    {
+        std::lock_guard<std::mutex> lock(g_mutex);
+        return !g_equippedWeapons.empty() ||
+            !g_equippedKnives.empty() || !g_equippedGloves.empty();
+    }
+
+    bool GetEquippedTarget(uint16_t definition, const std::string& team, TargetSkin& target)
+    {
+        std::lock_guard<std::mutex> lock(g_mutex);
+        const auto found = g_equippedWeapons.find(TargetKey(definition, team));
+        if (found == g_equippedWeapons.end()) return false;
+        target = found->second;
+        return true;
+    }
+
+    bool GetEquippedKnifeTarget(const std::string& team, TargetSkin& target)
+    {
+        std::lock_guard<std::mutex> lock(g_mutex);
+        const auto found = g_equippedKnives.find(team);
+        if (found == g_equippedKnives.end()) return false;
+        target = found->second;
+        return true;
+    }
+
+    bool GetEquippedGloveTarget(const std::string& team, TargetSkin& target)
+    {
+        std::lock_guard<std::mutex> lock(g_mutex);
+        const auto found = g_equippedGloves.find(team);
+        if (found == g_equippedGloves.end()) return false;
+        target = found->second;
+        return true;
+    }
 }
