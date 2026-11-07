@@ -36,7 +36,11 @@ namespace ArmoryInventory
         uint64_t        id = 0;
         std::string     instanceId;
         uint16_t        definition = 0;
-        Attachments::Set attachments;   // the attachment state the projection asks for
+        int             stickerKit = 0;
+        int             keychain = 0;
+        int             keychainSeed = 0;
+        float           wear = 0.001f;
+        Attachments::Set attachments;   // attachments already applied to this item
     };
 
     void StartWatcher();
