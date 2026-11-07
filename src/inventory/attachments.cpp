@@ -248,7 +248,7 @@ namespace Attachments
                 switch (ch)
                 {
                 case '"': escaped += "\\\""; break;
-                case '\\\\': escaped += "\\\\\\"; break;
+                case '\\': escaped += "\\\\"; break;
                 case '\\b': escaped += "\\b"; break;
                 case '\\f': escaped += "\\f"; break;
                 case '\\n': escaped += "\\n"; break;
