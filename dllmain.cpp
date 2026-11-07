@@ -20,6 +20,7 @@
 #include "inventory/engine_schema_diagnostic.h"
 #include "inventory/armory_inventory.h"
 #include "inventory/loadout_api.h"
+#include "inventory/native_apply.h"
 #include "inventory/runtime_mode.h"
 #include "skin/glove_paintkit_schema.h"
 #include "skin/glove_schema.h"
@@ -202,6 +203,10 @@ static DWORD WINAPI InjectThread(LPVOID)
         LogStatus("FAILED", "inventory_runtime_initialization_failed");
         return 0;
     }
+
+    // CS2's own inventory applies the Armory's stickers and charms; this is the
+    // hook that lets it finish for items Valve doesn't know.
+    NativeApply::Initialize();
 
     // Both data sources can be watched while inactive. FrameStageNotify only
     // adopts the source that has been explicitly activated below.

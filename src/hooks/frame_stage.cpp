@@ -29,6 +29,8 @@
 #include "hooks/knife_animation.h"
 #include "inventory/plan_a.h"
 #include "inventory/armory_inventory.h"
+#include "inventory/attachments.h"
+#include "inventory/native_apply.h"
 #include "inventory/runtime_mode.h"
 #include "skin/apply.h"
 #include "sdk/scene_node.h"
@@ -562,9 +564,17 @@ static void __fastcall FsnDetour(void* pClient, int stage)
     }
 
     // Armory inventory is only written while Armory is the selected runtime
-    // source and the player is outside an active match.
+    // source and the player is outside an active match. The same window is when
+    // CS2's own inventory screen can change a weapon's stickers or charm, so new
+    // attachment state is picked up here and handed to the Bridge.
     if (!inMatch && runtimeMode == RuntimeMode::Armory)
+    {
         ArmoryInventory::AdoptPending();
+        Attachments::ObserveAndPersist();
+        // The UseTool hook needs client.dll's Panorama script API; retry here
+        // when start-up ran before the client had registered it.
+        NativeApply::Tick();
+    }
 
     // Keep the sources isolated while allowing Armory's currently equipped
     // native inventory item to pass through the same entity apply pipeline.

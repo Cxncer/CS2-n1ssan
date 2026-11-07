@@ -8,8 +8,13 @@
 #include <string>
 #include "inventory/loadout.h"
 
+namespace Attachments { struct Set; }
+
 // Returns true when the weapon's skin identity/fallback data needed updating.
-bool ApplyWeaponSkin(uintptr_t weaponEnt, uintptr_t pawn, const TargetSkin& t);
+// `attachments`, when given, carries the stickers / charm of the Armory instance
+// being applied; Loadout mode always passes null.
+bool ApplyWeaponSkin(uintptr_t weaponEnt, uintptr_t pawn, const TargetSkin& t,
+                     const Attachments::Set* attachments = nullptr);
 
 // Reset a weapon to its default state (no paint, no attributes, no name).
 void ApplyDefault(uintptr_t weaponEnt);

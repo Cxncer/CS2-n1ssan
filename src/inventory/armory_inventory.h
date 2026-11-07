@@ -2,6 +2,9 @@
 
 #include <cstdint>
 #include <string>
+#include <vector>
+
+#include "inventory/attachments.h"
 
 struct TargetSkin;
 
@@ -27,11 +30,29 @@ namespace ArmoryInventory
         Equivalent
     };
 
+    // One projected instance, as the runtime currently knows it.
+    struct ManagedItem
+    {
+        uint64_t        id = 0;
+        std::string     instanceId;
+        uint16_t        definition = 0;
+        Attachments::Set attachments;   // the attachment state the projection asks for
+    };
+
     void StartWatcher();
     bool HasPending();
     void AdoptPending();
     bool HasItems();
     bool GetTargetForItemId(uint64_t itemId, TargetSkin& target);
+
+    // Copies the committed managed set (guard: safe from the game thread).
+    bool SnapshotManagedItems(std::vector<ManagedItem>& out);
+
+    // Profile and inventory revision the committed projection was built from.
+    bool SessionInfo(std::string& profileId, int& inventoryRevision);
+
+    // Directory that holds the Bridge documents, with a trailing separator.
+    std::string BridgeDirectory();
 
     // Resolve the Armory instance that belongs to a live weapon.
     //   definition: live C_EconItemView definition index.
@@ -39,12 +60,15 @@ namespace ArmoryInventory
     //   knife:      resolve through the equipment slot, because the live
     //               knife's definition may still be the default knife.
     //   detail:     short human-readable reason, for one-line diagnostics.
+    //   attachments: when not null, receives the matched instance's sticker /
+    //               charm state (empty when nothing matched).
     ArmoryMatch ResolveTargetForWeapon(
         uint16_t definition,
         uint8_t teamNumber,
         bool knife,
         TargetSkin& target,
-        std::string& detail);
+        std::string& detail,
+        Attachments::Set* attachments = nullptr);
 
     // Resolve the owned instance worn in a non-weapon slot ("gloves",
     // "agent", "zeus") for one team. The player's in-game loadout wins when it

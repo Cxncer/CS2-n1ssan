@@ -116,10 +116,11 @@ bool ProcessWeapon(uintptr_t weaponEnt, uintptr_t pawn)
         const char* teamLabel = teamStr[0] ? teamStr : "unknown";
 
         TargetSkin equipped{};
+        Attachments::Set attachments;
         std::string matchDetail;
         const ArmoryInventory::ArmoryMatch match =
             ArmoryInventory::ResolveTargetForWeapon(
-                def, team, knife, equipped, matchDetail);
+                def, team, knife, equipped, matchDetail, &attachments);
 
         if (match == ArmoryInventory::ArmoryMatch::None)
         {
@@ -151,7 +152,8 @@ bool ProcessWeapon(uintptr_t weaponEnt, uintptr_t pawn)
             return false;
         }
 
-        return ApplyWeaponSkin(weaponEnt, pawn, equipped);
+        return ApplyWeaponSkin(weaponEnt, pawn, equipped,
+            attachments.Empty() ? nullptr : &attachments);
     }
 
     // Knife: look up knife target by slot, not def

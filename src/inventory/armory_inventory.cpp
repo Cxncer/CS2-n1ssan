@@ -43,6 +43,10 @@ namespace
         int         stickerKit = 0;
         int         keychain = 0;
         int         keychainSeed = 0;
+        // Sticker and charm state carried by the projection. Deliberately not
+        // part of StableIdFor: an attachment change must not recreate the item,
+        // because the in-game Loadout keeps referring to its id.
+        Attachments::Set attachments;
     };
 
     // One entry from the Bridge's canonical equipment document. Assignments
@@ -71,6 +75,8 @@ namespace
     std::vector<ArmoryItem> g_inventoryItems;
     std::atomic<bool> g_pending{ false };
     std::string g_path;
+    std::string g_profileId;
+    int         g_inventoryRevision = 0;
 
     // All guarded by g_mutex.
     std::vector<EquipmentAssignment> g_assignments;
@@ -178,8 +184,94 @@ namespace
         return false;
     }
 
-    bool ParseItems(const std::string& text, std::vector<ArmoryItem>& out)
+    // Flat attachment keys: the projection emits one fixed key per value so the
+    // document stays readable with this scanner (no nested arrays).
+    void ParseAttachments(const std::string& object, ArmoryItem& item)
     {
+        double number = 0;
+
+        for (int slot = 0; slot < Attachments::STICKER_SLOTS; ++slot)
+        {
+            char key[40]{};
+
+            snprintf(key, sizeof(key), "sticker%dKit", slot);
+            if (!ExtractNumber(object, key, number) || number <= 0.0 || number > 1000000.0)
+                continue;
+
+            Attachments::StickerSlot& sticker = item.attachments.stickers[slot];
+            sticker.present = true;
+            sticker.kit = static_cast<int>(number);
+            sticker.scale = 1.0f;
+
+            snprintf(key, sizeof(key), "sticker%dWear", slot);
+            if (ExtractNumber(object, key, number))
+                sticker.wear = static_cast<float>(number);
+
+            snprintf(key, sizeof(key), "sticker%dScale", slot);
+            if (ExtractNumber(object, key, number) && number > 0.0)
+                sticker.scale = static_cast<float>(number);
+
+            snprintf(key, sizeof(key), "sticker%dRotation", slot);
+            if (ExtractNumber(object, key, number))
+                sticker.rotation = static_cast<float>(number);
+
+            snprintf(key, sizeof(key), "sticker%dOffsetX", slot);
+            if (ExtractNumber(object, key, number))
+                sticker.offsetX = static_cast<float>(number);
+
+            snprintf(key, sizeof(key), "sticker%dOffsetY", slot);
+            if (ExtractNumber(object, key, number))
+                sticker.offsetY = static_cast<float>(number);
+
+            snprintf(key, sizeof(key), "sticker%dSchema", slot);
+            if (ExtractNumber(object, key, number))
+            {
+                sticker.hasSchema = true;
+                sticker.schema = static_cast<int>(number);
+            }
+        }
+
+        if (!ExtractNumber(object, "charmKit", number) || number <= 0.0 || number > 1000000.0)
+            return;
+
+        Attachments::Charm& charm = item.attachments.charm;
+        charm.present = true;
+        charm.kit = static_cast<int>(number);
+
+        if (ExtractNumber(object, "charmSeed", number))
+            charm.seed = static_cast<int>(number);
+        if (ExtractNumber(object, "charmX", number))
+            charm.x = static_cast<float>(number);
+        if (ExtractNumber(object, "charmY", number))
+            charm.y = static_cast<float>(number);
+        if (ExtractNumber(object, "charmZ", number))
+            charm.z = static_cast<float>(number);
+
+        if (ExtractNumber(object, "charmSticker", number) && number > 0.0)
+        {
+            charm.hasSticker = true;
+            charm.sticker = static_cast<int>(number);
+        }
+
+        if (ExtractNumber(object, "charmHighlight", number) && number > 0.0)
+        {
+            charm.hasHighlight = true;
+            charm.highlight = static_cast<int>(number);
+        }
+    }
+
+    bool ParseItems(const std::string& text, std::vector<ArmoryItem>& out,
+                    std::string& profileId, int& inventoryRevision)
+    {
+        profileId.clear();
+        inventoryRevision = 0;
+
+        ExtractString(text.substr(0, text.find("\"items\"")), "profileId", profileId);
+
+        double revision = 0;
+        if (ExtractNumber(text, "inventoryRevision", revision))
+            inventoryRevision = static_cast<int>(revision);
+
         const size_t itemsKey = text.find("\"items\"");
         if (itemsKey == std::string::npos) return false;
 
@@ -234,6 +326,8 @@ namespace
             if (ExtractNumber(object, "stickerKit", number)) item.stickerKit = static_cast<int>(number);
             if (ExtractNumber(object, "keychain", number)) item.keychain = static_cast<int>(number);
             if (ExtractNumber(object, "keychainSeed", number)) item.keychainSeed = static_cast<int>(number);
+
+            ParseAttachments(object, item);
 
             bool statTrak = false;
             if (ExtractBool(object, "statTrak", statTrak))
@@ -375,6 +469,9 @@ namespace
 
     // Two owned instances are interchangeable only when applying either one
     // produces the same result in game.
+    // Two owned instances are interchangeable only when applying either one
+    // produces the same result in game. Stickers and a charm are part of what a
+    // weapon looks like, so instances that differ only there are not equivalent.
     bool SameRenderable(const ArmoryItem& a, const ArmoryItem& b)
     {
         return a.definition == b.definition &&
@@ -385,7 +482,8 @@ namespace
             a.statTrak == b.statTrak &&
             a.stickerKit == b.stickerKit &&
             a.keychain == b.keychain &&
-            a.keychainSeed == b.keychainSeed;
+            a.keychainSeed == b.keychainSeed &&
+            a.attachments == b.attachments;
     }
 
     const ArmoryItem* FindByIdLocked(uint64_t id)
@@ -406,7 +504,8 @@ namespace
         return nullptr;
     }
 
-    void FillTarget(const ArmoryItem& item, TargetSkin& target)
+    void FillTarget(const ArmoryItem& item, TargetSkin& target,
+                    Attachments::Set* attachments = nullptr)
     {
         target = TargetSkin{};
         target.paintKit = item.paintKit;
@@ -612,7 +711,9 @@ namespace ArmoryInventory
                 }
 
                 std::vector<ArmoryItem> items;
-                if (!ParseItems(text, items))
+                std::string profileId;
+                int inventoryRevision = 0;
+                if (!ParseItems(text, items, profileId, inventoryRevision))
                 {
                     Log("[armory-inventory] reload skipped: malformed inventory document");
                     continue;
@@ -621,6 +722,8 @@ namespace ArmoryInventory
                 const size_t count = items.size();
                 {
                     std::lock_guard<std::mutex> lock(g_mutex);
+                    g_profileId = profileId;
+                    g_inventoryRevision = inventoryRevision;
                     // Keep the active lookup table aligned with the inventory
                     // currently committed to SOCache. Publish staged entries
                     // only after the replacement transaction succeeds.
@@ -679,6 +782,26 @@ namespace ArmoryInventory
             {
                 Log("[armory-inventory] retained item id=%016llX def=%u",
                     static_cast<unsigned long long>(item.id), item.definition);
+
+                // Stickers and the charm can change without the item id moving,
+                // so a retained item still has to match the projection.
+                Attachments::Set current;
+                if (LootSOCache::ReadAttachments(item.id, current) &&
+                    current == item.attachments)
+                    continue;
+
+                if (LootSOCache::SyncAttachments(item.id, item.attachments))
+                {
+                    char text[256]{};
+                    Attachments::Describe(item.attachments, text, sizeof(text));
+                    Log("[armory-inventory] attachments synced on %016llX: %s",
+                        static_cast<unsigned long long>(item.id), text);
+                }
+                else
+                {
+                    Log("[armory-inventory] attachments could not be synced on %016llX",
+                        static_cast<unsigned long long>(item.id));
+                }
                 continue;
             }
 
@@ -694,6 +817,7 @@ namespace ArmoryInventory
             request.stickerKit = item.stickerKit;
             request.keychain = item.keychain;
             request.keychainSeed = item.keychainSeed;
+            request.attachments = item.attachments;
 
             switch (LootSOCache::Create(request))
             {
@@ -772,6 +896,39 @@ namespace ArmoryInventory
         return !g_inventoryItems.empty();
     }
 
+    bool SnapshotManagedItems(std::vector<ManagedItem>& out)
+    {
+        std::lock_guard<std::mutex> lock(g_mutex);
+
+        out.clear();
+        out.reserve(g_inventoryItems.size());
+
+        for (const auto& item : g_inventoryItems)
+        {
+            ManagedItem managed;
+            managed.id = item.id;
+            managed.instanceId = item.instanceId;
+            managed.definition = item.definition;
+            managed.attachments = item.attachments;
+            out.push_back(std::move(managed));
+        }
+
+        return true;
+    }
+
+    bool SessionInfo(std::string& profileId, int& inventoryRevision)
+    {
+        std::lock_guard<std::mutex> lock(g_mutex);
+        profileId = g_profileId;
+        inventoryRevision = g_inventoryRevision;
+        return !g_inventoryItems.empty();
+    }
+
+    std::string BridgeDirectory()
+    {
+        return g_bridgeDirectory;
+    }
+
     // Exact projected-item lookup by SOCache ID. Kept for diagnostics and any
     // future path that holds a projected instance ID directly.
     bool GetTargetForItemId(uint64_t itemId, TargetSkin& target)
@@ -805,10 +962,12 @@ namespace ArmoryInventory
         uint8_t teamNumber,
         bool knife,
         TargetSkin& target,
-        std::string& detail)
+        std::string& detail,
+        Attachments::Set* attachments)
     {
         target = TargetSkin{};
         detail.clear();
+        if (attachments) *attachments = Attachments::Set{};
 
         if (!definition)
         {
@@ -839,7 +998,7 @@ namespace ArmoryInventory
             {
                 if (const ArmoryItem* item = FindByIdLocked(equippedId))
                 {
-                    FillTarget(*item, target);
+                    FillTarget(*item, target, attachments);
                     snprintf(why, sizeof(why), "equipped in game %016llX",
                         static_cast<unsigned long long>(item->id));
                     detail = why;
@@ -860,7 +1019,7 @@ namespace ArmoryInventory
             {
                 if (const ArmoryItem* item = FindByIdLocked(assigned->second))
                 {
-                    FillTarget(*item, target);
+                    FillTarget(*item, target, attachments);
                     snprintf(why, sizeof(why), "assigned knife instance %016llX",
                         static_cast<unsigned long long>(item->id));
                     detail = why;
@@ -875,7 +1034,7 @@ namespace ArmoryInventory
             {
                 if (const ArmoryItem* item = FindByIdLocked(assigned->second))
                 {
-                    FillTarget(*item, target);
+                    FillTarget(*item, target, attachments);
                     snprintf(why, sizeof(why), "assigned instance %016llX",
                         static_cast<unsigned long long>(item->id));
                     detail = why;
@@ -895,7 +1054,7 @@ namespace ArmoryInventory
             {
                 if (const ArmoryItem* item = FindByIdLocked(t->second))
                 {
-                    FillTarget(*item, target);
+                    FillTarget(*item, target, attachments);
                     detail = "both teams assigned the same instance";
                     return ArmoryMatch::Equipped;
                 }
@@ -932,7 +1091,7 @@ namespace ArmoryInventory
             return ArmoryMatch::None;
         }
 
-        FillTarget(*item, target);
+        FillTarget(*item, target, attachments);
         snprintf(why, sizeof(why), "%u owned instance(s) render identically",
             static_cast<unsigned>(group.count));
         detail = why;

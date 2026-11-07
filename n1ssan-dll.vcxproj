@@ -173,6 +173,8 @@
     <ClCompile Include="src\inventory\loot_schema.cpp" />
     <ClCompile Include="src\inventory\loot_socache.cpp" />
     <ClCompile Include="src\inventory\armory_inventory.cpp" />
+    <ClCompile Include="src\inventory\attachments.cpp" />
+    <ClCompile Include="src\inventory\native_apply.cpp" />
     <ClCompile Include="src\inventory\runtime_mode.cpp" />
     <ClCompile Include="src\inventory\plan_a.cpp" />
     <ClCompile Include="src\inventory\schema_prob.cpp" />

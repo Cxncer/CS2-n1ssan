@@ -10,6 +10,7 @@
 #include "memory/access.h"
 #include "config/auto_offsets.h"
 #include "inventory/loot_schema.h"
+#include "inventory/attachments.h"
 #include "memory/scanner.h"
 #include "inventory/engine_schema_diagnostic.h"
 
@@ -540,7 +541,8 @@ namespace
     // Writes identity + paint kit to a given item view. SAFE to call on an
     // empty view. Returns false if the view already has attributes we don't own.
     bool WriteViewSafely(uintptr_t v, const TargetSkin& t,
-        int wantQuality, int wantStatTrak, const char* which)
+        int wantQuality, int wantStatTrak, const char* which,
+        const Attachments::Set* attachments)
     {
         if (!v) return false;
 
@@ -568,7 +570,7 @@ namespace
         SafeWriteU8(v + g_off.EIV_RestoreCustom, 1);
         SafeWriteI32(v + g_off.EIV_EntityQuality, wantQuality);
 
-        EconAttr_Create(v, t.paintKit, t.wear, t.resolvedSeed, wantStatTrak);
+        EconAttr_Create(v, t.paintKit, t.wear, t.resolvedSeed, wantStatTrak, attachments);
 
         // Diagnostic: check whether attributes were created
         AttributeVector_t* post = GetAttributeVector(v);
@@ -627,7 +629,8 @@ bool ResolveDefinitionModelName(uint16_t definitionIndex, std::string& modelName
 }
 
 // ---- Weapon ----
-bool ApplyWeaponSkin(uintptr_t weaponEnt, uintptr_t pawn, const TargetSkin& t)
+bool ApplyWeaponSkin(uintptr_t weaponEnt, uintptr_t pawn, const TargetSkin& t,
+                     const Attachments::Set* attachments)
 {
     if (!weaponEnt || !pawn)
         return false;
@@ -662,7 +665,36 @@ bool ApplyWeaponSkin(uintptr_t weaponEnt, uintptr_t pawn, const TargetSkin& t)
             t,
             wantQuality,
             wantStatTrak,
-            "world");
+            "world",
+            attachments);
+    }
+
+    // Stickers and the charm can change without the paint identity changing, so
+    // they are brought in line separately. A fresh view write already carries
+    // them; a view the game owns is left alone, as everywhere else here.
+    if (attachments && !attachments->Empty() && alreadyPainted)
+    {
+        Attachments::Set current;
+        const bool readable =
+            Attachments::Read(reinterpret_cast<void*>(view), current);
+
+        if (!readable || current != *attachments)
+        {
+            if (Attachments::Write(reinterpret_cast<void*>(view), *attachments,
+                    readable ? &current : nullptr))
+            {
+                char text[192]{};
+                Attachments::Describe(*attachments, text, sizeof(text));
+                Log("[attach-view] updated weapon=%p: %s", (void*)weaponEnt, text);
+
+                // The model was built without these stickers.
+                g_weaponModelCache.erase(weaponEnt);
+            }
+            else
+            {
+                Log("[attach-view] could not write stickers on weapon=%p", (void*)weaponEnt);
+            }
+        }
     }
 
     // --------------------------------------------------------

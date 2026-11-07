@@ -40,6 +40,7 @@ namespace
 
     constexpr int CLASS_ECON_ITEM = 1;
     constexpr int VFUNC_SO_CREATED = 0;
+    constexpr int VFUNC_SO_UPDATED = 1;
     constexpr int VFUNC_SO_DESTROYED = 2;
     constexpr int VFUNC_TYPECACHE_REMOVE = 3;
     constexpr int VFUNC_ITEM_DESTRUCT = 1;
@@ -334,6 +335,83 @@ namespace LootSOCache
         return item != nullptr;
     }
 
+    void* Find(uint64_t id)
+    {
+        if (!id) return nullptr;
+
+        void* tc = ItemTypeCache(LocalInventory());
+        if (!tc) return nullptr;
+
+        void* item = nullptr;
+        if (!FindItemInCache(tc, id, item))
+            return nullptr;
+        return item;
+    }
+
+    bool ReadAttachments(uint64_t id, Attachments::Set& out)
+    {
+        out = Attachments::Set{};
+
+        void* item = Find(id);
+        if (!item) return false;
+
+        return Attachments::Read(item, out);
+    }
+
+    bool SyncAttachments(uint64_t id, const Attachments::Set& attachments)
+    {
+        void* item = Find(id);
+        if (!item) return false;
+
+        Attachments::Set current;
+        const bool known = Attachments::Read(item, current);
+
+        if (known && current == attachments)
+            return true;
+
+        // `current` is only trusted for clearing slots when the read completed;
+        // an inconclusive read must not erase what the item already carries.
+        return Attachments::Write(item, attachments, known ? &current : nullptr);
+    }
+
+    bool NotifyUpdated(uint64_t id)
+    {
+        if (!id)
+            return false;
+
+        void* inv = LocalInventory();
+        void* tc = ItemTypeCache(inv);
+        SOID owner{};
+        if (!inv || !tc || !ReadOwner(inv, owner))
+            return false;
+
+        void* item = nullptr;
+        if (!FindItemInCache(tc, id, item) || !item)
+            return false;
+
+        // What a Game Coordinator item update does to the local inventory: the
+        // shared-object listeners hear about it before anything else runs, which
+        // is how the inventory screen and the in-match weapons learn the item
+        // changed.
+        __try
+        {
+            void** inventoryVtable = *reinterpret_cast<void***>(inv);
+            auto notifyUpdated = reinterpret_cast<ListenerFn>(
+                inventoryVtable[VFUNC_SO_UPDATED]);
+            if (!notifyUpdated)
+                return false;
+
+            notifyUpdated(inv, &owner, item, SO_EVENT_INCREMENTAL);
+            return true;
+        }
+        __except (EXCEPTION_EXECUTE_HANDLER)
+        {
+            Log("[socache] SO_UPDATED threw for id=%llu",
+                static_cast<unsigned long long>(id));
+            return false;
+        }
+    }
+
     bool GetIdsByPrefix(uint64_t prefix, uint64_t mask, std::vector<uint64_t>& ids)
     {
         ids.clear();
@@ -350,7 +428,7 @@ namespace LootSOCache
         return true;
     }
 
-    bool Remove(uint64_t id)
+    bool Remove(uint64_t id, bool destruct)
     {
         if (!id)
             return false;
@@ -402,6 +480,9 @@ namespace LootSOCache
                 static_cast<unsigned long long>(id));
             return false;
         }
+
+        if (!destruct)
+            return true;
 
         __try
         {
@@ -489,6 +570,18 @@ namespace LootSOCache
                 DestroyUncachedItem(item);
                 return CreateResult::Failed;
             }
+        }
+
+        // Stickers and the charm the player applied in CS2, restored from the
+        // profile so the item comes back exactly as it was left. Failing to
+        // write them keeps the weapon rather than dropping it from the
+        // inventory; the retained-item sync corrects it on the next reload.
+        if (!req.attachments.Empty() && !Attachments::Write(item, req.attachments, nullptr))
+        {
+            char text[160]{};
+            Attachments::Describe(req.attachments, text, sizeof(text));
+            Log("[socache] attachments not written for def=%u: %s",
+                req.definition, text);
         }
 
         __try
