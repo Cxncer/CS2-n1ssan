@@ -81,8 +81,12 @@ namespace
         if (k == std::string::npos) return false;
         const size_t colon = object.find(':', k + needle.size());
         if (colon == std::string::npos) return false;
-        const size_t quote = object.find('"', colon + 1);
-        if (quote == std::string::npos) return false;
+        size_t quote = colon + 1;
+        while (quote < object.size() &&
+            (object[quote] == ' ' || object[quote] == '\\t' ||
+             object[quote] == '\\r' || object[quote] == '\\n'))
+            ++quote;
+        if (quote >= object.size() || object[quote] != '"') return false;
 
         std::string value;
         for (size_t i = quote + 1; i < object.size(); ++i)
@@ -192,7 +196,6 @@ namespace
             if (ExtractNumber(object, "stickerKit", number)) item.stickerKit = static_cast<int>(number);
             if (ExtractNumber(object, "keychain", number)) item.keychain = static_cast<int>(number);
             if (ExtractNumber(object, "keychainSeed", number)) item.keychainSeed = static_cast<int>(number);
-            ExtractString(object, "customName", item.customName);
 
             bool statTrak = false;
             if (ExtractBool(object, "statTrak", statTrak))
@@ -340,6 +343,9 @@ namespace
             }
         }
 
+        const size_t weaponCount = weapons.size();
+        const size_t knifeCount = knives.size();
+        const size_t gloveCount = gloves.size();
         {
             std::lock_guard<std::mutex> lock(g_mutex);
             g_equippedWeapons = std::move(weapons);
@@ -349,7 +355,7 @@ namespace
 
         Log("[armory-equipment] activeProfile=%s assignments=%zu weaponTargets=%zu knifeTargets=%zu gloveTargets=%zu",
             activeProfileId.c_str(), assignments.size(),
-            g_equippedWeapons.size(), g_equippedKnives.size(), g_equippedGloves.size());
+            weaponCount, knifeCount, gloveCount);
     }
 
     void StartEquipmentWatcher()
