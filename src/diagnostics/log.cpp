@@ -116,7 +116,10 @@ namespace
         bool ok = WriteFile(file, record, length, &written, nullptr) &&
             written == length;
         if (!ok)
+        {
             error = GetLastError();
+            if (error == ERROR_SUCCESS) error = ERROR_WRITE_FAULT;
+        }
         if (ok)
         {
             if (!WriteFile(file, "\n", 1, &written, nullptr) || written != 1)
