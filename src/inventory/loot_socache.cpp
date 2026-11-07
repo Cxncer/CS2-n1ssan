@@ -57,12 +57,12 @@ namespace
     bool ShouldLogSocacheDiagnostic()
     {
         // Keep watcher-driven diagnostics useful without flooding the log.
-        static DWORD lastLog = 0;
+        static volatile LONG lastLog = 0;
         const DWORD now = GetTickCount();
-        if (now - lastLog < 2000)
+        const LONG previous = InterlockedCompareExchange(&lastLog, 0, 0);
+        if (now - static_cast<DWORD>(previous) < 2000)
             return false;
-        lastLog = now;
-        return true;
+        return InterlockedCompareExchange(&lastLog, static_cast<LONG>(now), previous) == previous;
     }
 
     bool ReadOwner(const void* inv, SOID& o)
