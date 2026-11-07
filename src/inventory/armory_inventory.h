@@ -1,7 +1,6 @@
 #pragma once
 
 #include <cstdint>
-#include <string>
 
 struct TargetSkin;
 
@@ -13,10 +12,6 @@ namespace ArmoryInventory
     void StartWatcher();
     bool HasPending();
     void AdoptPending();
-
-    // Active Loadout Builder assignments backed by owned Armory instances.
-    bool HasEquippedTargets();
-    bool GetEquippedTarget(uint16_t definition, const std::string& team, TargetSkin& target);
-    bool GetEquippedKnifeTarget(const std::string& team, TargetSkin& target);
-    bool GetEquippedGloveTarget(const std::string& team, TargetSkin& target);
+    bool HasItems();
+    bool GetTargetForItemId(uint64_t itemId, TargetSkin& target);
 }
