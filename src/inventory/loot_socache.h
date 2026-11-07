@@ -20,6 +20,7 @@ namespace LootSOCache
         int      keychainSeed = 0;
     };
 
+    bool Initialize();
     bool WaitForInventory(int timeoutMs = 2000);
     CreateResult Create(const NewItem& item);
     bool HasItem(uint64_t id);
