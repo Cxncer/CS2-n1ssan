@@ -765,6 +765,47 @@ namespace Attachments
         return index;
     }
 
+    // Sticker-only mutation, matching Lootline's SyncStickers contract:
+    // never reads, clears, or rewrites keychain attributes.
+    bool WriteStickerSlots(void* econItem, const Set& set, const Set* previous)
+    {
+        if (!econItem || !Initialize()) return false;
+
+        bool ok = true;
+        char name[48]{};
+
+        for (int slot = 0; slot < STICKER_SLOTS; ++slot)
+        {
+            const StickerSlot& sticker = set.stickers[slot];
+            const bool wasPresent = previous && previous->stickers[slot].present;
+            if (!sticker.present && !wasPresent) continue;
+
+            StickerName(name, sizeof(name), slot, "id");
+            ok = SetIntByName(econItem, name, sticker.present ? sticker.kit : 0) && ok;
+            if (!sticker.present) continue;
+
+            StickerName(name, sizeof(name), slot, "wear");
+            ok = SetFloatByName(econItem, name, Clamp01(sticker.wear)) && ok;
+            StickerName(name, sizeof(name), slot, "scale");
+            ok = SetFloatByName(econItem, name, sticker.scale > 0.0f ? sticker.scale : 1.0f) && ok;
+            StickerName(name, sizeof(name), slot, "rotation");
+            ok = SetFloatByName(econItem, name, sticker.rotation) && ok;
+            StickerName(name, sizeof(name), slot, "offset x");
+            ok = SetFloatByName(econItem, name, sticker.offsetX) && ok;
+            StickerName(name, sizeof(name), slot, "offset y");
+            ok = SetFloatByName(econItem, name, sticker.offsetY) && ok;
+
+            if (sticker.hasSchema)
+            {
+                StickerName(name, sizeof(name), slot, "schema");
+                if (NameOk(name))
+                    ok = SetIntByName(econItem, name, sticker.schema) && ok;
+            }
+        }
+
+        return ok;
+    }
+
     bool Write(void* econItem, const Set& set, const Set* previous)
     {
         if (!econItem) return false;
