@@ -141299,3 +141299,6563 @@ N1SSAN_STATUS|1|2026-11-08T02:55:45Z|5620|armory-obsidian-3.0|READY|reason=runti
 [hud-find] child[2]=0x000002B0CFDB8080 owner=0x000002B05A3DC400 handle=0x2200EB resolved=0x000002B088CE4000 **MATCH**
 [hud-find] SUCCESS hudWeapon=0x000002B05A3DC400 after 3 nodes
 [apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[status-path] selected=C:\Users\mirac\AppData\Local\n1ssan\status\cs2-24152.status source=LOCALAPPDATA
+
+# n1ssan diagnostic session
+[build] armory-obsidian-3.0
+[build] Operation Armory x Obsidian Build 3.0 | Nov  7 2026 22:48:39
+N1SSAN_STATUS|1|2026-11-08T03:14:55Z|24152|armory-obsidian-3.0|INITIALIZING|reason=worker_started
+[status-write] begin state=INITIALIZING path=C:\Users\mirac\AppData\Local\n1ssan\status\cs2-24152.status
+[status-write] success state=INITIALIZING error=0
+[off] PAWN_MyWearables = 0x1268
+[off] field offsets populated
+[auto-off] dwEntityList                 hit 0x00007FFAB4F793CB -> rva 0x271FBB8 (val=000003A755460000)
+[auto-off] dwLocalPlayerController      hit 0x00007FFAB4E95750 -> rva 0x2542548 (val=000003A7E1EC4A00)
+[auto-off] dwLocalPlayerPawn            hit 0x00007FFAB46B1615 -> rva 0x27391E0 (val=000003A7722A3000)
+[auto-off] summary: matched=3/3
+[off] RVA_ENTITY_LIST           = 0x00007FFAB6C7FBB8
+[off] RVA_LOCALPLAYERCONTROLLER = 0x00007FFAB6AA2548
+[off] RVA_LOCALPLAYERPAWN       = 0x00007FFAB6C991E0
+[bridge] discovered Bridge directory: E:\Vibe Coding\CS2 Lore\CS2 n1ssan\development\n1ssan-web-bridge\
+[runtime-mode] no valid selection yet; waiting for launcher
+[runtime-mode] initialized in neutral mode; waiting for DOMINATE selection
+[schema-live] m_nSubclassID runtime=0x380 hardcoded=0x38C MISMATCH
+[schema-live] subclass resolver ready: 0x380
+[schema-gloves] C_CSPlayerPawn->m_EconGloves = 0x1770
+[schema-gloves] C_CSPlayerPawn->m_bNeedToReApplyGloves = 0x176D
+[schema-gloves] C_EconItemView->m_iItemDefinitionIndex = 0x1BA
+[schema-gloves] C_EconItemView->m_iEntityQuality = 0x1BC
+[schema-gloves] C_EconItemView->m_iItemIDHigh = 0x1D0
+[schema-gloves] C_EconItemView->m_bInitialized = 0x1E8
+[schema-gloves] C_EconItemView->m_bDisallowSOC = 0x1E9
+[schema-gloves] C_EconItemView->m_bRestoreCustomMaterialAfterPrecache = 0x1B8
+[schema-gloves] C_EconItemView->m_AttributeList = 0x208
+[schema-gloves] C_EconItemView->m_NetworkedDynamicAttributes = 0x280
+[schema-gloves] CAttributeList->m_Attributes = 0x8
+[schema-gloves] READY
+[resolve] InvalidateDescription          @ 0x00007FFAB5701350
+[resolve] BuildModernSkin                @ 0x00007FFAB53A5B10
+[resolve] SetMeshGroupMask               @ 0x00007FFAB5025A90
+[resolve] RegenerateSkins                @ 0x00007FFAB4D8B4B0
+[resolve] ReleaseCompositeMaterials      @ 0x00007FFAB5A4C4A0
+[resolve] GloveCreatePaintKit            @ 0x00007FFAB56F13D0
+[resolve] AgentSetModel                  @ 0x00007FFAB4EC5C90
+[resolve] KnifeUpdateSubclass            @ 0x00007FFAB4769000
+[resolve] GloveSetBodyGroup              @ 0x00007FFAB4EC4BB0
+[resolve] MemAlloc                       @ 0x00007FFAD115DD30
+[resolve] MemFree                        @ 0x00007FFAD115DD70
+[resolve] CSkeletonInstance->m_modelState = 0x140 (hardcoded)
+[resolve] CModelState->m_hModel = 0xA0 (hardcoded)
+[resolve] entityList @ 0x00007FFAB6C7FBB8 -> 0x000003A755460000
+[glove-paintkit-schema] READY
+[glove-schema] READY
+[plan-a] CEconItemSystem* = 0x000003A6C9B22FC0 (stored)
+[loot-schema] GetAttributeDefinitionByName @ 0x00007FFAB56930F0
+[loot-schema] OK (invOffset=0x528D0, setUint=00007FFAB5648E70, setFloat=00007FFAB5649080)
+[socache] CreateBaseTypeCache initialized @ 00007FFAB5B8B820
+[plan-a] shared inventory runtime ready; Loadout injection disabled
+[use-tool] initialize attempt=1 installed=0 mode=0
+[use-tool] placement probe: sticker signature=FOUND
+[use-tool] placement probe: keychain signature=FOUND
+[use-tool] notification: engine=0x00007FFAB6C991E0 dispatch=vfunc 47 eventId=903
+[use-tool] hook: ok at 0x00007FFAB5565810 via signature (CS2's inventory applies Armory stickers and charms)
+[use-tool] placement pointers: sticker slot=00007FFAB677AE90 x=00007FFAB6B5960C y=00007FFAB6B59610 rotation=00007FFAB6B59614 wear=00007FFAB6B59618; charm x=00007FFAB6B598A8 y=00007FFAB6B598AC z=00007FFAB6B598B0
+[use-tool] placement: sticker ok, charm ok
+[use-tool] popup notification: ok (the applying spinner finishes)
+[armory-inventory] watching for inventory changes: E:\Vibe Coding\CS2 Lore\CS2 n1ssan\development\n1ssan-web-bridge\armory-inventory.json
+[armory-equipment] watching for loadout assignments: E:\Vibe Coding\CS2 Lore\CS2 n1ssan\development\n1ssan-web-bridge\armory-equipment.json
+[loadout-api] resolved GetItemID=00007FFAB55085D0 GetSlotEquippedWithDefIndex=00007FFAB551DC10
+[fsn] pClient=0x00007FFAB6AC4620 vtable=0x00007FFAB61C8230 fn=0x00007FFAB50CEFE0 slot=36
+[fsn] hooked (vtable overwrite)
+[fsn] first stage call seen
+
+=== SNAPSHOT ===
+[snap] fsnCount=1 lastStage=0 stage5Count=0
+[snap] stage histogram:
+[snap]   stage  0: 1 frames
+[snap] dwLocalPlayerController @ 0x00007FFAB6AA2548 -> 0x000003A7E1EC4A00 
+[snap] dwLocalPlayerPawn       @ 0x00007FFAB6C991E0 -> 0x000003A7722A3000 
+[snap] pawn: vtable=0x00007FFAC41D3740 inClient=0 health=935
+[snap] ctrl: vtable=0x00007FFAB6171680 inClient=1 m_hPlayerPawn@0x92C = 0x00E5800B (idx=11)
+[snap] entitySystem @ 0x00007FFAB6C7FBB8 = 0x000003A755460000 highestEntityIndex=13
+[snap] entity resolution: 12/16 of indices 1..16 valid
+[snap] ctrl->pawn handle resolve: 0x00E5800B -> 0x000003A7E1D1D000
+[snap] ----------------------------------------
+[knife-anim] stage=6 reached
+[glove-observe] pawn=000003A7E1D1D000 reapply=0 changed=0 def=0 init=0 idHigh=0x0
+[match] network signOn=6 maxClients=1 backgroundMap=0 connected=0 alive=0
+N1SSAN_STATUS|1|2026-11-08T03:14:55Z|24152|armory-obsidian-3.0|CHECKS_PASSED|reason=required_initialization_checks_passed
+[status-write] begin state=CHECKS_PASSED path=C:\Users\mirac\AppData\Local\n1ssan\status\cs2-24152.status
+[status-write] success state=CHECKS_PASSED error=0
+[diagnostic] runtime=unknown targets=0; awaiting DOMINATE selection
+N1SSAN_STATUS|1|2026-11-08T03:14:55Z|24152|armory-obsidian-3.0|READY|reason=runtime_worker_heartbeat
+[status-write] begin state=READY path=C:\Users\mirac\AppData\Local\n1ssan\status\cs2-24152.status
+[status-write] success state=READY error=0
+[knife-anim] stage=6 reached
+[knife-anim] stage=6 reached
+[armory-equipment] index: assignments=0 resolved=0 unresolved=0 conflicts=0 definitions=0 slots=0
+[armory-equipment] reloaded equipment document
+[armory-inventory] staged 19 items (applies outside an active match)
+
+=== SNAPSHOT ===
+[snap] fsnCount=2632 lastStage=0 stage5Count=221
+[snap] stage histogram:
+[snap]   stage  0: 322 frames
+[snap]   stage  1: 221 frames
+[snap]   stage  2: 221 frames
+[snap]   stage  3: 221 frames
+[snap]   stage  5: 221 frames
+[snap]   stage  6: 221 frames
+[snap]   stage  7: 221 frames
+[snap]   stage  8: 221 frames
+[snap]   stage 10: 221 frames
+[snap]   stage 11: 321 frames
+[snap]   stage 12: 221 frames
+[snap] dwLocalPlayerController @ 0x00007FFAB6AA2548 -> 0x000003A7E1EC4A00 
+[snap] dwLocalPlayerPawn       @ 0x00007FFAB6C991E0 -> 0x000003A7722A3000 
+[snap] pawn: vtable=0x00007FFAC41D3740 inClient=0 health=935
+[snap] ctrl: vtable=0x00007FFAB6171680 inClient=1 m_hPlayerPawn@0x92C = 0x00E5800B (idx=11)
+[snap] entitySystem @ 0x00007FFAB6C7FBB8 = 0x000003A755460000 highestEntityIndex=13
+[snap] entity resolution: 12/16 of indices 1..16 valid
+[snap] ctrl->pawn handle resolve: 0x00E5800B -> 0x000003A7E1D1D000
+[snap] ----------------------------------------
+
+=== SNAPSHOT ===
+[snap] fsnCount=5263 lastStage=0 stage5Count=442
+[snap] stage histogram:
+[snap]   stage  0: 643 frames
+[snap]   stage  1: 442 frames
+[snap]   stage  2: 442 frames
+[snap]   stage  3: 442 frames
+[snap]   stage  5: 442 frames
+[snap]   stage  6: 442 frames
+[snap]   stage  7: 442 frames
+[snap]   stage  8: 442 frames
+[snap]   stage 10: 442 frames
+[snap]   stage 11: 642 frames
+[snap]   stage 12: 442 frames
+[snap] dwLocalPlayerController @ 0x00007FFAB6AA2548 -> 0x000003A7E1EC4A00 
+[snap] dwLocalPlayerPawn       @ 0x00007FFAB6C991E0 -> 0x000003A7722A3000 
+[snap] pawn: vtable=0x00007FFAC41D3740 inClient=0 health=935
+[snap] ctrl: vtable=0x00007FFAB6171680 inClient=1 m_hPlayerPawn@0x92C = 0x00E5800B (idx=11)
+[snap] entitySystem @ 0x00007FFAB6C7FBB8 = 0x000003A755460000 highestEntityIndex=13
+[snap] entity resolution: 12/16 of indices 1..16 valid
+[snap] ctrl->pawn handle resolve: 0x00E5800B -> 0x000003A7E1D1D000
+N1SSAN_STATUS|1|2026-11-08T03:15:05Z|24152|armory-obsidian-3.0|READY|reason=runtime_worker_heartbeat
+[snap] ----------------------------------------
+[status-write] begin state=READY path=C:\Users\mirac\AppData\Local\n1ssan\status\cs2-24152.status
+[status-write] success state=READY error=0
+
+=== SNAPSHOT ===
+[snap] fsnCount=7883 lastStage=0 stage5Count=662
+[snap] stage histogram:
+[snap]   stage  0: 963 frames
+[snap]   stage  1: 662 frames
+[snap]   stage  2: 662 frames
+[snap]   stage  3: 662 frames
+[snap]   stage  5: 662 frames
+[snap]   stage  6: 662 frames
+[snap]   stage  7: 662 frames
+[snap]   stage  8: 662 frames
+[snap]   stage 10: 662 frames
+[snap]   stage 11: 962 frames
+[snap]   stage 12: 662 frames
+[snap] dwLocalPlayerController @ 0x00007FFAB6AA2548 -> 0x000003A7E1EC4A00 
+[snap] dwLocalPlayerPawn       @ 0x00007FFAB6C991E0 -> 0x000003A7722A3000 
+[snap] pawn: vtable=0x00007FFAC41D3740 inClient=0 health=935
+[snap] ctrl: vtable=0x00007FFAB6171680 inClient=1 m_hPlayerPawn@0x92C = 0x00E5800B (idx=11)
+[snap] entitySystem @ 0x00007FFAB6C7FBB8 = 0x000003A755460000 highestEntityIndex=13
+[snap] entity resolution: 12/16 of indices 1..16 valid
+[snap] ctrl->pawn handle resolve: 0x00E5800B -> 0x000003A7E1D1D000
+[snap] ----------------------------------------
+
+=== SNAPSHOT ===
+[snap] fsnCount=10523 lastStage=0 stage5Count=884
+[snap] stage histogram:
+[snap]   stage  0: 1284 frames
+[snap]   stage  1: 884 frames
+[snap]   stage  2: 884 frames
+[snap]   stage  3: 884 frames
+[snap]   stage  5: 884 frames
+[snap]   stage  6: 884 frames
+[snap]   stage  7: 884 frames
+[snap]   stage  8: 884 frames
+[snap]   stage 10: 884 frames
+[snap]   stage 11: 1283 frames
+N1SSAN_STATUS|1|2026-11-08T03:15:15Z|24152|armory-obsidian-3.0|READY|reason=runtime_worker_heartbeat
+[snap]   stage 12: 884 frames
+[status-write] begin state=READY path=C:\Users\mirac\AppData\Local\n1ssan\status\cs2-24152.status
+[snap] dwLocalPlayerController @ 0x00007FFAB6AA2548 -> 0x000003A7E1EC4A00 
+[snap] dwLocalPlayerPawn       @ 0x00007FFAB6C991E0 -> 0x000003A7722A3000 
+[snap] pawn: vtable=0x00007FFAC41D3740 inClient=0 health=935
+[snap] ctrl: vtable=0x00007FFAB6171680 inClient=1 m_hPlayerPawn@0x92C = 0x00E5800B (idx=11)
+[status-write] success state=READY error=0
+[snap] entitySystem @ 0x00007FFAB6C7FBB8 = 0x000003A755460000 highestEntityIndex=13
+[snap] entity resolution: 12/16 of indices 1..16 valid
+[snap] ctrl->pawn handle resolve: 0x00E5800B -> 0x000003A7E1D1D000
+[snap] ----------------------------------------
+
+=== SNAPSHOT ===
+[snap] fsnCount=13165 lastStage=0 stage5Count=1106
+[snap] stage histogram:
+[snap]   stage  0: 1606 frames
+[snap]   stage  1: 1106 frames
+[snap]   stage  2: 1106 frames
+[snap]   stage  3: 1106 frames
+[snap]   stage  5: 1106 frames
+[snap]   stage  6: 1106 frames
+[snap]   stage  7: 1106 frames
+[snap]   stage  8: 1106 frames
+[snap]   stage 10: 1106 frames
+[snap]   stage 11: 1605 frames
+[snap]   stage 12: 1106 frames
+[snap] dwLocalPlayerController @ 0x00007FFAB6AA2548 -> 0x000003A7E1EC4A00 
+[snap] dwLocalPlayerPawn       @ 0x00007FFAB6C991E0 -> 0x000003A7722A3000 
+[snap] pawn: vtable=0x00007FFAC41D3740 inClient=0 health=935
+[snap] ctrl: vtable=0x00007FFAB6171680 inClient=1 m_hPlayerPawn@0x92C = 0x00E5800B (idx=11)
+[snap] entitySystem @ 0x00007FFAB6C7FBB8 = 0x000003A755460000 highestEntityIndex=13
+[snap] entity resolution: 12/16 of indices 1..16 valid
+[snap] ctrl->pawn handle resolve: 0x00E5800B -> 0x000003A7E1D1D000
+[snap] ----------------------------------------
+N1SSAN_STATUS|1|2026-11-08T03:15:26Z|24152|armory-obsidian-3.0|READY|reason=runtime_worker_heartbeat
+[status-write] begin state=READY path=C:\Users\mirac\AppData\Local\n1ssan\status\cs2-24152.status
+[status-write] success state=READY error=0
+
+=== SNAPSHOT ===
+[snap] fsnCount=15803 lastStage=0 stage5Count=1328
+[snap] stage histogram:
+[snap]   stage  0: 1926 frames
+[snap]   stage  1: 1328 frames
+[snap]   stage  2: 1328 frames
+[snap]   stage  3: 1328 frames
+[snap]   stage  5: 1328 frames
+[snap]   stage  6: 1328 frames
+[snap]   stage  7: 1328 frames
+[snap]   stage  8: 1328 frames
+[snap]   stage 10: 1328 frames
+[snap]   stage 11: 1925 frames
+[snap]   stage 12: 1328 frames
+[snap] dwLocalPlayerController @ 0x00007FFAB6AA2548 -> 0x000003A7E1EC4A00 
+[snap] dwLocalPlayerPawn       @ 0x00007FFAB6C991E0 -> 0x000003A7722A3000 
+[snap] pawn: vtable=0x00007FFAC41D3740 inClient=0 health=935
+[snap] ctrl: vtable=0x00007FFAB6171680 inClient=1 m_hPlayerPawn@0x92C = 0x00E5800B (idx=11)
+[snap] entitySystem @ 0x00007FFAB6C7FBB8 = 0x000003A755460000 highestEntityIndex=13
+[snap] entity resolution: 12/16 of indices 1..16 valid
+[snap] ctrl->pawn handle resolve: 0x00E5800B -> 0x000003A7E1D1D000
+[snap] ----------------------------------------
+
+=== SNAPSHOT ===
+[snap] fsnCount=18434 lastStage=0 stage5Count=1549
+[snap] stage histogram:
+[snap]   stage  0: 2247 frames
+[snap]   stage  1: 1549 frames
+[snap]   stage  2: 1549 frames
+[snap]   stage  3: 1549 frames
+[snap]   stage  5: 1549 frames
+[snap]   stage  6: 1549 frames
+[snap]   stage  7: 1549 frames
+[snap]   stage  8: 1549 frames
+[snap]   stage 10: 1549 frames
+[snap]   stage 11: 2246 frames
+[snap]   stage 12: 1549 frames
+[snap] dwLocalPlayerController @ 0x00007FFAB6AA2548 -> 0x000003A7E1EC4A00 
+[snap] dwLocalPlayerPawn       @ 0x00007FFAB6C991E0 -> 0x000003A7722A3000 
+[snap] pawn: vtable=0x00007FFAC41D3740 inClient=0 health=935
+[snap] ctrl: vtable=0x00007FFAB6171680 inClient=1 m_hPlayerPawn@0x92C = 0x00E5800B (idx=11)
+[snap] entitySystem @ 0x00007FFAB6C7FBB8 = 0x000003A755460000 highestEntityIndex=13
+[snap] entity resolution: 12/16 of indices 1..16 valid
+[snap] ctrl->pawn handle resolve: 0x00E5800B -> 0x000003A7E1D1D000
+[snap] ----------------------------------------
+N1SSAN_STATUS|1|2026-11-08T03:15:36Z|24152|armory-obsidian-3.0|READY|reason=runtime_worker_heartbeat
+[status-write] begin state=READY path=C:\Users\mirac\AppData\Local\n1ssan\status\cs2-24152.status
+[status-write] success state=READY error=0
+
+=== SNAPSHOT ===
+[snap] fsnCount=21065 lastStage=0 stage5Count=1770
+[snap] stage histogram:
+[snap]   stage  0: 2568 frames
+[snap]   stage  1: 1770 frames
+[snap]   stage  2: 1770 frames
+[snap]   stage  3: 1770 frames
+[snap]   stage  5: 1770 frames
+[snap]   stage  6: 1770 frames
+[snap]   stage  7: 1770 frames
+[snap]   stage  8: 1770 frames
+[snap]   stage 10: 1770 frames
+[snap]   stage 11: 2567 frames
+[snap]   stage 12: 1770 frames
+[snap] dwLocalPlayerController @ 0x00007FFAB6AA2548 -> 0x000003A7E1EC4A00 
+[snap] dwLocalPlayerPawn       @ 0x00007FFAB6C991E0 -> 0x000003A7722A3000 
+[snap] pawn: vtable=0x00007FFAC41D3740 inClient=0 health=935
+[snap] ctrl: vtable=0x00007FFAB6171680 inClient=1 m_hPlayerPawn@0x92C = 0x00E5800B (idx=11)
+[snap] entitySystem @ 0x00007FFAB6C7FBB8 = 0x000003A755460000 highestEntityIndex=13
+[snap] entity resolution: 12/16 of indices 1..16 valid
+[snap] ctrl->pawn handle resolve: 0x00E5800B -> 0x000003A7E1D1D000
+[snap] ----------------------------------------
+
+=== SNAPSHOT ===
+[snap] fsnCount=23703 lastStage=0 stage5Count=1992
+[snap] stage histogram:
+[snap]   stage  0: 2888 frames
+[snap]   stage  1: 1992 frames
+[snap]   stage  2: 1992 frames
+[snap]   stage  3: 1992 frames
+[snap]   stage  5: 1992 frames
+[snap]   stage  6: 1992 frames
+[snap]   stage  7: 1992 frames
+[snap]   stage  8: 1992 frames
+[snap]   stage 10: 1992 frames
+[snap]   stage 11: 2887 frames
+[snap]   stage 12: 1992 frames
+[snap] dwLocalPlayerController @ 0x00007FFAB6AA2548 -> 0x000003A7E1EC4A00 
+[snap] dwLocalPlayerPawn       @ 0x00007FFAB6C991E0 -> 0x000003A7722A3000 
+[snap] pawn: vtable=0x00007FFAC41D3740 inClient=0 health=935
+[snap] ctrl: vtable=0x00007FFAB6171680 inClient=1 m_hPlayerPawn@0x92C = 0x00E5800B (idx=11)
+[snap] entitySystem @ 0x00007FFAB6C7FBB8 = 0x000003A755460000 highestEntityIndex=13
+[snap] entity resolution: 12/16 of indices 1..16 valid
+[snap] ctrl->pawn handle resolve: 0x00E5800B -> 0x000003A7E1D1D000
+[snap] ----------------------------------------
+N1SSAN_STATUS|1|2026-11-08T03:15:46Z|24152|armory-obsidian-3.0|READY|reason=runtime_worker_heartbeat
+[status-write] begin state=READY path=C:\Users\mirac\AppData\Local\n1ssan\status\cs2-24152.status
+[status-write] success state=READY error=0
+
+=== SNAPSHOT ===
+[snap] fsnCount=26343 lastStage=0 stage5Count=2214
+[snap] stage histogram:
+[snap]   stage  0: 3209 frames
+[snap]   stage  1: 2214 frames
+[snap]   stage  2: 2214 frames
+[snap]   stage  3: 2214 frames
+[snap]   stage  5: 2214 frames
+[snap]   stage  6: 2214 frames
+[snap]   stage  7: 2214 frames
+[snap]   stage  8: 2214 frames
+[snap]   stage 10: 2214 frames
+[snap]   stage 11: 3208 frames
+[snap]   stage 12: 2214 frames
+[snap] dwLocalPlayerController @ 0x00007FFAB6AA2548 -> 0x000003A7E1EC4A00 
+[snap] dwLocalPlayerPawn       @ 0x00007FFAB6C991E0 -> 0x000003A7722A3000 
+[snap] pawn: vtable=0x00007FFAC41D3740 inClient=0 health=935
+[snap] ctrl: vtable=0x00007FFAB6171680 inClient=1 m_hPlayerPawn@0x92C = 0x00E5800B (idx=11)
+[snap] entitySystem @ 0x00007FFAB6C7FBB8 = 0x000003A755460000 highestEntityIndex=13
+[snap] entity resolution: 12/16 of indices 1..16 valid
+[snap] ctrl->pawn handle resolve: 0x00E5800B -> 0x000003A7E1D1D000
+[snap] ----------------------------------------
+
+=== SNAPSHOT ===
+[snap] fsnCount=28972 lastStage=0 stage5Count=2435
+[snap] stage histogram:
+[snap]   stage  0: 3529 frames
+[snap]   stage  1: 2435 frames
+[snap]   stage  2: 2435 frames
+[snap]   stage  3: 2435 frames
+[snap]   stage  5: 2435 frames
+[snap]   stage  6: 2435 frames
+[snap]   stage  7: 2435 frames
+[snap]   stage  8: 2435 frames
+[snap]   stage 10: 2435 frames
+[snap]   stage 11: 3528 frames
+[snap]   stage 12: 2435 frames
+[snap] dwLocalPlayerController @ 0x00007FFAB6AA2548 -> 0x000003A7E1EC4A00 
+[snap] dwLocalPlayerPawn       @ 0x00007FFAB6C991E0 -> 0x000003A7722A3000 
+[snap] pawn: vtable=0x00007FFAC41D3740 inClient=0 health=935
+[snap] ctrl: vtable=0x00007FFAB6171680 inClient=1 m_hPlayerPawn@0x92C = 0x00E5800B (idx=11)
+[snap] entitySystem @ 0x00007FFAB6C7FBB8 = 0x000003A755460000 highestEntityIndex=13
+[snap] entity resolution: 12/16 of indices 1..16 valid
+[snap] ctrl->pawn handle resolve: 0x00E5800B -> 0x000003A7E1D1D000
+[snap] ----------------------------------------
+N1SSAN_STATUS|1|2026-11-08T03:15:56Z|24152|armory-obsidian-3.0|READY|reason=runtime_worker_heartbeat
+[status-write] begin state=READY path=C:\Users\mirac\AppData\Local\n1ssan\status\cs2-24152.status
+[status-write] success state=READY error=0
+
+=== SNAPSHOT ===
+[snap] fsnCount=31611 lastStage=12 stage5Count=2657
+[snap] stage histogram:
+[snap]   stage  0: 3849 frames
+[snap]   stage  1: 2657 frames
+[snap]   stage  2: 2657 frames
+[snap]   stage  3: 2657 frames
+[snap]   stage  5: 2657 frames
+[snap]   stage  6: 2657 frames
+[snap]   stage  7: 2657 frames
+[snap]   stage  8: 2657 frames
+[snap]   stage 10: 2657 frames
+[snap]   stage 11: 3849 frames
+[snap]   stage 12: 2657 frames
+[snap] dwLocalPlayerController @ 0x00007FFAB6AA2548 -> 0x000003A7E1EC4A00 
+[snap] dwLocalPlayerPawn       @ 0x00007FFAB6C991E0 -> 0x000003A7722A3000 
+[snap] pawn: vtable=0x00007FFAC41D3740 inClient=0 health=935
+[snap] ctrl: vtable=0x00007FFAB6171680 inClient=1 m_hPlayerPawn@0x92C = 0x00E5800B (idx=11)
+[snap] entitySystem @ 0x00007FFAB6C7FBB8 = 0x000003A755460000 highestEntityIndex=13
+[snap] entity resolution: 12/16 of indices 1..16 valid
+[snap] ctrl->pawn handle resolve: 0x00E5800B -> 0x000003A7E1D1D000
+[snap] ----------------------------------------
+
+=== SNAPSHOT ===
+[snap] fsnCount=34241 lastStage=0 stage5Count=2878
+[snap] stage histogram:
+[snap]   stage  0: 4170 frames
+[snap]   stage  1: 2878 frames
+[snap]   stage  2: 2878 frames
+[snap]   stage  3: 2878 frames
+[snap]   stage  5: 2878 frames
+[snap]   stage  6: 2878 frames
+[snap]   stage  7: 2878 frames
+[snap]   stage  8: 2878 frames
+[snap]   stage 10: 2878 frames
+[snap]   stage 11: 4169 frames
+[snap]   stage 12: 2878 frames
+[snap] dwLocalPlayerController @ 0x00007FFAB6AA2548 -> 0x000003A7E1EC4A00 
+[snap] dwLocalPlayerPawn       @ 0x00007FFAB6C991E0 -> 0x000003A7722A3000 
+[snap] pawn: vtable=0x00007FFAC41D3740 inClient=0 health=935
+[snap] ctrl: vtable=0x00007FFAB6171680 inClient=1 m_hPlayerPawn@0x92C = 0x00E5800B (idx=11)
+[snap] entitySystem @ 0x00007FFAB6C7FBB8 = 0x000003A755460000 highestEntityIndex=13
+[snap] entity resolution: 12/16 of indices 1..16 valid
+[snap] ctrl->pawn handle resolve: 0x00E5800B -> 0x000003A7E1D1D000
+[snap] ----------------------------------------
+N1SSAN_STATUS|1|2026-11-08T03:16:06Z|24152|armory-obsidian-3.0|READY|reason=runtime_worker_heartbeat
+[status-write] begin state=READY path=C:\Users\mirac\AppData\Local\n1ssan\status\cs2-24152.status
+[status-write] success state=READY error=0
+
+=== SNAPSHOT ===
+[snap] fsnCount=36881 lastStage=0 stage5Count=3100
+[snap] stage histogram:
+[snap]   stage  0: 4491 frames
+[snap]   stage  1: 3100 frames
+[snap]   stage  2: 3100 frames
+[snap]   stage  3: 3100 frames
+[snap]   stage  5: 3100 frames
+[snap]   stage  6: 3100 frames
+[snap]   stage  7: 3100 frames
+[snap]   stage  8: 3100 frames
+[snap]   stage 10: 3100 frames
+[snap]   stage 11: 4490 frames
+[snap]   stage 12: 3100 frames
+[snap] dwLocalPlayerController @ 0x00007FFAB6AA2548 -> 0x000003A7E1EC4A00 
+[snap] dwLocalPlayerPawn       @ 0x00007FFAB6C991E0 -> 0x000003A7722A3000 
+[snap] pawn: vtable=0x00007FFAC41D3740 inClient=0 health=935
+[snap] ctrl: vtable=0x00007FFAB6171680 inClient=1 m_hPlayerPawn@0x92C = 0x00E5800B (idx=11)
+[snap] entitySystem @ 0x00007FFAB6C7FBB8 = 0x000003A755460000 highestEntityIndex=13
+[snap] entity resolution: 12/16 of indices 1..16 valid
+[snap] ctrl->pawn handle resolve: 0x00E5800B -> 0x000003A7E1D1D000
+[snap] ----------------------------------------
+
+=== SNAPSHOT ===
+[snap] fsnCount=39510 lastStage=0 stage5Count=3321
+[snap] stage histogram:
+[snap]   stage  0: 4811 frames
+[snap]   stage  1: 3321 frames
+[snap]   stage  2: 3321 frames
+[snap]   stage  3: 3321 frames
+[snap]   stage  5: 3321 frames
+[snap]   stage  6: 3321 frames
+[snap]   stage  7: 3321 frames
+[snap]   stage  8: 3321 frames
+[snap]   stage 10: 3321 frames
+[snap]   stage 11: 4810 frames
+[snap]   stage 12: 3321 frames
+[snap] dwLocalPlayerController @ 0x00007FFAB6AA2548 -> 0x000003A7E1EC4A00 
+[snap] dwLocalPlayerPawn       @ 0x00007FFAB6C991E0 -> 0x000003A7722A3000 
+[snap] pawn: vtable=0x00007FFAC41D3740 inClient=0 health=935
+[snap] ctrl: vtable=0x00007FFAB6171680 inClient=1 m_hPlayerPawn@0x92C = 0x00E5800B (idx=11)
+[snap] entitySystem @ 0x00007FFAB6C7FBB8 = 0x000003A755460000 highestEntityIndex=13
+[snap] entity resolution: 12/16 of indices 1..16 valid
+[snap] ctrl->pawn handle resolve: 0x00E5800B -> 0x000003A7E1D1D000
+[snap] ----------------------------------------
+N1SSAN_STATUS|1|2026-11-08T03:16:16Z|24152|armory-obsidian-3.0|READY|reason=runtime_worker_heartbeat
+[status-write] begin state=READY path=C:\Users\mirac\AppData\Local\n1ssan\status\cs2-24152.status
+[status-write] success state=READY error=0
+
+=== SNAPSHOT ===
+[snap] fsnCount=42141 lastStage=0 stage5Count=3542
+[snap] stage histogram:
+[snap]   stage  0: 5132 frames
+[snap]   stage  1: 3542 frames
+[snap]   stage  2: 3542 frames
+[snap]   stage  3: 3542 frames
+[snap]   stage  5: 3542 frames
+[snap]   stage  6: 3542 frames
+[snap]   stage  7: 3542 frames
+[snap]   stage  8: 3542 frames
+[snap]   stage 10: 3542 frames
+[snap]   stage 11: 5131 frames
+[snap]   stage 12: 3542 frames
+[snap] dwLocalPlayerController @ 0x00007FFAB6AA2548 -> 0x000003A7E1EC4A00 
+[snap] dwLocalPlayerPawn       @ 0x00007FFAB6C991E0 -> 0x000003A7722A3000 
+[snap] pawn: vtable=0x00007FFAC41D3740 inClient=0 health=935
+[snap] ctrl: vtable=0x00007FFAB6171680 inClient=1 m_hPlayerPawn@0x92C = 0x00E5800B (idx=11)
+[snap] entitySystem @ 0x00007FFAB6C7FBB8 = 0x000003A755460000 highestEntityIndex=13
+[snap] entity resolution: 12/16 of indices 1..16 valid
+[snap] ctrl->pawn handle resolve: 0x00E5800B -> 0x000003A7E1D1D000
+[snap] ----------------------------------------
+
+=== SNAPSHOT ===
+[snap] fsnCount=44770 lastStage=0 stage5Count=3763
+[snap] stage histogram:
+[snap]   stage  0: 5452 frames
+[snap]   stage  1: 3763 frames
+[snap]   stage  2: 3763 frames
+[snap]   stage  3: 3763 frames
+[snap]   stage  5: 3763 frames
+[snap]   stage  6: 3763 frames
+[snap]   stage  7: 3763 frames
+[snap]   stage  8: 3763 frames
+[snap]   stage 10: 3763 frames
+[snap]   stage 11: 5451 frames
+[snap]   stage 12: 3763 frames
+[snap] dwLocalPlayerController @ 0x00007FFAB6AA2548 -> 0x000003A7E1EC4A00 
+[snap] dwLocalPlayerPawn       @ 0x00007FFAB6C991E0 -> 0x000003A7722A3000 
+[snap] pawn: vtable=0x00007FFAC41D3740 inClient=0 health=935
+[snap] ctrl: vtable=0x00007FFAB6171680 inClient=1 m_hPlayerPawn@0x92C = 0x00E5800B (idx=11)
+[snap] entitySystem @ 0x00007FFAB6C7FBB8 = 0x000003A755460000 highestEntityIndex=13
+[snap] entity resolution: 12/16 of indices 1..16 valid
+[snap] ctrl->pawn handle resolve: 0x00E5800B -> 0x000003A7E1D1D000
+[snap] ----------------------------------------
+N1SSAN_STATUS|1|2026-11-08T03:16:26Z|24152|armory-obsidian-3.0|READY|reason=runtime_worker_heartbeat
+[status-write] begin state=READY path=C:\Users\mirac\AppData\Local\n1ssan\status\cs2-24152.status
+[status-write] success state=READY error=0
+
+=== SNAPSHOT ===
+[snap] fsnCount=47417 lastStage=7 stage5Count=3986
+[snap] stage histogram:
+[snap]   stage  0: 5773 frames
+[snap]   stage  1: 3986 frames
+[snap]   stage  2: 3986 frames
+[snap]   stage  3: 3985 frames
+[snap]   stage  5: 3986 frames
+[snap]   stage  6: 3986 frames
+[snap]   stage  7: 3986 frames
+[snap]   stage  8: 3985 frames
+[snap]   stage 10: 3986 frames
+[snap]   stage 11: 5773 frames
+[snap]   stage 12: 3985 frames
+[snap] dwLocalPlayerController @ 0x00007FFAB6AA2548 -> 0x000003A7E1EC4A00 
+[snap] dwLocalPlayerPawn       @ 0x00007FFAB6C991E0 -> 0x000003A7722A3000 
+[snap] pawn: vtable=0x00007FFAC41D3740 inClient=0 health=935
+[snap] ctrl: vtable=0x00007FFAB6171680 inClient=1 m_hPlayerPawn@0x92C = 0x00E5800B (idx=11)
+[snap] entitySystem @ 0x00007FFAB6C7FBB8 = 0x000003A755460000 highestEntityIndex=13
+[snap] entity resolution: 12/16 of indices 1..16 valid
+[snap] ctrl->pawn handle resolve: 0x00E5800B -> 0x000003A7E1D1D000
+[snap] ----------------------------------------
+
+=== SNAPSHOT ===
+[snap] fsnCount=50057 lastStage=0 stage5Count=4208
+[snap] stage histogram:
+[snap]   stage  0: 6093 frames
+[snap]   stage  1: 4208 frames
+[snap]   stage  2: 4208 frames
+[snap]   stage  3: 4208 frames
+[snap]   stage  5: 4208 frames
+[snap]   stage  6: 4208 frames
+[snap]   stage  7: 4208 frames
+[snap]   stage  8: 4208 frames
+[snap]   stage 10: 4208 frames
+[snap]   stage 11: 6092 frames
+[snap]   stage 12: 4208 frames
+[snap] dwLocalPlayerController @ 0x00007FFAB6AA2548 -> 0x000003A7E1EC4A00 
+[snap] dwLocalPlayerPawn       @ 0x00007FFAB6C991E0 -> 0x000003A7722A3000 
+[snap] pawn: vtable=0x00007FFAC41D3740 inClient=0 health=935
+[snap] ctrl: vtable=0x00007FFAB6171680 inClient=1 m_hPlayerPawn@0x92C = 0x00E5800B (idx=11)
+[snap] entitySystem @ 0x00007FFAB6C7FBB8 = 0x000003A755460000 highestEntityIndex=13
+[snap] entity resolution: 12/16 of indices 1..16 valid
+[snap] ctrl->pawn handle resolve: 0x00E5800B -> 0x000003A7E1D1D000
+[snap] ----------------------------------------
+N1SSAN_STATUS|1|2026-11-08T03:16:36Z|24152|armory-obsidian-3.0|READY|reason=runtime_worker_heartbeat
+[status-write] begin state=READY path=C:\Users\mirac\AppData\Local\n1ssan\status\cs2-24152.status
+[status-write] success state=READY error=0
+
+=== SNAPSHOT ===
+[snap] fsnCount=52697 lastStage=0 stage5Count=4430
+[snap] stage histogram:
+[snap]   stage  0: 6414 frames
+[snap]   stage  1: 4430 frames
+[snap]   stage  2: 4430 frames
+[snap]   stage  3: 4430 frames
+[snap]   stage  5: 4430 frames
+[snap]   stage  6: 4430 frames
+[snap]   stage  7: 4430 frames
+[snap]   stage  8: 4430 frames
+[snap]   stage 10: 4430 frames
+[snap]   stage 11: 6413 frames
+[snap]   stage 12: 4430 frames
+[snap] dwLocalPlayerController @ 0x00007FFAB6AA2548 -> 0x000003A7E1EC4A00 
+[snap] dwLocalPlayerPawn       @ 0x00007FFAB6C991E0 -> 0x000003A7722A3000 
+[snap] pawn: vtable=0x00007FFAC41D3740 inClient=0 health=935
+[snap] ctrl: vtable=0x00007FFAB6171680 inClient=1 m_hPlayerPawn@0x92C = 0x00E5800B (idx=11)
+[snap] entitySystem @ 0x00007FFAB6C7FBB8 = 0x000003A755460000 highestEntityIndex=13
+[snap] entity resolution: 12/16 of indices 1..16 valid
+[snap] ctrl->pawn handle resolve: 0x00E5800B -> 0x000003A7E1D1D000
+[snap] ----------------------------------------
+
+=== SNAPSHOT ===
+[snap] fsnCount=55337 lastStage=0 stage5Count=4652
+[snap] stage histogram:
+[snap]   stage  0: 6735 frames
+[snap]   stage  1: 4652 frames
+[snap]   stage  2: 4652 frames
+[snap]   stage  3: 4652 frames
+[snap]   stage  5: 4652 frames
+[snap]   stage  6: 4652 frames
+[snap]   stage  7: 4652 frames
+[snap]   stage  8: 4652 frames
+[snap]   stage 10: 4652 frames
+[snap]   stage 11: 6734 frames
+[snap]   stage 12: 4652 frames
+[snap] dwLocalPlayerController @ 0x00007FFAB6AA2548 -> 0x000003A7E1EC4A00 
+[snap] dwLocalPlayerPawn       @ 0x00007FFAB6C991E0 -> 0x000003A7722A3000 
+[snap] pawn: vtable=0x00007FFAC41D3740 inClient=0 health=935
+[snap] ctrl: vtable=0x00007FFAB6171680 inClient=1 m_hPlayerPawn@0x92C = 0x00E5800B (idx=11)
+[snap] entitySystem @ 0x00007FFAB6C7FBB8 = 0x000003A755460000 highestEntityIndex=13
+[snap] entity resolution: 12/16 of indices 1..16 valid
+[snap] ctrl->pawn handle resolve: 0x00E5800B -> 0x000003A7E1D1D000
+[snap] ----------------------------------------
+N1SSAN_STATUS|1|2026-11-08T03:16:46Z|24152|armory-obsidian-3.0|READY|reason=runtime_worker_heartbeat
+[status-write] begin state=READY path=C:\Users\mirac\AppData\Local\n1ssan\status\cs2-24152.status
+[status-write] success state=READY error=0
+
+=== SNAPSHOT ===
+[snap] fsnCount=57977 lastStage=0 stage5Count=4874
+[snap] stage histogram:
+[snap]   stage  0: 7056 frames
+[snap]   stage  1: 4874 frames
+[snap]   stage  2: 4874 frames
+[snap]   stage  3: 4874 frames
+[snap]   stage  5: 4874 frames
+[snap]   stage  6: 4874 frames
+[snap]   stage  7: 4874 frames
+[snap]   stage  8: 4874 frames
+[snap]   stage 10: 4874 frames
+[snap]   stage 11: 7055 frames
+[snap]   stage 12: 4874 frames
+[snap] dwLocalPlayerController @ 0x00007FFAB6AA2548 -> 0x000003A7E1EC4A00 
+[snap] dwLocalPlayerPawn       @ 0x00007FFAB6C991E0 -> 0x000003A7722A3000 
+[snap] pawn: vtable=0x00007FFAC41D3740 inClient=0 health=935
+[snap] ctrl: vtable=0x00007FFAB6171680 inClient=1 m_hPlayerPawn@0x92C = 0x00E5800B (idx=11)
+[snap] entitySystem @ 0x00007FFAB6C7FBB8 = 0x000003A755460000 highestEntityIndex=13
+[snap] entity resolution: 12/16 of indices 1..16 valid
+[snap] ctrl->pawn handle resolve: 0x00E5800B -> 0x000003A7E1D1D000
+[snap] ----------------------------------------
+
+=== SNAPSHOT ===
+[snap] fsnCount=60605 lastStage=11 stage5Count=5095
+[snap] stage histogram:
+[snap]   stage  0: 7375 frames
+[snap]   stage  1: 5095 frames
+[snap]   stage  2: 5095 frames
+[snap]   stage  3: 5095 frames
+[snap]   stage  5: 5095 frames
+[snap]   stage  6: 5095 frames
+[snap]   stage  7: 5095 frames
+[snap]   stage  8: 5095 frames
+[snap]   stage 10: 5095 frames
+[snap]   stage 11: 7375 frames
+[snap]   stage 12: 5095 frames
+[snap] dwLocalPlayerController @ 0x00007FFAB6AA2548 -> 0x000003A7E1EC4A00 
+[snap] dwLocalPlayerPawn       @ 0x00007FFAB6C991E0 -> 0x000003A7722A3000 
+[snap] pawn: vtable=0x00007FFAC41D3740 inClient=0 health=935
+[snap] ctrl: vtable=0x00007FFAB6171680 inClient=1 m_hPlayerPawn@0x92C = 0x00E5800B (idx=11)
+[snap] entitySystem @ 0x00007FFAB6C7FBB8 = 0x000003A755460000 highestEntityIndex=13
+[snap] entity resolution: 12/16 of indices 1..16 valid
+[snap] ctrl->pawn handle resolve: 0x00E5800B -> 0x000003A7E1D1D000
+[snap] ----------------------------------------
+N1SSAN_STATUS|1|2026-11-08T03:16:56Z|24152|armory-obsidian-3.0|READY|reason=runtime_worker_heartbeat
+[status-write] begin state=READY path=C:\Users\mirac\AppData\Local\n1ssan\status\cs2-24152.status
+[status-write] success state=READY error=0
+
+=== SNAPSHOT ===
+[snap] fsnCount=63235 lastStage=0 stage5Count=5316
+[snap] stage histogram:
+[snap]   stage  0: 7696 frames
+[snap]   stage  1: 5316 frames
+[snap]   stage  2: 5316 frames
+[snap]   stage  3: 5316 frames
+[snap]   stage  5: 5316 frames
+[snap]   stage  6: 5316 frames
+[snap]   stage  7: 5316 frames
+[snap]   stage  8: 5316 frames
+[snap]   stage 10: 5316 frames
+[snap]   stage 11: 7695 frames
+[snap]   stage 12: 5316 frames
+[snap] dwLocalPlayerController @ 0x00007FFAB6AA2548 -> 0x000003A7E1EC4A00 
+[snap] dwLocalPlayerPawn       @ 0x00007FFAB6C991E0 -> 0x000003A7722A3000 
+[snap] pawn: vtable=0x00007FFAC41D3740 inClient=0 health=935
+[snap] ctrl: vtable=0x00007FFAB6171680 inClient=1 m_hPlayerPawn@0x92C = 0x00E5800B (idx=11)
+[snap] entitySystem @ 0x00007FFAB6C7FBB8 = 0x000003A755460000 highestEntityIndex=13
+[snap] entity resolution: 12/16 of indices 1..16 valid
+[snap] ctrl->pawn handle resolve: 0x00E5800B -> 0x000003A7E1D1D000
+[snap] ----------------------------------------
+
+=== SNAPSHOT ===
+[snap] fsnCount=65873 lastStage=0 stage5Count=5538
+[snap] stage histogram:
+[snap]   stage  0: 8016 frames
+[snap]   stage  1: 5538 frames
+[snap]   stage  2: 5538 frames
+[snap]   stage  3: 5538 frames
+[snap]   stage  5: 5538 frames
+[snap]   stage  6: 5538 frames
+[snap]   stage  7: 5538 frames
+[snap]   stage  8: 5538 frames
+[snap]   stage 10: 5538 frames
+[snap]   stage 11: 8015 frames
+[snap]   stage 12: 5538 frames
+[snap] dwLocalPlayerController @ 0x00007FFAB6AA2548 -> 0x000003A7E1EC4A00 
+[snap] dwLocalPlayerPawn       @ 0x00007FFAB6C991E0 -> 0x000003A7722A3000 
+[snap] pawn: vtable=0x00007FFAC41D3740 inClient=0 health=935
+[snap] ctrl: vtable=0x00007FFAB6171680 inClient=1 m_hPlayerPawn@0x92C = 0x00E5800B (idx=11)
+[snap] entitySystem @ 0x00007FFAB6C7FBB8 = 0x000003A755460000 highestEntityIndex=13
+[snap] entity resolution: 12/16 of indices 1..16 valid
+[snap] ctrl->pawn handle resolve: 0x00E5800B -> 0x000003A7E1D1D000
+[snap] ----------------------------------------
+N1SSAN_STATUS|1|2026-11-08T03:17:06Z|24152|armory-obsidian-3.0|READY|reason=runtime_worker_heartbeat
+[status-write] begin state=READY path=C:\Users\mirac\AppData\Local\n1ssan\status\cs2-24152.status
+[status-write] success state=READY error=0
+
+=== SNAPSHOT ===
+[snap] fsnCount=68513 lastStage=0 stage5Count=5760
+[snap] stage histogram:
+[snap]   stage  0: 8337 frames
+[snap]   stage  1: 5760 frames
+[snap]   stage  2: 5760 frames
+[snap]   stage  3: 5760 frames
+[snap]   stage  5: 5760 frames
+[snap]   stage  6: 5760 frames
+[snap]   stage  7: 5760 frames
+[snap]   stage  8: 5760 frames
+[snap]   stage 10: 5760 frames
+[snap]   stage 11: 8336 frames
+[snap]   stage 12: 5760 frames
+[snap] dwLocalPlayerController @ 0x00007FFAB6AA2548 -> 0x000003A7E1EC4A00 
+[snap] dwLocalPlayerPawn       @ 0x00007FFAB6C991E0 -> 0x000003A7722A3000 
+[snap] pawn: vtable=0x00007FFAC41D3740 inClient=0 health=935
+[snap] ctrl: vtable=0x00007FFAB6171680 inClient=1 m_hPlayerPawn@0x92C = 0x00E5800B (idx=11)
+[snap] entitySystem @ 0x00007FFAB6C7FBB8 = 0x000003A755460000 highestEntityIndex=13
+[snap] entity resolution: 12/16 of indices 1..16 valid
+[snap] ctrl->pawn handle resolve: 0x00E5800B -> 0x000003A7E1D1D000
+[snap] ----------------------------------------
+
+=== SNAPSHOT ===
+[snap] fsnCount=71142 lastStage=0 stage5Count=5981
+[snap] stage histogram:
+[snap]   stage  0: 8657 frames
+[snap]   stage  1: 5981 frames
+[snap]   stage  2: 5981 frames
+[snap]   stage  3: 5981 frames
+[snap]   stage  5: 5981 frames
+[snap]   stage  6: 5981 frames
+[snap]   stage  7: 5981 frames
+[snap]   stage  8: 5981 frames
+[snap]   stage 10: 5981 frames
+[snap]   stage 11: 8656 frames
+[snap]   stage 12: 5981 frames
+[snap] dwLocalPlayerController @ 0x00007FFAB6AA2548 -> 0x000003A7E1EC4A00 
+[snap] dwLocalPlayerPawn       @ 0x00007FFAB6C991E0 -> 0x000003A7722A3000 
+[snap] pawn: vtable=0x00007FFAC41D3740 inClient=0 health=935
+[snap] ctrl: vtable=0x00007FFAB6171680 inClient=1 m_hPlayerPawn@0x92C = 0x00E5800B (idx=11)
+[snap] entitySystem @ 0x00007FFAB6C7FBB8 = 0x000003A755460000 highestEntityIndex=13
+[snap] entity resolution: 12/16 of indices 1..16 valid
+[snap] ctrl->pawn handle resolve: 0x00E5800B -> 0x000003A7E1D1D000
+[snap] ----------------------------------------
+N1SSAN_STATUS|1|2026-11-08T03:17:16Z|24152|armory-obsidian-3.0|READY|reason=runtime_worker_heartbeat
+[status-write] begin state=READY path=C:\Users\mirac\AppData\Local\n1ssan\status\cs2-24152.status
+[status-write] success state=READY error=0
+
+=== SNAPSHOT ===
+[snap] fsnCount=73791 lastStage=0 stage5Count=6204
+[snap] stage histogram:
+[snap]   stage  0: 8978 frames
+[snap]   stage  1: 6204 frames
+[snap]   stage  2: 6204 frames
+[snap]   stage  3: 6204 frames
+[snap]   stage  5: 6204 frames
+[snap]   stage  6: 6204 frames
+[snap]   stage  7: 6204 frames
+[snap]   stage  8: 6204 frames
+[snap]   stage 10: 6204 frames
+[snap]   stage 11: 8977 frames
+[snap]   stage 12: 6204 frames
+[snap] dwLocalPlayerController @ 0x00007FFAB6AA2548 -> 0x000003A7E1EC4A00 
+[snap] dwLocalPlayerPawn       @ 0x00007FFAB6C991E0 -> 0x000003A7722A3000 
+[snap] pawn: vtable=0x00007FFAC41D3740 inClient=0 health=935
+[snap] ctrl: vtable=0x00007FFAB6171680 inClient=1 m_hPlayerPawn@0x92C = 0x00E5800B (idx=11)
+[snap] entitySystem @ 0x00007FFAB6C7FBB8 = 0x000003A755460000 highestEntityIndex=13
+[snap] entity resolution: 12/16 of indices 1..16 valid
+[snap] ctrl->pawn handle resolve: 0x00E5800B -> 0x000003A7E1D1D000
+[snap] ----------------------------------------
+
+=== SNAPSHOT ===
+[snap] fsnCount=76431 lastStage=0 stage5Count=6426
+[snap] stage histogram:
+[snap]   stage  0: 9299 frames
+[snap]   stage  1: 6426 frames
+[snap]   stage  2: 6426 frames
+[snap]   stage  3: 6426 frames
+[snap]   stage  5: 6426 frames
+[snap]   stage  6: 6426 frames
+[snap]   stage  7: 6426 frames
+[snap]   stage  8: 6426 frames
+[snap]   stage 10: 6426 frames
+[snap]   stage 11: 9298 frames
+[snap]   stage 12: 6426 frames
+[snap] dwLocalPlayerController @ 0x00007FFAB6AA2548 -> 0x000003A7E1EC4A00 
+[snap] dwLocalPlayerPawn       @ 0x00007FFAB6C991E0 -> 0x000003A7722A3000 
+[snap] pawn: vtable=0x00007FFAC41D3740 inClient=0 health=935
+[snap] ctrl: vtable=0x00007FFAB6171680 inClient=1 m_hPlayerPawn@0x92C = 0x00E5800B (idx=11)
+[snap] entitySystem @ 0x00007FFAB6C7FBB8 = 0x000003A755460000 highestEntityIndex=13
+[snap] entity resolution: 12/16 of indices 1..16 valid
+[snap] ctrl->pawn handle resolve: 0x00E5800B -> 0x000003A7E1D1D000
+[snap] ----------------------------------------
+[runtime-mode] switched to armory
+[runtime-mode] preparing requested mode: armory
+[runtime-mode] active mode: armory
+[socache-diag] SOCache resolved inv=000003A7557C1000 offset=0x68 cache=000003A73D3A94C0 typeCache=000003A73D4738C0
+[plan-a] Loadout cleanup: found=0 removed=0 failed=0
+[armory-inventory] preparing replacement set: 19 items
+[loot-schema] attr 'set item texture prefab' (idx 6) -> 0x000003A7BA4A0960
+[loot-schema] attr 6 kind=2 (0=float,1=uint32,2=default,3=other)
+[loot-schema] attr 'set item texture seed' (idx 7) -> 0x000003A7BA4A0A00
+[loot-schema] attr 7 kind=2 (0=float,1=uint32,2=default,3=other)
+[loot-schema] attr 'set item texture wear' (idx 8) -> 0x000003A7BA4A0AA0
+[loot-schema] attr 8 kind=2 (0=float,1=uint32,2=default,3=other)
+[loot-schema] attr 'kill eater' (idx 80) -> 0x000003A7BA4A3520
+[loot-schema] attr 'kill eater score type' (idx 81) -> 0x000003A7BA4A35C0
+[attach] sticker and charm attributes resolved (6 sticker slots, 1 charm)
+[armory-equipment] index: assignments=0 resolved=0 unresolved=0 conflicts=0 definitions=13 slots=0
+[armory-inventory] replacement committed: desired=19 created=19 retained=0 removed=0 removeFailed=0
+[attach] item 9CF82CD4592CD5C7 did not read back its saved attachments: stickers=0 charm=none
+[use-tool] main thread: panorama CUIEngine::RunFrame vfunc 5 (0x00007FFAC3DC6B70)
+[detect] pawn=0x000003A7E1D1D000 hp=100 signOn=6 bg=0
+[armory-equipment] index: assignments=0 resolved=0 unresolved=0 conflicts=0 definitions=13 slots=0
+[armory-equipment] reloaded equipment document
+[armory-inventory] staged 19 items (applies outside an active match)
+[armory-inventory] preparing replacement set: 19 items
+[armory-inventory] retained item id=9F45014B4918D4CA def=5404
+[armory-inventory] attachments synced on 9F45014B4918D4CA: stickers=0 charm=none
+[armory-inventory] retained item id=98580F04895784C8 def=4730
+[armory-inventory] retained item id=922FEB06198C79C1 def=525
+[armory-inventory] attachments synced on 922FEB06198C79C1: stickers=0 charm=none
+[armory-inventory] retained item id=9B4523A8BFE93866 def=5030
+[armory-inventory] attachments synced on 9B4523A8BFE93866: stickers=0 charm=none
+[armory-inventory] retained item id=9919302EC58DC70A def=16
+[armory-inventory] attachments synced on 9919302EC58DC70A: stickers=1 [0 kit=20 wear=0.000 rot=0.0 off=-0.079,-0.004 schema=4] charm=none
+[armory-inventory] retained item id=96221A0E61314132 def=60
+[armory-inventory] attachments synced on 96221A0E61314132: stickers=0 charm=kit:24 seed=0 off=0.677,0.332,7.013
+[armory-inventory] retained item id=914A30836F3526FC def=7
+[armory-inventory] retained item id=91EEF26FDFB7F111 def=1209
+[armory-inventory] retained item id=91B8869FF09A7CB1 def=1209
+[armory-inventory] attachments synced on 91B8869FF09A7CB1: stickers=0 charm=none
+[armory-inventory] retained item id=933E7226750B4A56 def=1209
+[armory-inventory] attachments synced on 933E7226750B4A56: stickers=0 charm=none
+[armory-inventory] retained item id=9F7A8249065ED9F7 def=1209
+[armory-inventory] attachments synced on 9F7A8249065ED9F7: stickers=0 charm=none
+[armory-inventory] retained item id=918DEDB7EDB11B7C def=1209
+[armory-inventory] attachments synced on 918DEDB7EDB11B7C: stickers=0 charm=none
+[armory-inventory] retained item id=995F5CC648CDEA98 def=1355
+[armory-inventory] attachments synced on 995F5CC648CDEA98: stickers=0 charm=none
+[armory-inventory] retained item id=98C14E9EE61FC80E def=1209
+[armory-inventory] attachments synced on 98C14E9EE61FC80E: stickers=0 charm=none
+[armory-inventory] retained item id=9536605177002A96 def=9
+[armory-inventory] attachments synced on 9536605177002A96: stickers=0 charm=none
+[armory-inventory] retained item id=9CF82CD4592CD5C7 def=61
+[armory-inventory] attachments synced on 9CF82CD4592CD5C7: stickers=0 charm=kit:7 seed=0 off=1.872,0.344,3.930
+[armory-inventory] retained item id=955F0C957F4C067D def=61
+[armory-inventory] attachments synced on 955F0C957F4C067D: stickers=0 charm=none
+[armory-inventory] retained item id=9EF2C4042C206579 def=34
+[armory-inventory] attachments synced on 9EF2C4042C206579: stickers=0 charm=none
+[armory-inventory] retained item id=9AD2A303DFC2661B def=4
+[armory-inventory] attachments synced on 9AD2A303DFC2661B: stickers=0 charm=none
+[armory-equipment] index: assignments=0 resolved=0 unresolved=0 conflicts=0 definitions=13 slots=0
+[armory-inventory] replacement committed: desired=19 created=0 retained=19 removed=0 removeFailed=0
+N1SSAN_STATUS|1|2026-11-08T03:17:26Z|24152|armory-obsidian-3.0|READY|reason=runtime_worker_heartbeat
+[status-write] begin state=READY path=C:\Users\mirac\AppData\Local\n1ssan\status\cs2-24152.status
+[status-write] success state=READY error=0
+
+=== SNAPSHOT ===
+[snap] fsnCount=79015 lastStage=0 stage5Count=6642
+[snap] stage histogram:
+[snap]   stage  0: 9619 frames
+[snap]   stage  1: 6642 frames
+[snap]   stage  2: 6642 frames
+[snap]   stage  3: 6642 frames
+[snap]   stage  5: 6642 frames
+[snap]   stage  6: 6642 frames
+[snap]   stage  7: 6642 frames
+[snap]   stage  8: 6642 frames
+[snap]   stage 10: 6642 frames
+[snap]   stage 11: 9618 frames
+[snap]   stage 12: 6642 frames
+[snap] dwLocalPlayerController @ 0x00007FFAB6AA2548 -> 0x000003A7E1EC4A00 
+[snap] dwLocalPlayerPawn       @ 0x00007FFAB6C991E0 -> 0x000003A7722A3000 
+[snap] pawn: vtable=0x00007FFAC41D3740 inClient=0 health=935
+[snap] ctrl: vtable=0x00007FFAB6171680 inClient=1 m_hPlayerPawn@0x92C = 0x00E5800B (idx=11)
+[snap] entitySystem @ 0x00007FFAB6C7FBB8 = 0x000003A755460000 highestEntityIndex=13
+[snap] entity resolution: 12/16 of indices 1..16 valid
+[snap] ctrl->pawn handle resolve: 0x00E5800B -> 0x000003A7E1D1D000
+[snap] ----------------------------------------
+[armory-equipment] index: assignments=0 resolved=0 unresolved=0 conflicts=0 definitions=13 slots=0
+[armory-equipment] reloaded equipment document
+[armory-inventory] staged 19 items (applies outside an active match)
+[armory-inventory] preparing replacement set: 19 items
+[armory-inventory] retained item id=9F45014B4918D4CA def=5404
+[armory-inventory] attachments synced on 9F45014B4918D4CA: stickers=0 charm=none
+[armory-inventory] retained item id=98580F04895784C8 def=4730
+[armory-inventory] retained item id=922FEB06198C79C1 def=525
+[armory-inventory] attachments synced on 922FEB06198C79C1: stickers=0 charm=none
+[armory-inventory] retained item id=9B4523A8BFE93866 def=5030
+[armory-inventory] attachments synced on 9B4523A8BFE93866: stickers=0 charm=none
+[armory-inventory] retained item id=9919302EC58DC70A def=16
+[armory-inventory] attachments synced on 9919302EC58DC70A: stickers=1 [0 kit=20 wear=0.000 rot=0.0 off=-0.079,-0.004 schema=4] charm=none
+[armory-inventory] retained item id=96221A0E61314132 def=60
+[armory-inventory] attachments synced on 96221A0E61314132: stickers=0 charm=kit:24 seed=0 off=0.677,0.332,7.013
+[armory-inventory] retained item id=914A30836F3526FC def=7
+[armory-inventory] retained item id=91EEF26FDFB7F111 def=1209
+[armory-inventory] retained item id=91B8869FF09A7CB1 def=1209
+[armory-inventory] attachments synced on 91B8869FF09A7CB1: stickers=0 charm=none
+[armory-inventory] retained item id=933E7226750B4A56 def=1209
+[armory-inventory] attachments synced on 933E7226750B4A56: stickers=0 charm=none
+[armory-inventory] retained item id=9F7A8249065ED9F7 def=1209
+[armory-inventory] attachments synced on 9F7A8249065ED9F7: stickers=0 charm=none
+[armory-inventory] retained item id=918DEDB7EDB11B7C def=1209
+[armory-inventory] attachments synced on 918DEDB7EDB11B7C: stickers=0 charm=none
+[armory-inventory] retained item id=995F5CC648CDEA98 def=1355
+[armory-inventory] attachments synced on 995F5CC648CDEA98: stickers=0 charm=none
+[armory-inventory] retained item id=98C14E9EE61FC80E def=1209
+[armory-inventory] retained item id=9536605177002A96 def=9
+[armory-inventory] retained item id=9CF82CD4592CD5C7 def=61
+[armory-inventory] attachments synced on 9CF82CD4592CD5C7: stickers=0 charm=kit:7 seed=0 off=1.872,0.344,3.930
+[armory-inventory] retained item id=955F0C957F4C067D def=61
+[armory-inventory] retained item id=9EF2C4042C206579 def=34
+[armory-inventory] attachments synced on 9EF2C4042C206579: stickers=0 charm=none
+[armory-inventory] retained item id=9AD2A303DFC2661B def=4
+[armory-equipment] index: assignments=0 resolved=0 unresolved=0 conflicts=0 definitions=13 slots=0
+[armory-inventory] replacement committed: desired=19 created=0 retained=19 removed=0 removeFailed=0
+
+=== SNAPSHOT ===
+[snap] fsnCount=81629 lastStage=12 stage5Count=6861
+[snap] stage histogram:
+[snap]   stage  0: 9940 frames
+[snap]   stage  1: 6861 frames
+[snap]   stage  2: 6861 frames
+[snap]   stage  3: 6861 frames
+[snap]   stage  5: 6861 frames
+[snap]   stage  6: 6861 frames
+[snap]   stage  7: 6861 frames
+[snap]   stage  8: 6861 frames
+[snap]   stage 10: 6861 frames
+[snap]   stage 11: 9940 frames
+[snap]   stage 12: 6861 frames
+[snap] dwLocalPlayerController @ 0x00007FFAB6AA2548 -> 0x000003A7E1EC4A00 
+[snap] dwLocalPlayerPawn       @ 0x00007FFAB6C991E0 -> 0x000003A7722A3000 
+[snap] pawn: vtable=0x00007FFAC41D3740 inClient=0 health=935
+[snap] ctrl: vtable=0x00007FFAB6171680 inClient=1 m_hPlayerPawn@0x92C = 0x00E5800B (idx=11)
+[snap] entitySystem @ 0x00007FFAB6C7FBB8 = 0x000003A755460000 highestEntityIndex=13
+[snap] entity resolution: 12/16 of indices 1..16 valid
+[snap] ctrl->pawn handle resolve: 0x00E5800B -> 0x000003A7E1D1D000
+[snap] ----------------------------------------
+[detect] pawn=0x000003A7E1D1D000 hp=100 signOn=6 bg=0
+[armory-equipment] index: assignments=0 resolved=0 unresolved=0 conflicts=0 definitions=13 slots=0
+[armory-equipment] reloaded equipment document
+[armory-inventory] staged 19 items (applies outside an active match)
+[armory-inventory] preparing replacement set: 19 items
+[armory-inventory] retained item id=9F45014B4918D4CA def=5404
+[armory-inventory] attachments synced on 9F45014B4918D4CA: stickers=0 charm=none
+[armory-inventory] retained item id=98580F04895784C8 def=4730
+[armory-inventory] retained item id=922FEB06198C79C1 def=525
+[armory-inventory] attachments synced on 922FEB06198C79C1: stickers=0 charm=none
+[armory-inventory] retained item id=9B4523A8BFE93866 def=5030
+[armory-inventory] attachments synced on 9B4523A8BFE93866: stickers=0 charm=none
+[armory-inventory] retained item id=9919302EC58DC70A def=16
+[armory-inventory] attachments synced on 9919302EC58DC70A: stickers=1 [0 kit=20 wear=0.000 rot=0.0 off=-0.079,-0.004 schema=4] charm=none
+[armory-inventory] retained item id=96221A0E61314132 def=60
+[armory-inventory] attachments synced on 96221A0E61314132: stickers=0 charm=kit:24 seed=0 off=0.677,0.332,7.013
+[armory-inventory] retained item id=914A30836F3526FC def=7
+[armory-inventory] retained item id=91EEF26FDFB7F111 def=1209
+[armory-inventory] retained item id=91B8869FF09A7CB1 def=1209
+[armory-inventory] attachments synced on 91B8869FF09A7CB1: stickers=0 charm=none
+[armory-inventory] retained item id=933E7226750B4A56 def=1209
+[armory-inventory] attachments synced on 933E7226750B4A56: stickers=0 charm=none
+[armory-inventory] retained item id=9F7A8249065ED9F7 def=1209
+[armory-inventory] attachments synced on 9F7A8249065ED9F7: stickers=0 charm=none
+[armory-inventory] retained item id=918DEDB7EDB11B7C def=1209
+[armory-inventory] attachments synced on 918DEDB7EDB11B7C: stickers=0 charm=none
+[armory-inventory] retained item id=995F5CC648CDEA98 def=1355
+[armory-inventory] attachments synced on 995F5CC648CDEA98: stickers=0 charm=none
+[armory-inventory] retained item id=98C14E9EE61FC80E def=1209
+[armory-inventory] retained item id=9536605177002A96 def=9
+[armory-inventory] attachments synced on 9536605177002A96: stickers=0 charm=none
+[armory-inventory] retained item id=9CF82CD4592CD5C7 def=61
+[armory-inventory] attachments synced on 9CF82CD4592CD5C7: stickers=0 charm=kit:7 seed=0 off=1.872,0.344,3.930
+[armory-inventory] retained item id=955F0C957F4C067D def=61
+[armory-inventory] retained item id=9EF2C4042C206579 def=34
+[armory-inventory] retained item id=9AD2A303DFC2661B def=4
+[armory-equipment] index: assignments=0 resolved=0 unresolved=0 conflicts=0 definitions=13 slots=0
+[armory-inventory] replacement committed: desired=19 created=0 retained=19 removed=0 removeFailed=0
+N1SSAN_STATUS|1|2026-11-08T03:17:36Z|24152|armory-obsidian-3.0|READY|reason=runtime_worker_heartbeat
+[status-write] begin state=READY path=C:\Users\mirac\AppData\Local\n1ssan\status\cs2-24152.status
+[status-write] success state=READY error=0
+
+=== SNAPSHOT ===
+[snap] fsnCount=84221 lastStage=0 stage5Count=7078
+[snap] stage histogram:
+[snap]   stage  0: 10260 frames
+[snap]   stage  1: 7078 frames
+[snap]   stage  2: 7078 frames
+[snap]   stage  3: 7078 frames
+[snap]   stage  5: 7078 frames
+[snap]   stage  6: 7078 frames
+[snap]   stage  7: 7078 frames
+[snap]   stage  8: 7078 frames
+[snap]   stage 10: 7078 frames
+[snap]   stage 11: 10259 frames
+[snap]   stage 12: 7078 frames
+[snap] dwLocalPlayerController @ 0x00007FFAB6AA2548 -> 0x000003A7E1EC4A00 
+[snap] dwLocalPlayerPawn       @ 0x00007FFAB6C991E0 -> 0x000003A7722A3000 
+[snap] pawn: vtable=0x00007FFAC41D3740 inClient=0 health=935
+[snap] ctrl: vtable=0x00007FFAB6171680 inClient=1 m_hPlayerPawn@0x92C = 0x00E5800B (idx=11)
+[snap] entitySystem @ 0x00007FFAB6C7FBB8 = 0x000003A755460000 highestEntityIndex=13
+[snap] entity resolution: 12/16 of indices 1..16 valid
+[snap] ctrl->pawn handle resolve: 0x00E5800B -> 0x000003A7E1D1D000
+[snap] ----------------------------------------
+
+=== SNAPSHOT ===
+[snap] fsnCount=88253 lastStage=0 stage5Count=7364
+[snap] stage histogram:
+[snap]   stage  0: 10989 frames
+[snap]   stage  1: 7364 frames
+[snap]   stage  2: 7364 frames
+[snap]   stage  3: 7364 frames
+[snap]   stage  5: 7364 frames
+[snap]   stage  6: 7364 frames
+[snap]   stage  7: 7364 frames
+[snap]   stage  8: 7364 frames
+[snap]   stage 10: 7364 frames
+[snap]   stage 11: 10575 frames
+[snap]   stage 12: 7777 frames
+[snap] dwLocalPlayerController @ 0x00007FFAB6AA2548 -> 0x000003A7E1EC4A00 
+[snap] dwLocalPlayerPawn       @ 0x00007FFAB6C991E0 -> 0x000003A7722A3000 
+[snap] pawn: vtable=0x00007FFAC41D3740 inClient=0 health=935
+[snap] ctrl: vtable=0x00007FFAB6171680 inClient=1 m_hPlayerPawn@0x92C = 0x00E5800B (idx=11)
+[snap] entitySystem @ 0x00007FFAB6C7FBB8 = 0x000003A755460000 highestEntityIndex=13
+[snap] entity resolution: 12/16 of indices 1..16 valid
+[snap] ctrl->pawn handle resolve: 0x00E5800B -> 0x000003A7E1D1D000
+[snap] ----------------------------------------
+[detect] pawn=0x000003A7E1D1D000 hp=100 signOn=6 bg=0
+N1SSAN_STATUS|1|2026-11-08T03:17:46Z|24152|armory-obsidian-3.0|READY|reason=runtime_worker_heartbeat
+[status-write] begin state=READY path=C:\Users\mirac\AppData\Local\n1ssan\status\cs2-24152.status
+[status-write] success state=READY error=0
+
+=== SNAPSHOT ===
+[snap] fsnCount=92148 lastStage=0 stage5Count=7665
+[snap] stage histogram:
+[snap]   stage  0: 11582 frames
+[snap]   stage  1: 7665 frames
+[snap]   stage  2: 7665 frames
+[snap]   stage  3: 7665 frames
+[snap]   stage  5: 7665 frames
+[snap]   stage  6: 7665 frames
+[snap]   stage  7: 7665 frames
+[snap]   stage  8: 7665 frames
+[snap]   stage 10: 7665 frames
+[snap]   stage 11: 10895 frames
+[snap]   stage 12: 8351 frames
+[snap] dwLocalPlayerController @ 0x00007FFAB6AA2548 -> 0x000003A7E1EC4A00 
+[snap] dwLocalPlayerPawn       @ 0x00007FFAB6C991E0 -> 0x000003A7722A3000 
+[snap] pawn: vtable=0x00007FFAC41D3740 inClient=0 health=935
+[snap] ctrl: vtable=0x00007FFAB6171680 inClient=1 m_hPlayerPawn@0x92C = 0x00E5800B (idx=11)
+[snap] entitySystem @ 0x00007FFAB6C7FBB8 = 0x000003A755460000 highestEntityIndex=13
+[snap] entity resolution: 12/16 of indices 1..16 valid
+[snap] ctrl->pawn handle resolve: 0x00E5800B -> 0x000003A7E1D1D000
+[snap] ----------------------------------------
+
+=== SNAPSHOT ===
+[snap] fsnCount=96572 lastStage=0 stage5Count=7979
+[snap] stage histogram:
+[snap]   stage  0: 12381 frames
+[snap]   stage  1: 7979 frames
+[snap]   stage  2: 7979 frames
+[snap]   stage  3: 7979 frames
+[snap]   stage  5: 7979 frames
+[snap]   stage  6: 7979 frames
+[snap]   stage  7: 7979 frames
+[snap]   stage  8: 7979 frames
+[snap]   stage 10: 7979 frames
+[snap]   stage 11: 11215 frames
+[snap]   stage 12: 9144 frames
+[snap] dwLocalPlayerController @ 0x00007FFAB6AA2548 -> 0x000003A7E1EC4A00 
+[snap] dwLocalPlayerPawn       @ 0x00007FFAB6C991E0 -> 0x000003A7722A3000 
+[snap] pawn: vtable=0x00007FFAC41D3740 inClient=0 health=935
+[snap] ctrl: vtable=0x00007FFAB6171680 inClient=1 m_hPlayerPawn@0x92C = 0x00E5800B (idx=11)
+[snap] entitySystem @ 0x00007FFAB6C7FBB8 = 0x000003A755460000 highestEntityIndex=13
+[snap] entity resolution: 12/16 of indices 1..16 valid
+[snap] ctrl->pawn handle resolve: 0x00E5800B -> 0x000003A7E1D1D000
+[snap] ----------------------------------------
+[glove-observe] pawn=000003A7722A3000 reapply=114 changed=0 def=24948 init=115 idHigh=0x726F482C
+[glove-observe] pawn=000003A7E7024800 reapply=0 changed=0 def=0 init=0 idHigh=0x0
+[detect] pawn=0x000003A7E7024800 hp=100 signOn=6 bg=0
+N1SSAN_STATUS|1|2026-11-08T03:17:56Z|24152|armory-obsidian-3.0|READY|reason=runtime_worker_heartbeat
+[status-write] begin state=READY path=C:\Users\mirac\AppData\Local\n1ssan\status\cs2-24152.status
+[status-write] success state=READY error=0
+
+=== SNAPSHOT ===
+[snap] fsnCount=100343 lastStage=0 stage5Count=8177
+[snap] stage histogram:
+[snap]   stage  0: 13242 frames
+[snap]   stage  1: 8255 frames
+[snap]   stage  2: 8255 frames
+[snap]   stage  3: 8251 frames
+[snap]   stage  4: 1 frames
+[snap]   stage  5: 8177 frames
+[snap]   stage  6: 8177 frames
+[snap]   stage  7: 8177 frames
+[snap]   stage  8: 8177 frames
+[snap]   stage 10: 8177 frames
+[snap]   stage 11: 11418 frames
+[snap]   stage 12: 10036 frames
+[snap] dwLocalPlayerController @ 0x00007FFAB6AA2548 -> 0x000003A7E5500600 
+[snap] dwLocalPlayerPawn       @ 0x00007FFAB6C991E0 -> 0x000003A7722A3000 
+[snap] pawn: vtable=0x00007FFAC41D3740 inClient=0 health=935
+[snap] ctrl: vtable=0x00007FFAB6171680 inClient=1 m_hPlayerPawn@0x92C = 0x00B301A1 (idx=417)
+[snap] entitySystem @ 0x00007FFAB6C7FBB8 = 0x000003A755460000 highestEntityIndex=205
+[snap] entity resolution: 1/16 of indices 1..16 valid
+[snap] ctrl->pawn handle resolve: 0x00B301A1 -> 0x000003A7E7024800
+[snap] ----------------------------------------
+
+=== SNAPSHOT ===
+[snap] fsnCount=106093 lastStage=0 stage5Count=8497
+[snap] stage histogram:
+[snap]   stage  0: 14677 frames
+[snap]   stage  1: 8575 frames
+[snap]   stage  2: 8575 frames
+[snap]   stage  3: 8571 frames
+[snap]   stage  4: 1 frames
+[snap]   stage  5: 8497 frames
+[snap]   stage  6: 8497 frames
+[snap]   stage  7: 8497 frames
+[snap]   stage  8: 8497 frames
+[snap]   stage 10: 8497 frames
+[snap]   stage 11: 11738 frames
+[snap]   stage 12: 11471 frames
+[snap] dwLocalPlayerController @ 0x00007FFAB6AA2548 -> 0x000003A7E5500600 
+[snap] dwLocalPlayerPawn       @ 0x00007FFAB6C991E0 -> 0x000003A7722A3000 
+[snap] pawn: vtable=0x00007FFAC41D3740 inClient=0 health=935
+[snap] ctrl: vtable=0x00007FFAB6171680 inClient=1 m_hPlayerPawn@0x92C = 0x00B301A1 (idx=417)
+[snap] entitySystem @ 0x00007FFAB6C7FBB8 = 0x000003A755460000 highestEntityIndex=205
+[snap] entity resolution: 1/16 of indices 1..16 valid
+[snap] ctrl->pawn handle resolve: 0x00B301A1 -> 0x000003A7E7024800
+[snap] ----------------------------------------
+[detect] pawn=0x000003A7E7024800 hp=100 signOn=6 bg=0
+N1SSAN_STATUS|1|2026-11-08T03:18:06Z|24152|armory-obsidian-3.0|READY|reason=runtime_worker_heartbeat
+[status-write] begin state=READY path=C:\Users\mirac\AppData\Local\n1ssan\status\cs2-24152.status
+[status-write] success state=READY error=0
+
+=== SNAPSHOT ===
+[snap] fsnCount=111711 lastStage=0 stage5Count=8817
+[snap] stage histogram:
+[snap]   stage  0: 16046 frames
+[snap]   stage  1: 8895 frames
+[snap]   stage  2: 8895 frames
+[snap]   stage  3: 8891 frames
+[snap]   stage  4: 1 frames
+[snap]   stage  5: 8817 frames
+[snap]   stage  6: 8817 frames
+[snap]   stage  7: 8817 frames
+[snap]   stage  8: 8817 frames
+[snap]   stage 10: 8817 frames
+[snap]   stage 11: 12058 frames
+[snap]   stage 12: 12840 frames
+[snap] dwLocalPlayerController @ 0x00007FFAB6AA2548 -> 0x000003A7E5500600 
+[snap] dwLocalPlayerPawn       @ 0x00007FFAB6C991E0 -> 0x000003A7722A3000 
+[snap] pawn: vtable=0x00007FFAC41D3740 inClient=0 health=935
+[snap] ctrl: vtable=0x00007FFAB6171680 inClient=1 m_hPlayerPawn@0x92C = 0x00B301A1 (idx=417)
+[snap] entitySystem @ 0x00007FFAB6C7FBB8 = 0x000003A755460000 highestEntityIndex=205
+[snap] entity resolution: 1/16 of indices 1..16 valid
+[snap] ctrl->pawn handle resolve: 0x00B301A1 -> 0x000003A7E7024800
+[snap] ----------------------------------------
+[apply-cache] weapon model cache invalidated
+[apply-cache] pawn changed: 000003A7E7024800
+[match] FOUND pawn=0x000003A7E7024800 hp=100 signOn=6 bg=0 connected=0
+[apply] tick pawn=0x000003A7E7024800
+[apply] wData=0x0000000000000002 count=182647840
+[apply] activeHandle=0x008580EC
+[apply] active 0x000003A80AE92000
+[pw] weapon=0x000003A80AE92000 view=0x000003A80AE932E0
+[pw]   view+0x00 = 0xB62755F0
+[pw]   view+0x04 = 0x00007FFA
+[pw]   view+0x08 = 0x00000000
+[pw]   view+0x0C = 0x00000000
+[pw]   view+0x10 = 0xFFFFFFFE
+[pw]   view+0x14 = 0x00000000
+[pw]   view+0x18 = 0x00000000
+[pw]   view+0x1C = 0x00000000
+[pw]   view+0x20 = 0x00000000
+[pw]   view+0x24 = 0x00000000
+[pw]   view+0x28 = 0x00000000
+[pw]   view+0x2C = 0x00000000
+[pw]   view+0x30 = 0x00000000
+[pw]   view+0x34 = 0x00000000
+[pw]   view+0x38 = 0x00000000
+[pw]   view+0x3C = 0x00000000
+[pw] weapon+0x1290..0x12F0:
+[pw]   +0x1290 = 0x00007FFAB6275790
+[pw]   +0x1298 = 0x0000000000000000
+[pw]   +0x12A0 = 0x0000000000000000
+[pw]   +0x12A8 = 0x0000000000000000
+[pw]   +0x12B0 = 0x008580EC00000001
+[pw]   +0x12B8 = 0x0000000100000000
+[pw]   +0x12C0 = 0x0000000000000000
+[pw]   +0x12C8 = 0x0000000000000000
+[pw]   +0x12D0 = 0x0000000000000000
+[pw]   +0x12D8 = 0x0000000000000000
+[pw]   +0x12E0 = 0x00007FFAB62755F0
+[pw]   +0x12E8 = 0x0000000000000000
+[pw] weapon 0x000003A80AE92000 def=61
+[team] pawn=0x000003A7E7024800, scanning +0x380..0x400:
+[team]   pawn+0x3BC (u8)  = 1
+[armory-apply] in-game live weapon def=61 team=CT paintKit=1173 (equipped in game 9CF82CD4592CD5C7)
+[apply] enter (weapon=0x000003A80AE92000 def=61 pk=1173)
+[apply] world view pre-write: size=0 data=0x0000000000000000
+[attr-diag] item=000003A80AE932E0 size=0 data=0000000000000000 alloc=0
+[attr-entry] 0: def=6 value=1173.000 initial=1173.000
+[attr-entry] 1: def=7 value=1.000 initial=1.000
+[attr-entry] 2: def=8 value=0.300420 initial=0.300420
+[attr] attachments written (5 attributes): stickers=0 charm=kit:7 seed=0 off=1.872,0.344,3.930
+[apply] world post-create: size=10 data=000003A80AEA1A00 alloc=18
+[apply] world view 0x000003A80AE932E0 painted (pk=1173)
+[hud-find] START weapon=0x000003A80AE92000 pawn=0x000003A7E7024800
+[hud-find] armsHandle=0xFFFFFFFF
+[hud-find] FAIL: invalid arms handle
+[apply-cache] rebuilding weapon=000003A80AE92000 hud=0000000000000000 def=61 pk=1173
+[apply-diagnostic] weaponChanged=1 gloveUpdate=0 regenAvailable=1
+[skin-regenerate] calling pRegenerateSkins weaponChanged=1
+[skin-regenerate] returned
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-gloves] nothing applied team=CT (not equipped in game and no assignment for this slot)
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-agent] nothing applied team=CT (not equipped in game and no assignment for this slot)
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[apply] tick pawn=0x000003A7E7024800
+[apply] active 0x000003A80AE92000
+[pw] weapon 0x000003A80AE92000 def=61
+[armory-apply] in-game live weapon def=61 team=CT paintKit=1173 (equipped in game 9CF82CD4592CD5C7)
+[hud-find] START weapon=0x000003A80AE92000 pawn=0x000003A7E7024800
+[hud-find] armsHandle=0xA4244233
+[hud-find] arms=0x000003A80AF65000
+[hud-find] armsNode=0x000003A8040A1080
+[hud-find] firstChild=0x000003A8040A2880
+[hud-find] child[0]=0x000003A8040A2880 owner=0x000003A80AF5E000 handle=0x8580EC resolved=0x000003A80AE92000 **MATCH**
+[hud-find] SUCCESS hudWeapon=0x000003A80AF5E000 after 1 nodes
+[apply-cache] rebuilding weapon=000003A80AE92000 hud=000003A80AF5E000 def=61 pk=1173
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[apply] tick pawn=0x000003A7E7024800
+[apply] active 0x000003A80AE92000
+[pw] weapon 0x000003A80AE92000 def=61
+[armory-apply] in-game live weapon def=61 team=CT paintKit=1173 (equipped in game 9CF82CD4592CD5C7)
+[hud-find] START weapon=0x000003A80AE92000 pawn=0x000003A7E7024800
+[hud-find] armsHandle=0xA4244233
+[hud-find] arms=0x000003A80AF65000
+[hud-find] armsNode=0x000003A8040A1080
+[hud-find] firstChild=0x000003A8040A2880
+[hud-find] child[0]=0x000003A8040A2880 owner=0x000003A80AF5E000 handle=0x8580EC resolved=0x000003A80AE92000 **MATCH**
+[hud-find] SUCCESS hudWeapon=0x000003A80AF5E000 after 1 nodes
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[apply] tick pawn=0x000003A7E7024800
+[apply] active 0x000003A80AE92000
+[pw] weapon 0x000003A80AE92000 def=61
+[armory-apply] in-game live weapon def=61 team=CT paintKit=1173 (equipped in game 9CF82CD4592CD5C7)
+[hud-find] START weapon=0x000003A80AE92000 pawn=0x000003A7E7024800
+[hud-find] armsHandle=0xA4244233
+[hud-find] arms=0x000003A80AF65000
+[hud-find] armsNode=0x000003A8040A1080
+[hud-find] firstChild=0x000003A8040A2880
+[hud-find] child[0]=0x000003A8040A2880 owner=0x000003A80AF5E000 handle=0x8580EC resolved=0x000003A80AE92000 **MATCH**
+[hud-find] SUCCESS hudWeapon=0x000003A80AF5E000 after 1 nodes
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+
+=== SNAPSHOT ===
+[snap] fsnCount=117030 lastStage=7 stage5Count=9126
+[snap] stage histogram:
+[snap]   stage  0: 17316 frames
+[snap]   stage  1: 9204 frames
+[snap]   stage  2: 9204 frames
+[snap]   stage  3: 9199 frames
+[snap]   stage  4: 1 frames
+[snap]   stage  5: 9126 frames
+[snap]   stage  6: 9126 frames
+[snap]   stage  7: 9126 frames
+[snap]   stage  8: 9125 frames
+[snap]   stage 10: 9126 frames
+[snap]   stage 11: 12373 frames
+[snap]   stage 12: 14104 frames
+[snap] dwLocalPlayerController @ 0x00007FFAB6AA2548 -> 0x000003A7E5500600 
+[snap] dwLocalPlayerPawn       @ 0x00007FFAB6C991E0 -> 0x000003A7722A3000 
+[snap] pawn: vtable=0x00007FFAC41D3740 inClient=0 health=935
+[snap] ctrl: vtable=0x00007FFAB6171680 inClient=1 m_hPlayerPawn@0x92C = 0x00B301A1 (idx=417)
+[snap] entitySystem @ 0x00007FFAB6C7FBB8 = 0x000003A755460000 highestEntityIndex=211
+[snap] entity resolution: 1/16 of indices 1..16 valid
+[snap] ctrl->pawn handle resolve: 0x00B301A1 -> 0x000003A7E7024800
+[snap] ----------------------------------------
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[apply] tick pawn=0x000003A7E7024800
+[apply] active 0x000003A80AE92000
+[pw] weapon 0x000003A80AE92000 def=61
+[armory-apply] in-game live weapon def=61 team=CT paintKit=1173 (equipped in game 9CF82CD4592CD5C7)
+[hud-find] START weapon=0x000003A80AE92000 pawn=0x000003A7E7024800
+[hud-find] armsHandle=0xA4244233
+[hud-find] arms=0x000003A80AF65000
+[hud-find] armsNode=0x000003A8040A1080
+[hud-find] firstChild=0x000003A8040A2880
+[hud-find] child[0]=0x000003A8040A2880 owner=0x000003A80AF5E000 handle=0x8580EC resolved=0x000003A80AE92000 **MATCH**
+[hud-find] SUCCESS hudWeapon=0x000003A80AF5E000 after 1 nodes
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[apply] tick pawn=0x000003A7E7024800
+[apply] active 0x000003A80AE92000
+[pw] weapon 0x000003A80AE92000 def=61
+[armory-apply] in-game live weapon def=61 team=CT paintKit=1173 (equipped in game 9CF82CD4592CD5C7)
+[hud-find] START weapon=0x000003A80AE92000 pawn=0x000003A7E7024800
+[hud-find] armsHandle=0xA4244233
+[hud-find] arms=0x000003A80AF65000
+[hud-find] armsNode=0x000003A8040A1080
+[hud-find] firstChild=0x000003A8040A2880
+[hud-find] child[0]=0x000003A8040A2880 owner=0x000003A80AF5E000 handle=0x8580EC resolved=0x000003A80AE92000 **MATCH**
+[hud-find] SUCCESS hudWeapon=0x000003A80AF5E000 after 1 nodes
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[apply] tick pawn=0x000003A7E7024800
+[apply] active 0x000003A80AE92000
+[pw] weapon 0x000003A80AE92000 def=61
+[armory-apply] in-game live weapon def=61 team=CT paintKit=1173 (equipped in game 9CF82CD4592CD5C7)
+[hud-find] START weapon=0x000003A80AE92000 pawn=0x000003A7E7024800
+[hud-find] armsHandle=0xA4244233
+[hud-find] arms=0x000003A80AF65000
+[hud-find] armsNode=0x000003A8040A1080
+[hud-find] firstChild=0x000003A8040A2880
+[hud-find] child[0]=0x000003A8040A2880 owner=0x000003A80AF5E000 handle=0x8580EC resolved=0x000003A80AE92000 **MATCH**
+[hud-find] SUCCESS hudWeapon=0x000003A80AF5E000 after 1 nodes
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[apply] tick pawn=0x000003A7E7024800
+[apply] active 0x000003A80AE92000
+[pw] weapon 0x000003A80AE92000 def=61
+[armory-apply] in-game live weapon def=61 team=CT paintKit=1173 (equipped in game 9CF82CD4592CD5C7)
+[hud-find] START weapon=0x000003A80AE92000 pawn=0x000003A7E7024800
+[hud-find] armsHandle=0xA4244233
+[hud-find] arms=0x000003A80AF65000
+[hud-find] armsNode=0x000003A8040A1080
+[hud-find] firstChild=0x000003A8040A2880
+[hud-find] child[0]=0x000003A8040A2880 owner=0x000003A80AF5E000 handle=0x8580EC resolved=0x000003A80AE92000 **MATCH**
+[hud-find] SUCCESS hudWeapon=0x000003A80AF5E000 after 1 nodes
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[apply] tick pawn=0x000003A7E7024800
+[apply] active 0x000003A80AE92000
+[pw] weapon 0x000003A80AE92000 def=61
+[armory-apply] in-game live weapon def=61 team=CT paintKit=1173 (equipped in game 9CF82CD4592CD5C7)
+[hud-find] START weapon=0x000003A80AE92000 pawn=0x000003A7E7024800
+[hud-find] armsHandle=0xA4244233
+[hud-find] arms=0x000003A80AF65000
+[hud-find] armsNode=0x000003A8040A1080
+[hud-find] firstChild=0x000003A8040A2880
+[hud-find] child[0]=0x000003A8040A2880 owner=0x000003A80AF5E000 handle=0x8580EC resolved=0x000003A80AE92000 **MATCH**
+[hud-find] SUCCESS hudWeapon=0x000003A80AF5E000 after 1 nodes
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[apply] tick pawn=0x000003A7E7024800
+[apply] active 0x000003A80AE90000
+[pw] weapon 0x000003A80AE90000 def=42
+[armory-loadout] team=ct def=42 holds item 17293822569102704682, which is not a projected instance
+[armory-apply] no Armory target for live weapon def=42 team=CT (not owned in the projected profile)
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[apply] tick pawn=0x000003A7E7024800
+[apply] active 0x000003A80AE90000
+[pw] weapon 0x000003A80AE90000 def=42
+[armory-loadout] team=ct def=42 holds item 17293822569102704682, which is not a projected instance
+[armory-apply] no Armory target for live weapon def=42 team=CT (not owned in the projected profile)
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[apply] tick pawn=0x000003A7E7024800
+[apply] active 0x000003A80AE90000
+[pw] weapon 0x000003A80AE90000 def=42
+[armory-loadout] team=ct def=42 holds item 17293822569102704682, which is not a projected instance
+[armory-apply] no Armory target for live weapon def=42 team=CT (not owned in the projected profile)
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[apply] tick pawn=0x000003A7E7024800
+[apply] active 0x000003A80AE90000
+[pw] weapon 0x000003A80AE90000 def=42
+[armory-loadout] team=ct def=42 holds item 17293822569102704682, which is not a projected instance
+[armory-apply] no Armory target for live weapon def=42 team=CT (not owned in the projected profile)
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[apply] tick pawn=0x000003A7E7024800
+[apply] active 0x000003A80AE92000
+[pw] weapon 0x000003A80AE92000 def=61
+[armory-apply] in-game live weapon def=61 team=CT paintKit=1173 (equipped in game 9CF82CD4592CD5C7)
+[hud-find] START weapon=0x000003A80AE92000 pawn=0x000003A7E7024800
+[hud-find] armsHandle=0xA4244233
+[hud-find] arms=0x000003A80AF65000
+[hud-find] armsNode=0x000003A8040A1080
+[hud-find] firstChild=0x000003A8040A2880
+[hud-find] child[0]=0x000003A8040A2880 owner=0x000003A80AF5E000 handle=0x8580EC resolved=0x000003A80AE92000 **MATCH**
+[hud-find] SUCCESS hudWeapon=0x000003A80AF5E000 after 1 nodes
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[apply] tick pawn=0x000003A7E7024800
+[apply] active 0x000003A80AE92000
+[pw] weapon 0x000003A80AE92000 def=61
+[armory-apply] in-game live weapon def=61 team=CT paintKit=1173 (equipped in game 9CF82CD4592CD5C7)
+[hud-find] START weapon=0x000003A80AE92000 pawn=0x000003A7E7024800
+[hud-find] armsHandle=0xA4244233
+[hud-find] arms=0x000003A80AF65000
+[hud-find] armsNode=0x000003A8040A1080
+[hud-find] firstChild=0x000003A8040A2880
+[hud-find] child[0]=0x000003A8040A2880 owner=0x000003A80AF5E000 handle=0x8580EC resolved=0x000003A80AE92000 **MATCH**
+[hud-find] SUCCESS hudWeapon=0x000003A80AF5E000 after 1 nodes
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[apply] tick pawn=0x000003A7E7024800
+[apply] active 0x000003A80AE92000
+[pw] weapon 0x000003A80AE92000 def=61
+[armory-apply] in-game live weapon def=61 team=CT paintKit=1173 (equipped in game 9CF82CD4592CD5C7)
+[hud-find] START weapon=0x000003A80AE92000 pawn=0x000003A7E7024800
+[hud-find] armsHandle=0xA4244233
+[hud-find] arms=0x000003A80AF65000
+[hud-find] armsNode=0x000003A8040A1080
+[hud-find] firstChild=0x000003A8040A2880
+[hud-find] child[0]=0x000003A8040A2880 owner=0x000003A80AF5E000 handle=0x8580EC resolved=0x000003A80AE92000 **MATCH**
+[hud-find] SUCCESS hudWeapon=0x000003A80AF5E000 after 1 nodes
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[apply] tick pawn=0x000003A7E7024800
+[apply] active 0x000003A80AE92000
+[pw] weapon 0x000003A80AE92000 def=61
+[armory-apply] in-game live weapon def=61 team=CT paintKit=1173 (equipped in game 9CF82CD4592CD5C7)
+[hud-find] START weapon=0x000003A80AE92000 pawn=0x000003A7E7024800
+[hud-find] armsHandle=0xA4244233
+[hud-find] arms=0x000003A80AF65000
+[hud-find] armsNode=0x000003A8040A1080
+[hud-find] firstChild=0x000003A8040A2880
+[hud-find] child[0]=0x000003A8040A2880 owner=0x000003A80AF5E000 handle=0x8580EC resolved=0x000003A80AE92000 **MATCH**
+[hud-find] SUCCESS hudWeapon=0x000003A80AF5E000 after 1 nodes
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[apply] tick pawn=0x000003A7E7024800
+[apply] active 0x000003A80AE92000
+[pw] weapon 0x000003A80AE92000 def=61
+[armory-apply] in-game live weapon def=61 team=CT paintKit=1173 (equipped in game 9CF82CD4592CD5C7)
+[hud-find] START weapon=0x000003A80AE92000 pawn=0x000003A7E7024800
+[hud-find] armsHandle=0xA4244233
+[hud-find] arms=0x000003A80AF65000
+[hud-find] armsNode=0x000003A8040A1080
+[hud-find] firstChild=0x000003A8040A2880
+[hud-find] child[0]=0x000003A8040A2880 owner=0x000003A80AF5E000 handle=0x8580EC resolved=0x000003A80AE92000 **MATCH**
+[hud-find] SUCCESS hudWeapon=0x000003A80AF5E000 after 1 nodes
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[apply] tick pawn=0x000003A7E7024800
+[apply] active 0x000003A80AE92000
+[pw] weapon 0x000003A80AE92000 def=61
+[armory-apply] in-game live weapon def=61 team=CT paintKit=1173 (equipped in game 9CF82CD4592CD5C7)
+[hud-find] START weapon=0x000003A80AE92000 pawn=0x000003A7E7024800
+[hud-find] armsHandle=0xA4244233
+[hud-find] arms=0x000003A80AF65000
+[hud-find] armsNode=0x000003A8040A1080
+[hud-find] firstChild=0x000003A8040A2880
+[hud-find] child[0]=0x000003A8040A2880 owner=0x000003A80AF5E000 handle=0x8580EC resolved=0x000003A80AE92000 **MATCH**
+[hud-find] SUCCESS hudWeapon=0x000003A80AF5E000 after 1 nodes
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[apply] tick pawn=0x000003A7E7024800
+[apply] active 0x000003A80AE92000
+[pw] weapon 0x000003A80AE92000 def=61
+[armory-apply] in-game live weapon def=61 team=CT paintKit=1173 (equipped in game 9CF82CD4592CD5C7)
+[hud-find] START weapon=0x000003A80AE92000 pawn=0x000003A7E7024800
+[hud-find] armsHandle=0xA4244233
+[hud-find] arms=0x000003A80AF65000
+[hud-find] armsNode=0x000003A8040A1080
+[hud-find] firstChild=0x000003A8040A2880
+[hud-find] child[0]=0x000003A8040A2880 owner=0x000003A80AF5E000 handle=0x8580EC resolved=0x000003A80AE92000 **MATCH**
+[hud-find] SUCCESS hudWeapon=0x000003A80AF5E000 after 1 nodes
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[apply] tick pawn=0x000003A7E7024800
+[apply] active 0x000003A80AE92000
+[pw] weapon 0x000003A80AE92000 def=61
+[armory-apply] in-game live weapon def=61 team=CT paintKit=1173 (equipped in game 9CF82CD4592CD5C7)
+[hud-find] START weapon=0x000003A80AE92000 pawn=0x000003A7E7024800
+[hud-find] armsHandle=0xA4244233
+[hud-find] arms=0x000003A80AF65000
+[hud-find] armsNode=0x000003A8040A1080
+[hud-find] firstChild=0x000003A8040A2880
+[hud-find] child[0]=0x000003A8040A2880 owner=0x000003A80AF5E000 handle=0x8580EC resolved=0x000003A80AE92000 **MATCH**
+[hud-find] SUCCESS hudWeapon=0x000003A80AF5E000 after 1 nodes
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[apply] tick pawn=0x000003A7E7024800
+[apply] active 0x000003A80AE92000
+[pw] weapon 0x000003A80AE92000 def=61
+[armory-apply] in-game live weapon def=61 team=CT paintKit=1173 (equipped in game 9CF82CD4592CD5C7)
+[hud-find] START weapon=0x000003A80AE92000 pawn=0x000003A7E7024800
+[hud-find] armsHandle=0xA4244233
+[hud-find] arms=0x000003A80AF65000
+[hud-find] armsNode=0x000003A8040A1080
+[hud-find] firstChild=0x000003A8040A2880
+[hud-find] child[0]=0x000003A8040A2880 owner=0x000003A80AF5E000 handle=0x8580EC resolved=0x000003A80AE92000 **MATCH**
+[hud-find] SUCCESS hudWeapon=0x000003A80AF5E000 after 1 nodes
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[apply] tick pawn=0x000003A7E7024800
+[apply] active 0x000003A80AE90000
+[pw] weapon 0x000003A80AE90000 def=42
+[armory-loadout] team=ct def=42 holds item 17293822569102704682, which is not a projected instance
+[armory-apply] no Armory target for live weapon def=42 team=CT (not owned in the projected profile)
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[apply] tick pawn=0x000003A7E7024800
+[apply] active 0x000003A80AE90000
+[pw] weapon 0x000003A80AE90000 def=42
+[armory-loadout] team=ct def=42 holds item 17293822569102704682, which is not a projected instance
+[armory-apply] no Armory target for live weapon def=42 team=CT (not owned in the projected profile)
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+N1SSAN_STATUS|1|2026-11-08T03:18:16Z|24152|armory-obsidian-3.0|READY|reason=runtime_worker_heartbeat
+[status-write] begin state=READY path=C:\Users\mirac\AppData\Local\n1ssan\status\cs2-24152.status
+[status-write] success state=READY error=0
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+
+=== SNAPSHOT ===
+[snap] fsnCount=121931 lastStage=12 stage5Count=9446
+[snap] stage histogram:
+[snap]   stage  0: 18325 frames
+[snap]   stage  1: 9524 frames
+[snap]   stage  2: 9524 frames
+[snap]   stage  3: 9520 frames
+[snap]   stage  4: 1 frames
+[snap]   stage  5: 9446 frames
+[snap]   stage  6: 9446 frames
+[snap]   stage  7: 9446 frames
+[snap]   stage  8: 9446 frames
+[snap]   stage 10: 9446 frames
+[snap]   stage 11: 12693 frames
+[snap]   stage 12: 15114 frames
+[snap] dwLocalPlayerController @ 0x00007FFAB6AA2548 -> 0x000003A7E5500600 
+[snap] dwLocalPlayerPawn       @ 0x00007FFAB6C991E0 -> 0x000003A7722A3000 
+[snap] pawn: vtable=0x00007FFAC41D3740 inClient=0 health=935
+[snap] ctrl: vtable=0x00007FFAB6171680 inClient=1 m_hPlayerPawn@0x92C = 0x00B301A1 (idx=417)
+[snap] entitySystem @ 0x00007FFAB6C7FBB8 = 0x000003A755460000 highestEntityIndex=211
+[snap] entity resolution: 1/16 of indices 1..16 valid
+[snap] ctrl->pawn handle resolve: 0x00B301A1 -> 0x000003A7E7024800
+[snap] ----------------------------------------
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[apply] tick pawn=0x000003A7E7024800
+[apply] active 0x000003A80AE90000
+[pw] weapon 0x000003A80AE90000 def=42
+[armory-loadout] team=ct def=42 holds item 17293822569102704682, which is not a projected instance
+[armory-apply] no Armory target for live weapon def=42 team=CT (not owned in the projected profile)
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[apply] tick pawn=0x000003A7E7024800
+[apply] active 0x000003A80AE90000
+[pw] weapon 0x000003A80AE90000 def=42
+[armory-loadout] team=ct def=42 holds item 17293822569102704682, which is not a projected instance
+[armory-apply] no Armory target for live weapon def=42 team=CT (not owned in the projected profile)
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[apply] tick pawn=0x000003A7E7024800
+[apply] active 0x000003A80AE90000
+[pw] weapon 0x000003A80AE90000 def=42
+[armory-loadout] team=ct def=42 holds item 17293822569102704682, which is not a projected instance
+[armory-apply] no Armory target for live weapon def=42 team=CT (not owned in the projected profile)
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[apply] tick pawn=0x000003A7E7024800
+[apply] active 0x000003A80AE92000
+[pw] weapon 0x000003A80AE92000 def=61
+[armory-apply] in-game live weapon def=61 team=CT paintKit=1173 (equipped in game 9CF82CD4592CD5C7)
+[hud-find] START weapon=0x000003A80AE92000 pawn=0x000003A7E7024800
+[hud-find] armsHandle=0xA4244233
+[hud-find] arms=0x000003A80AF65000
+[hud-find] armsNode=0x000003A8040A1080
+[hud-find] firstChild=0x000003A8040A2880
+[hud-find] child[0]=0x000003A8040A2880 owner=0x000003A80AF5E000 handle=0x8580EC resolved=0x000003A80AE92000 **MATCH**
+[hud-find] SUCCESS hudWeapon=0x000003A80AF5E000 after 1 nodes
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[apply] tick pawn=0x000003A7E7024800
+[apply] active 0x000003A80AE92000
+[pw] weapon 0x000003A80AE92000 def=61
+[armory-apply] in-game live weapon def=61 team=CT paintKit=1173 (equipped in game 9CF82CD4592CD5C7)
+[hud-find] START weapon=0x000003A80AE92000 pawn=0x000003A7E7024800
+[hud-find] armsHandle=0xA4244233
+[hud-find] arms=0x000003A80AF65000
+[hud-find] armsNode=0x000003A8040A1080
+[hud-find] firstChild=0x000003A8040A2880
+[hud-find] child[0]=0x000003A8040A2880 owner=0x000003A80AF5E000 handle=0x8580EC resolved=0x000003A80AE92000 **MATCH**
+[hud-find] SUCCESS hudWeapon=0x000003A80AF5E000 after 1 nodes
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[apply] tick pawn=0x000003A7E7024800
+[apply] active 0x000003A80AE92000
+[pw] weapon 0x000003A80AE92000 def=61
+[armory-apply] in-game live weapon def=61 team=CT paintKit=1173 (equipped in game 9CF82CD4592CD5C7)
+[hud-find] START weapon=0x000003A80AE92000 pawn=0x000003A7E7024800
+[hud-find] armsHandle=0xA4244233
+[hud-find] arms=0x000003A80AF65000
+[hud-find] armsNode=0x000003A8040A1080
+[hud-find] firstChild=0x000003A8040A2880
+[hud-find] child[0]=0x000003A8040A2880 owner=0x000003A80AF5E000 handle=0x8580EC resolved=0x000003A80AE92000 **MATCH**
+[hud-find] SUCCESS hudWeapon=0x000003A80AF5E000 after 1 nodes
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[apply] tick pawn=0x000003A7E7024800
+[apply] active 0x000003A80AE92000
+[pw] weapon 0x000003A80AE92000 def=61
+[armory-apply] in-game live weapon def=61 team=CT paintKit=1173 (equipped in game 9CF82CD4592CD5C7)
+[hud-find] START weapon=0x000003A80AE92000 pawn=0x000003A7E7024800
+[hud-find] armsHandle=0xA4244233
+[hud-find] arms=0x000003A80AF65000
+[hud-find] armsNode=0x000003A8040A1080
+[hud-find] firstChild=0x000003A8040A2880
+[hud-find] child[0]=0x000003A8040A2880 owner=0x000003A80AF5E000 handle=0x8580EC resolved=0x000003A80AE92000 **MATCH**
+[hud-find] SUCCESS hudWeapon=0x000003A80AF5E000 after 1 nodes
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[apply] tick pawn=0x000003A7E7024800
+[apply] active 0x000003A80AE92000
+[pw] weapon 0x000003A80AE92000 def=61
+[armory-apply] in-game live weapon def=61 team=CT paintKit=1173 (equipped in game 9CF82CD4592CD5C7)
+[hud-find] START weapon=0x000003A80AE92000 pawn=0x000003A7E7024800
+[hud-find] armsHandle=0xA4244233
+[hud-find] arms=0x000003A80AF65000
+[hud-find] armsNode=0x000003A8040A1080
+[hud-find] firstChild=0x000003A8040A2880
+[hud-find] child[0]=0x000003A8040A2880 owner=0x000003A80AF5E000 handle=0x8580EC resolved=0x000003A80AE92000 **MATCH**
+[hud-find] SUCCESS hudWeapon=0x000003A80AF5E000 after 1 nodes
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[apply] tick pawn=0x000003A7E7024800
+[apply] active 0x000003A80AE92000
+[pw] weapon 0x000003A80AE92000 def=61
+[armory-apply] in-game live weapon def=61 team=CT paintKit=1173 (equipped in game 9CF82CD4592CD5C7)
+[hud-find] START weapon=0x000003A80AE92000 pawn=0x000003A7E7024800
+[hud-find] armsHandle=0xA4244233
+[hud-find] arms=0x000003A80AF65000
+[hud-find] armsNode=0x000003A8040A1080
+[hud-find] firstChild=0x000003A8040A2880
+[hud-find] child[0]=0x000003A8040A2880 owner=0x000003A80AF5E000 handle=0x8580EC resolved=0x000003A80AE92000 **MATCH**
+[hud-find] SUCCESS hudWeapon=0x000003A80AF5E000 after 1 nodes
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[apply] tick pawn=0x000003A7E7024800
+[apply] active 0x000003A80AE92000
+[pw] weapon 0x000003A80AE92000 def=61
+[armory-apply] in-game live weapon def=61 team=CT paintKit=1173 (equipped in game 9CF82CD4592CD5C7)
+[hud-find] START weapon=0x000003A80AE92000 pawn=0x000003A7E7024800
+[hud-find] armsHandle=0xA4244233
+[hud-find] arms=0x000003A80AF65000
+[hud-find] armsNode=0x000003A8040A1080
+[hud-find] firstChild=0x000003A8040A2880
+[hud-find] child[0]=0x000003A8040A2880 owner=0x000003A80AF5E000 handle=0x8580EC resolved=0x000003A80AE92000 **MATCH**
+[hud-find] SUCCESS hudWeapon=0x000003A80AF5E000 after 1 nodes
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[apply] tick pawn=0x000003A7E7024800
+[apply] active 0x000003A80AE92000
+[pw] weapon 0x000003A80AE92000 def=61
+[armory-apply] in-game live weapon def=61 team=CT paintKit=1173 (equipped in game 9CF82CD4592CD5C7)
+[hud-find] START weapon=0x000003A80AE92000 pawn=0x000003A7E7024800
+[hud-find] armsHandle=0xA4244233
+[hud-find] arms=0x000003A80AF65000
+[hud-find] armsNode=0x000003A8040A1080
+[hud-find] firstChild=0x000003A8040A2880
+[hud-find] child[0]=0x000003A8040A2880 owner=0x000003A80AF5E000 handle=0x8580EC resolved=0x000003A80AE92000 **MATCH**
+[hud-find] SUCCESS hudWeapon=0x000003A80AF5E000 after 1 nodes
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[apply] tick pawn=0x000003A7E7024800
+[apply] active 0x000003A80AE92000
+[pw] weapon 0x000003A80AE92000 def=61
+[armory-apply] in-game live weapon def=61 team=CT paintKit=1173 (equipped in game 9CF82CD4592CD5C7)
+[hud-find] START weapon=0x000003A80AE92000 pawn=0x000003A7E7024800
+[hud-find] armsHandle=0xA4244233
+[hud-find] arms=0x000003A80AF65000
+[hud-find] armsNode=0x000003A8040A1080
+[hud-find] firstChild=0x000003A8040A2880
+[hud-find] child[0]=0x000003A8040A2880 owner=0x000003A80AF5E000 handle=0x8580EC resolved=0x000003A80AE92000 **MATCH**
+[hud-find] SUCCESS hudWeapon=0x000003A80AF5E000 after 1 nodes
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[apply] tick pawn=0x000003A7E7024800
+[apply] active 0x000003A80AE92000
+[pw] weapon 0x000003A80AE92000 def=61
+[armory-apply] in-game live weapon def=61 team=CT paintKit=1173 (equipped in game 9CF82CD4592CD5C7)
+[hud-find] START weapon=0x000003A80AE92000 pawn=0x000003A7E7024800
+[hud-find] armsHandle=0xA4244233
+[hud-find] arms=0x000003A80AF65000
+[hud-find] armsNode=0x000003A8040A1080
+[hud-find] firstChild=0x000003A8040A2880
+[hud-find] child[0]=0x000003A8040A2880 owner=0x000003A80AF5E000 handle=0x8580EC resolved=0x000003A80AE92000 **MATCH**
+[hud-find] SUCCESS hudWeapon=0x000003A80AF5E000 after 1 nodes
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[apply] tick pawn=0x000003A7E7024800
+[apply] active 0x000003A80AE92000
+[pw] weapon 0x000003A80AE92000 def=61
+[armory-apply] in-game live weapon def=61 team=CT paintKit=1173 (equipped in game 9CF82CD4592CD5C7)
+[hud-find] START weapon=0x000003A80AE92000 pawn=0x000003A7E7024800
+[hud-find] armsHandle=0xA4244233
+[hud-find] arms=0x000003A80AF65000
+[hud-find] armsNode=0x000003A8040A1080
+[hud-find] firstChild=0x000003A8040A2880
+[hud-find] child[0]=0x000003A8040A2880 owner=0x000003A80AF5E000 handle=0x8580EC resolved=0x000003A80AE92000 **MATCH**
+[hud-find] SUCCESS hudWeapon=0x000003A80AF5E000 after 1 nodes
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[apply] tick pawn=0x000003A7E7024800
+[apply] active 0x000003A80AE92000
+[pw] weapon 0x000003A80AE92000 def=61
+[armory-apply] in-game live weapon def=61 team=CT paintKit=1173 (equipped in game 9CF82CD4592CD5C7)
+[hud-find] START weapon=0x000003A80AE92000 pawn=0x000003A7E7024800
+[hud-find] armsHandle=0xA4244233
+[hud-find] arms=0x000003A80AF65000
+[hud-find] armsNode=0x000003A8040A1080
+[hud-find] firstChild=0x000003A8040A2880
+[hud-find] child[0]=0x000003A8040A2880 owner=0x000003A80AF5E000 handle=0x8580EC resolved=0x000003A80AE92000 **MATCH**
+[hud-find] SUCCESS hudWeapon=0x000003A80AF5E000 after 1 nodes
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[apply] tick pawn=0x000003A7E7024800
+[apply] active 0x000003A80AE92000
+[pw] weapon 0x000003A80AE92000 def=61
+[armory-apply] in-game live weapon def=61 team=CT paintKit=1173 (equipped in game 9CF82CD4592CD5C7)
+[hud-find] START weapon=0x000003A80AE92000 pawn=0x000003A7E7024800
+[hud-find] armsHandle=0xA4244233
+[hud-find] arms=0x000003A80AF65000
+[hud-find] armsNode=0x000003A8040A1080
+[hud-find] firstChild=0x000003A8040A2880
+[hud-find] child[0]=0x000003A8040A2880 owner=0x000003A80AF5E000 handle=0x8580EC resolved=0x000003A80AE92000 **MATCH**
+[hud-find] SUCCESS hudWeapon=0x000003A80AF5E000 after 1 nodes
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[apply] tick pawn=0x000003A7E7024800
+[apply] active 0x000003A80AE92000
+[pw] weapon 0x000003A80AE92000 def=61
+[armory-apply] in-game live weapon def=61 team=CT paintKit=1173 (equipped in game 9CF82CD4592CD5C7)
+[hud-find] START weapon=0x000003A80AE92000 pawn=0x000003A7E7024800
+[hud-find] armsHandle=0xA4244233
+[hud-find] arms=0x000003A80AF65000
+[hud-find] armsNode=0x000003A8040A1080
+[hud-find] firstChild=0x000003A8040A2880
+[hud-find] child[0]=0x000003A8040A2880 owner=0x000003A80AF5E000 handle=0x8580EC resolved=0x000003A80AE92000 **MATCH**
+[hud-find] SUCCESS hudWeapon=0x000003A80AF5E000 after 1 nodes
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[apply] tick pawn=0x000003A7E7024800
+[apply] active 0x000003A80AE92000
+[pw] weapon 0x000003A80AE92000 def=61
+[armory-apply] in-game live weapon def=61 team=CT paintKit=1173 (equipped in game 9CF82CD4592CD5C7)
+[hud-find] START weapon=0x000003A80AE92000 pawn=0x000003A7E7024800
+[hud-find] armsHandle=0xA4244233
+[hud-find] arms=0x000003A80AF65000
+[hud-find] armsNode=0x000003A8040A1080
+[hud-find] firstChild=0x000003A8040A2880
+[hud-find] child[0]=0x000003A8040A2880 owner=0x000003A80AF5E000 handle=0x8580EC resolved=0x000003A80AE92000 **MATCH**
+[hud-find] SUCCESS hudWeapon=0x000003A80AF5E000 after 1 nodes
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[apply] tick pawn=0x000003A7E7024800
+[apply] active 0x000003A80AE92000
+[pw] weapon 0x000003A80AE92000 def=61
+[armory-apply] in-game live weapon def=61 team=CT paintKit=1173 (equipped in game 9CF82CD4592CD5C7)
+[hud-find] START weapon=0x000003A80AE92000 pawn=0x000003A7E7024800
+[hud-find] armsHandle=0xA4244233
+[hud-find] arms=0x000003A80AF65000
+[hud-find] armsNode=0x000003A8040A1080
+[hud-find] firstChild=0x000003A8040A2880
+[hud-find] child[0]=0x000003A8040A2880 owner=0x000003A80AF5E000 handle=0x8580EC resolved=0x000003A80AE92000 **MATCH**
+[hud-find] SUCCESS hudWeapon=0x000003A80AF5E000 after 1 nodes
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+
+=== SNAPSHOT ===
+[snap] fsnCount=127066 lastStage=0 stage5Count=9766
+[snap] stage histogram:
+[snap]   stage  0: 19453 frames
+[snap]   stage  1: 9844 frames
+[snap]   stage  2: 9844 frames
+[snap]   stage  3: 9840 frames
+[snap]   stage  4: 1 frames
+[snap]   stage  5: 9766 frames
+[snap]   stage  6: 9766 frames
+[snap]   stage  7: 9766 frames
+[snap]   stage  8: 9766 frames
+[snap]   stage 10: 9766 frames
+[snap]   stage 11: 13013 frames
+[snap]   stage 12: 16241 frames
+[snap] dwLocalPlayerController @ 0x00007FFAB6AA2548 -> 0x000003A7E5500600 
+[snap] dwLocalPlayerPawn       @ 0x00007FFAB6C991E0 -> 0x000003A7722A3000 
+[snap] pawn: vtable=0x00007FFAC41D3740 inClient=0 health=935
+[snap] ctrl: vtable=0x00007FFAB6171680 inClient=1 m_hPlayerPawn@0x92C = 0x00B301A1 (idx=417)
+[snap] entitySystem @ 0x00007FFAB6C7FBB8 = 0x000003A755460000 highestEntityIndex=211
+[snap] entity resolution: 1/16 of indices 1..16 valid
+[snap] ctrl->pawn handle resolve: 0x00B301A1 -> 0x000003A7E7024800
+[snap] ----------------------------------------
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[apply] tick pawn=0x000003A7E7024800
+[apply] active 0x000003A80AE92000
+[pw] weapon 0x000003A80AE92000 def=61
+[armory-apply] in-game live weapon def=61 team=CT paintKit=1173 (equipped in game 9CF82CD4592CD5C7)
+[hud-find] START weapon=0x000003A80AE92000 pawn=0x000003A7E7024800
+[hud-find] armsHandle=0xA4244233
+[hud-find] arms=0x000003A80AF65000
+[hud-find] armsNode=0x000003A8040A1080
+[hud-find] firstChild=0x000003A8040A2880
+[hud-find] child[0]=0x000003A8040A2880 owner=0x000003A80AF5E000 handle=0x8580EC resolved=0x000003A80AE92000 **MATCH**
+[hud-find] SUCCESS hudWeapon=0x000003A80AF5E000 after 1 nodes
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[apply] tick pawn=0x000003A7E7024800
+[apply] active 0x000003A80AE92000
+[pw] weapon 0x000003A80AE92000 def=61
+[armory-apply] in-game live weapon def=61 team=CT paintKit=1173 (equipped in game 9CF82CD4592CD5C7)
+[hud-find] START weapon=0x000003A80AE92000 pawn=0x000003A7E7024800
+[hud-find] armsHandle=0xA4244233
+[hud-find] arms=0x000003A80AF65000
+[hud-find] armsNode=0x000003A8040A1080
+[hud-find] firstChild=0x000003A8040A2880
+[hud-find] child[0]=0x000003A8040A2880 owner=0x000003A80AF5E000 handle=0x8580EC resolved=0x000003A80AE92000 **MATCH**
+[hud-find] SUCCESS hudWeapon=0x000003A80AF5E000 after 1 nodes
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[apply] tick pawn=0x000003A7E7024800
+[apply] active 0x000003A80AE92000
+[pw] weapon 0x000003A80AE92000 def=61
+[armory-apply] in-game live weapon def=61 team=CT paintKit=1173 (equipped in game 9CF82CD4592CD5C7)
+[hud-find] START weapon=0x000003A80AE92000 pawn=0x000003A7E7024800
+[hud-find] armsHandle=0xA4244233
+[hud-find] arms=0x000003A80AF65000
+[hud-find] armsNode=0x000003A8040A1080
+[hud-find] firstChild=0x000003A8040A2880
+[hud-find] child[0]=0x000003A8040A2880 owner=0x000003A80AF5E000 handle=0x8580EC resolved=0x000003A80AE92000 **MATCH**
+[hud-find] SUCCESS hudWeapon=0x000003A80AF5E000 after 1 nodes
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[apply] tick pawn=0x000003A7E7024800
+[apply] active 0x000003A80AE92000
+[pw] weapon 0x000003A80AE92000 def=61
+[armory-apply] in-game live weapon def=61 team=CT paintKit=1173 (equipped in game 9CF82CD4592CD5C7)
+[hud-find] START weapon=0x000003A80AE92000 pawn=0x000003A7E7024800
+[hud-find] armsHandle=0xA4244233
+[hud-find] arms=0x000003A80AF65000
+[hud-find] armsNode=0x000003A8040A1080
+[hud-find] firstChild=0x000003A8040A2880
+[hud-find] child[0]=0x000003A8040A2880 owner=0x000003A80AF5E000 handle=0x8580EC resolved=0x000003A80AE92000 **MATCH**
+[hud-find] SUCCESS hudWeapon=0x000003A80AF5E000 after 1 nodes
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[apply] tick pawn=0x000003A7E7024800
+[apply] active 0x000003A80AE92000
+[pw] weapon 0x000003A80AE92000 def=61
+[armory-apply] in-game live weapon def=61 team=CT paintKit=1173 (equipped in game 9CF82CD4592CD5C7)
+[hud-find] START weapon=0x000003A80AE92000 pawn=0x000003A7E7024800
+[hud-find] armsHandle=0xA4244233
+[hud-find] arms=0x000003A80AF65000
+[hud-find] armsNode=0x000003A8040A1080
+[hud-find] firstChild=0x000003A8040A2880
+[hud-find] child[0]=0x000003A8040A2880 owner=0x000003A80AF5E000 handle=0x8580EC resolved=0x000003A80AE92000 **MATCH**
+[hud-find] SUCCESS hudWeapon=0x000003A80AF5E000 after 1 nodes
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[apply] tick pawn=0x000003A7E7024800
+[apply] active 0x000003A80AE92000
+[pw] weapon 0x000003A80AE92000 def=61
+[armory-apply] in-game live weapon def=61 team=CT paintKit=1173 (equipped in game 9CF82CD4592CD5C7)
+[hud-find] START weapon=0x000003A80AE92000 pawn=0x000003A7E7024800
+[hud-find] armsHandle=0xA4244233
+[hud-find] arms=0x000003A80AF65000
+[hud-find] armsNode=0x000003A8040A1080
+[hud-find] firstChild=0x000003A8040A2880
+[hud-find] child[0]=0x000003A8040A2880 owner=0x000003A80AF5E000 handle=0x8580EC resolved=0x000003A80AE92000 **MATCH**
+[hud-find] SUCCESS hudWeapon=0x000003A80AF5E000 after 1 nodes
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[apply] tick pawn=0x000003A7E7024800
+[apply] active 0x000003A80AE92000
+[pw] weapon 0x000003A80AE92000 def=61
+[armory-apply] in-game live weapon def=61 team=CT paintKit=1173 (equipped in game 9CF82CD4592CD5C7)
+[hud-find] START weapon=0x000003A80AE92000 pawn=0x000003A7E7024800
+[hud-find] armsHandle=0xA4244233
+[hud-find] arms=0x000003A80AF65000
+[hud-find] armsNode=0x000003A8040A1080
+[hud-find] firstChild=0x000003A8040A2880
+[hud-find] child[0]=0x000003A8040A2880 owner=0x000003A80AF5E000 handle=0x8580EC resolved=0x000003A80AE92000 **MATCH**
+[hud-find] SUCCESS hudWeapon=0x000003A80AF5E000 after 1 nodes
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[apply] tick pawn=0x000003A7E7024800
+[apply] active 0x000003A80AE92000
+[pw] weapon 0x000003A80AE92000 def=61
+[armory-apply] in-game live weapon def=61 team=CT paintKit=1173 (equipped in game 9CF82CD4592CD5C7)
+[hud-find] START weapon=0x000003A80AE92000 pawn=0x000003A7E7024800
+[hud-find] armsHandle=0xA4244233
+[hud-find] arms=0x000003A80AF65000
+[hud-find] armsNode=0x000003A8040A1080
+[hud-find] firstChild=0x000003A8040A2880
+[hud-find] child[0]=0x000003A8040A2880 owner=0x000003A80AF5E000 handle=0x8580EC resolved=0x000003A80AE92000 **MATCH**
+[hud-find] SUCCESS hudWeapon=0x000003A80AF5E000 after 1 nodes
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[apply] tick pawn=0x000003A7E7024800
+[apply] active 0x000003A80AE92000
+[pw] weapon 0x000003A80AE92000 def=61
+[armory-apply] in-game live weapon def=61 team=CT paintKit=1173 (equipped in game 9CF82CD4592CD5C7)
+[hud-find] START weapon=0x000003A80AE92000 pawn=0x000003A7E7024800
+[hud-find] armsHandle=0xA4244233
+[hud-find] arms=0x000003A80AF65000
+[hud-find] armsNode=0x000003A8040A1080
+[hud-find] firstChild=0x000003A8040A2880
+[hud-find] child[0]=0x000003A8040A2880 owner=0x000003A80AF5E000 handle=0x8580EC resolved=0x000003A80AE92000 **MATCH**
+[hud-find] SUCCESS hudWeapon=0x000003A80AF5E000 after 1 nodes
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[apply] tick pawn=0x000003A7E7024800
+[apply] active 0x000003A80AE92000
+[pw] weapon 0x000003A80AE92000 def=61
+[armory-apply] in-game live weapon def=61 team=CT paintKit=1173 (equipped in game 9CF82CD4592CD5C7)
+[hud-find] START weapon=0x000003A80AE92000 pawn=0x000003A7E7024800
+[hud-find] armsHandle=0xA4244233
+[hud-find] arms=0x000003A80AF65000
+[hud-find] armsNode=0x000003A8040A1080
+[hud-find] firstChild=0x000003A8040A2880
+[hud-find] child[0]=0x000003A8040A2880 owner=0x000003A80AF5E000 handle=0x8580EC resolved=0x000003A80AE92000 **MATCH**
+[hud-find] SUCCESS hudWeapon=0x000003A80AF5E000 after 1 nodes
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[apply] tick pawn=0x000003A7E7024800
+[apply] active 0x000003A80AE90000
+[pw] weapon 0x000003A80AE90000 def=42
+[armory-loadout] team=ct def=42 holds item 17293822569102704682, which is not a projected instance
+[armory-apply] no Armory target for live weapon def=42 team=CT (not owned in the projected profile)
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[apply] tick pawn=0x000003A7E7024800
+[apply] active 0x000003A80AE92000
+[pw] weapon 0x000003A80AE92000 def=61
+[armory-apply] in-game live weapon def=61 team=CT paintKit=1173 (equipped in game 9CF82CD4592CD5C7)
+[hud-find] START weapon=0x000003A80AE92000 pawn=0x000003A7E7024800
+[hud-find] armsHandle=0xA4244233
+[hud-find] arms=0x000003A80AF65000
+[hud-find] armsNode=0x000003A8040A1080
+[hud-find] firstChild=0x000003A8040A2880
+[hud-find] child[0]=0x000003A8040A2880 owner=0x000003A80AF5E000 handle=0x8580EC resolved=0x000003A80AE92000 **MATCH**
+[hud-find] SUCCESS hudWeapon=0x000003A80AF5E000 after 1 nodes
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[apply] tick pawn=0x000003A7E7024800
+[apply] active 0x000003A80AE92000
+[pw] weapon 0x000003A80AE92000 def=61
+[armory-apply] in-game live weapon def=61 team=CT paintKit=1173 (equipped in game 9CF82CD4592CD5C7)
+[hud-find] START weapon=0x000003A80AE92000 pawn=0x000003A7E7024800
+[hud-find] armsHandle=0xA4244233
+[hud-find] arms=0x000003A80AF65000
+[hud-find] armsNode=0x000003A8040A1080
+[hud-find] firstChild=0x000003A8040A2880
+[hud-find] child[0]=0x000003A8040A2880 owner=0x000003A80AF5E000 handle=0x8580EC resolved=0x000003A80AE92000 **MATCH**
+[hud-find] SUCCESS hudWeapon=0x000003A80AF5E000 after 1 nodes
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[apply] tick pawn=0x000003A7E7024800
+[apply] active 0x000003A80AE92000
+[pw] weapon 0x000003A80AE92000 def=61
+[armory-apply] in-game live weapon def=61 team=CT paintKit=1173 (equipped in game 9CF82CD4592CD5C7)
+[hud-find] START weapon=0x000003A80AE92000 pawn=0x000003A7E7024800
+[hud-find] armsHandle=0xA4244233
+[hud-find] arms=0x000003A80AF65000
+[hud-find] armsNode=0x000003A8040A1080
+[hud-find] firstChild=0x000003A8040A2880
+[hud-find] child[0]=0x000003A8040A2880 owner=0x000003A80AF5E000 handle=0x8580EC resolved=0x000003A80AE92000 **MATCH**
+[hud-find] SUCCESS hudWeapon=0x000003A80AF5E000 after 1 nodes
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[apply] tick pawn=0x000003A7E7024800
+[apply] active 0x000003A80AE92000
+[pw] weapon 0x000003A80AE92000 def=61
+[armory-apply] in-game live weapon def=61 team=CT paintKit=1173 (equipped in game 9CF82CD4592CD5C7)
+[hud-find] START weapon=0x000003A80AE92000 pawn=0x000003A7E7024800
+[hud-find] armsHandle=0xA4244233
+[hud-find] arms=0x000003A80AF65000
+[hud-find] armsNode=0x000003A8040A1080
+[hud-find] firstChild=0x000003A8040A2880
+[hud-find] child[0]=0x000003A8040A2880 owner=0x000003A80AF5E000 handle=0x8580EC resolved=0x000003A80AE92000 **MATCH**
+[hud-find] SUCCESS hudWeapon=0x000003A80AF5E000 after 1 nodes
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[apply] tick pawn=0x000003A7E7024800
+[apply] active 0x000003A80AE92000
+[pw] weapon 0x000003A80AE92000 def=61
+[armory-apply] in-game live weapon def=61 team=CT paintKit=1173 (equipped in game 9CF82CD4592CD5C7)
+[hud-find] START weapon=0x000003A80AE92000 pawn=0x000003A7E7024800
+[hud-find] armsHandle=0xA4244233
+[hud-find] arms=0x000003A80AF65000
+[hud-find] armsNode=0x000003A8040A1080
+[hud-find] firstChild=0x000003A8040A2880
+[hud-find] child[0]=0x000003A8040A2880 owner=0x000003A80AF5E000 handle=0x8580EC resolved=0x000003A80AE92000 **MATCH**
+[hud-find] SUCCESS hudWeapon=0x000003A80AF5E000 after 1 nodes
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[apply] tick pawn=0x000003A7E7024800
+[apply] active 0x000003A80AE92000
+[pw] weapon 0x000003A80AE92000 def=61
+[armory-apply] in-game live weapon def=61 team=CT paintKit=1173 (equipped in game 9CF82CD4592CD5C7)
+[hud-find] START weapon=0x000003A80AE92000 pawn=0x000003A7E7024800
+[hud-find] armsHandle=0xA4244233
+[hud-find] arms=0x000003A80AF65000
+[hud-find] armsNode=0x000003A8040A1080
+[hud-find] firstChild=0x000003A8040A2880
+[hud-find] child[0]=0x000003A8040A2880 owner=0x000003A80AF5E000 handle=0x8580EC resolved=0x000003A80AE92000 **MATCH**
+[hud-find] SUCCESS hudWeapon=0x000003A80AF5E000 after 1 nodes
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[apply] tick pawn=0x000003A7E7024800
+[apply] active 0x000003A80AE92000
+[pw] weapon 0x000003A80AE92000 def=61
+[armory-apply] in-game live weapon def=61 team=CT paintKit=1173 (equipped in game 9CF82CD4592CD5C7)
+[hud-find] START weapon=0x000003A80AE92000 pawn=0x000003A7E7024800
+[hud-find] armsHandle=0xA4244233
+[hud-find] arms=0x000003A80AF65000
+[hud-find] armsNode=0x000003A8040A1080
+[hud-find] firstChild=0x000003A8040A2880
+[hud-find] child[0]=0x000003A8040A2880 owner=0x000003A80AF5E000 handle=0x8580EC resolved=0x000003A80AE92000 **MATCH**
+[hud-find] SUCCESS hudWeapon=0x000003A80AF5E000 after 1 nodes
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[apply] tick pawn=0x000003A7E7024800
+[apply] active 0x000003A80AE92000
+[pw] weapon 0x000003A80AE92000 def=61
+[armory-apply] in-game live weapon def=61 team=CT paintKit=1173 (equipped in game 9CF82CD4592CD5C7)
+[hud-find] START weapon=0x000003A80AE92000 pawn=0x000003A7E7024800
+[hud-find] armsHandle=0xA4244233
+[hud-find] arms=0x000003A80AF65000
+[hud-find] armsNode=0x000003A8040A1080
+[hud-find] firstChild=0x000003A8040A2880
+[hud-find] child[0]=0x000003A8040A2880 owner=0x000003A80AF5E000 handle=0x8580EC resolved=0x000003A80AE92000 **MATCH**
+[hud-find] SUCCESS hudWeapon=0x000003A80AF5E000 after 1 nodes
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[apply] tick pawn=0x000003A7E7024800
+[apply] active 0x000003A80AE92000
+[pw] weapon 0x000003A80AE92000 def=61
+[armory-apply] in-game live weapon def=61 team=CT paintKit=1173 (equipped in game 9CF82CD4592CD5C7)
+[hud-find] START weapon=0x000003A80AE92000 pawn=0x000003A7E7024800
+[hud-find] armsHandle=0xA4244233
+[hud-find] arms=0x000003A80AF65000
+[hud-find] armsNode=0x000003A8040A1080
+[hud-find] firstChild=0x000003A8040A2880
+[hud-find] child[0]=0x000003A8040A2880 owner=0x000003A80AF5E000 handle=0x8580EC resolved=0x000003A80AE92000 **MATCH**
+[hud-find] SUCCESS hudWeapon=0x000003A80AF5E000 after 1 nodes
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+N1SSAN_STATUS|1|2026-11-08T03:18:26Z|24152|armory-obsidian-3.0|READY|reason=runtime_worker_heartbeat
+[status-write] begin state=READY path=C:\Users\mirac\AppData\Local\n1ssan\status\cs2-24152.status
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[status-write] success state=READY error=0
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+
+=== SNAPSHOT ===
+[snap] fsnCount=131928 lastStage=0 stage5Count=10082
+[snap] stage histogram:
+[snap]   stage  0: 20462 frames
+[snap]   stage  1: 10160 frames
+[snap]   stage  2: 10160 frames
+[snap]   stage  3: 10156 frames
+[snap]   stage  4: 1 frames
+[snap]   stage  5: 10082 frames
+[snap]   stage  6: 10082 frames
+[snap]   stage  7: 10082 frames
+[snap]   stage  8: 10082 frames
+[snap]   stage 10: 10082 frames
+[snap]   stage 11: 13333 frames
+[snap]   stage 12: 17246 frames
+[snap] dwLocalPlayerController @ 0x00007FFAB6AA2548 -> 0x000003A7E5500600 
+[snap] dwLocalPlayerPawn       @ 0x00007FFAB6C991E0 -> 0x000003A7722A3000 
+[snap] pawn: vtable=0x00007FFAC41D3740 inClient=0 health=935
+[snap] ctrl: vtable=0x00007FFAB6171680 inClient=1 m_hPlayerPawn@0x92C = 0x00B301A1 (idx=417)
+[snap] entitySystem @ 0x00007FFAB6C7FBB8 = 0x000003A755460000 highestEntityIndex=211
+[snap] entity resolution: 1/16 of indices 1..16 valid
+[snap] ctrl->pawn handle resolve: 0x00B301A1 -> 0x000003A7E7024800
+[snap] ----------------------------------------
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-loadout] team=ct clothing_hands holds item 17293822569102709669, which is not a projected instance
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[glove-observe] pawn=000003A7722A3000 reapply=114 changed=0 def=24948 init=115 idHigh=0x726F482C
+[apply-cache] weapon model cache invalidated
+[apply-cache] left active match pawn
+[armory-gloves] nothing applied team=unknown (team unknown)
+[armory-agent] nothing applied team=unknown (team unknown)
+[apply-cache] weapon model cache invalidated
+[apply-cache] pawn changed: 000003A7722A3000
+[apply] tick pawn=0x000003A7722A3000
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[glove-observe] pawn=000003A7E32EB800 reapply=0 changed=0 def=0 init=0 idHigh=0x0
+[apply-cache] weapon model cache invalidated
+[apply-cache] left active match pawn
+[match] LOST pawn=0x000003A7E32EB800 hp=100
+[detect] pawn=0x000003A7E32EB800 hp=100 signOn=6 bg=0
+
+=== SNAPSHOT ===
+[snap] fsnCount=135972 lastStage=0 stage5Count=10317
+[snap] stage histogram:
+[snap]   stage  0: 21023 frames
+[snap]   stage  1: 10635 frames
+[snap]   stage  2: 10635 frames
+[snap]   stage  3: 10627 frames
+[snap]   stage  4: 2 frames
+[snap]   stage  5: 10317 frames
+[snap]   stage  6: 10317 frames
+[snap]   stage  7: 10317 frames
+[snap]   stage  8: 10317 frames
+[snap]   stage 10: 10307 frames
+[snap]   stage 11: 13565 frames
+[snap]   stage 12: 17910 frames
+[snap] dwLocalPlayerController @ 0x00007FFAB6AA2548 -> 0x000003A7E0A71800 
+[snap] dwLocalPlayerPawn       @ 0x00007FFAB6C991E0 -> 0x000003A7722A3000 
+[snap] pawn: vtable=0x00007FFAC41D3740 inClient=0 health=935
+[snap] ctrl: vtable=0x00007FFAB6171680 inClient=1 m_hPlayerPawn@0x92C = 0x00C680F7 (idx=247)
+[snap] entitySystem @ 0x00007FFAB6C7FBB8 = 0x000003A755460000 highestEntityIndex=13
+[snap] entity resolution: 1/16 of indices 1..16 valid
+[snap] ctrl->pawn handle resolve: 0x00C680F7 -> 0x000003A7E32EB800
+[snap] ----------------------------------------
+N1SSAN_STATUS|1|2026-11-08T03:18:36Z|24152|armory-obsidian-3.0|READY|reason=runtime_worker_heartbeat
+[status-write] begin state=READY path=C:\Users\mirac\AppData\Local\n1ssan\status\cs2-24152.status
+[status-write] success state=READY error=0
+
+=== SNAPSHOT ===
+[snap] fsnCount=140001 lastStage=0 stage5Count=10632
+[snap] stage histogram:
+[snap]   stage  0: 21620 frames
+[snap]   stage  1: 10950 frames
+[snap]   stage  2: 10950 frames
+[snap]   stage  3: 10942 frames
+[snap]   stage  4: 2 frames
+[snap]   stage  5: 10632 frames
+[snap]   stage  6: 10632 frames
+[snap]   stage  7: 10632 frames
+[snap]   stage  8: 10632 frames
+[snap]   stage 10: 10622 frames
+[snap]   stage 11: 13885 frames
+[snap]   stage 12: 18502 frames
+[snap] dwLocalPlayerController @ 0x00007FFAB6AA2548 -> 0x000003A7E0A71800 
+[snap] dwLocalPlayerPawn       @ 0x00007FFAB6C991E0 -> 0x000003A7722A3000 
+[snap] pawn: vtable=0x00007FFAC41D3740 inClient=0 health=936
+[snap] ctrl: vtable=0x00007FFAB6171680 inClient=1 m_hPlayerPawn@0x92C = 0x00C680F7 (idx=247)
+[snap] entitySystem @ 0x00007FFAB6C7FBB8 = 0x000003A755460000 highestEntityIndex=13
+[snap] entity resolution: 1/16 of indices 1..16 valid
+[snap] ctrl->pawn handle resolve: 0x00C680F7 -> 0x000003A7E32EB800
+[snap] ----------------------------------------
+[detect] pawn=0x000003A7E32EB800 hp=100 signOn=6 bg=0
+
+=== SNAPSHOT ===
+[snap] fsnCount=143836 lastStage=0 stage5Count=10947
+[snap] stage histogram:
+[snap]   stage  0: 22120 frames
+[snap]   stage  1: 11265 frames
+[snap]   stage  2: 11265 frames
+[snap]   stage  3: 11257 frames
+[snap]   stage  4: 2 frames
+[snap]   stage  5: 10947 frames
+[snap]   stage  6: 10947 frames
+[snap]   stage  7: 10947 frames
+[snap]   stage  8: 10947 frames
+[snap]   stage 10: 10937 frames
+[snap]   stage 11: 14205 frames
+[snap]   stage 12: 18997 frames
+[snap] dwLocalPlayerController @ 0x00007FFAB6AA2548 -> 0x000003A7E0A71800 
+[snap] dwLocalPlayerPawn       @ 0x00007FFAB6C991E0 -> 0x000003A7722A3000 
+[snap] pawn: vtable=0x00007FFAC41D3740 inClient=0 health=936
+[snap] ctrl: vtable=0x00007FFAB6171680 inClient=1 m_hPlayerPawn@0x92C = 0x00C680F7 (idx=247)
+[snap] entitySystem @ 0x00007FFAB6C7FBB8 = 0x000003A755460000 highestEntityIndex=13
+[snap] entity resolution: 1/16 of indices 1..16 valid
+[snap] ctrl->pawn handle resolve: 0x00C680F7 -> 0x000003A7E32EB800
+[snap] ----------------------------------------
+[use-tool] hook-entry #1 mode=2 api=000003A6C928D400 toolArg=000003A7EB4512C0 targetArg=000003A7EB458740 original=00007FFAB3020FC0
+[use-tool] sticker 42 on 96221A0E61314132: at the popup's spot - applying
+[use-tool] hook-entry #1 decision=handled locally
+[attach] Lootline ItemViewById resolved @ 00007FFAB4D9D190
+[attach] ItemViewById read 96221A0E61314132 via CS2 getters
+[use-tool] sticker target read through CS2 ItemView fallback; preserving unobserved attributes
+[use-tool] consumed sticker item 91EEF26FDFB7F111 removal=SUCCESS
+[attach] immediate native observation stickers=1 [0 kit=42 wear=0.000 rot=0.0 off=0.426,0.013 schema=4] charm=none for item-1794105070324-mfrfy (96221A0E61314132), source=item-1794105125026-i4lld consumed=1 file=written
+[use-tool] sticker 42 applied to 96221A0E61314132 in slot 0 (position 4): attributes written, inventory told, popup NOT told, sticker item used up
+[armory-inventory] staged 18 items (applies outside an active match)
+[armory-inventory] preparing replacement set: 18 items
+[armory-inventory] retained item id=9F45014B4918D4CA def=5404
+[armory-inventory] attachments synced on 9F45014B4918D4CA: stickers=0 charm=none
+[armory-inventory] retained item id=98580F04895784C8 def=4730
+[armory-inventory] attachments synced on 98580F04895784C8: stickers=0 charm=none
+[armory-inventory] retained item id=922FEB06198C79C1 def=525
+[armory-inventory] attachments synced on 922FEB06198C79C1: stickers=0 charm=none
+[armory-inventory] retained item id=9B4523A8BFE93866 def=5030
+[armory-inventory] attachments synced on 9B4523A8BFE93866: stickers=0 charm=none
+[armory-inventory] retained item id=9919302EC58DC70A def=16
+[armory-inventory] attachments synced on 9919302EC58DC70A: stickers=1 [0 kit=20 wear=0.000 rot=0.0 off=-0.079,-0.004 schema=4] charm=none
+[armory-inventory] retained item id=96221A0E61314132 def=60
+[armory-inventory] attachments synced on 96221A0E61314132: stickers=1 [0 kit=42 wear=0.000 rot=0.0 off=0.426,0.013 schema=4] charm=none
+[armory-inventory] retained item id=914A30836F3526FC def=7
+[armory-inventory] retained item id=91B8869FF09A7CB1 def=1209
+[armory-inventory] attachments synced on 91B8869FF09A7CB1: stickers=0 charm=none
+[armory-inventory] retained item id=933E7226750B4A56 def=1209
+[armory-inventory] attachments synced on 933E7226750B4A56: stickers=0 charm=none
+[armory-inventory] retained item id=9F7A8249065ED9F7 def=1209
+[armory-inventory] attachments synced on 9F7A8249065ED9F7: stickers=0 charm=none
+[armory-inventory] retained item id=918DEDB7EDB11B7C def=1209
+[armory-inventory] attachments synced on 918DEDB7EDB11B7C: stickers=0 charm=none
+[armory-inventory] retained item id=995F5CC648CDEA98 def=1355
+[armory-inventory] attachments synced on 995F5CC648CDEA98: stickers=0 charm=none
+[armory-inventory] retained item id=98C14E9EE61FC80E def=1209
+[armory-inventory] attachments synced on 98C14E9EE61FC80E: stickers=0 charm=none
+[armory-inventory] retained item id=9536605177002A96 def=9
+[armory-inventory] attachments synced on 9536605177002A96: stickers=0 charm=none
+[armory-inventory] retained item id=9CF82CD4592CD5C7 def=61
+[armory-inventory] attachments synced on 9CF82CD4592CD5C7: stickers=0 charm=kit:7 seed=0 off=1.872,0.344,3.930
+[armory-inventory] retained item id=955F0C957F4C067D def=61
+[armory-inventory] retained item id=9EF2C4042C206579 def=34
+[armory-inventory] attachments synced on 9EF2C4042C206579: stickers=0 charm=none
+[armory-inventory] retained item id=9AD2A303DFC2661B def=4
+[armory-inventory] attachments synced on 9AD2A303DFC2661B: stickers=0 charm=none
+[armory-equipment] index: assignments=0 resolved=0 unresolved=0 conflicts=0 definitions=13 slots=0
+[armory-inventory] replacement committed: desired=18 created=0 retained=18 removed=0 removeFailed=0
+N1SSAN_STATUS|1|2026-11-08T03:18:46Z|24152|armory-obsidian-3.0|READY|reason=runtime_worker_heartbeat
+[status-write] begin state=READY path=C:\Users\mirac\AppData\Local\n1ssan\status\cs2-24152.status
+[status-write] success state=READY error=0
+
+=== SNAPSHOT ===
+[snap] fsnCount=147733 lastStage=0 stage5Count=11258
+[snap] stage histogram:
+[snap]   stage  0: 22669 frames
+[snap]   stage  1: 11576 frames
+[snap]   stage  2: 11576 frames
+[snap]   stage  3: 11568 frames
+[snap]   stage  4: 2 frames
+[snap]   stage  5: 11258 frames
+[snap]   stage  6: 11258 frames
+[snap]   stage  7: 11258 frames
+[snap]   stage  8: 11258 frames
+[snap]   stage 10: 11248 frames
+[snap]   stage 11: 14526 frames
+[snap]   stage 12: 19536 frames
+[snap] dwLocalPlayerController @ 0x00007FFAB6AA2548 -> 0x000003A7E0A71800 
+[snap] dwLocalPlayerPawn       @ 0x00007FFAB6C991E0 -> 0x000003A7722A3000 
+[snap] pawn: vtable=0x00007FFAC41D3740 inClient=0 health=936
+[snap] ctrl: vtable=0x00007FFAB6171680 inClient=1 m_hPlayerPawn@0x92C = 0x00C680F7 (idx=247)
+[snap] entitySystem @ 0x00007FFAB6C7FBB8 = 0x000003A755460000 highestEntityIndex=13
+[snap] entity resolution: 1/16 of indices 1..16 valid
+[snap] ctrl->pawn handle resolve: 0x00C680F7 -> 0x000003A7E32EB800
+[snap] ----------------------------------------
+[detect] pawn=0x000003A7E32EB800 hp=100 signOn=6 bg=0
+
+=== SNAPSHOT ===
+[snap] fsnCount=152466 lastStage=0 stage5Count=11577
+[snap] stage histogram:
+[snap]   stage  0: 23600 frames
+[snap]   stage  1: 11895 frames
+[snap]   stage  2: 11895 frames
+[snap]   stage  3: 11887 frames
+[snap]   stage  4: 2 frames
+[snap]   stage  5: 11577 frames
+[snap]   stage  6: 11577 frames
+[snap]   stage  7: 11577 frames
+[snap]   stage  8: 11577 frames
+[snap]   stage 10: 11567 frames
+[snap]   stage 11: 14846 frames
+[snap]   stage 12: 20466 frames
+[snap] dwLocalPlayerController @ 0x00007FFAB6AA2548 -> 0x000003A7E0A71800 
+[snap] dwLocalPlayerPawn       @ 0x00007FFAB6C991E0 -> 0x000003A7722A3000 
+[snap] pawn: vtable=0x00007FFAC41D3740 inClient=0 health=936
+[snap] ctrl: vtable=0x00007FFAB6171680 inClient=1 m_hPlayerPawn@0x92C = 0x00C680F7 (idx=247)
+[snap] entitySystem @ 0x00007FFAB6C7FBB8 = 0x000003A755460000 highestEntityIndex=13
+[snap] entity resolution: 1/16 of indices 1..16 valid
+[snap] ctrl->pawn handle resolve: 0x00C680F7 -> 0x000003A7E32EB800
+[snap] ----------------------------------------
+[glove-observe] pawn=000003A7722A3000 reapply=114 changed=0 def=24948 init=115 idHigh=0x726F482C
+[glove-observe] pawn=000003A7E6A0B800 reapply=0 changed=0 def=0 init=0 idHigh=0x0
+[apply-cache] weapon model cache invalidated
+[apply-cache] pawn changed: 000003A7E6A0B800
+[match] FOUND pawn=0x000003A7E6A0B800 hp=100 signOn=6 bg=0 connected=0
+[apply] tick pawn=0x000003A7E6A0B800
+[apply] active 0x000003A82750A000
+[pw] weapon 0x000003A82750A000 def=32
+[armory-apply] no Armory target for live weapon def=32 team=CT (not owned in the projected profile)
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[armory-gloves] applied def=5030 team=CT (equipped in game clothing_hands instance 9B4523A8BFE93866)
+[armory-agent] nothing applied team=CT (not equipped in game and no assignment for this slot)
+[apply-cache] weapon model cache invalidated
+[glove-observe] pawn=000003A7E6A0B800 reapply=0 changed=0 def=5030 init=1 idHigh=0xFFFFFFFF
+[apply-cache] weapon model cache invalidated
+[apply-cache] weapon model cache invalidated
+[apply-cache] weapon model cache invalidated
+[apply] tick pawn=0x000003A7E6A0B800
+[apply] active 0x000003A82750A000
+[pw] weapon 0x000003A82750A000 def=32
+[armory-apply] no Armory target for live weapon def=32 team=CT (not owned in the projected profile)
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+N1SSAN_STATUS|1|2026-11-08T03:18:56Z|24152|armory-obsidian-3.0|READY|reason=runtime_worker_heartbeat
+[status-write] begin state=READY path=C:\Users\mirac\AppData\Local\n1ssan\status\cs2-24152.status
+[status-write] success state=READY error=0
+
+=== SNAPSHOT ===
+[snap] fsnCount=156305 lastStage=12 stage5Count=11780
+[snap] stage histogram:
+[snap]   stage  0: 24468 frames
+[snap]   stage  1: 12178 frames
+[snap]   stage  2: 12178 frames
+[snap]   stage  3: 12166 frames
+[snap]   stage  4: 3 frames
+[snap]   stage  5: 11780 frames
+[snap]   stage  6: 11780 frames
+[snap]   stage  7: 11780 frames
+[snap]   stage  8: 11780 frames
+[snap]   stage 10: 11770 frames
+[snap]   stage 11: 15058 frames
+[snap]   stage 12: 21364 frames
+[snap] dwLocalPlayerController @ 0x00007FFAB6AA2548 -> 0x000003A7E11D4200 
+[snap] dwLocalPlayerPawn       @ 0x00007FFAB6C991E0 -> 0x000003A7722A3000 
+[snap] pawn: vtable=0x00007FFAC41D3740 inClient=0 health=936
+[snap] ctrl: vtable=0x00007FFAB6171680 inClient=1 m_hPlayerPawn@0x92C = 0x01E2812B (idx=299)
+[snap] entitySystem @ 0x00007FFAB6C7FBB8 = 0x000003A755460000 highestEntityIndex=211
+[snap] entity resolution: 1/16 of indices 1..16 valid
+[snap] ctrl->pawn handle resolve: 0x01E2812B -> 0x000003A7E6A0B800
+[snap] ----------------------------------------
+[apply-cache] weapon model cache invalidated
+[apply-cache] weapon model cache invalidated
+[apply-cache] weapon model cache invalidated
+[apply-cache] weapon model cache invalidated
+[apply] tick pawn=0x000003A7E6A0B800
+[apply] active 0x000003A82750A000
+[pw] weapon 0x000003A82750A000 def=32
+[armory-apply] no Armory target for live weapon def=32 team=CT (not owned in the projected profile)
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000003A7E6A0B800
+[apply] active 0x000003A82750A000
+[pw] weapon 0x000003A82750A000 def=32
+[armory-apply] no Armory target for live weapon def=32 team=CT (not owned in the projected profile)
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000003A7E6A0B800
+[apply] active 0x000003A82750A000
+[pw] weapon 0x000003A82750A000 def=32
+[armory-apply] no Armory target for live weapon def=32 team=CT (not owned in the projected profile)
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply-cache] weapon model cache invalidated
+[apply-cache] weapon model cache invalidated
+[apply-cache] weapon model cache invalidated
+[apply] tick pawn=0x000003A7E6A0B800
+[apply] active 0x000003A827508000
+[pw] weapon 0x000003A827508000 def=42
+[armory-apply] in-game live weapon def=42 team=CT paintKit=420 (equipped in game 922FEB06198C79C1)
+[knife] SetModel (schema): weapons/models/knife/knife_skeleton/weapon_knife_skeleton.vmdl
+[apply] enter (weapon=0x000003A827508000 def=525 pk=420)
+[apply] world view pre-write: size=0 data=0x0000000000000000
+[attr-diag] item=000003A8275092E0 size=0 data=0000000000000000 alloc=0
+[attr-entry] 0: def=6 value=420.000 initial=420.000
+[attr-entry] 1: def=7 value=144.000 initial=144.000
+[attr-entry] 2: def=8 value=0.002350 initial=0.002350
+[apply] world post-create: size=3 data=000003A8041D2700 alloc=11
+[apply] world view 0x000003A8275092E0 painted (pk=420)
+[hud-find] START weapon=0x000003A827508000 pawn=0x000003A7E6A0B800
+[hud-find] armsHandle=0xDB8C43E1
+[hud-find] arms=0x000003A80B44B000
+[hud-find] armsNode=0x000003A829EDA080
+[hud-find] firstChild=0x000003A829568080
+[hud-find] NO MATCH walked=2 finalChild=0x0000000000000000
+[apply-cache] rebuilding weapon=000003A827508000 hud=0000000000000000 def=525 pk=420
+[hud-name] weapon selection entry refreshed: 000003A827508000
+[apply-diagnostic] weaponChanged=1 gloveUpdate=1 regenAvailable=1
+[skin-regenerate] calling pRegenerateSkins weaponChanged=1
+[skin-regenerate] returned
+[apply-cache] weapon model cache invalidated
+[apply] tick pawn=0x000003A7E6A0B800
+[apply] active 0x000003A827508000
+[pw] weapon 0x000003A827508000 def=525
+[armory-apply] in-game live weapon def=525 team=CT paintKit=420 (equipped in game 922FEB06198C79C1)
+[hud-find] START weapon=0x000003A827508000 pawn=0x000003A7E6A0B800
+[hud-find] armsHandle=0xDB8C43E1
+[hud-find] arms=0x000003A80B44B000
+[hud-find] armsNode=0x000003A829EDA080
+[hud-find] firstChild=0x000003A827656480
+[hud-find] child[1]=0x000003A829562C80 owner=0x000003A7E2B1C000 handle=0x10581FE resolved=0x000003A827508000 **MATCH**
+[hud-find] SUCCESS hudWeapon=0x000003A7E2B1C000 after 2 nodes
+[apply-cache] rebuilding weapon=000003A827508000 hud=000003A7E2B1C000 def=525 pk=420
+[knife] HUD SetModel (schema): weapons/models/knife/knife_skeleton/weapon_knife_skeleton.vmdl
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000003A7E6A0B800
+[apply] active 0x000003A827508000
+[pw] weapon 0x000003A827508000 def=525
+[armory-apply] in-game live weapon def=525 team=CT paintKit=420 (equipped in game 922FEB06198C79C1)
+[hud-find] START weapon=0x000003A827508000 pawn=0x000003A7E6A0B800
+[hud-find] armsHandle=0xDB8C43E1
+[hud-find] arms=0x000003A80B44B000
+[hud-find] armsNode=0x000003A829EDA080
+[hud-find] firstChild=0x000003A827656480
+[hud-find] child[1]=0x000003A829562C80 owner=0x000003A7E2B1C000 handle=0x10581FE resolved=0x000003A827508000 **MATCH**
+[hud-find] SUCCESS hudWeapon=0x000003A7E2B1C000 after 2 nodes
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000003A7E6A0B800
+[apply] active 0x000003A827508000
+[pw] weapon 0x000003A827508000 def=525
+[armory-apply] in-game live weapon def=525 team=CT paintKit=420 (equipped in game 922FEB06198C79C1)
+[hud-find] START weapon=0x000003A827508000 pawn=0x000003A7E6A0B800
+[hud-find] armsHandle=0xDB8C43E1
+[hud-find] arms=0x000003A80B44B000
+[hud-find] armsNode=0x000003A829EDA080
+[hud-find] firstChild=0x000003A827656480
+[hud-find] child[1]=0x000003A829562C80 owner=0x000003A7E2B1C000 handle=0x10581FE resolved=0x000003A827508000 **MATCH**
+[hud-find] SUCCESS hudWeapon=0x000003A7E2B1C000 after 2 nodes
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000003A7E6A0B800
+[apply] active 0x000003A827508000
+[pw] weapon 0x000003A827508000 def=525
+[armory-apply] in-game live weapon def=525 team=CT paintKit=420 (equipped in game 922FEB06198C79C1)
+[hud-find] START weapon=0x000003A827508000 pawn=0x000003A7E6A0B800
+[hud-find] armsHandle=0xDB8C43E1
+[hud-find] arms=0x000003A80B44B000
+[hud-find] armsNode=0x000003A829EDA080
+[hud-find] firstChild=0x000003A827656480
+[hud-find] child[1]=0x000003A829562C80 owner=0x000003A7E2B1C000 handle=0x10581FE resolved=0x000003A827508000 **MATCH**
+[hud-find] SUCCESS hudWeapon=0x000003A7E2B1C000 after 2 nodes
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000003A7E6A0B800
+[apply] active 0x000003A827508000
+[pw] weapon 0x000003A827508000 def=525
+[armory-apply] in-game live weapon def=525 team=CT paintKit=420 (equipped in game 922FEB06198C79C1)
+[hud-find] START weapon=0x000003A827508000 pawn=0x000003A7E6A0B800
+[hud-find] armsHandle=0xDB8C43E1
+[hud-find] arms=0x000003A80B44B000
+[hud-find] armsNode=0x000003A829EDA080
+[hud-find] firstChild=0x000003A827656480
+[hud-find] child[1]=0x000003A829562C80 owner=0x000003A7E2B1C000 handle=0x10581FE resolved=0x000003A827508000 **MATCH**
+[hud-find] SUCCESS hudWeapon=0x000003A7E2B1C000 after 2 nodes
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000003A7E6A0B800
+[apply] active 0x000003A827508000
+[pw] weapon 0x000003A827508000 def=525
+[armory-apply] in-game live weapon def=525 team=CT paintKit=420 (equipped in game 922FEB06198C79C1)
+[hud-find] START weapon=0x000003A827508000 pawn=0x000003A7E6A0B800
+[hud-find] armsHandle=0xDB8C43E1
+[hud-find] arms=0x000003A80B44B000
+[hud-find] armsNode=0x000003A829EDA080
+[hud-find] firstChild=0x000003A827656480
+[hud-find] child[1]=0x000003A829562C80 owner=0x000003A7E2B1C000 handle=0x10581FE resolved=0x000003A827508000 **MATCH**
+[hud-find] SUCCESS hudWeapon=0x000003A7E2B1C000 after 2 nodes
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply-cache] weapon model cache invalidated
+[apply-cache] weapon model cache invalidated
+[apply] tick pawn=0x000003A7E6A0B800
+[apply] active 0x000003A827508000
+[pw] weapon 0x000003A827508000 def=525
+[armory-apply] in-game live weapon def=525 team=CT paintKit=420 (equipped in game 922FEB06198C79C1)
+[hud-find] START weapon=0x000003A827508000 pawn=0x000003A7E6A0B800
+[hud-find] armsHandle=0xDB8C43E1
+[hud-find] arms=0x000003A80B44B000
+[hud-find] armsNode=0x000003A829EDA080
+[hud-find] firstChild=0x000003A7E2513C80
+[hud-find] child[2]=0x000003A829562C80 owner=0x000003A7E2B1C000 handle=0x10581FE resolved=0x000003A827508000 **MATCH**
+[hud-find] SUCCESS hudWeapon=0x000003A7E2B1C000 after 3 nodes
+[apply-cache] rebuilding weapon=000003A827508000 hud=000003A7E2B1C000 def=525 pk=420
+[knife] HUD SetModel (schema): weapons/models/knife/knife_skeleton/weapon_knife_skeleton.vmdl
+[apply-diagnostic] weaponChanged=0 gloveUpdate=1 regenAvailable=1
+[apply-cache] weapon model cache invalidated
+[apply-cache] weapon model cache invalidated
+[apply] tick pawn=0x000003A7E6A0B800
+[apply] active 0x000003A827508000
+[pw] weapon 0x000003A827508000 def=525
+[armory-apply] in-game live weapon def=525 team=CT paintKit=420 (equipped in game 922FEB06198C79C1)
+[hud-find] START weapon=0x000003A827508000 pawn=0x000003A7E6A0B800
+[hud-find] armsHandle=0xDB8C43E1
+[hud-find] arms=0x000003A80B44B000
+[hud-find] armsNode=0x000003A829EDA080
+[hud-find] firstChild=0x000003A7E2519C80
+[hud-find] child[1]=0x000003A829562C80 owner=0x000003A7E2B1C000 handle=0x10581FE resolved=0x000003A827508000 **MATCH**
+[hud-find] SUCCESS hudWeapon=0x000003A7E2B1C000 after 2 nodes
+[apply-cache] rebuilding weapon=000003A827508000 hud=000003A7E2B1C000 def=525 pk=420
+[knife] HUD SetModel (schema): weapons/models/knife/knife_skeleton/weapon_knife_skeleton.vmdl
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000003A7E6A0B800
+[apply] active 0x000003A827508000
+[pw] weapon 0x000003A827508000 def=525
+[armory-apply] in-game live weapon def=525 team=CT paintKit=420 (equipped in game 922FEB06198C79C1)
+[hud-find] START weapon=0x000003A827508000 pawn=0x000003A7E6A0B800
+[hud-find] armsHandle=0xDB8C43E1
+[hud-find] arms=0x000003A80B44B000
+[hud-find] armsNode=0x000003A829EDA080
+[hud-find] firstChild=0x000003A7E2519C80
+[hud-find] child[1]=0x000003A829562C80 owner=0x000003A7E2B1C000 handle=0x10581FE resolved=0x000003A827508000 **MATCH**
+[hud-find] SUCCESS hudWeapon=0x000003A7E2B1C000 after 2 nodes
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000003A7E6A0B800
+[apply] active 0x000003A82874E000
+[pw] weapon 0x000003A82874E000 def=2
+[armory-loadout] team=ct def=2 holds item 51964091955, which is not a projected instance
+[armory-apply] no Armory target for live weapon def=2 team=CT (not owned in the projected profile)
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[apply] tick pawn=0x000003A7E6A0B800
+[apply] active 0x000003A82874E000
+[pw] weapon 0x000003A82874E000 def=2
+[armory-loadout] team=ct def=2 holds item 51964091955, which is not a projected instance
+[armory-apply] no Armory target for live weapon def=2 team=CT (not owned in the projected profile)
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[apply] tick pawn=0x000003A7E6A0B800
+[apply] active 0x000003A828286000
+[pw] weapon 0x000003A828286000 def=32
+[armory-apply] no Armory target for live weapon def=32 team=CT (not owned in the projected profile)
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000003A7E6A0B800
+[apply] active 0x000003A828286000
+[pw] weapon 0x000003A828286000 def=32
+[armory-apply] no Armory target for live weapon def=32 team=CT (not owned in the projected profile)
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000003A7E6A0B800
+[apply] active 0x000003A827508000
+[pw] weapon 0x000003A827508000 def=525
+[armory-apply] in-game live weapon def=525 team=CT paintKit=420 (equipped in game 922FEB06198C79C1)
+[hud-find] START weapon=0x000003A827508000 pawn=0x000003A7E6A0B800
+[hud-find] armsHandle=0xDB8C43E1
+[hud-find] arms=0x000003A80B44B000
+[hud-find] armsNode=0x000003A829EDA080
+[hud-find] firstChild=0x000003A7E2519C80
+[hud-find] child[1]=0x000003A829562C80 owner=0x000003A7E2B1C000 handle=0x10581FE resolved=0x000003A827508000 **MATCH**
+[hud-find] SUCCESS hudWeapon=0x000003A7E2B1C000 after 2 nodes
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000003A7E6A0B800
+[apply] active 0x000003A827508000
+[pw] weapon 0x000003A827508000 def=525
+[armory-apply] in-game live weapon def=525 team=CT paintKit=420 (equipped in game 922FEB06198C79C1)
+[hud-find] START weapon=0x000003A827508000 pawn=0x000003A7E6A0B800
+[hud-find] armsHandle=0xDB8C43E1
+[hud-find] arms=0x000003A80B44B000
+[hud-find] armsNode=0x000003A829EDA080
+[hud-find] firstChild=0x000003A7E2519C80
+[hud-find] child[1]=0x000003A829562C80 owner=0x000003A7E2B1C000 handle=0x10581FE resolved=0x000003A827508000 **MATCH**
+[hud-find] SUCCESS hudWeapon=0x000003A7E2B1C000 after 2 nodes
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+
+=== SNAPSHOT ===
+[snap] fsnCount=161418 lastStage=0 stage5Count=12098
+[snap] stage histogram:
+[snap]   stage  0: 25594 frames
+[snap]   stage  1: 12496 frames
+[snap]   stage  2: 12496 frames
+[snap]   stage  3: 12484 frames
+[snap]   stage  4: 3 frames
+[snap]   stage  5: 12098 frames
+[snap]   stage  6: 12098 frames
+[snap]   stage  7: 12098 frames
+[snap]   stage  8: 12098 frames
+[snap]   stage 10: 12088 frames
+[snap]   stage 11: 15378 frames
+[snap]   stage 12: 22487 frames
+[snap] dwLocalPlayerController @ 0x00007FFAB6AA2548 -> 0x000003A7E11D4200 
+[snap] dwLocalPlayerPawn       @ 0x00007FFAB6C991E0 -> 0x000003A7722A3000 
+[snap] pawn: vtable=0x00007FFAC41D3740 inClient=0 health=936
+[snap] ctrl: vtable=0x00007FFAB6171680 inClient=1 m_hPlayerPawn@0x92C = 0x01E2812B (idx=299)
+[snap] entitySystem @ 0x00007FFAB6C7FBB8 = 0x000003A755460000 highestEntityIndex=214
+[snap] entity resolution: 1/16 of indices 1..16 valid
+[snap] ctrl->pawn handle resolve: 0x01E2812B -> 0x000003A7E6A0B800
+[snap] ----------------------------------------
+[apply] tick pawn=0x000003A7E6A0B800
+[apply] active 0x000003A827508000
+[pw] weapon 0x000003A827508000 def=525
+[armory-apply] in-game live weapon def=525 team=CT paintKit=420 (equipped in game 922FEB06198C79C1)
+[hud-find] START weapon=0x000003A827508000 pawn=0x000003A7E6A0B800
+[hud-find] armsHandle=0xDB8C43E1
+[hud-find] arms=0x000003A80B44B000
+[hud-find] armsNode=0x000003A829EDA080
+[hud-find] firstChild=0x000003A7E2519C80
+[hud-find] child[1]=0x000003A829562C80 owner=0x000003A7E2B1C000 handle=0x10581FE resolved=0x000003A827508000 **MATCH**
+[hud-find] SUCCESS hudWeapon=0x000003A7E2B1C000 after 2 nodes
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000003A7E6A0B800
+[apply] active 0x000003A827508000
+[pw] weapon 0x000003A827508000 def=525
+[armory-apply] in-game live weapon def=525 team=CT paintKit=420 (equipped in game 922FEB06198C79C1)
+[hud-find] START weapon=0x000003A827508000 pawn=0x000003A7E6A0B800
+[hud-find] armsHandle=0xDB8C43E1
+[hud-find] arms=0x000003A80B44B000
+[hud-find] armsNode=0x000003A829EDA080
+[hud-find] firstChild=0x000003A82A260480
+[hud-find] child[0]=0x000003A82A260480 owner=0x000003A80AF50400 handle=0x160805A resolved=0x000003A82874E000
+[hud-find] child[2]=0x000003A829562C80 owner=0x000003A7E2B1C000 handle=0x10581FE resolved=0x000003A827508000 **MATCH**
+[hud-find] SUCCESS hudWeapon=0x000003A7E2B1C000 after 3 nodes
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000003A7E6A0B800
+[apply] active 0x000003A82874E000
+[pw] weapon 0x000003A82874E000 def=2
+[armory-loadout] team=ct def=2 holds item 51964091955, which is not a projected instance
+[armory-apply] no Armory target for live weapon def=2 team=CT (not owned in the projected profile)
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[apply] tick pawn=0x000003A7E6A0B800
+[apply] active 0x000003A82874E000
+[pw] weapon 0x000003A82874E000 def=2
+[armory-loadout] team=ct def=2 holds item 51964091955, which is not a projected instance
+[armory-apply] no Armory target for live weapon def=2 team=CT (not owned in the projected profile)
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[apply] tick pawn=0x000003A7E6A0B800
+[apply] active 0x000003A82874E000
+[pw] weapon 0x000003A82874E000 def=2
+[armory-loadout] team=ct def=2 holds item 51964091955, which is not a projected instance
+[armory-apply] no Armory target for live weapon def=2 team=CT (not owned in the projected profile)
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[apply] tick pawn=0x000003A7E6A0B800
+[apply] active 0x000003A82874E000
+[pw] weapon 0x000003A82874E000 def=2
+[armory-loadout] team=ct def=2 holds item 51964091955, which is not a projected instance
+[armory-apply] no Armory target for live weapon def=2 team=CT (not owned in the projected profile)
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[apply] tick pawn=0x000003A7E6A0B800
+[apply] active 0x000003A827508000
+[pw] weapon 0x000003A827508000 def=525
+[armory-apply] in-game live weapon def=525 team=CT paintKit=420 (equipped in game 922FEB06198C79C1)
+[hud-find] START weapon=0x000003A827508000 pawn=0x000003A7E6A0B800
+[hud-find] armsHandle=0xDB8C43E1
+[hud-find] arms=0x000003A80B44B000
+[hud-find] armsNode=0x000003A829EDA080
+[hud-find] firstChild=0x000003A82A260480
+[hud-find] child[0]=0x000003A82A260480 owner=0x000003A80AF50400 handle=0x160805A resolved=0x000003A82874E000
+[hud-find] child[2]=0x000003A829562C80 owner=0x000003A7E2B1C000 handle=0x10581FE resolved=0x000003A827508000 **MATCH**
+[hud-find] SUCCESS hudWeapon=0x000003A7E2B1C000 after 3 nodes
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000003A7E6A0B800
+[apply] active 0x000003A827508000
+[pw] weapon 0x000003A827508000 def=525
+[armory-apply] in-game live weapon def=525 team=CT paintKit=420 (equipped in game 922FEB06198C79C1)
+[hud-find] START weapon=0x000003A827508000 pawn=0x000003A7E6A0B800
+[hud-find] armsHandle=0xDB8C43E1
+[hud-find] arms=0x000003A80B44B000
+[hud-find] armsNode=0x000003A829EDA080
+[hud-find] firstChild=0x000003A82A260480
+[hud-find] child[0]=0x000003A82A260480 owner=0x000003A80AF50400 handle=0x160805A resolved=0x000003A82874E000
+[hud-find] child[2]=0x000003A829562C80 owner=0x000003A7E2B1C000 handle=0x10581FE resolved=0x000003A827508000 **MATCH**
+[hud-find] SUCCESS hudWeapon=0x000003A7E2B1C000 after 3 nodes
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000003A7E6A0B800
+[apply] active 0x000003A827508000
+[pw] weapon 0x000003A827508000 def=525
+[armory-apply] in-game live weapon def=525 team=CT paintKit=420 (equipped in game 922FEB06198C79C1)
+[hud-find] START weapon=0x000003A827508000 pawn=0x000003A7E6A0B800
+[hud-find] armsHandle=0xDB8C43E1
+[hud-find] arms=0x000003A80B44B000
+[hud-find] armsNode=0x000003A829EDA080
+[hud-find] firstChild=0x000003A82A260480
+[hud-find] child[0]=0x000003A82A260480 owner=0x000003A80AF50400 handle=0x160805A resolved=0x000003A82874E000
+[hud-find] child[2]=0x000003A829562C80 owner=0x000003A7E2B1C000 handle=0x10581FE resolved=0x000003A827508000 **MATCH**
+[hud-find] SUCCESS hudWeapon=0x000003A7E2B1C000 after 3 nodes
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000003A7E6A0B800
+[apply] active 0x000003A827508000
+[pw] weapon 0x000003A827508000 def=525
+[armory-apply] in-game live weapon def=525 team=CT paintKit=420 (equipped in game 922FEB06198C79C1)
+[hud-find] START weapon=0x000003A827508000 pawn=0x000003A7E6A0B800
+[hud-find] armsHandle=0xDB8C43E1
+[hud-find] arms=0x000003A80B44B000
+[hud-find] armsNode=0x000003A829EDA080
+[hud-find] firstChild=0x000003A82A260480
+[hud-find] child[0]=0x000003A82A260480 owner=0x000003A80AF50400 handle=0x160805A resolved=0x000003A82874E000
+[hud-find] child[2]=0x000003A829562C80 owner=0x000003A7E2B1C000 handle=0x10581FE resolved=0x000003A827508000 **MATCH**
+[hud-find] SUCCESS hudWeapon=0x000003A7E2B1C000 after 3 nodes
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000003A7E6A0B800
+[apply] active 0x000003A827508000
+[pw] weapon 0x000003A827508000 def=525
+[armory-apply] in-game live weapon def=525 team=CT paintKit=420 (equipped in game 922FEB06198C79C1)
+[hud-find] START weapon=0x000003A827508000 pawn=0x000003A7E6A0B800
+[hud-find] armsHandle=0xDB8C43E1
+[hud-find] arms=0x000003A80B44B000
+[hud-find] armsNode=0x000003A829EDA080
+[hud-find] firstChild=0x000003A82A260480
+[hud-find] child[0]=0x000003A82A260480 owner=0x000003A80AF50400 handle=0x160805A resolved=0x000003A82874E000
+[hud-find] child[2]=0x000003A829562C80 owner=0x000003A7E2B1C000 handle=0x10581FE resolved=0x000003A827508000 **MATCH**
+[hud-find] SUCCESS hudWeapon=0x000003A7E2B1C000 after 3 nodes
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000003A7E6A0B800
+[apply] active 0x000003A827508000
+[pw] weapon 0x000003A827508000 def=525
+[armory-apply] in-game live weapon def=525 team=CT paintKit=420 (equipped in game 922FEB06198C79C1)
+[hud-find] START weapon=0x000003A827508000 pawn=0x000003A7E6A0B800
+[hud-find] armsHandle=0xDB8C43E1
+[hud-find] arms=0x000003A80B44B000
+[hud-find] armsNode=0x000003A829EDA080
+[hud-find] firstChild=0x000003A82A260480
+[hud-find] child[0]=0x000003A82A260480 owner=0x000003A80AF50400 handle=0x160805A resolved=0x000003A82874E000
+[hud-find] child[2]=0x000003A829562C80 owner=0x000003A7E2B1C000 handle=0x10581FE resolved=0x000003A827508000 **MATCH**
+[hud-find] SUCCESS hudWeapon=0x000003A7E2B1C000 after 3 nodes
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000003A7E6A0B800
+[apply] active 0x000003A827508000
+[pw] weapon 0x000003A827508000 def=525
+[armory-apply] in-game live weapon def=525 team=CT paintKit=420 (equipped in game 922FEB06198C79C1)
+[hud-find] START weapon=0x000003A827508000 pawn=0x000003A7E6A0B800
+[hud-find] armsHandle=0xDB8C43E1
+[hud-find] arms=0x000003A80B44B000
+[hud-find] armsNode=0x000003A829EDA080
+[hud-find] firstChild=0x000003A82A260480
+[hud-find] child[0]=0x000003A82A260480 owner=0x000003A80AF50400 handle=0x160805A resolved=0x000003A82874E000
+[hud-find] child[2]=0x000003A829562C80 owner=0x000003A7E2B1C000 handle=0x10581FE resolved=0x000003A827508000 **MATCH**
+[hud-find] SUCCESS hudWeapon=0x000003A7E2B1C000 after 3 nodes
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000003A7E6A0B800
+[apply] active 0x000003A827508000
+[pw] weapon 0x000003A827508000 def=525
+[armory-apply] in-game live weapon def=525 team=CT paintKit=420 (equipped in game 922FEB06198C79C1)
+[hud-find] START weapon=0x000003A827508000 pawn=0x000003A7E6A0B800
+[hud-find] armsHandle=0xDB8C43E1
+[hud-find] arms=0x000003A80B44B000
+[hud-find] armsNode=0x000003A829EDA080
+[hud-find] firstChild=0x000003A82A260480
+[hud-find] child[0]=0x000003A82A260480 owner=0x000003A80AF50400 handle=0x160805A resolved=0x000003A82874E000
+[hud-find] child[2]=0x000003A829562C80 owner=0x000003A7E2B1C000 handle=0x10581FE resolved=0x000003A827508000 **MATCH**
+[hud-find] SUCCESS hudWeapon=0x000003A7E2B1C000 after 3 nodes
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000003A7E6A0B800
+[apply] active 0x000003A827508000
+[pw] weapon 0x000003A827508000 def=525
+[armory-apply] in-game live weapon def=525 team=CT paintKit=420 (equipped in game 922FEB06198C79C1)
+[hud-find] START weapon=0x000003A827508000 pawn=0x000003A7E6A0B800
+[hud-find] armsHandle=0xDB8C43E1
+[hud-find] arms=0x000003A80B44B000
+[hud-find] armsNode=0x000003A829EDA080
+[hud-find] firstChild=0x000003A82A260480
+[hud-find] child[0]=0x000003A82A260480 owner=0x000003A80AF50400 handle=0x160805A resolved=0x000003A82874E000
+[hud-find] child[2]=0x000003A829562C80 owner=0x000003A7E2B1C000 handle=0x10581FE resolved=0x000003A827508000 **MATCH**
+[hud-find] SUCCESS hudWeapon=0x000003A7E2B1C000 after 3 nodes
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000003A7E6A0B800
+[apply] active 0x000003A827508000
+[pw] weapon 0x000003A827508000 def=525
+[armory-apply] in-game live weapon def=525 team=CT paintKit=420 (equipped in game 922FEB06198C79C1)
+[hud-find] START weapon=0x000003A827508000 pawn=0x000003A7E6A0B800
+[hud-find] armsHandle=0xDB8C43E1
+[hud-find] arms=0x000003A80B44B000
+[hud-find] armsNode=0x000003A829EDA080
+[hud-find] firstChild=0x000003A82A260480
+[hud-find] child[0]=0x000003A82A260480 owner=0x000003A80AF50400 handle=0x160805A resolved=0x000003A82874E000
+[hud-find] child[2]=0x000003A829562C80 owner=0x000003A7E2B1C000 handle=0x10581FE resolved=0x000003A827508000 **MATCH**
+[hud-find] SUCCESS hudWeapon=0x000003A7E2B1C000 after 3 nodes
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000003A7E6A0B800
+[apply] active 0x000003A80B3CE000
+[pw] weapon 0x000003A80B3CE000 def=61
+[armory-apply] in-game live weapon def=61 team=CT paintKit=1173 (equipped in game 9CF82CD4592CD5C7)
+[apply] enter (weapon=0x000003A80B3CE000 def=61 pk=1173)
+[apply] world view pre-write: size=0 data=0x0000000000000000
+[attr-diag] item=000003A80B3CF2E0 size=0 data=0000000000000000 alloc=0
+[attr-entry] 0: def=6 value=1173.000 initial=1173.000
+[attr-entry] 1: def=7 value=1.000 initial=1.000
+[attr-entry] 2: def=8 value=0.300420 initial=0.300420
+[attr] attachments written (5 attributes): stickers=0 charm=kit:7 seed=0 off=1.872,0.344,3.930
+[apply] world post-create: size=10 data=000003A82A821A00 alloc=18
+[apply] world view 0x000003A80B3CF2E0 painted (pk=1173)
+[hud-find] START weapon=0x000003A80B3CE000 pawn=0x000003A7E6A0B800
+[hud-find] armsHandle=0xDB8C43E1
+[hud-find] arms=0x000003A80B44B000
+[hud-find] armsNode=0x000003A829EDA080
+[hud-find] firstChild=0x000003A827EA9C80
+[hud-find] child[0]=0x000003A827EA9C80 owner=0x000003A7E2B1D400 handle=0x1EA80B5 resolved=0x000003A80B3CE000 **MATCH**
+[hud-find] SUCCESS hudWeapon=0x000003A7E2B1D400 after 1 nodes
+[apply-cache] rebuilding weapon=000003A80B3CE000 hud=000003A7E2B1D400 def=61 pk=1173
+[hud-name] weapon selection entry refreshed: 000003A80B3CE000
+[apply-diagnostic] weaponChanged=1 gloveUpdate=0 regenAvailable=1
+[skin-regenerate] calling pRegenerateSkins weaponChanged=1
+[skin-regenerate] returned
+[apply] tick pawn=0x000003A7E6A0B800
+[apply] active 0x000003A80B3CE000
+[pw] weapon 0x000003A80B3CE000 def=61
+[armory-apply] in-game live weapon def=61 team=CT paintKit=1173 (equipped in game 9CF82CD4592CD5C7)
+[hud-find] START weapon=0x000003A80B3CE000 pawn=0x000003A7E6A0B800
+[hud-find] armsHandle=0xDB8C43E1
+[hud-find] arms=0x000003A80B44B000
+[hud-find] armsNode=0x000003A829EDA080
+[hud-find] firstChild=0x000003A7E11CD880
+[hud-find] child[1]=0x000003A827EA9C80 owner=0x000003A7E2B1D400 handle=0x1EA80B5 resolved=0x000003A80B3CE000 **MATCH**
+[hud-find] SUCCESS hudWeapon=0x000003A7E2B1D400 after 2 nodes
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000003A7E6A0B800
+[apply] active 0x000003A80B3CE000
+[pw] weapon 0x000003A80B3CE000 def=61
+[armory-apply] in-game live weapon def=61 team=CT paintKit=1173 (equipped in game 9CF82CD4592CD5C7)
+[hud-find] START weapon=0x000003A80B3CE000 pawn=0x000003A7E6A0B800
+[hud-find] armsHandle=0xDB8C43E1
+[hud-find] arms=0x000003A80B44B000
+[hud-find] armsNode=0x000003A829EDA080
+[hud-find] firstChild=0x000003A7E11CD880
+[hud-find] child[1]=0x000003A827EA9C80 owner=0x000003A7E2B1D400 handle=0x1EA80B5 resolved=0x000003A80B3CE000 **MATCH**
+[hud-find] SUCCESS hudWeapon=0x000003A7E2B1D400 after 2 nodes
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+N1SSAN_STATUS|1|2026-11-08T03:19:06Z|24152|armory-obsidian-3.0|READY|reason=runtime_worker_heartbeat
+[status-write] begin state=READY path=C:\Users\mirac\AppData\Local\n1ssan\status\cs2-24152.status
+[status-write] success state=READY error=0
+
+=== SNAPSHOT ===
+[snap] fsnCount=166766 lastStage=0 stage5Count=12416
+[snap] stage histogram:
+[snap]   stage  0: 26837 frames
+[snap]   stage  1: 12814 frames
+[snap]   stage  2: 12814 frames
+[snap]   stage  3: 12802 frames
+[snap]   stage  4: 3 frames
+[snap]   stage  5: 12416 frames
+[snap]   stage  6: 12416 frames
+[snap]   stage  7: 12416 frames
+[snap]   stage  8: 12416 frames
+[snap]   stage 10: 12406 frames
+[snap]   stage 11: 15698 frames
+[snap]   stage 12: 23728 frames
+[snap] dwLocalPlayerController @ 0x00007FFAB6AA2548 -> 0x000003A7E11D4200 
+[snap] dwLocalPlayerPawn       @ 0x00007FFAB6C991E0 -> 0x000003A7722A3000 
+[snap] pawn: vtable=0x00007FFAC41D3740 inClient=0 health=936
+[snap] ctrl: vtable=0x00007FFAB6171680 inClient=1 m_hPlayerPawn@0x92C = 0x01E2812B (idx=299)
+[snap] entitySystem @ 0x00007FFAB6C7FBB8 = 0x000003A755460000 highestEntityIndex=215
+[snap] entity resolution: 1/16 of indices 1..16 valid
+[snap] ctrl->pawn handle resolve: 0x01E2812B -> 0x000003A7E6A0B800
+[snap] ----------------------------------------
+[apply] tick pawn=0x000003A7E6A0B800
+[apply] active 0x000003A80B3CE000
+[pw] weapon 0x000003A80B3CE000 def=61
+[armory-apply] in-game live weapon def=61 team=CT paintKit=1173 (equipped in game 9CF82CD4592CD5C7)
+[hud-find] START weapon=0x000003A80B3CE000 pawn=0x000003A7E6A0B800
+[hud-find] armsHandle=0xDB8C43E1
+[hud-find] arms=0x000003A80B44B000
+[hud-find] armsNode=0x000003A829EDA080
+[hud-find] firstChild=0x000003A7E11CD880
+[hud-find] child[1]=0x000003A827EA9C80 owner=0x000003A7E2B1D400 handle=0x1EA80B5 resolved=0x000003A80B3CE000 **MATCH**
+[hud-find] SUCCESS hudWeapon=0x000003A7E2B1D400 after 2 nodes
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000003A7E6A0B800
+[apply] active 0x000003A80B3CE000
+[pw] weapon 0x000003A80B3CE000 def=61
+[armory-apply] in-game live weapon def=61 team=CT paintKit=1173 (equipped in game 9CF82CD4592CD5C7)
+[hud-find] START weapon=0x000003A80B3CE000 pawn=0x000003A7E6A0B800
+[hud-find] armsHandle=0xDB8C43E1
+[hud-find] arms=0x000003A80B44B000
+[hud-find] armsNode=0x000003A829EDA080
+[hud-find] firstChild=0x000003A7E11CD880
+[hud-find] child[1]=0x000003A827EA9C80 owner=0x000003A7E2B1D400 handle=0x1EA80B5 resolved=0x000003A80B3CE000 **MATCH**
+[hud-find] SUCCESS hudWeapon=0x000003A7E2B1D400 after 2 nodes
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000003A7E6A0B800
+[apply] active 0x000003A827508000
+[pw] weapon 0x000003A827508000 def=525
+[armory-apply] in-game live weapon def=525 team=CT paintKit=420 (equipped in game 922FEB06198C79C1)
+[hud-find] START weapon=0x000003A827508000 pawn=0x000003A7E6A0B800
+[hud-find] armsHandle=0xDB8C43E1
+[hud-find] arms=0x000003A80B44B000
+[hud-find] armsNode=0x000003A829EDA080
+[hud-find] firstChild=0x000003A7E11CD880
+[hud-find] child[1]=0x000003A827EA9C80 owner=0x000003A7E2B1D400 handle=0x1EA80B5 resolved=0x000003A80B3CE000
+[hud-find] child[3]=0x000003A829562C80 owner=0x000003A7E2B1C000 handle=0x10581FE resolved=0x000003A827508000 **MATCH**
+[hud-find] SUCCESS hudWeapon=0x000003A7E2B1C000 after 4 nodes
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000003A7E6A0B800
+[apply] active 0x000003A827508000
+[pw] weapon 0x000003A827508000 def=525
+[armory-apply] in-game live weapon def=525 team=CT paintKit=420 (equipped in game 922FEB06198C79C1)
+[hud-find] START weapon=0x000003A827508000 pawn=0x000003A7E6A0B800
+[hud-find] armsHandle=0xDB8C43E1
+[hud-find] arms=0x000003A80B44B000
+[hud-find] armsNode=0x000003A829EDA080
+[hud-find] firstChild=0x000003A7E11CD880
+[hud-find] child[1]=0x000003A827EA9C80 owner=0x000003A7E2B1D400 handle=0x1EA80B5 resolved=0x000003A80B3CE000
+[hud-find] child[3]=0x000003A829562C80 owner=0x000003A7E2B1C000 handle=0x10581FE resolved=0x000003A827508000 **MATCH**
+[hud-find] SUCCESS hudWeapon=0x000003A7E2B1C000 after 4 nodes
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000003A7E6A0B800
+[apply] active 0x000003A827508000
+[pw] weapon 0x000003A827508000 def=525
+[armory-apply] in-game live weapon def=525 team=CT paintKit=420 (equipped in game 922FEB06198C79C1)
+[hud-find] START weapon=0x000003A827508000 pawn=0x000003A7E6A0B800
+[hud-find] armsHandle=0xDB8C43E1
+[hud-find] arms=0x000003A80B44B000
+[hud-find] armsNode=0x000003A829EDA080
+[hud-find] firstChild=0x000003A7E11CD880
+[hud-find] child[1]=0x000003A827EA9C80 owner=0x000003A7E2B1D400 handle=0x1EA80B5 resolved=0x000003A80B3CE000
+[hud-find] child[3]=0x000003A829562C80 owner=0x000003A7E2B1C000 handle=0x10581FE resolved=0x000003A827508000 **MATCH**
+[hud-find] SUCCESS hudWeapon=0x000003A7E2B1C000 after 4 nodes
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000003A7E6A0B800
+[apply] active 0x000003A827508000
+[pw] weapon 0x000003A827508000 def=525
+[armory-apply] in-game live weapon def=525 team=CT paintKit=420 (equipped in game 922FEB06198C79C1)
+[hud-find] START weapon=0x000003A827508000 pawn=0x000003A7E6A0B800
+[hud-find] armsHandle=0xDB8C43E1
+[hud-find] arms=0x000003A80B44B000
+[hud-find] armsNode=0x000003A829EDA080
+[hud-find] firstChild=0x000003A7E11CD880
+[hud-find] child[1]=0x000003A827EA9C80 owner=0x000003A7E2B1D400 handle=0x1EA80B5 resolved=0x000003A80B3CE000
+[hud-find] child[3]=0x000003A829562C80 owner=0x000003A7E2B1C000 handle=0x10581FE resolved=0x000003A827508000 **MATCH**
+[hud-find] SUCCESS hudWeapon=0x000003A7E2B1C000 after 4 nodes
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000003A7E6A0B800
+[apply] active 0x000003A827508000
+[pw] weapon 0x000003A827508000 def=525
+[armory-apply] in-game live weapon def=525 team=CT paintKit=420 (equipped in game 922FEB06198C79C1)
+[hud-find] START weapon=0x000003A827508000 pawn=0x000003A7E6A0B800
+[hud-find] armsHandle=0xDB8C43E1
+[hud-find] arms=0x000003A80B44B000
+[hud-find] armsNode=0x000003A829EDA080
+[hud-find] firstChild=0x000003A7E11CD880
+[hud-find] child[1]=0x000003A827EA9C80 owner=0x000003A7E2B1D400 handle=0x1EA80B5 resolved=0x000003A80B3CE000
+[hud-find] child[3]=0x000003A829562C80 owner=0x000003A7E2B1C000 handle=0x10581FE resolved=0x000003A827508000 **MATCH**
+[hud-find] SUCCESS hudWeapon=0x000003A7E2B1C000 after 4 nodes
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000003A7E6A0B800
+[apply] active 0x000003A80B3CE000
+[pw] weapon 0x000003A80B3CE000 def=61
+[armory-apply] in-game live weapon def=61 team=CT paintKit=1173 (equipped in game 9CF82CD4592CD5C7)
+[hud-find] START weapon=0x000003A80B3CE000 pawn=0x000003A7E6A0B800
+[hud-find] armsHandle=0xDB8C43E1
+[hud-find] arms=0x000003A80B44B000
+[hud-find] armsNode=0x000003A829EDA080
+[hud-find] firstChild=0x000003A7E11CD880
+[hud-find] child[1]=0x000003A827EA9C80 owner=0x000003A7E2B1D400 handle=0x1EA80B5 resolved=0x000003A80B3CE000 **MATCH**
+[hud-find] SUCCESS hudWeapon=0x000003A7E2B1D400 after 2 nodes
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000003A7E6A0B800
+[apply] active 0x000003A80B3CE000
+[pw] weapon 0x000003A80B3CE000 def=61
+[armory-apply] in-game live weapon def=61 team=CT paintKit=1173 (equipped in game 9CF82CD4592CD5C7)
+[hud-find] START weapon=0x000003A80B3CE000 pawn=0x000003A7E6A0B800
+[hud-find] armsHandle=0xDB8C43E1
+[hud-find] arms=0x000003A80B44B000
+[hud-find] armsNode=0x000003A829EDA080
+[hud-find] firstChild=0x000003A7E11CD880
+[hud-find] child[1]=0x000003A827EA9C80 owner=0x000003A7E2B1D400 handle=0x1EA80B5 resolved=0x000003A80B3CE000 **MATCH**
+[hud-find] SUCCESS hudWeapon=0x000003A7E2B1D400 after 2 nodes
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000003A7E6A0B800
+[apply] active 0x000003A80B3CE000
+[pw] weapon 0x000003A80B3CE000 def=61
+[armory-apply] in-game live weapon def=61 team=CT paintKit=1173 (equipped in game 9CF82CD4592CD5C7)
+[hud-find] START weapon=0x000003A80B3CE000 pawn=0x000003A7E6A0B800
+[hud-find] armsHandle=0xDB8C43E1
+[hud-find] arms=0x000003A80B44B000
+[hud-find] armsNode=0x000003A829EDA080
+[hud-find] firstChild=0x000003A7E11CD880
+[hud-find] child[1]=0x000003A827EA9C80 owner=0x000003A7E2B1D400 handle=0x1EA80B5 resolved=0x000003A80B3CE000 **MATCH**
+[hud-find] SUCCESS hudWeapon=0x000003A7E2B1D400 after 2 nodes
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000003A7E6A0B800
+[apply] active 0x000003A80B3CE000
+[pw] weapon 0x000003A80B3CE000 def=61
+[armory-apply] in-game live weapon def=61 team=CT paintKit=1173 (equipped in game 9CF82CD4592CD5C7)
+[hud-find] START weapon=0x000003A80B3CE000 pawn=0x000003A7E6A0B800
+[hud-find] armsHandle=0xDB8C43E1
+[hud-find] arms=0x000003A80B44B000
+[hud-find] armsNode=0x000003A829EDA080
+[hud-find] firstChild=0x000003A7E11CD880
+[hud-find] child[1]=0x000003A827EA9C80 owner=0x000003A7E2B1D400 handle=0x1EA80B5 resolved=0x000003A80B3CE000 **MATCH**
+[hud-find] SUCCESS hudWeapon=0x000003A7E2B1D400 after 2 nodes
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000003A7E6A0B800
+[apply] active 0x000003A80B3CE000
+[pw] weapon 0x000003A80B3CE000 def=61
+[armory-apply] in-game live weapon def=61 team=CT paintKit=1173 (equipped in game 9CF82CD4592CD5C7)
+[hud-find] START weapon=0x000003A80B3CE000 pawn=0x000003A7E6A0B800
+[hud-find] armsHandle=0xDB8C43E1
+[hud-find] arms=0x000003A80B44B000
+[hud-find] armsNode=0x000003A829EDA080
+[hud-find] firstChild=0x000003A7E11CD880
+[hud-find] child[1]=0x000003A827EA9C80 owner=0x000003A7E2B1D400 handle=0x1EA80B5 resolved=0x000003A80B3CE000 **MATCH**
+[hud-find] SUCCESS hudWeapon=0x000003A7E2B1D400 after 2 nodes
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000003A7E6A0B800
+[apply] active 0x000003A80B3CE000
+[pw] weapon 0x000003A80B3CE000 def=61
+[armory-apply] in-game live weapon def=61 team=CT paintKit=1173 (equipped in game 9CF82CD4592CD5C7)
+[hud-find] START weapon=0x000003A80B3CE000 pawn=0x000003A7E6A0B800
+[hud-find] armsHandle=0xDB8C43E1
+[hud-find] arms=0x000003A80B44B000
+[hud-find] armsNode=0x000003A829EDA080
+[hud-find] firstChild=0x000003A7E11CD880
+[hud-find] child[1]=0x000003A827EA9C80 owner=0x000003A7E2B1D400 handle=0x1EA80B5 resolved=0x000003A80B3CE000 **MATCH**
+[hud-find] SUCCESS hudWeapon=0x000003A7E2B1D400 after 2 nodes
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000003A7E6A0B800
+[apply] active 0x000003A80B3CE000
+[pw] weapon 0x000003A80B3CE000 def=61
+[armory-apply] in-game live weapon def=61 team=CT paintKit=1173 (equipped in game 9CF82CD4592CD5C7)
+[hud-find] START weapon=0x000003A80B3CE000 pawn=0x000003A7E6A0B800
+[hud-find] armsHandle=0xDB8C43E1
+[hud-find] arms=0x000003A80B44B000
+[hud-find] armsNode=0x000003A829EDA080
+[hud-find] firstChild=0x000003A7E11CD880
+[hud-find] child[1]=0x000003A827EA9C80 owner=0x000003A7E2B1D400 handle=0x1EA80B5 resolved=0x000003A80B3CE000 **MATCH**
+[hud-find] SUCCESS hudWeapon=0x000003A7E2B1D400 after 2 nodes
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000003A7E6A0B800
+[apply] active 0x000003A80B3CE000
+[pw] weapon 0x000003A80B3CE000 def=61
+[armory-apply] in-game live weapon def=61 team=CT paintKit=1173 (equipped in game 9CF82CD4592CD5C7)
+[hud-find] START weapon=0x000003A80B3CE000 pawn=0x000003A7E6A0B800
+[hud-find] armsHandle=0xDB8C43E1
+[hud-find] arms=0x000003A80B44B000
+[hud-find] armsNode=0x000003A829EDA080
+[hud-find] firstChild=0x000003A7E11CD880
+[hud-find] child[1]=0x000003A827EA9C80 owner=0x000003A7E2B1D400 handle=0x1EA80B5 resolved=0x000003A80B3CE000 **MATCH**
+[hud-find] SUCCESS hudWeapon=0x000003A7E2B1D400 after 2 nodes
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000003A7E6A0B800
+[apply] active 0x000003A827508000
+[pw] weapon 0x000003A827508000 def=525
+[armory-apply] in-game live weapon def=525 team=CT paintKit=420 (equipped in game 922FEB06198C79C1)
+[hud-find] START weapon=0x000003A827508000 pawn=0x000003A7E6A0B800
+[hud-find] armsHandle=0xDB8C43E1
+[hud-find] arms=0x000003A80B44B000
+[hud-find] armsNode=0x000003A829EDA080
+[hud-find] firstChild=0x000003A7E11CD880
+[hud-find] child[1]=0x000003A827EA9C80 owner=0x000003A7E2B1D400 handle=0x1EA80B5 resolved=0x000003A80B3CE000
+[hud-find] child[3]=0x000003A829562C80 owner=0x000003A7E2B1C000 handle=0x10581FE resolved=0x000003A827508000 **MATCH**
+[hud-find] SUCCESS hudWeapon=0x000003A7E2B1C000 after 4 nodes
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000003A7E6A0B800
+[apply] active 0x000003A827508000
+[pw] weapon 0x000003A827508000 def=525
+[armory-apply] in-game live weapon def=525 team=CT paintKit=420 (equipped in game 922FEB06198C79C1)
+[hud-find] START weapon=0x000003A827508000 pawn=0x000003A7E6A0B800
+[hud-find] armsHandle=0xDB8C43E1
+[hud-find] arms=0x000003A80B44B000
+[hud-find] armsNode=0x000003A829EDA080
+[hud-find] firstChild=0x000003A7E11CD880
+[hud-find] child[1]=0x000003A827EA9C80 owner=0x000003A7E2B1D400 handle=0x1EA80B5 resolved=0x000003A80B3CE000
+[hud-find] child[3]=0x000003A829562C80 owner=0x000003A7E2B1C000 handle=0x10581FE resolved=0x000003A827508000 **MATCH**
+[hud-find] SUCCESS hudWeapon=0x000003A7E2B1C000 after 4 nodes
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000003A7E6A0B800
+[apply] active 0x000003A827508000
+[pw] weapon 0x000003A827508000 def=525
+[armory-apply] in-game live weapon def=525 team=CT paintKit=420 (equipped in game 922FEB06198C79C1)
+[hud-find] START weapon=0x000003A827508000 pawn=0x000003A7E6A0B800
+[hud-find] armsHandle=0xDB8C43E1
+[hud-find] arms=0x000003A80B44B000
+[hud-find] armsNode=0x000003A829EDA080
+[hud-find] firstChild=0x000003A7E11CD880
+[hud-find] child[1]=0x000003A827EA9C80 owner=0x000003A7E2B1D400 handle=0x1EA80B5 resolved=0x000003A80B3CE000
+[hud-find] child[3]=0x000003A829562C80 owner=0x000003A7E2B1C000 handle=0x10581FE resolved=0x000003A827508000 **MATCH**
+[hud-find] SUCCESS hudWeapon=0x000003A7E2B1C000 after 4 nodes
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000003A7E6A0B800
+[apply] active 0x000003A827508000
+[pw] weapon 0x000003A827508000 def=525
+[armory-apply] in-game live weapon def=525 team=CT paintKit=420 (equipped in game 922FEB06198C79C1)
+[hud-find] START weapon=0x000003A827508000 pawn=0x000003A7E6A0B800
+[hud-find] armsHandle=0xDB8C43E1
+[hud-find] arms=0x000003A80B44B000
+[hud-find] armsNode=0x000003A829EDA080
+[hud-find] firstChild=0x000003A7E11CD880
+[hud-find] child[1]=0x000003A827EA9C80 owner=0x000003A7E2B1D400 handle=0x1EA80B5 resolved=0x000003A80B3CE000
+[hud-find] child[3]=0x000003A829562C80 owner=0x000003A7E2B1C000 handle=0x10581FE resolved=0x000003A827508000 **MATCH**
+[hud-find] SUCCESS hudWeapon=0x000003A7E2B1C000 after 4 nodes
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000003A7E6A0B800
+[apply] active 0x000003A827508000
+[pw] weapon 0x000003A827508000 def=525
+[armory-apply] in-game live weapon def=525 team=CT paintKit=420 (equipped in game 922FEB06198C79C1)
+[hud-find] START weapon=0x000003A827508000 pawn=0x000003A7E6A0B800
+[hud-find] armsHandle=0xDB8C43E1
+[hud-find] arms=0x000003A80B44B000
+[hud-find] armsNode=0x000003A829EDA080
+[hud-find] firstChild=0x000003A7E11CD880
+[hud-find] child[1]=0x000003A827EA9C80 owner=0x000003A7E2B1D400 handle=0x1EA80B5 resolved=0x000003A80B3CE000
+[hud-find] child[3]=0x000003A829562C80 owner=0x000003A7E2B1C000 handle=0x10581FE resolved=0x000003A827508000 **MATCH**
+[hud-find] SUCCESS hudWeapon=0x000003A7E2B1C000 after 4 nodes
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+
+=== SNAPSHOT ===
+[snap] fsnCount=172489 lastStage=0 stage5Count=12735
+[snap] stage histogram:
+[snap]   stage  0: 28263 frames
+[snap]   stage  1: 13133 frames
+[snap]   stage  2: 13133 frames
+[snap]   stage  3: 13121 frames
+[snap]   stage  4: 3 frames
+[snap]   stage  5: 12735 frames
+[snap]   stage  6: 12735 frames
+[snap]   stage  7: 12735 frames
+[snap]   stage  8: 12735 frames
+[snap]   stage 10: 12725 frames
+[snap]   stage 11: 16018 frames
+[snap]   stage 12: 25153 frames
+[snap] dwLocalPlayerController @ 0x00007FFAB6AA2548 -> 0x000003A7E11D4200 
+[snap] dwLocalPlayerPawn       @ 0x00007FFAB6C991E0 -> 0x000003A7722A3000 
+[snap] pawn: vtable=0x00007FFAC41D3740 inClient=0 health=936
+[snap] ctrl: vtable=0x00007FFAB6171680 inClient=1 m_hPlayerPawn@0x92C = 0x01E2812B (idx=299)
+[snap] entitySystem @ 0x00007FFAB6C7FBB8 = 0x000003A755460000 highestEntityIndex=215
+[snap] entity resolution: 1/16 of indices 1..16 valid
+[snap] ctrl->pawn handle resolve: 0x01E2812B -> 0x000003A7E6A0B800
+[snap] ----------------------------------------
+[apply] tick pawn=0x000003A7E6A0B800
+[apply] active 0x000003A827508000
+[pw] weapon 0x000003A827508000 def=525
+[armory-apply] in-game live weapon def=525 team=CT paintKit=420 (equipped in game 922FEB06198C79C1)
+[hud-find] START weapon=0x000003A827508000 pawn=0x000003A7E6A0B800
+[hud-find] armsHandle=0xDB8C43E1
+[hud-find] arms=0x000003A80B44B000
+[hud-find] armsNode=0x000003A829EDA080
+[hud-find] firstChild=0x000003A7E11CD880
+[hud-find] child[1]=0x000003A827EA9C80 owner=0x000003A7E2B1D400 handle=0x1EA80B5 resolved=0x000003A80B3CE000
+[hud-find] child[3]=0x000003A829562C80 owner=0x000003A7E2B1C000 handle=0x10581FE resolved=0x000003A827508000 **MATCH**
+[hud-find] SUCCESS hudWeapon=0x000003A7E2B1C000 after 4 nodes
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000003A7E6A0B800
+[apply] active 0x000003A827508000
+[pw] weapon 0x000003A827508000 def=525
+[armory-apply] in-game live weapon def=525 team=CT paintKit=420 (equipped in game 922FEB06198C79C1)
+[hud-find] START weapon=0x000003A827508000 pawn=0x000003A7E6A0B800
+[hud-find] armsHandle=0xDB8C43E1
+[hud-find] arms=0x000003A80B44B000
+[hud-find] armsNode=0x000003A829EDA080
+[hud-find] firstChild=0x000003A7E11CD880
+[hud-find] child[1]=0x000003A827EA9C80 owner=0x000003A7E2B1D400 handle=0x1EA80B5 resolved=0x000003A80B3CE000
+[hud-find] child[3]=0x000003A829562C80 owner=0x000003A7E2B1C000 handle=0x10581FE resolved=0x000003A827508000 **MATCH**
+[hud-find] SUCCESS hudWeapon=0x000003A7E2B1C000 after 4 nodes
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000003A7E6A0B800
+[apply] active 0x000003A828284000
+[pw] weapon 0x000003A828284000 def=60
+[armory-apply] in-game live weapon def=60 team=CT paintKit=1017 (equipped in game 96221A0E61314132)
+[apply] enter (weapon=0x000003A828284000 def=60 pk=1017)
+[apply] world view pre-write: size=0 data=0x0000000000000000
+[attr-diag] item=000003A8282852E0 size=0 data=0000000000000000 alloc=0
+[attr-entry] 0: def=6 value=1017.000 initial=1017.000
+[attr-entry] 1: def=7 value=1.000 initial=1.000
+[attr-entry] 2: def=8 value=0.008740 initial=0.008740
+[attr] attachments written (7 attributes): stickers=1 [0 kit=42 wear=0.000 rot=0.0 off=0.426,0.013 schema=4] charm=none
+[apply] world post-create: size=10 data=000003A7DC65E800 alloc=18
+[apply] world view 0x000003A8282852E0 painted (pk=1017)
+[hud-find] START weapon=0x000003A828284000 pawn=0x000003A7E6A0B800
+[hud-find] armsHandle=0xDB8C43E1
+[hud-find] arms=0x000003A80B44B000
+[hud-find] armsNode=0x000003A829EDA080
+[hud-find] firstChild=0x000003A82A81E480
+[hud-find] child[0]=0x000003A82A81E480 owner=0x000003A82B826000 handle=0x12A00B6 resolved=0x000003A828284000 **MATCH**
+[hud-find] SUCCESS hudWeapon=0x000003A82B826000 after 1 nodes
+[apply-cache] rebuilding weapon=000003A828284000 hud=000003A82B826000 def=60 pk=1017
+[hud-name] weapon selection entry refreshed: 000003A828284000
+[apply-diagnostic] weaponChanged=1 gloveUpdate=0 regenAvailable=1
+[skin-regenerate] calling pRegenerateSkins weaponChanged=1
+[skin-regenerate] returned
+[apply] tick pawn=0x000003A7E6A0B800
+[apply] active 0x000003A828284000
+[pw] weapon 0x000003A828284000 def=60
+[armory-apply] in-game live weapon def=60 team=CT paintKit=1017 (equipped in game 96221A0E61314132)
+[hud-find] START weapon=0x000003A828284000 pawn=0x000003A7E6A0B800
+[hud-find] armsHandle=0xDB8C43E1
+[hud-find] arms=0x000003A80B44B000
+[hud-find] armsNode=0x000003A829EDA080
+[hud-find] firstChild=0x000003A82A81E480
+[hud-find] child[0]=0x000003A82A81E480 owner=0x000003A82B826000 handle=0x12A00B6 resolved=0x000003A828284000 **MATCH**
+[hud-find] SUCCESS hudWeapon=0x000003A82B826000 after 1 nodes
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000003A7E6A0B800
+[apply] active 0x000003A828284000
+[pw] weapon 0x000003A828284000 def=60
+[armory-apply] in-game live weapon def=60 team=CT paintKit=1017 (equipped in game 96221A0E61314132)
+[hud-find] START weapon=0x000003A828284000 pawn=0x000003A7E6A0B800
+[hud-find] armsHandle=0xDB8C43E1
+[hud-find] arms=0x000003A80B44B000
+[hud-find] armsNode=0x000003A829EDA080
+[hud-find] firstChild=0x000003A82A81E480
+[hud-find] child[0]=0x000003A82A81E480 owner=0x000003A82B826000 handle=0x12A00B6 resolved=0x000003A828284000 **MATCH**
+[hud-find] SUCCESS hudWeapon=0x000003A82B826000 after 1 nodes
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000003A7E6A0B800
+[apply] active 0x000003A828284000
+[pw] weapon 0x000003A828284000 def=60
+[armory-apply] in-game live weapon def=60 team=CT paintKit=1017 (equipped in game 96221A0E61314132)
+[hud-find] START weapon=0x000003A828284000 pawn=0x000003A7E6A0B800
+[hud-find] armsHandle=0xDB8C43E1
+[hud-find] arms=0x000003A80B44B000
+[hud-find] armsNode=0x000003A829EDA080
+[hud-find] firstChild=0x000003A82A81E480
+[hud-find] child[0]=0x000003A82A81E480 owner=0x000003A82B826000 handle=0x12A00B6 resolved=0x000003A828284000 **MATCH**
+[hud-find] SUCCESS hudWeapon=0x000003A82B826000 after 1 nodes
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000003A7E6A0B800
+[apply] active 0x000003A828284000
+[pw] weapon 0x000003A828284000 def=60
+[armory-apply] in-game live weapon def=60 team=CT paintKit=1017 (equipped in game 96221A0E61314132)
+[hud-find] START weapon=0x000003A828284000 pawn=0x000003A7E6A0B800
+[hud-find] armsHandle=0xDB8C43E1
+[hud-find] arms=0x000003A80B44B000
+[hud-find] armsNode=0x000003A829EDA080
+[hud-find] firstChild=0x000003A82A81E480
+[hud-find] child[0]=0x000003A82A81E480 owner=0x000003A82B826000 handle=0x12A00B6 resolved=0x000003A828284000 **MATCH**
+[hud-find] SUCCESS hudWeapon=0x000003A82B826000 after 1 nodes
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000003A7E6A0B800
+[apply] active 0x000003A828284000
+[pw] weapon 0x000003A828284000 def=60
+[armory-apply] in-game live weapon def=60 team=CT paintKit=1017 (equipped in game 96221A0E61314132)
+[hud-find] START weapon=0x000003A828284000 pawn=0x000003A7E6A0B800
+[hud-find] armsHandle=0xDB8C43E1
+[hud-find] arms=0x000003A80B44B000
+[hud-find] armsNode=0x000003A829EDA080
+[hud-find] firstChild=0x000003A82A81E480
+[hud-find] child[0]=0x000003A82A81E480 owner=0x000003A82B826000 handle=0x12A00B6 resolved=0x000003A828284000 **MATCH**
+[hud-find] SUCCESS hudWeapon=0x000003A82B826000 after 1 nodes
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000003A7E6A0B800
+[apply] active 0x000003A828284000
+[pw] weapon 0x000003A828284000 def=60
+[armory-apply] in-game live weapon def=60 team=CT paintKit=1017 (equipped in game 96221A0E61314132)
+[hud-find] START weapon=0x000003A828284000 pawn=0x000003A7E6A0B800
+[hud-find] armsHandle=0xDB8C43E1
+[hud-find] arms=0x000003A80B44B000
+[hud-find] armsNode=0x000003A829EDA080
+[hud-find] firstChild=0x000003A82A81E480
+[hud-find] child[0]=0x000003A82A81E480 owner=0x000003A82B826000 handle=0x12A00B6 resolved=0x000003A828284000 **MATCH**
+[hud-find] SUCCESS hudWeapon=0x000003A82B826000 after 1 nodes
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000003A7E6A0B800
+[apply] active 0x000003A828284000
+[pw] weapon 0x000003A828284000 def=60
+[armory-apply] in-game live weapon def=60 team=CT paintKit=1017 (equipped in game 96221A0E61314132)
+[hud-find] START weapon=0x000003A828284000 pawn=0x000003A7E6A0B800
+[hud-find] armsHandle=0xDB8C43E1
+[hud-find] arms=0x000003A80B44B000
+[hud-find] armsNode=0x000003A829EDA080
+[hud-find] firstChild=0x000003A82A81E480
+[hud-find] child[0]=0x000003A82A81E480 owner=0x000003A82B826000 handle=0x12A00B6 resolved=0x000003A828284000 **MATCH**
+[hud-find] SUCCESS hudWeapon=0x000003A82B826000 after 1 nodes
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000003A7E6A0B800
+[apply] active 0x000003A828284000
+[pw] weapon 0x000003A828284000 def=60
+[armory-apply] in-game live weapon def=60 team=CT paintKit=1017 (equipped in game 96221A0E61314132)
+[hud-find] START weapon=0x000003A828284000 pawn=0x000003A7E6A0B800
+[hud-find] armsHandle=0xDB8C43E1
+[hud-find] arms=0x000003A80B44B000
+[hud-find] armsNode=0x000003A829EDA080
+[hud-find] firstChild=0x000003A82A81E480
+[hud-find] child[0]=0x000003A82A81E480 owner=0x000003A82B826000 handle=0x12A00B6 resolved=0x000003A828284000 **MATCH**
+[hud-find] SUCCESS hudWeapon=0x000003A82B826000 after 1 nodes
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000003A7E6A0B800
+[apply] active 0x000003A828284000
+[pw] weapon 0x000003A828284000 def=60
+[armory-apply] in-game live weapon def=60 team=CT paintKit=1017 (equipped in game 96221A0E61314132)
+[hud-find] START weapon=0x000003A828284000 pawn=0x000003A7E6A0B800
+[hud-find] armsHandle=0xDB8C43E1
+[hud-find] arms=0x000003A80B44B000
+[hud-find] armsNode=0x000003A829EDA080
+[hud-find] firstChild=0x000003A82A81E480
+[hud-find] child[0]=0x000003A82A81E480 owner=0x000003A82B826000 handle=0x12A00B6 resolved=0x000003A828284000 **MATCH**
+[hud-find] SUCCESS hudWeapon=0x000003A82B826000 after 1 nodes
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000003A7E6A0B800
+[apply] active 0x000003A827508000
+[pw] weapon 0x000003A827508000 def=525
+[armory-apply] in-game live weapon def=525 team=CT paintKit=420 (equipped in game 922FEB06198C79C1)
+[hud-find] START weapon=0x000003A827508000 pawn=0x000003A7E6A0B800
+[hud-find] armsHandle=0xDB8C43E1
+[hud-find] arms=0x000003A80B44B000
+[hud-find] armsNode=0x000003A829EDA080
+[hud-find] firstChild=0x000003A82A81E480
+[hud-find] child[0]=0x000003A82A81E480 owner=0x000003A82B826000 handle=0x12A00B6 resolved=0x000003A828284000
+[hud-find] child[2]=0x000003A827EA9C80 owner=0x000003A7E2B1D400 handle=0x1EA80B5 resolved=0x000003A80B3CE000
+[hud-find] child[4]=0x000003A829562C80 owner=0x000003A7E2B1C000 handle=0x10581FE resolved=0x000003A827508000 **MATCH**
+[hud-find] SUCCESS hudWeapon=0x000003A7E2B1C000 after 5 nodes
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000003A7E6A0B800
+[apply] active 0x000003A828284000
+[pw] weapon 0x000003A828284000 def=60
+[armory-apply] in-game live weapon def=60 team=CT paintKit=1017 (equipped in game 96221A0E61314132)
+[hud-find] START weapon=0x000003A828284000 pawn=0x000003A7E6A0B800
+[hud-find] armsHandle=0xDB8C43E1
+[hud-find] arms=0x000003A80B44B000
+[hud-find] armsNode=0x000003A829EDA080
+[hud-find] firstChild=0x000003A82A81E480
+[hud-find] child[0]=0x000003A82A81E480 owner=0x000003A82B826000 handle=0x12A00B6 resolved=0x000003A828284000 **MATCH**
+[hud-find] SUCCESS hudWeapon=0x000003A82B826000 after 1 nodes
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000003A7E6A0B800
+[apply] active 0x000003A828284000
+[pw] weapon 0x000003A828284000 def=60
+[armory-apply] in-game live weapon def=60 team=CT paintKit=1017 (equipped in game 96221A0E61314132)
+[hud-find] START weapon=0x000003A828284000 pawn=0x000003A7E6A0B800
+[hud-find] armsHandle=0xDB8C43E1
+[hud-find] arms=0x000003A80B44B000
+[hud-find] armsNode=0x000003A829EDA080
+[hud-find] firstChild=0x000003A82A81E480
+[hud-find] child[0]=0x000003A82A81E480 owner=0x000003A82B826000 handle=0x12A00B6 resolved=0x000003A828284000 **MATCH**
+[hud-find] SUCCESS hudWeapon=0x000003A82B826000 after 1 nodes
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000003A7E6A0B800
+[apply] active 0x000003A827508000
+[pw] weapon 0x000003A827508000 def=525
+[armory-apply] in-game live weapon def=525 team=CT paintKit=420 (equipped in game 922FEB06198C79C1)
+[hud-find] START weapon=0x000003A827508000 pawn=0x000003A7E6A0B800
+[hud-find] armsHandle=0xDB8C43E1
+[hud-find] arms=0x000003A80B44B000
+[hud-find] armsNode=0x000003A829EDA080
+[hud-find] firstChild=0x000003A82A81E480
+[hud-find] child[0]=0x000003A82A81E480 owner=0x000003A82B826000 handle=0x12A00B6 resolved=0x000003A828284000
+[hud-find] child[2]=0x000003A827EA9C80 owner=0x000003A7E2B1D400 handle=0x1EA80B5 resolved=0x000003A80B3CE000
+[hud-find] child[4]=0x000003A829562C80 owner=0x000003A7E2B1C000 handle=0x10581FE resolved=0x000003A827508000 **MATCH**
+[hud-find] SUCCESS hudWeapon=0x000003A7E2B1C000 after 5 nodes
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000003A7E6A0B800
+[apply] active 0x000003A827508000
+[pw] weapon 0x000003A827508000 def=525
+[armory-apply] in-game live weapon def=525 team=CT paintKit=420 (equipped in game 922FEB06198C79C1)
+[hud-find] START weapon=0x000003A827508000 pawn=0x000003A7E6A0B800
+[hud-find] armsHandle=0xDB8C43E1
+[hud-find] arms=0x000003A80B44B000
+[hud-find] armsNode=0x000003A829EDA080
+[hud-find] firstChild=0x000003A82A81E480
+[hud-find] child[0]=0x000003A82A81E480 owner=0x000003A82B826000 handle=0x12A00B6 resolved=0x000003A828284000
+[hud-find] child[2]=0x000003A827EA9C80 owner=0x000003A7E2B1D400 handle=0x1EA80B5 resolved=0x000003A80B3CE000
+[hud-find] child[4]=0x000003A829562C80 owner=0x000003A7E2B1C000 handle=0x10581FE resolved=0x000003A827508000 **MATCH**
+[hud-find] SUCCESS hudWeapon=0x000003A7E2B1C000 after 5 nodes
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000003A7E6A0B800
+[apply] active 0x000003A827508000
+[pw] weapon 0x000003A827508000 def=525
+[armory-apply] in-game live weapon def=525 team=CT paintKit=420 (equipped in game 922FEB06198C79C1)
+[hud-find] START weapon=0x000003A827508000 pawn=0x000003A7E6A0B800
+[hud-find] armsHandle=0xDB8C43E1
+[hud-find] arms=0x000003A80B44B000
+[hud-find] armsNode=0x000003A829EDA080
+[hud-find] firstChild=0x000003A82A81E480
+[hud-find] child[0]=0x000003A82A81E480 owner=0x000003A82B826000 handle=0x12A00B6 resolved=0x000003A828284000
+[hud-find] child[2]=0x000003A827EA9C80 owner=0x000003A7E2B1D400 handle=0x1EA80B5 resolved=0x000003A80B3CE000
+[hud-find] child[4]=0x000003A829562C80 owner=0x000003A7E2B1C000 handle=0x10581FE resolved=0x000003A827508000 **MATCH**
+[hud-find] SUCCESS hudWeapon=0x000003A7E2B1C000 after 5 nodes
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000003A7E6A0B800
+[apply] active 0x000003A827508000
+[pw] weapon 0x000003A827508000 def=525
+[armory-apply] in-game live weapon def=525 team=CT paintKit=420 (equipped in game 922FEB06198C79C1)
+[hud-find] START weapon=0x000003A827508000 pawn=0x000003A7E6A0B800
+[hud-find] armsHandle=0xDB8C43E1
+[hud-find] arms=0x000003A80B44B000
+[hud-find] armsNode=0x000003A829EDA080
+[hud-find] firstChild=0x000003A82A81E480
+[hud-find] child[0]=0x000003A82A81E480 owner=0x000003A82B826000 handle=0x12A00B6 resolved=0x000003A828284000
+[hud-find] child[2]=0x000003A827EA9C80 owner=0x000003A7E2B1D400 handle=0x1EA80B5 resolved=0x000003A80B3CE000
+[hud-find] child[4]=0x000003A829562C80 owner=0x000003A7E2B1C000 handle=0x10581FE resolved=0x000003A827508000 **MATCH**
+[hud-find] SUCCESS hudWeapon=0x000003A7E2B1C000 after 5 nodes
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+N1SSAN_STATUS|1|2026-11-08T03:19:16Z|24152|armory-obsidian-3.0|READY|reason=runtime_worker_heartbeat
+[status-write] begin state=READY path=C:\Users\mirac\AppData\Local\n1ssan\status\cs2-24152.status
+
+=== SNAPSHOT ===
+[snap] fsnCount=178035 lastStage=0 stage5Count=13053
+[snap] stage histogram:
+[snap]   stage  0: 29605 frames
+[snap]   stage  1: 13451 frames
+[snap]   stage  2: 13451 frames
+[snap]   stage  3: 13439 frames
+[status-write] success state=READY error=0
+[snap]   stage  4: 3 frames
+[snap]   stage  5: 13053 frames
+[snap]   stage  6: 13053 frames
+[snap]   stage  7: 13053 frames
+[snap]   stage  8: 13053 frames
+[snap]   stage 10: 13043 frames
+[snap]   stage 11: 16338 frames
+[snap]   stage 12: 26493 frames
+[snap] dwLocalPlayerController @ 0x00007FFAB6AA2548 -> 0x000003A7E11D4200 
+[snap] dwLocalPlayerPawn       @ 0x00007FFAB6C991E0 -> 0x000003A7722A3000 
+[snap] pawn: vtable=0x00007FFAC41D3740 inClient=0 health=936
+[snap] ctrl: vtable=0x00007FFAB6171680 inClient=1 m_hPlayerPawn@0x92C = 0x01E2812B (idx=299)
+[snap] entitySystem @ 0x00007FFAB6C7FBB8 = 0x000003A755460000 highestEntityIndex=216
+[snap] entity resolution: 1/16 of indices 1..16 valid
+[snap] ctrl->pawn handle resolve: 0x01E2812B -> 0x000003A7E6A0B800
+[snap] ----------------------------------------
+[apply] tick pawn=0x000003A7E6A0B800
+[apply] active 0x000003A827508000
+[pw] weapon 0x000003A827508000 def=525
+[armory-apply] in-game live weapon def=525 team=CT paintKit=420 (equipped in game 922FEB06198C79C1)
+[hud-find] START weapon=0x000003A827508000 pawn=0x000003A7E6A0B800
+[hud-find] armsHandle=0xDB8C43E1
+[hud-find] arms=0x000003A80B44B000
+[hud-find] armsNode=0x000003A829EDA080
+[hud-find] firstChild=0x000003A82A81E480
+[hud-find] child[0]=0x000003A82A81E480 owner=0x000003A82B826000 handle=0x12A00B6 resolved=0x000003A828284000
+[hud-find] child[2]=0x000003A827EA9C80 owner=0x000003A7E2B1D400 handle=0x1EA80B5 resolved=0x000003A80B3CE000
+[hud-find] child[4]=0x000003A829562C80 owner=0x000003A7E2B1C000 handle=0x10581FE resolved=0x000003A827508000 **MATCH**
+[hud-find] SUCCESS hudWeapon=0x000003A7E2B1C000 after 5 nodes
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000003A7E6A0B800
+[apply] active 0x000003A827508000
+[pw] weapon 0x000003A827508000 def=525
+[armory-apply] in-game live weapon def=525 team=CT paintKit=420 (equipped in game 922FEB06198C79C1)
+[hud-find] START weapon=0x000003A827508000 pawn=0x000003A7E6A0B800
+[hud-find] armsHandle=0xDB8C43E1
+[hud-find] arms=0x000003A80B44B000
+[hud-find] armsNode=0x000003A829EDA080
+[hud-find] firstChild=0x000003A82A81E480
+[hud-find] child[0]=0x000003A82A81E480 owner=0x000003A82B826000 handle=0x12A00B6 resolved=0x000003A828284000
+[hud-find] child[2]=0x000003A827EA9C80 owner=0x000003A7E2B1D400 handle=0x1EA80B5 resolved=0x000003A80B3CE000
+[hud-find] child[4]=0x000003A829562C80 owner=0x000003A7E2B1C000 handle=0x10581FE resolved=0x000003A827508000 **MATCH**
+[hud-find] SUCCESS hudWeapon=0x000003A7E2B1C000 after 5 nodes
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000003A7E6A0B800
+[apply] active 0x000003A828284000
+[pw] weapon 0x000003A828284000 def=60
+[armory-apply] in-game live weapon def=60 team=CT paintKit=1017 (equipped in game 96221A0E61314132)
+[hud-find] START weapon=0x000003A828284000 pawn=0x000003A7E6A0B800
+[hud-find] armsHandle=0xDB8C43E1
+[hud-find] arms=0x000003A80B44B000
+[hud-find] armsNode=0x000003A829EDA080
+[hud-find] firstChild=0x000003A82A81E480
+[hud-find] child[0]=0x000003A82A81E480 owner=0x000003A82B826000 handle=0x12A00B6 resolved=0x000003A828284000 **MATCH**
+[hud-find] SUCCESS hudWeapon=0x000003A82B826000 after 1 nodes
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000003A7E6A0B800
+[apply] active 0x000003A827508000
+[pw] weapon 0x000003A827508000 def=525
+[armory-apply] in-game live weapon def=525 team=CT paintKit=420 (equipped in game 922FEB06198C79C1)
+[hud-find] START weapon=0x000003A827508000 pawn=0x000003A7E6A0B800
+[hud-find] armsHandle=0xDB8C43E1
+[hud-find] arms=0x000003A80B44B000
+[hud-find] armsNode=0x000003A829EDA080
+[hud-find] firstChild=0x000003A82A81E480
+[hud-find] child[0]=0x000003A82A81E480 owner=0x000003A82B826000 handle=0x12A00B6 resolved=0x000003A828284000
+[hud-find] child[2]=0x000003A827EA9C80 owner=0x000003A7E2B1D400 handle=0x1EA80B5 resolved=0x000003A80B3CE000
+[hud-find] child[4]=0x000003A829562C80 owner=0x000003A7E2B1C000 handle=0x10581FE resolved=0x000003A827508000 **MATCH**
+[hud-find] SUCCESS hudWeapon=0x000003A7E2B1C000 after 5 nodes
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000003A7E6A0B800
+[apply] active 0x000003A827508000
+[pw] weapon 0x000003A827508000 def=525
+[armory-apply] in-game live weapon def=525 team=CT paintKit=420 (equipped in game 922FEB06198C79C1)
+[hud-find] START weapon=0x000003A827508000 pawn=0x000003A7E6A0B800
+[hud-find] armsHandle=0xDB8C43E1
+[hud-find] arms=0x000003A80B44B000
+[hud-find] armsNode=0x000003A829EDA080
+[hud-find] firstChild=0x000003A82A81E480
+[hud-find] child[0]=0x000003A82A81E480 owner=0x000003A82B826000 handle=0x12A00B6 resolved=0x000003A828284000
+[hud-find] child[2]=0x000003A827EA9C80 owner=0x000003A7E2B1D400 handle=0x1EA80B5 resolved=0x000003A80B3CE000
+[hud-find] child[4]=0x000003A829562C80 owner=0x000003A7E2B1C000 handle=0x10581FE resolved=0x000003A827508000 **MATCH**
+[hud-find] SUCCESS hudWeapon=0x000003A7E2B1C000 after 5 nodes
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000003A7E6A0B800
+[apply] active 0x000003A827508000
+[pw] weapon 0x000003A827508000 def=525
+[armory-apply] in-game live weapon def=525 team=CT paintKit=420 (equipped in game 922FEB06198C79C1)
+[hud-find] START weapon=0x000003A827508000 pawn=0x000003A7E6A0B800
+[hud-find] armsHandle=0xDB8C43E1
+[hud-find] arms=0x000003A80B44B000
+[hud-find] armsNode=0x000003A829EDA080
+[hud-find] firstChild=0x000003A82A81E480
+[hud-find] child[0]=0x000003A82A81E480 owner=0x000003A82B826000 handle=0x12A00B6 resolved=0x000003A828284000
+[hud-find] child[2]=0x000003A827EA9C80 owner=0x000003A7E2B1D400 handle=0x1EA80B5 resolved=0x000003A80B3CE000
+[hud-find] child[4]=0x000003A829562C80 owner=0x000003A7E2B1C000 handle=0x10581FE resolved=0x000003A827508000 **MATCH**
+[hud-find] SUCCESS hudWeapon=0x000003A7E2B1C000 after 5 nodes
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000003A7E6A0B800
+[apply] active 0x000003A828284000
+[pw] weapon 0x000003A828284000 def=60
+[armory-apply] in-game live weapon def=60 team=CT paintKit=1017 (equipped in game 96221A0E61314132)
+[hud-find] START weapon=0x000003A828284000 pawn=0x000003A7E6A0B800
+[hud-find] armsHandle=0xDB8C43E1
+[hud-find] arms=0x000003A80B44B000
+[hud-find] armsNode=0x000003A829EDA080
+[hud-find] firstChild=0x000003A82A81E480
+[hud-find] child[0]=0x000003A82A81E480 owner=0x000003A82B826000 handle=0x12A00B6 resolved=0x000003A828284000 **MATCH**
+[hud-find] SUCCESS hudWeapon=0x000003A82B826000 after 1 nodes
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000003A7E6A0B800
+[apply] active 0x000003A827508000
+[pw] weapon 0x000003A827508000 def=525
+[armory-apply] in-game live weapon def=525 team=CT paintKit=420 (equipped in game 922FEB06198C79C1)
+[hud-find] START weapon=0x000003A827508000 pawn=0x000003A7E6A0B800
+[hud-find] armsHandle=0xDB8C43E1
+[hud-find] arms=0x000003A80B44B000
+[hud-find] armsNode=0x000003A829EDA080
+[hud-find] firstChild=0x000003A82A81E480
+[hud-find] child[0]=0x000003A82A81E480 owner=0x000003A82B826000 handle=0x12A00B6 resolved=0x000003A828284000
+[hud-find] child[2]=0x000003A827EA9C80 owner=0x000003A7E2B1D400 handle=0x1EA80B5 resolved=0x000003A80B3CE000
+[hud-find] child[4]=0x000003A829562C80 owner=0x000003A7E2B1C000 handle=0x10581FE resolved=0x000003A827508000 **MATCH**
+[hud-find] SUCCESS hudWeapon=0x000003A7E2B1C000 after 5 nodes
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000003A7E6A0B800
+[apply] active 0x000003A827508000
+[pw] weapon 0x000003A827508000 def=525
+[armory-apply] in-game live weapon def=525 team=CT paintKit=420 (equipped in game 922FEB06198C79C1)
+[hud-find] START weapon=0x000003A827508000 pawn=0x000003A7E6A0B800
+[hud-find] armsHandle=0xDB8C43E1
+[hud-find] arms=0x000003A80B44B000
+[hud-find] armsNode=0x000003A829EDA080
+[hud-find] firstChild=0x000003A82A81E480
+[hud-find] child[0]=0x000003A82A81E480 owner=0x000003A82B826000 handle=0x12A00B6 resolved=0x000003A828284000
+[hud-find] child[2]=0x000003A827EA9C80 owner=0x000003A7E2B1D400 handle=0x1EA80B5 resolved=0x000003A80B3CE000
+[hud-find] child[4]=0x000003A829562C80 owner=0x000003A7E2B1C000 handle=0x10581FE resolved=0x000003A827508000 **MATCH**
+[hud-find] SUCCESS hudWeapon=0x000003A7E2B1C000 after 5 nodes
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000003A7E6A0B800
+[apply] active 0x000003A827508000
+[pw] weapon 0x000003A827508000 def=525
+[armory-apply] in-game live weapon def=525 team=CT paintKit=420 (equipped in game 922FEB06198C79C1)
+[hud-find] START weapon=0x000003A827508000 pawn=0x000003A7E6A0B800
+[hud-find] armsHandle=0xDB8C43E1
+[hud-find] arms=0x000003A80B44B000
+[hud-find] armsNode=0x000003A829EDA080
+[hud-find] firstChild=0x000003A82A81E480
+[hud-find] child[0]=0x000003A82A81E480 owner=0x000003A82B826000 handle=0x12A00B6 resolved=0x000003A828284000
+[hud-find] child[2]=0x000003A827EA9C80 owner=0x000003A7E2B1D400 handle=0x1EA80B5 resolved=0x000003A80B3CE000
+[hud-find] child[4]=0x000003A829562C80 owner=0x000003A7E2B1C000 handle=0x10581FE resolved=0x000003A827508000 **MATCH**
+[hud-find] SUCCESS hudWeapon=0x000003A7E2B1C000 after 5 nodes
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000003A7E6A0B800
+[apply] active 0x000003A827508000
+[pw] weapon 0x000003A827508000 def=525
+[armory-apply] in-game live weapon def=525 team=CT paintKit=420 (equipped in game 922FEB06198C79C1)
+[hud-find] START weapon=0x000003A827508000 pawn=0x000003A7E6A0B800
+[hud-find] armsHandle=0xDB8C43E1
+[hud-find] arms=0x000003A80B44B000
+[hud-find] armsNode=0x000003A829EDA080
+[hud-find] firstChild=0x000003A82A81E480
+[hud-find] child[0]=0x000003A82A81E480 owner=0x000003A82B826000 handle=0x12A00B6 resolved=0x000003A828284000
+[hud-find] child[2]=0x000003A827EA9C80 owner=0x000003A7E2B1D400 handle=0x1EA80B5 resolved=0x000003A80B3CE000
+[hud-find] child[4]=0x000003A829562C80 owner=0x000003A7E2B1C000 handle=0x10581FE resolved=0x000003A827508000 **MATCH**
+[hud-find] SUCCESS hudWeapon=0x000003A7E2B1C000 after 5 nodes
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000003A7E6A0B800
+[apply] active 0x000003A827508000
+[pw] weapon 0x000003A827508000 def=525
+[armory-apply] in-game live weapon def=525 team=CT paintKit=420 (equipped in game 922FEB06198C79C1)
+[hud-find] START weapon=0x000003A827508000 pawn=0x000003A7E6A0B800
+[hud-find] armsHandle=0xDB8C43E1
+[hud-find] arms=0x000003A80B44B000
+[hud-find] armsNode=0x000003A829EDA080
+[hud-find] firstChild=0x000003A82A81E480
+[hud-find] child[0]=0x000003A82A81E480 owner=0x000003A82B826000 handle=0x12A00B6 resolved=0x000003A828284000
+[hud-find] child[2]=0x000003A827EA9C80 owner=0x000003A7E2B1D400 handle=0x1EA80B5 resolved=0x000003A80B3CE000
+[hud-find] child[4]=0x000003A829562C80 owner=0x000003A7E2B1C000 handle=0x10581FE resolved=0x000003A827508000 **MATCH**
+[hud-find] SUCCESS hudWeapon=0x000003A7E2B1C000 after 5 nodes
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000003A7E6A0B800
+[apply] active 0x000003A827508000
+[pw] weapon 0x000003A827508000 def=525
+[armory-apply] in-game live weapon def=525 team=CT paintKit=420 (equipped in game 922FEB06198C79C1)
+[hud-find] START weapon=0x000003A827508000 pawn=0x000003A7E6A0B800
+[hud-find] armsHandle=0xDB8C43E1
+[hud-find] arms=0x000003A80B44B000
+[hud-find] armsNode=0x000003A829EDA080
+[hud-find] firstChild=0x000003A82A81E480
+[hud-find] child[0]=0x000003A82A81E480 owner=0x000003A82B826000 handle=0x12A00B6 resolved=0x000003A828284000
+[hud-find] child[2]=0x000003A827EA9C80 owner=0x000003A7E2B1D400 handle=0x1EA80B5 resolved=0x000003A80B3CE000
+[hud-find] child[4]=0x000003A829562C80 owner=0x000003A7E2B1C000 handle=0x10581FE resolved=0x000003A827508000 **MATCH**
+[hud-find] SUCCESS hudWeapon=0x000003A7E2B1C000 after 5 nodes
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000003A7E6A0B800
+[apply] active 0x000003A827508000
+[pw] weapon 0x000003A827508000 def=525
+[armory-apply] in-game live weapon def=525 team=CT paintKit=420 (equipped in game 922FEB06198C79C1)
+[hud-find] START weapon=0x000003A827508000 pawn=0x000003A7E6A0B800
+[hud-find] armsHandle=0xDB8C43E1
+[hud-find] arms=0x000003A80B44B000
+[hud-find] armsNode=0x000003A829EDA080
+[hud-find] firstChild=0x000003A82A81E480
+[hud-find] child[0]=0x000003A82A81E480 owner=0x000003A82B826000 handle=0x12A00B6 resolved=0x000003A828284000
+[hud-find] child[2]=0x000003A827EA9C80 owner=0x000003A7E2B1D400 handle=0x1EA80B5 resolved=0x000003A80B3CE000
+[hud-find] child[4]=0x000003A829562C80 owner=0x000003A7E2B1C000 handle=0x10581FE resolved=0x000003A827508000 **MATCH**
+[hud-find] SUCCESS hudWeapon=0x000003A7E2B1C000 after 5 nodes
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000003A7E6A0B800
+[apply] active 0x000003A827508000
+[pw] weapon 0x000003A827508000 def=525
+[armory-apply] in-game live weapon def=525 team=CT paintKit=420 (equipped in game 922FEB06198C79C1)
+[hud-find] START weapon=0x000003A827508000 pawn=0x000003A7E6A0B800
+[hud-find] armsHandle=0xDB8C43E1
+[hud-find] arms=0x000003A80B44B000
+[hud-find] armsNode=0x000003A829EDA080
+[hud-find] firstChild=0x000003A82A81E480
+[hud-find] child[0]=0x000003A82A81E480 owner=0x000003A82B826000 handle=0x12A00B6 resolved=0x000003A828284000
+[hud-find] child[2]=0x000003A827EA9C80 owner=0x000003A7E2B1D400 handle=0x1EA80B5 resolved=0x000003A80B3CE000
+[hud-find] child[4]=0x000003A829562C80 owner=0x000003A7E2B1C000 handle=0x10581FE resolved=0x000003A827508000 **MATCH**
+[hud-find] SUCCESS hudWeapon=0x000003A7E2B1C000 after 5 nodes
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000003A7E6A0B800
+[apply] active 0x000003A827508000
+[pw] weapon 0x000003A827508000 def=525
+[armory-apply] in-game live weapon def=525 team=CT paintKit=420 (equipped in game 922FEB06198C79C1)
+[hud-find] START weapon=0x000003A827508000 pawn=0x000003A7E6A0B800
+[hud-find] armsHandle=0xDB8C43E1
+[hud-find] arms=0x000003A80B44B000
+[hud-find] armsNode=0x000003A829EDA080
+[hud-find] firstChild=0x000003A82A81E480
+[hud-find] child[0]=0x000003A82A81E480 owner=0x000003A82B826000 handle=0x12A00B6 resolved=0x000003A828284000
+[hud-find] child[2]=0x000003A827EA9C80 owner=0x000003A7E2B1D400 handle=0x1EA80B5 resolved=0x000003A80B3CE000
+[hud-find] child[4]=0x000003A829562C80 owner=0x000003A7E2B1C000 handle=0x10581FE resolved=0x000003A827508000 **MATCH**
+[hud-find] SUCCESS hudWeapon=0x000003A7E2B1C000 after 5 nodes
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000003A7E6A0B800
+[apply] active 0x000003A827508000
+[pw] weapon 0x000003A827508000 def=525
+[armory-apply] in-game live weapon def=525 team=CT paintKit=420 (equipped in game 922FEB06198C79C1)
+[hud-find] START weapon=0x000003A827508000 pawn=0x000003A7E6A0B800
+[hud-find] armsHandle=0xDB8C43E1
+[hud-find] arms=0x000003A80B44B000
+[hud-find] armsNode=0x000003A829EDA080
+[hud-find] firstChild=0x000003A82A81E480
+[hud-find] child[0]=0x000003A82A81E480 owner=0x000003A82B826000 handle=0x12A00B6 resolved=0x000003A828284000
+[hud-find] child[2]=0x000003A827EA9C80 owner=0x000003A7E2B1D400 handle=0x1EA80B5 resolved=0x000003A80B3CE000
+[hud-find] child[4]=0x000003A829562C80 owner=0x000003A7E2B1C000 handle=0x10581FE resolved=0x000003A827508000 **MATCH**
+[hud-find] SUCCESS hudWeapon=0x000003A7E2B1C000 after 5 nodes
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000003A7E6A0B800
+[apply] active 0x000003A827508000
+[pw] weapon 0x000003A827508000 def=525
+[armory-apply] in-game live weapon def=525 team=CT paintKit=420 (equipped in game 922FEB06198C79C1)
+[hud-find] START weapon=0x000003A827508000 pawn=0x000003A7E6A0B800
+[hud-find] armsHandle=0xDB8C43E1
+[hud-find] arms=0x000003A80B44B000
+[hud-find] armsNode=0x000003A829EDA080
+[hud-find] firstChild=0x000003A82A81E480
+[hud-find] child[0]=0x000003A82A81E480 owner=0x000003A82B826000 handle=0x12A00B6 resolved=0x000003A828284000
+[hud-find] child[2]=0x000003A827EA9C80 owner=0x000003A7E2B1D400 handle=0x1EA80B5 resolved=0x000003A80B3CE000
+[hud-find] child[4]=0x000003A829562C80 owner=0x000003A7E2B1C000 handle=0x10581FE resolved=0x000003A827508000 **MATCH**
+[hud-find] SUCCESS hudWeapon=0x000003A7E2B1C000 after 5 nodes
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000003A7E6A0B800
+[apply] active 0x000003A827508000
+[pw] weapon 0x000003A827508000 def=525
+[armory-apply] in-game live weapon def=525 team=CT paintKit=420 (equipped in game 922FEB06198C79C1)
+[hud-find] START weapon=0x000003A827508000 pawn=0x000003A7E6A0B800
+[hud-find] armsHandle=0xDB8C43E1
+[hud-find] arms=0x000003A80B44B000
+[hud-find] armsNode=0x000003A829EDA080
+[hud-find] firstChild=0x000003A82A81E480
+[hud-find] child[0]=0x000003A82A81E480 owner=0x000003A82B826000 handle=0x12A00B6 resolved=0x000003A828284000
+[hud-find] child[2]=0x000003A827EA9C80 owner=0x000003A7E2B1D400 handle=0x1EA80B5 resolved=0x000003A80B3CE000
+[hud-find] child[4]=0x000003A829562C80 owner=0x000003A7E2B1C000 handle=0x10581FE resolved=0x000003A827508000 **MATCH**
+[hud-find] SUCCESS hudWeapon=0x000003A7E2B1C000 after 5 nodes
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000003A7E6A0B800
+[apply] active 0x000003A827508000
+[pw] weapon 0x000003A827508000 def=525
+[armory-apply] in-game live weapon def=525 team=CT paintKit=420 (equipped in game 922FEB06198C79C1)
+[hud-find] START weapon=0x000003A827508000 pawn=0x000003A7E6A0B800
+[hud-find] armsHandle=0xDB8C43E1
+[hud-find] arms=0x000003A80B44B000
+[hud-find] armsNode=0x000003A829EDA080
+[hud-find] firstChild=0x000003A82A81E480
+[hud-find] child[0]=0x000003A82A81E480 owner=0x000003A82B826000 handle=0x12A00B6 resolved=0x000003A828284000
+[hud-find] child[2]=0x000003A827EA9C80 owner=0x000003A7E2B1D400 handle=0x1EA80B5 resolved=0x000003A80B3CE000
+[hud-find] child[4]=0x000003A829562C80 owner=0x000003A7E2B1C000 handle=0x10581FE resolved=0x000003A827508000 **MATCH**
+[hud-find] SUCCESS hudWeapon=0x000003A7E2B1C000 after 5 nodes
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+
+=== SNAPSHOT ===
+[snap] fsnCount=183330 lastStage=0 stage5Count=13372
+[snap] stage histogram:
+[snap]   stage  0: 30817 frames
+[snap]   stage  1: 13770 frames
+[snap]   stage  2: 13770 frames
+[snap]   stage  3: 13758 frames
+[snap]   stage  4: 3 frames
+[snap]   stage  5: 13372 frames
+[snap]   stage  6: 13372 frames
+[snap]   stage  7: 13372 frames
+[snap]   stage  8: 13372 frames
+[snap]   stage 10: 13362 frames
+[snap]   stage 11: 16658 frames
+[snap]   stage 12: 27704 frames
+[snap] dwLocalPlayerController @ 0x00007FFAB6AA2548 -> 0x000003A7E11D4200 
+[snap] dwLocalPlayerPawn       @ 0x00007FFAB6C991E0 -> 0x000003A7722A3000 
+[snap] pawn: vtable=0x00007FFAC41D3740 inClient=0 health=936
+[snap] ctrl: vtable=0x00007FFAB6171680 inClient=1 m_hPlayerPawn@0x92C = 0x01E2812B (idx=299)
+[snap] entitySystem @ 0x00007FFAB6C7FBB8 = 0x000003A755460000 highestEntityIndex=216
+[snap] entity resolution: 1/16 of indices 1..16 valid
+[snap] ctrl->pawn handle resolve: 0x01E2812B -> 0x000003A7E6A0B800
+[snap] ----------------------------------------
+[apply] tick pawn=0x000003A7E6A0B800
+[apply] active 0x000003A827508000
+[pw] weapon 0x000003A827508000 def=525
+[armory-apply] in-game live weapon def=525 team=CT paintKit=420 (equipped in game 922FEB06198C79C1)
+[hud-find] START weapon=0x000003A827508000 pawn=0x000003A7E6A0B800
+[hud-find] armsHandle=0xDB8C43E1
+[hud-find] arms=0x000003A80B44B000
+[hud-find] armsNode=0x000003A829EDA080
+[hud-find] firstChild=0x000003A82A81E480
+[hud-find] child[0]=0x000003A82A81E480 owner=0x000003A82B826000 handle=0x12A00B6 resolved=0x000003A828284000
+[hud-find] child[2]=0x000003A827EA9C80 owner=0x000003A7E2B1D400 handle=0x1EA80B5 resolved=0x000003A80B3CE000
+[hud-find] child[4]=0x000003A829562C80 owner=0x000003A7E2B1C000 handle=0x10581FE resolved=0x000003A827508000 **MATCH**
+[hud-find] SUCCESS hudWeapon=0x000003A7E2B1C000 after 5 nodes
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000003A7E6A0B800
+[apply] active 0x000003A827508000
+[pw] weapon 0x000003A827508000 def=525
+[armory-apply] in-game live weapon def=525 team=CT paintKit=420 (equipped in game 922FEB06198C79C1)
+[hud-find] START weapon=0x000003A827508000 pawn=0x000003A7E6A0B800
+[hud-find] armsHandle=0xDB8C43E1
+[hud-find] arms=0x000003A80B44B000
+[hud-find] armsNode=0x000003A829EDA080
+[hud-find] firstChild=0x000003A82A81E480
+[hud-find] child[0]=0x000003A82A81E480 owner=0x000003A82B826000 handle=0x12A00B6 resolved=0x000003A828284000
+[hud-find] child[2]=0x000003A827EA9C80 owner=0x000003A7E2B1D400 handle=0x1EA80B5 resolved=0x000003A80B3CE000
+[hud-find] child[4]=0x000003A829562C80 owner=0x000003A7E2B1C000 handle=0x10581FE resolved=0x000003A827508000 **MATCH**
+[hud-find] SUCCESS hudWeapon=0x000003A7E2B1C000 after 5 nodes
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000003A7E6A0B800
+[apply] active 0x000003A827508000
+[pw] weapon 0x000003A827508000 def=525
+[armory-apply] in-game live weapon def=525 team=CT paintKit=420 (equipped in game 922FEB06198C79C1)
+[hud-find] START weapon=0x000003A827508000 pawn=0x000003A7E6A0B800
+[hud-find] armsHandle=0xDB8C43E1
+[hud-find] arms=0x000003A80B44B000
+[hud-find] armsNode=0x000003A829EDA080
+[hud-find] firstChild=0x000003A82A81E480
+[hud-find] child[0]=0x000003A82A81E480 owner=0x000003A82B826000 handle=0x12A00B6 resolved=0x000003A828284000
+[hud-find] child[2]=0x000003A827EA9C80 owner=0x000003A7E2B1D400 handle=0x1EA80B5 resolved=0x000003A80B3CE000
+[hud-find] child[4]=0x000003A829562C80 owner=0x000003A7E2B1C000 handle=0x10581FE resolved=0x000003A827508000 **MATCH**
+[hud-find] SUCCESS hudWeapon=0x000003A7E2B1C000 after 5 nodes
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000003A7E6A0B800
+[apply] active 0x000003A827508000
+[pw] weapon 0x000003A827508000 def=525
+[armory-apply] in-game live weapon def=525 team=CT paintKit=420 (equipped in game 922FEB06198C79C1)
+[hud-find] START weapon=0x000003A827508000 pawn=0x000003A7E6A0B800
+[hud-find] armsHandle=0xDB8C43E1
+[hud-find] arms=0x000003A80B44B000
+[hud-find] armsNode=0x000003A829EDA080
+[hud-find] firstChild=0x000003A82A81E480
+[hud-find] child[0]=0x000003A82A81E480 owner=0x000003A82B826000 handle=0x12A00B6 resolved=0x000003A828284000
+[hud-find] child[2]=0x000003A827EA9C80 owner=0x000003A7E2B1D400 handle=0x1EA80B5 resolved=0x000003A80B3CE000
+[hud-find] child[4]=0x000003A829562C80 owner=0x000003A7E2B1C000 handle=0x10581FE resolved=0x000003A827508000 **MATCH**
+[hud-find] SUCCESS hudWeapon=0x000003A7E2B1C000 after 5 nodes
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000003A7E6A0B800
+[apply] active 0x000003A828284000
+[pw] weapon 0x000003A828284000 def=60
+[armory-apply] in-game live weapon def=60 team=CT paintKit=1017 (equipped in game 96221A0E61314132)
+[hud-find] START weapon=0x000003A828284000 pawn=0x000003A7E6A0B800
+[hud-find] armsHandle=0xDB8C43E1
+[hud-find] arms=0x000003A80B44B000
+[hud-find] armsNode=0x000003A829EDA080
+[hud-find] firstChild=0x000003A82A81E480
+[hud-find] child[0]=0x000003A82A81E480 owner=0x000003A82B826000 handle=0x12A00B6 resolved=0x000003A828284000 **MATCH**
+[hud-find] SUCCESS hudWeapon=0x000003A82B826000 after 1 nodes
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000003A7E6A0B800
+[apply] active 0x000003A828284000
+[pw] weapon 0x000003A828284000 def=60
+[armory-apply] in-game live weapon def=60 team=CT paintKit=1017 (equipped in game 96221A0E61314132)
+[hud-find] START weapon=0x000003A828284000 pawn=0x000003A7E6A0B800
+[hud-find] armsHandle=0xDB8C43E1
+[hud-find] arms=0x000003A80B44B000
+[hud-find] armsNode=0x000003A829EDA080
+[hud-find] firstChild=0x000003A82A81E480
+[hud-find] child[0]=0x000003A82A81E480 owner=0x000003A82B826000 handle=0x12A00B6 resolved=0x000003A828284000 **MATCH**
+[hud-find] SUCCESS hudWeapon=0x000003A82B826000 after 1 nodes
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000003A7E6A0B800
+[apply] active 0x000003A828284000
+[pw] weapon 0x000003A828284000 def=60
+[armory-apply] in-game live weapon def=60 team=CT paintKit=1017 (equipped in game 96221A0E61314132)
+[hud-find] START weapon=0x000003A828284000 pawn=0x000003A7E6A0B800
+[hud-find] armsHandle=0xDB8C43E1
+[hud-find] arms=0x000003A80B44B000
+[hud-find] armsNode=0x000003A829EDA080
+[hud-find] firstChild=0x000003A82A81E480
+[hud-find] child[0]=0x000003A82A81E480 owner=0x000003A82B826000 handle=0x12A00B6 resolved=0x000003A828284000 **MATCH**
+[hud-find] SUCCESS hudWeapon=0x000003A82B826000 after 1 nodes
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000003A7E6A0B800
+[apply] active 0x000003A828284000
+[pw] weapon 0x000003A828284000 def=60
+[armory-apply] in-game live weapon def=60 team=CT paintKit=1017 (equipped in game 96221A0E61314132)
+[hud-find] START weapon=0x000003A828284000 pawn=0x000003A7E6A0B800
+[hud-find] armsHandle=0xDB8C43E1
+[hud-find] arms=0x000003A80B44B000
+[hud-find] armsNode=0x000003A829EDA080
+[hud-find] firstChild=0x000003A82A81E480
+[hud-find] child[0]=0x000003A82A81E480 owner=0x000003A82B826000 handle=0x12A00B6 resolved=0x000003A828284000 **MATCH**
+[hud-find] SUCCESS hudWeapon=0x000003A82B826000 after 1 nodes
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000003A7E6A0B800
+[apply] active 0x000003A828284000
+[pw] weapon 0x000003A828284000 def=60
+[armory-apply] in-game live weapon def=60 team=CT paintKit=1017 (equipped in game 96221A0E61314132)
+[hud-find] START weapon=0x000003A828284000 pawn=0x000003A7E6A0B800
+[hud-find] armsHandle=0xDB8C43E1
+[hud-find] arms=0x000003A80B44B000
+[hud-find] armsNode=0x000003A829EDA080
+[hud-find] firstChild=0x000003A82A81E480
+[hud-find] child[0]=0x000003A82A81E480 owner=0x000003A82B826000 handle=0x12A00B6 resolved=0x000003A828284000 **MATCH**
+[hud-find] SUCCESS hudWeapon=0x000003A82B826000 after 1 nodes
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000003A7E6A0B800
+[apply] active 0x000003A828284000
+[pw] weapon 0x000003A828284000 def=60
+[armory-apply] in-game live weapon def=60 team=CT paintKit=1017 (equipped in game 96221A0E61314132)
+[hud-find] START weapon=0x000003A828284000 pawn=0x000003A7E6A0B800
+[hud-find] armsHandle=0xDB8C43E1
+[hud-find] arms=0x000003A80B44B000
+[hud-find] armsNode=0x000003A829EDA080
+[hud-find] firstChild=0x000003A82A81E480
+[hud-find] child[0]=0x000003A82A81E480 owner=0x000003A82B826000 handle=0x12A00B6 resolved=0x000003A828284000 **MATCH**
+[hud-find] SUCCESS hudWeapon=0x000003A82B826000 after 1 nodes
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000003A7E6A0B800
+[apply] active 0x000003A828284000
+[pw] weapon 0x000003A828284000 def=60
+[armory-apply] in-game live weapon def=60 team=CT paintKit=1017 (equipped in game 96221A0E61314132)
+[hud-find] START weapon=0x000003A828284000 pawn=0x000003A7E6A0B800
+[hud-find] armsHandle=0xDB8C43E1
+[hud-find] arms=0x000003A80B44B000
+[hud-find] armsNode=0x000003A829EDA080
+[hud-find] firstChild=0x000003A82A81E480
+[hud-find] child[0]=0x000003A82A81E480 owner=0x000003A82B826000 handle=0x12A00B6 resolved=0x000003A828284000 **MATCH**
+[hud-find] SUCCESS hudWeapon=0x000003A82B826000 after 1 nodes
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000003A7E6A0B800
+[apply] active 0x000003A828284000
+[pw] weapon 0x000003A828284000 def=60
+[armory-apply] in-game live weapon def=60 team=CT paintKit=1017 (equipped in game 96221A0E61314132)
+[hud-find] START weapon=0x000003A828284000 pawn=0x000003A7E6A0B800
+[hud-find] armsHandle=0xDB8C43E1
+[hud-find] arms=0x000003A80B44B000
+[hud-find] armsNode=0x000003A829EDA080
+[hud-find] firstChild=0x000003A82A81E480
+[hud-find] child[0]=0x000003A82A81E480 owner=0x000003A82B826000 handle=0x12A00B6 resolved=0x000003A828284000 **MATCH**
+[hud-find] SUCCESS hudWeapon=0x000003A82B826000 after 1 nodes
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000003A7E6A0B800
+[apply] active 0x000003A828284000
+[pw] weapon 0x000003A828284000 def=60
+[armory-apply] in-game live weapon def=60 team=CT paintKit=1017 (equipped in game 96221A0E61314132)
+[hud-find] START weapon=0x000003A828284000 pawn=0x000003A7E6A0B800
+[hud-find] armsHandle=0xDB8C43E1
+[hud-find] arms=0x000003A80B44B000
+[hud-find] armsNode=0x000003A829EDA080
+[hud-find] firstChild=0x000003A82A81E480
+[hud-find] child[0]=0x000003A82A81E480 owner=0x000003A82B826000 handle=0x12A00B6 resolved=0x000003A828284000 **MATCH**
+[hud-find] SUCCESS hudWeapon=0x000003A82B826000 after 1 nodes
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000003A7E6A0B800
+[apply] active 0x000003A827508000
+[pw] weapon 0x000003A827508000 def=525
+[armory-apply] in-game live weapon def=525 team=CT paintKit=420 (equipped in game 922FEB06198C79C1)
+[hud-find] START weapon=0x000003A827508000 pawn=0x000003A7E6A0B800
+[hud-find] armsHandle=0xDB8C43E1
+[hud-find] arms=0x000003A80B44B000
+[hud-find] armsNode=0x000003A829EDA080
+[hud-find] firstChild=0x000003A82A81E480
+[hud-find] child[0]=0x000003A82A81E480 owner=0x000003A82B826000 handle=0x12A00B6 resolved=0x000003A828284000
+[hud-find] child[2]=0x000003A827EA9C80 owner=0x000003A7E2B1D400 handle=0x1EA80B5 resolved=0x000003A80B3CE000
+[hud-find] child[4]=0x000003A829562C80 owner=0x000003A7E2B1C000 handle=0x10581FE resolved=0x000003A827508000 **MATCH**
+[hud-find] SUCCESS hudWeapon=0x000003A7E2B1C000 after 5 nodes
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000003A7E6A0B800
+[apply] active 0x000003A827508000
+[pw] weapon 0x000003A827508000 def=525
+[armory-apply] in-game live weapon def=525 team=CT paintKit=420 (equipped in game 922FEB06198C79C1)
+[hud-find] START weapon=0x000003A827508000 pawn=0x000003A7E6A0B800
+[hud-find] armsHandle=0xDB8C43E1
+[hud-find] arms=0x000003A80B44B000
+[hud-find] armsNode=0x000003A829EDA080
+[hud-find] firstChild=0x000003A82A81E480
+[hud-find] child[0]=0x000003A82A81E480 owner=0x000003A82B826000 handle=0x12A00B6 resolved=0x000003A828284000
+[hud-find] child[2]=0x000003A827EA9C80 owner=0x000003A7E2B1D400 handle=0x1EA80B5 resolved=0x000003A80B3CE000
+[hud-find] child[4]=0x000003A829562C80 owner=0x000003A7E2B1C000 handle=0x10581FE resolved=0x000003A827508000 **MATCH**
+[hud-find] SUCCESS hudWeapon=0x000003A7E2B1C000 after 5 nodes
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000003A7E6A0B800
+[apply] active 0x000003A827508000
+[pw] weapon 0x000003A827508000 def=525
+[armory-apply] in-game live weapon def=525 team=CT paintKit=420 (equipped in game 922FEB06198C79C1)
+[hud-find] START weapon=0x000003A827508000 pawn=0x000003A7E6A0B800
+[hud-find] armsHandle=0xDB8C43E1
+[hud-find] arms=0x000003A80B44B000
+[hud-find] armsNode=0x000003A829EDA080
+[hud-find] firstChild=0x000003A82A81E480
+[hud-find] child[0]=0x000003A82A81E480 owner=0x000003A82B826000 handle=0x12A00B6 resolved=0x000003A828284000
+[hud-find] child[2]=0x000003A827EA9C80 owner=0x000003A7E2B1D400 handle=0x1EA80B5 resolved=0x000003A80B3CE000
+[hud-find] child[4]=0x000003A829562C80 owner=0x000003A7E2B1C000 handle=0x10581FE resolved=0x000003A827508000 **MATCH**
+[hud-find] SUCCESS hudWeapon=0x000003A7E2B1C000 after 5 nodes
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000003A7E6A0B800
+[apply] active 0x000003A827508000
+[pw] weapon 0x000003A827508000 def=525
+[armory-apply] in-game live weapon def=525 team=CT paintKit=420 (equipped in game 922FEB06198C79C1)
+[hud-find] START weapon=0x000003A827508000 pawn=0x000003A7E6A0B800
+[hud-find] armsHandle=0xDB8C43E1
+[hud-find] arms=0x000003A80B44B000
+[hud-find] armsNode=0x000003A829EDA080
+[hud-find] firstChild=0x000003A82A81E480
+[hud-find] child[0]=0x000003A82A81E480 owner=0x000003A82B826000 handle=0x12A00B6 resolved=0x000003A828284000
+[hud-find] child[2]=0x000003A827EA9C80 owner=0x000003A7E2B1D400 handle=0x1EA80B5 resolved=0x000003A80B3CE000
+[hud-find] child[4]=0x000003A829562C80 owner=0x000003A7E2B1C000 handle=0x10581FE resolved=0x000003A827508000 **MATCH**
+[hud-find] SUCCESS hudWeapon=0x000003A7E2B1C000 after 5 nodes
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000003A7E6A0B800
+[apply] active 0x000003A827508000
+[pw] weapon 0x000003A827508000 def=525
+[armory-apply] in-game live weapon def=525 team=CT paintKit=420 (equipped in game 922FEB06198C79C1)
+[hud-find] START weapon=0x000003A827508000 pawn=0x000003A7E6A0B800
+[hud-find] armsHandle=0xDB8C43E1
+[hud-find] arms=0x000003A80B44B000
+[hud-find] armsNode=0x000003A829EDA080
+[hud-find] firstChild=0x000003A82A81E480
+[hud-find] child[0]=0x000003A82A81E480 owner=0x000003A82B826000 handle=0x12A00B6 resolved=0x000003A828284000
+[hud-find] child[2]=0x000003A827EA9C80 owner=0x000003A7E2B1D400 handle=0x1EA80B5 resolved=0x000003A80B3CE000
+[hud-find] child[4]=0x000003A829562C80 owner=0x000003A7E2B1C000 handle=0x10581FE resolved=0x000003A827508000 **MATCH**
+[hud-find] SUCCESS hudWeapon=0x000003A7E2B1C000 after 5 nodes
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000003A7E6A0B800
+[apply] active 0x000003A827508000
+[pw] weapon 0x000003A827508000 def=525
+[armory-apply] in-game live weapon def=525 team=CT paintKit=420 (equipped in game 922FEB06198C79C1)
+[hud-find] START weapon=0x000003A827508000 pawn=0x000003A7E6A0B800
+[hud-find] armsHandle=0xDB8C43E1
+[hud-find] arms=0x000003A80B44B000
+[hud-find] armsNode=0x000003A829EDA080
+[hud-find] firstChild=0x000003A82A81E480
+[hud-find] child[0]=0x000003A82A81E480 owner=0x000003A82B826000 handle=0x12A00B6 resolved=0x000003A828284000
+[hud-find] child[2]=0x000003A827EA9C80 owner=0x000003A7E2B1D400 handle=0x1EA80B5 resolved=0x000003A80B3CE000
+[hud-find] child[4]=0x000003A829562C80 owner=0x000003A7E2B1C000 handle=0x10581FE resolved=0x000003A827508000 **MATCH**
+[hud-find] SUCCESS hudWeapon=0x000003A7E2B1C000 after 5 nodes
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+
+=== SNAPSHOT ===
+[snap] fsnCount=188885 lastStage=12 stage5Count=13692
+[snap] stage histogram:
+[snap]   stage  0: 32154 frames
+[snap]   stage  1: 14090 frames
+[snap]   stage  2: 14090 frames
+[snap]   stage  3: 14078 frames
+[snap]   stage  4: 3 frames
+[snap]   stage  5: 13692 frames
+N1SSAN_STATUS|1|2026-11-08T03:19:26Z|24152|armory-obsidian-3.0|READY|reason=runtime_worker_heartbeat
+[snap]   stage  6: 13692 frames
+[status-write] begin state=READY path=C:\Users\mirac\AppData\Local\n1ssan\status\cs2-24152.status
+[snap]   stage  7: 13692 frames
+[snap]   stage  8: 13692 frames
+[snap]   stage 10: 13682 frames
+[snap]   stage 11: 16978 frames
+[snap]   stage 12: 29042 frames
+[snap] dwLocalPlayerController @ 0x00007FFAB6AA2548 -> 0x000003A7E11D4200 
+[status-write] success state=READY error=0
+[snap] dwLocalPlayerPawn       @ 0x00007FFAB6C991E0 -> 0x000003A7722A3000 
+[snap] pawn: vtable=0x00007FFAC41D3740 inClient=0 health=936
+[snap] ctrl: vtable=0x00007FFAB6171680 inClient=1 m_hPlayerPawn@0x92C = 0x01E2812B (idx=299)
+[snap] entitySystem @ 0x00007FFAB6C7FBB8 = 0x000003A755460000 highestEntityIndex=216
+[snap] entity resolution: 1/16 of indices 1..16 valid
+[snap] ctrl->pawn handle resolve: 0x01E2812B -> 0x000003A7E6A0B800
+[snap] ----------------------------------------
+[apply] tick pawn=0x000003A7E6A0B800
+[apply] active 0x000003A827508000
+[pw] weapon 0x000003A827508000 def=525
+[armory-apply] in-game live weapon def=525 team=CT paintKit=420 (equipped in game 922FEB06198C79C1)
+[hud-find] START weapon=0x000003A827508000 pawn=0x000003A7E6A0B800
+[hud-find] armsHandle=0xDB8C43E1
+[hud-find] arms=0x000003A80B44B000
+[hud-find] armsNode=0x000003A829EDA080
+[hud-find] firstChild=0x000003A82A81E480
+[hud-find] child[0]=0x000003A82A81E480 owner=0x000003A82B826000 handle=0x12A00B6 resolved=0x000003A828284000
+[hud-find] child[2]=0x000003A827EA9C80 owner=0x000003A7E2B1D400 handle=0x1EA80B5 resolved=0x000003A80B3CE000
+[hud-find] child[4]=0x000003A829562C80 owner=0x000003A7E2B1C000 handle=0x10581FE resolved=0x000003A827508000 **MATCH**
+[hud-find] SUCCESS hudWeapon=0x000003A7E2B1C000 after 5 nodes
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000003A7E6A0B800
+[apply] active 0x000003A827508000
+[pw] weapon 0x000003A827508000 def=525
+[armory-apply] in-game live weapon def=525 team=CT paintKit=420 (equipped in game 922FEB06198C79C1)
+[hud-find] START weapon=0x000003A827508000 pawn=0x000003A7E6A0B800
+[hud-find] armsHandle=0xDB8C43E1
+[hud-find] arms=0x000003A80B44B000
+[hud-find] armsNode=0x000003A829EDA080
+[hud-find] firstChild=0x000003A82A81E480
+[hud-find] child[0]=0x000003A82A81E480 owner=0x000003A82B826000 handle=0x12A00B6 resolved=0x000003A828284000
+[hud-find] child[2]=0x000003A827EA9C80 owner=0x000003A7E2B1D400 handle=0x1EA80B5 resolved=0x000003A80B3CE000
+[hud-find] child[4]=0x000003A829562C80 owner=0x000003A7E2B1C000 handle=0x10581FE resolved=0x000003A827508000 **MATCH**
+[hud-find] SUCCESS hudWeapon=0x000003A7E2B1C000 after 5 nodes
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000003A7E6A0B800
+[apply] active 0x000003A827508000
+[pw] weapon 0x000003A827508000 def=525
+[armory-apply] in-game live weapon def=525 team=CT paintKit=420 (equipped in game 922FEB06198C79C1)
+[hud-find] START weapon=0x000003A827508000 pawn=0x000003A7E6A0B800
+[hud-find] armsHandle=0xDB8C43E1
+[hud-find] arms=0x000003A80B44B000
+[hud-find] armsNode=0x000003A829EDA080
+[hud-find] firstChild=0x000003A82A81E480
+[hud-find] child[0]=0x000003A82A81E480 owner=0x000003A82B826000 handle=0x12A00B6 resolved=0x000003A828284000
+[hud-find] child[2]=0x000003A827EA9C80 owner=0x000003A7E2B1D400 handle=0x1EA80B5 resolved=0x000003A80B3CE000
+[hud-find] child[4]=0x000003A829562C80 owner=0x000003A7E2B1C000 handle=0x10581FE resolved=0x000003A827508000 **MATCH**
+[hud-find] SUCCESS hudWeapon=0x000003A7E2B1C000 after 5 nodes
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000003A7E6A0B800
+[apply] active 0x000003A827508000
+[pw] weapon 0x000003A827508000 def=525
+[armory-apply] in-game live weapon def=525 team=CT paintKit=420 (equipped in game 922FEB06198C79C1)
+[hud-find] START weapon=0x000003A827508000 pawn=0x000003A7E6A0B800
+[hud-find] armsHandle=0xDB8C43E1
+[hud-find] arms=0x000003A80B44B000
+[hud-find] armsNode=0x000003A829EDA080
+[hud-find] firstChild=0x000003A82A81E480
+[hud-find] child[0]=0x000003A82A81E480 owner=0x000003A82B826000 handle=0x12A00B6 resolved=0x000003A828284000
+[hud-find] child[2]=0x000003A827EA9C80 owner=0x000003A7E2B1D400 handle=0x1EA80B5 resolved=0x000003A80B3CE000
+[hud-find] child[4]=0x000003A829562C80 owner=0x000003A7E2B1C000 handle=0x10581FE resolved=0x000003A827508000 **MATCH**
+[hud-find] SUCCESS hudWeapon=0x000003A7E2B1C000 after 5 nodes
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000003A7E6A0B800
+[apply] active 0x000003A827508000
+[pw] weapon 0x000003A827508000 def=525
+[armory-apply] in-game live weapon def=525 team=CT paintKit=420 (equipped in game 922FEB06198C79C1)
+[hud-find] START weapon=0x000003A827508000 pawn=0x000003A7E6A0B800
+[hud-find] armsHandle=0xDB8C43E1
+[hud-find] arms=0x000003A80B44B000
+[hud-find] armsNode=0x000003A829EDA080
+[hud-find] firstChild=0x000003A82A81E480
+[hud-find] child[0]=0x000003A82A81E480 owner=0x000003A82B826000 handle=0x12A00B6 resolved=0x000003A828284000
+[hud-find] child[2]=0x000003A827EA9C80 owner=0x000003A7E2B1D400 handle=0x1EA80B5 resolved=0x000003A80B3CE000
+[hud-find] child[4]=0x000003A829562C80 owner=0x000003A7E2B1C000 handle=0x10581FE resolved=0x000003A827508000 **MATCH**
+[hud-find] SUCCESS hudWeapon=0x000003A7E2B1C000 after 5 nodes
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000003A7E6A0B800
+[apply] active 0x000003A827508000
+[pw] weapon 0x000003A827508000 def=525
+[armory-apply] in-game live weapon def=525 team=CT paintKit=420 (equipped in game 922FEB06198C79C1)
+[hud-find] START weapon=0x000003A827508000 pawn=0x000003A7E6A0B800
+[hud-find] armsHandle=0xDB8C43E1
+[hud-find] arms=0x000003A80B44B000
+[hud-find] armsNode=0x000003A829EDA080
+[hud-find] firstChild=0x000003A82A81E480
+[hud-find] child[0]=0x000003A82A81E480 owner=0x000003A82B826000 handle=0x12A00B6 resolved=0x000003A828284000
+[hud-find] child[2]=0x000003A827EA9C80 owner=0x000003A7E2B1D400 handle=0x1EA80B5 resolved=0x000003A80B3CE000
+[hud-find] child[4]=0x000003A829562C80 owner=0x000003A7E2B1C000 handle=0x10581FE resolved=0x000003A827508000 **MATCH**
+[hud-find] SUCCESS hudWeapon=0x000003A7E2B1C000 after 5 nodes
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000003A7E6A0B800
+[apply] active 0x000003A827508000
+[pw] weapon 0x000003A827508000 def=525
+[armory-apply] in-game live weapon def=525 team=CT paintKit=420 (equipped in game 922FEB06198C79C1)
+[hud-find] START weapon=0x000003A827508000 pawn=0x000003A7E6A0B800
+[hud-find] armsHandle=0xDB8C43E1
+[hud-find] arms=0x000003A80B44B000
+[hud-find] armsNode=0x000003A829EDA080
+[hud-find] firstChild=0x000003A82A81E480
+[hud-find] child[0]=0x000003A82A81E480 owner=0x000003A82B826000 handle=0x12A00B6 resolved=0x000003A828284000
+[hud-find] child[2]=0x000003A827EA9C80 owner=0x000003A7E2B1D400 handle=0x1EA80B5 resolved=0x000003A80B3CE000
+[hud-find] child[4]=0x000003A829562C80 owner=0x000003A7E2B1C000 handle=0x10581FE resolved=0x000003A827508000 **MATCH**
+[hud-find] SUCCESS hudWeapon=0x000003A7E2B1C000 after 5 nodes
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000003A7E6A0B800
+[apply] active 0x000003A827508000
+[pw] weapon 0x000003A827508000 def=525
+[armory-apply] in-game live weapon def=525 team=CT paintKit=420 (equipped in game 922FEB06198C79C1)
+[hud-find] START weapon=0x000003A827508000 pawn=0x000003A7E6A0B800
+[hud-find] armsHandle=0xDB8C43E1
+[hud-find] arms=0x000003A80B44B000
+[hud-find] armsNode=0x000003A829EDA080
+[hud-find] firstChild=0x000003A82A81E480
+[hud-find] child[0]=0x000003A82A81E480 owner=0x000003A82B826000 handle=0x12A00B6 resolved=0x000003A828284000
+[hud-find] child[2]=0x000003A827EA9C80 owner=0x000003A7E2B1D400 handle=0x1EA80B5 resolved=0x000003A80B3CE000
+[hud-find] child[4]=0x000003A829562C80 owner=0x000003A7E2B1C000 handle=0x10581FE resolved=0x000003A827508000 **MATCH**
+[hud-find] SUCCESS hudWeapon=0x000003A7E2B1C000 after 5 nodes
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000003A7E6A0B800
+[apply] active 0x000003A827508000
+[pw] weapon 0x000003A827508000 def=525
+[armory-apply] in-game live weapon def=525 team=CT paintKit=420 (equipped in game 922FEB06198C79C1)
+[hud-find] START weapon=0x000003A827508000 pawn=0x000003A7E6A0B800
+[hud-find] armsHandle=0xDB8C43E1
+[hud-find] arms=0x000003A80B44B000
+[hud-find] armsNode=0x000003A829EDA080
+[hud-find] firstChild=0x000003A82A81E480
+[hud-find] child[0]=0x000003A82A81E480 owner=0x000003A82B826000 handle=0x12A00B6 resolved=0x000003A828284000
+[hud-find] child[2]=0x000003A827EA9C80 owner=0x000003A7E2B1D400 handle=0x1EA80B5 resolved=0x000003A80B3CE000
+[hud-find] child[4]=0x000003A829562C80 owner=0x000003A7E2B1C000 handle=0x10581FE resolved=0x000003A827508000 **MATCH**
+[hud-find] SUCCESS hudWeapon=0x000003A7E2B1C000 after 5 nodes
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000003A7E6A0B800
+[apply] active 0x000003A827508000
+[pw] weapon 0x000003A827508000 def=525
+[armory-apply] in-game live weapon def=525 team=CT paintKit=420 (equipped in game 922FEB06198C79C1)
+[hud-find] START weapon=0x000003A827508000 pawn=0x000003A7E6A0B800
+[hud-find] armsHandle=0xDB8C43E1
+[hud-find] arms=0x000003A80B44B000
+[hud-find] armsNode=0x000003A829EDA080
+[hud-find] firstChild=0x000003A82A81E480
+[hud-find] child[0]=0x000003A82A81E480 owner=0x000003A82B826000 handle=0x12A00B6 resolved=0x000003A828284000
+[hud-find] child[2]=0x000003A827EA9C80 owner=0x000003A7E2B1D400 handle=0x1EA80B5 resolved=0x000003A80B3CE000
+[hud-find] child[4]=0x000003A829562C80 owner=0x000003A7E2B1C000 handle=0x10581FE resolved=0x000003A827508000 **MATCH**
+[hud-find] SUCCESS hudWeapon=0x000003A7E2B1C000 after 5 nodes
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000003A7E6A0B800
+[apply] active 0x000003A827508000
+[pw] weapon 0x000003A827508000 def=525
+[armory-apply] in-game live weapon def=525 team=CT paintKit=420 (equipped in game 922FEB06198C79C1)
+[hud-find] START weapon=0x000003A827508000 pawn=0x000003A7E6A0B800
+[hud-find] armsHandle=0xDB8C43E1
+[hud-find] arms=0x000003A80B44B000
+[hud-find] armsNode=0x000003A829EDA080
+[hud-find] firstChild=0x000003A82A81E480
+[hud-find] child[0]=0x000003A82A81E480 owner=0x000003A82B826000 handle=0x12A00B6 resolved=0x000003A828284000
+[hud-find] child[2]=0x000003A827EA9C80 owner=0x000003A7E2B1D400 handle=0x1EA80B5 resolved=0x000003A80B3CE000
+[hud-find] child[4]=0x000003A829562C80 owner=0x000003A7E2B1C000 handle=0x10581FE resolved=0x000003A827508000 **MATCH**
+[hud-find] SUCCESS hudWeapon=0x000003A7E2B1C000 after 5 nodes
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000003A7E6A0B800
+[apply] active 0x000003A827508000
+[pw] weapon 0x000003A827508000 def=525
+[armory-apply] in-game live weapon def=525 team=CT paintKit=420 (equipped in game 922FEB06198C79C1)
+[hud-find] START weapon=0x000003A827508000 pawn=0x000003A7E6A0B800
+[hud-find] armsHandle=0xDB8C43E1
+[hud-find] arms=0x000003A80B44B000
+[hud-find] armsNode=0x000003A829EDA080
+[hud-find] firstChild=0x000003A82A81E480
+[hud-find] child[0]=0x000003A82A81E480 owner=0x000003A82B826000 handle=0x12A00B6 resolved=0x000003A828284000
+[hud-find] child[2]=0x000003A827EA9C80 owner=0x000003A7E2B1D400 handle=0x1EA80B5 resolved=0x000003A80B3CE000
+[hud-find] child[4]=0x000003A829562C80 owner=0x000003A7E2B1C000 handle=0x10581FE resolved=0x000003A827508000 **MATCH**
+[hud-find] SUCCESS hudWeapon=0x000003A7E2B1C000 after 5 nodes
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000003A7E6A0B800
+[apply] active 0x000003A827508000
+[pw] weapon 0x000003A827508000 def=525
+[armory-apply] in-game live weapon def=525 team=CT paintKit=420 (equipped in game 922FEB06198C79C1)
+[hud-find] START weapon=0x000003A827508000 pawn=0x000003A7E6A0B800
+[hud-find] armsHandle=0xDB8C43E1
+[hud-find] arms=0x000003A80B44B000
+[hud-find] armsNode=0x000003A829EDA080
+[hud-find] firstChild=0x000003A82A81E480
+[hud-find] child[0]=0x000003A82A81E480 owner=0x000003A82B826000 handle=0x12A00B6 resolved=0x000003A828284000
+[hud-find] child[2]=0x000003A827EA9C80 owner=0x000003A7E2B1D400 handle=0x1EA80B5 resolved=0x000003A80B3CE000
+[hud-find] child[4]=0x000003A829562C80 owner=0x000003A7E2B1C000 handle=0x10581FE resolved=0x000003A827508000 **MATCH**
+[hud-find] SUCCESS hudWeapon=0x000003A7E2B1C000 after 5 nodes
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000003A7E6A0B800
+[apply] active 0x000003A827508000
+[pw] weapon 0x000003A827508000 def=525
+[armory-apply] in-game live weapon def=525 team=CT paintKit=420 (equipped in game 922FEB06198C79C1)
+[hud-find] START weapon=0x000003A827508000 pawn=0x000003A7E6A0B800
+[hud-find] armsHandle=0xDB8C43E1
+[hud-find] arms=0x000003A80B44B000
+[hud-find] armsNode=0x000003A829EDA080
+[hud-find] firstChild=0x000003A82A81E480
+[hud-find] child[0]=0x000003A82A81E480 owner=0x000003A82B826000 handle=0x12A00B6 resolved=0x000003A828284000
+[hud-find] child[2]=0x000003A827EA9C80 owner=0x000003A7E2B1D400 handle=0x1EA80B5 resolved=0x000003A80B3CE000
+[hud-find] child[4]=0x000003A829562C80 owner=0x000003A7E2B1C000 handle=0x10581FE resolved=0x000003A827508000 **MATCH**
+[hud-find] SUCCESS hudWeapon=0x000003A7E2B1C000 after 5 nodes
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000003A7E6A0B800
+[apply] active 0x000003A827508000
+[pw] weapon 0x000003A827508000 def=525
+[armory-apply] in-game live weapon def=525 team=CT paintKit=420 (equipped in game 922FEB06198C79C1)
+[hud-find] START weapon=0x000003A827508000 pawn=0x000003A7E6A0B800
+[hud-find] armsHandle=0xDB8C43E1
+[hud-find] arms=0x000003A80B44B000
+[hud-find] armsNode=0x000003A829EDA080
+[hud-find] firstChild=0x000003A82A81E480
+[hud-find] child[0]=0x000003A82A81E480 owner=0x000003A82B826000 handle=0x12A00B6 resolved=0x000003A828284000
+[hud-find] child[2]=0x000003A827EA9C80 owner=0x000003A7E2B1D400 handle=0x1EA80B5 resolved=0x000003A80B3CE000
+[hud-find] child[4]=0x000003A829562C80 owner=0x000003A7E2B1C000 handle=0x10581FE resolved=0x000003A827508000 **MATCH**
+[hud-find] SUCCESS hudWeapon=0x000003A7E2B1C000 after 5 nodes
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000003A7E6A0B800
+[apply] active 0x000003A827508000
+[pw] weapon 0x000003A827508000 def=525
+[armory-apply] in-game live weapon def=525 team=CT paintKit=420 (equipped in game 922FEB06198C79C1)
+[hud-find] START weapon=0x000003A827508000 pawn=0x000003A7E6A0B800
+[hud-find] armsHandle=0xDB8C43E1
+[hud-find] arms=0x000003A80B44B000
+[hud-find] armsNode=0x000003A829EDA080
+[hud-find] firstChild=0x000003A82A81E480
+[hud-find] child[0]=0x000003A82A81E480 owner=0x000003A82B826000 handle=0x12A00B6 resolved=0x000003A828284000
+[hud-find] child[2]=0x000003A827EA9C80 owner=0x000003A7E2B1D400 handle=0x1EA80B5 resolved=0x000003A80B3CE000
+[hud-find] child[4]=0x000003A829562C80 owner=0x000003A7E2B1C000 handle=0x10581FE resolved=0x000003A827508000 **MATCH**
+[hud-find] SUCCESS hudWeapon=0x000003A7E2B1C000 after 5 nodes
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000003A7E6A0B800
+[apply] active 0x000003A827508000
+[pw] weapon 0x000003A827508000 def=525
+[armory-apply] in-game live weapon def=525 team=CT paintKit=420 (equipped in game 922FEB06198C79C1)
+[hud-find] START weapon=0x000003A827508000 pawn=0x000003A7E6A0B800
+[hud-find] armsHandle=0xDB8C43E1
+[hud-find] arms=0x000003A80B44B000
+[hud-find] armsNode=0x000003A829EDA080
+[hud-find] firstChild=0x000003A82A81E480
+[hud-find] child[0]=0x000003A82A81E480 owner=0x000003A82B826000 handle=0x12A00B6 resolved=0x000003A828284000
+[hud-find] child[2]=0x000003A827EA9C80 owner=0x000003A7E2B1D400 handle=0x1EA80B5 resolved=0x000003A80B3CE000
+[hud-find] child[4]=0x000003A829562C80 owner=0x000003A7E2B1C000 handle=0x10581FE resolved=0x000003A827508000 **MATCH**
+[hud-find] SUCCESS hudWeapon=0x000003A7E2B1C000 after 5 nodes
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000003A7E6A0B800
+[apply] active 0x000003A827508000
+[pw] weapon 0x000003A827508000 def=525
+[armory-apply] in-game live weapon def=525 team=CT paintKit=420 (equipped in game 922FEB06198C79C1)
+[hud-find] START weapon=0x000003A827508000 pawn=0x000003A7E6A0B800
+[hud-find] armsHandle=0xDB8C43E1
+[hud-find] arms=0x000003A80B44B000
+[hud-find] armsNode=0x000003A829EDA080
+[hud-find] firstChild=0x000003A82A81E480
+[hud-find] child[0]=0x000003A82A81E480 owner=0x000003A82B826000 handle=0x12A00B6 resolved=0x000003A828284000
+[hud-find] child[2]=0x000003A827EA9C80 owner=0x000003A7E2B1D400 handle=0x1EA80B5 resolved=0x000003A80B3CE000
+[hud-find] child[4]=0x000003A829562C80 owner=0x000003A7E2B1C000 handle=0x10581FE resolved=0x000003A827508000 **MATCH**
+[hud-find] SUCCESS hudWeapon=0x000003A7E2B1C000 after 5 nodes
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000003A7E6A0B800
+[apply] active 0x000003A827508000
+[pw] weapon 0x000003A827508000 def=525
+[armory-apply] in-game live weapon def=525 team=CT paintKit=420 (equipped in game 922FEB06198C79C1)
+[hud-find] START weapon=0x000003A827508000 pawn=0x000003A7E6A0B800
+[hud-find] armsHandle=0xDB8C43E1
+[hud-find] arms=0x000003A80B44B000
+[hud-find] armsNode=0x000003A829EDA080
+[hud-find] firstChild=0x000003A82A81E480
+[hud-find] child[0]=0x000003A82A81E480 owner=0x000003A82B826000 handle=0x12A00B6 resolved=0x000003A828284000
+[hud-find] child[2]=0x000003A827EA9C80 owner=0x000003A7E2B1D400 handle=0x1EA80B5 resolved=0x000003A80B3CE000
+[hud-find] child[4]=0x000003A829562C80 owner=0x000003A7E2B1C000 handle=0x10581FE resolved=0x000003A827508000 **MATCH**
+[hud-find] SUCCESS hudWeapon=0x000003A7E2B1C000 after 5 nodes
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000003A7E6A0B800
+[apply] active 0x000003A828284000
+[pw] weapon 0x000003A828284000 def=60
+[armory-apply] in-game live weapon def=60 team=CT paintKit=1017 (equipped in game 96221A0E61314132)
+[hud-find] START weapon=0x000003A828284000 pawn=0x000003A7E6A0B800
+[hud-find] armsHandle=0xDB8C43E1
+[hud-find] arms=0x000003A80B44B000
+[hud-find] armsNode=0x000003A829EDA080
+[hud-find] firstChild=0x000003A82A81E480
+[hud-find] child[0]=0x000003A82A81E480 owner=0x000003A82B826000 handle=0x12A00B6 resolved=0x000003A828284000 **MATCH**
+[hud-find] SUCCESS hudWeapon=0x000003A82B826000 after 1 nodes
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+
+=== SNAPSHOT ===
+[snap] fsnCount=194391 lastStage=0 stage5Count=14011
+[snap] stage histogram:
+[snap]   stage  0: 33472 frames
+[snap]   stage  1: 14409 frames
+[snap]   stage  2: 14409 frames
+[snap]   stage  3: 14397 frames
+[snap]   stage  4: 3 frames
+[snap]   stage  5: 14011 frames
+[snap]   stage  6: 14011 frames
+[snap]   stage  7: 14011 frames
+[snap]   stage  8: 14011 frames
+[snap]   stage 10: 14001 frames
+[snap]   stage 11: 17298 frames
+[snap]   stage 12: 30358 frames
+[snap] dwLocalPlayerController @ 0x00007FFAB6AA2548 -> 0x000003A7E11D4200 
+[snap] dwLocalPlayerPawn       @ 0x00007FFAB6C991E0 -> 0x000003A7722A3000 
+[snap] pawn: vtable=0x00007FFAC41D3740 inClient=0 health=936
+[snap] ctrl: vtable=0x00007FFAB6171680 inClient=1 m_hPlayerPawn@0x92C = 0x01E2812B (idx=299)
+[snap] entitySystem @ 0x00007FFAB6C7FBB8 = 0x000003A755460000 highestEntityIndex=216
+[snap] entity resolution: 1/16 of indices 1..16 valid
+[snap] ctrl->pawn handle resolve: 0x01E2812B -> 0x000003A7E6A0B800
+[snap] ----------------------------------------
+[apply] tick pawn=0x000003A7E6A0B800
+[apply] active 0x000003A828284000
+[pw] weapon 0x000003A828284000 def=60
+[armory-apply] in-game live weapon def=60 team=CT paintKit=1017 (equipped in game 96221A0E61314132)
+[hud-find] START weapon=0x000003A828284000 pawn=0x000003A7E6A0B800
+[hud-find] armsHandle=0xDB8C43E1
+[hud-find] arms=0x000003A80B44B000
+[hud-find] armsNode=0x000003A829EDA080
+[hud-find] firstChild=0x000003A82A81E480
+[hud-find] child[0]=0x000003A82A81E480 owner=0x000003A82B826000 handle=0x12A00B6 resolved=0x000003A828284000 **MATCH**
+[hud-find] SUCCESS hudWeapon=0x000003A82B826000 after 1 nodes
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000003A7E6A0B800
+[apply] active 0x000003A828284000
+[pw] weapon 0x000003A828284000 def=60
+[armory-apply] in-game live weapon def=60 team=CT paintKit=1017 (equipped in game 96221A0E61314132)
+[hud-find] START weapon=0x000003A828284000 pawn=0x000003A7E6A0B800
+[hud-find] armsHandle=0xDB8C43E1
+[hud-find] arms=0x000003A80B44B000
+[hud-find] armsNode=0x000003A829EDA080
+[hud-find] firstChild=0x000003A82A81E480
+[hud-find] child[0]=0x000003A82A81E480 owner=0x000003A82B826000 handle=0x12A00B6 resolved=0x000003A828284000 **MATCH**
+[hud-find] SUCCESS hudWeapon=0x000003A82B826000 after 1 nodes
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000003A7E6A0B800
+[apply] active 0x000003A828284000
+[pw] weapon 0x000003A828284000 def=60
+[armory-apply] in-game live weapon def=60 team=CT paintKit=1017 (equipped in game 96221A0E61314132)
+[hud-find] START weapon=0x000003A828284000 pawn=0x000003A7E6A0B800
+[hud-find] armsHandle=0xDB8C43E1
+[hud-find] arms=0x000003A80B44B000
+[hud-find] armsNode=0x000003A829EDA080
+[hud-find] firstChild=0x000003A82A81E480
+[hud-find] child[0]=0x000003A82A81E480 owner=0x000003A82B826000 handle=0x12A00B6 resolved=0x000003A828284000 **MATCH**
+[hud-find] SUCCESS hudWeapon=0x000003A82B826000 after 1 nodes
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000003A7E6A0B800
+[apply] active 0x000003A828284000
+[pw] weapon 0x000003A828284000 def=60
+[armory-apply] in-game live weapon def=60 team=CT paintKit=1017 (equipped in game 96221A0E61314132)
+[hud-find] START weapon=0x000003A828284000 pawn=0x000003A7E6A0B800
+[hud-find] armsHandle=0xDB8C43E1
+[hud-find] arms=0x000003A80B44B000
+[hud-find] armsNode=0x000003A829EDA080
+[hud-find] firstChild=0x000003A82A81E480
+[hud-find] child[0]=0x000003A82A81E480 owner=0x000003A82B826000 handle=0x12A00B6 resolved=0x000003A828284000 **MATCH**
+[hud-find] SUCCESS hudWeapon=0x000003A82B826000 after 1 nodes
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000003A7E6A0B800
+[apply] active 0x000003A828284000
+[pw] weapon 0x000003A828284000 def=60
+[armory-apply] in-game live weapon def=60 team=CT paintKit=1017 (equipped in game 96221A0E61314132)
+[hud-find] START weapon=0x000003A828284000 pawn=0x000003A7E6A0B800
+[hud-find] armsHandle=0xDB8C43E1
+[hud-find] arms=0x000003A80B44B000
+[hud-find] armsNode=0x000003A829EDA080
+[hud-find] firstChild=0x000003A82A81E480
+[hud-find] child[0]=0x000003A82A81E480 owner=0x000003A82B826000 handle=0x12A00B6 resolved=0x000003A828284000 **MATCH**
+[hud-find] SUCCESS hudWeapon=0x000003A82B826000 after 1 nodes
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000003A7E6A0B800
+[apply] active 0x000003A828284000
+[pw] weapon 0x000003A828284000 def=60
+[armory-apply] in-game live weapon def=60 team=CT paintKit=1017 (equipped in game 96221A0E61314132)
+[hud-find] START weapon=0x000003A828284000 pawn=0x000003A7E6A0B800
+[hud-find] armsHandle=0xDB8C43E1
+[hud-find] arms=0x000003A80B44B000
+[hud-find] armsNode=0x000003A829EDA080
+[hud-find] firstChild=0x000003A82A81E480
+[hud-find] child[0]=0x000003A82A81E480 owner=0x000003A82B826000 handle=0x12A00B6 resolved=0x000003A828284000 **MATCH**
+[hud-find] SUCCESS hudWeapon=0x000003A82B826000 after 1 nodes
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000003A7E6A0B800
+[apply] active 0x000003A827508000
+[pw] weapon 0x000003A827508000 def=525
+[armory-apply] in-game live weapon def=525 team=CT paintKit=420 (equipped in game 922FEB06198C79C1)
+[hud-find] START weapon=0x000003A827508000 pawn=0x000003A7E6A0B800
+[hud-find] armsHandle=0xDB8C43E1
+[hud-find] arms=0x000003A80B44B000
+[hud-find] armsNode=0x000003A829EDA080
+[hud-find] firstChild=0x000003A82A81E480
+[hud-find] child[0]=0x000003A82A81E480 owner=0x000003A82B826000 handle=0x12A00B6 resolved=0x000003A828284000
+[hud-find] child[2]=0x000003A827EA9C80 owner=0x000003A7E2B1D400 handle=0x1EA80B5 resolved=0x000003A80B3CE000
+[hud-find] child[4]=0x000003A829562C80 owner=0x000003A7E2B1C000 handle=0x10581FE resolved=0x000003A827508000 **MATCH**
+[hud-find] SUCCESS hudWeapon=0x000003A7E2B1C000 after 5 nodes
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000003A7E6A0B800
+[apply] active 0x000003A827508000
+[pw] weapon 0x000003A827508000 def=525
+[armory-apply] in-game live weapon def=525 team=CT paintKit=420 (equipped in game 922FEB06198C79C1)
+[hud-find] START weapon=0x000003A827508000 pawn=0x000003A7E6A0B800
+[hud-find] armsHandle=0xDB8C43E1
+[hud-find] arms=0x000003A80B44B000
+[hud-find] armsNode=0x000003A829EDA080
+[hud-find] firstChild=0x000003A82A81E480
+[hud-find] child[0]=0x000003A82A81E480 owner=0x000003A82B826000 handle=0x12A00B6 resolved=0x000003A828284000
+[hud-find] child[2]=0x000003A827EA9C80 owner=0x000003A7E2B1D400 handle=0x1EA80B5 resolved=0x000003A80B3CE000
+[hud-find] child[4]=0x000003A829562C80 owner=0x000003A7E2B1C000 handle=0x10581FE resolved=0x000003A827508000 **MATCH**
+[hud-find] SUCCESS hudWeapon=0x000003A7E2B1C000 after 5 nodes
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000003A7E6A0B800
+[apply] active 0x000003A827508000
+[pw] weapon 0x000003A827508000 def=525
+[armory-apply] in-game live weapon def=525 team=CT paintKit=420 (equipped in game 922FEB06198C79C1)
+[hud-find] START weapon=0x000003A827508000 pawn=0x000003A7E6A0B800
+[hud-find] armsHandle=0xDB8C43E1
+[hud-find] arms=0x000003A80B44B000
+[hud-find] armsNode=0x000003A829EDA080
+[hud-find] firstChild=0x000003A82A81E480
+[hud-find] child[0]=0x000003A82A81E480 owner=0x000003A82B826000 handle=0x12A00B6 resolved=0x000003A828284000
+[hud-find] child[2]=0x000003A827EA9C80 owner=0x000003A7E2B1D400 handle=0x1EA80B5 resolved=0x000003A80B3CE000
+[hud-find] child[4]=0x000003A829562C80 owner=0x000003A7E2B1C000 handle=0x10581FE resolved=0x000003A827508000 **MATCH**
+[hud-find] SUCCESS hudWeapon=0x000003A7E2B1C000 after 5 nodes
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000003A7E6A0B800
+[apply] active 0x000003A827508000
+[pw] weapon 0x000003A827508000 def=525
+[armory-apply] in-game live weapon def=525 team=CT paintKit=420 (equipped in game 922FEB06198C79C1)
+[hud-find] START weapon=0x000003A827508000 pawn=0x000003A7E6A0B800
+[hud-find] armsHandle=0xDB8C43E1
+[hud-find] arms=0x000003A80B44B000
+[hud-find] armsNode=0x000003A829EDA080
+[hud-find] firstChild=0x000003A82A81E480
+[hud-find] child[0]=0x000003A82A81E480 owner=0x000003A82B826000 handle=0x12A00B6 resolved=0x000003A828284000
+[hud-find] child[2]=0x000003A827EA9C80 owner=0x000003A7E2B1D400 handle=0x1EA80B5 resolved=0x000003A80B3CE000
+[hud-find] child[4]=0x000003A829562C80 owner=0x000003A7E2B1C000 handle=0x10581FE resolved=0x000003A827508000 **MATCH**
+[hud-find] SUCCESS hudWeapon=0x000003A7E2B1C000 after 5 nodes
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000003A7E6A0B800
+[apply] active 0x000003A828284000
+[pw] weapon 0x000003A828284000 def=60
+[armory-apply] in-game live weapon def=60 team=CT paintKit=1017 (equipped in game 96221A0E61314132)
+[hud-find] START weapon=0x000003A828284000 pawn=0x000003A7E6A0B800
+[hud-find] armsHandle=0xDB8C43E1
+[hud-find] arms=0x000003A80B44B000
+[hud-find] armsNode=0x000003A829EDA080
+[hud-find] firstChild=0x000003A82A81E480
+[hud-find] child[0]=0x000003A82A81E480 owner=0x000003A82B826000 handle=0x12A00B6 resolved=0x000003A828284000 **MATCH**
+[hud-find] SUCCESS hudWeapon=0x000003A82B826000 after 1 nodes
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000003A7E6A0B800
+[apply] active 0x000003A828284000
+[pw] weapon 0x000003A828284000 def=60
+[armory-apply] in-game live weapon def=60 team=CT paintKit=1017 (equipped in game 96221A0E61314132)
+[hud-find] START weapon=0x000003A828284000 pawn=0x000003A7E6A0B800
+[hud-find] armsHandle=0xDB8C43E1
+[hud-find] arms=0x000003A80B44B000
+[hud-find] armsNode=0x000003A829EDA080
+[hud-find] firstChild=0x000003A82A81E480
+[hud-find] child[0]=0x000003A82A81E480 owner=0x000003A82B826000 handle=0x12A00B6 resolved=0x000003A828284000 **MATCH**
+[hud-find] SUCCESS hudWeapon=0x000003A82B826000 after 1 nodes
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000003A7E6A0B800
+[apply] active 0x000003A828284000
+[pw] weapon 0x000003A828284000 def=60
+[armory-apply] in-game live weapon def=60 team=CT paintKit=1017 (equipped in game 96221A0E61314132)
+[hud-find] START weapon=0x000003A828284000 pawn=0x000003A7E6A0B800
+[hud-find] armsHandle=0xDB8C43E1
+[hud-find] arms=0x000003A80B44B000
+[hud-find] armsNode=0x000003A829EDA080
+[hud-find] firstChild=0x000003A82A81E480
+[hud-find] child[0]=0x000003A82A81E480 owner=0x000003A82B826000 handle=0x12A00B6 resolved=0x000003A828284000 **MATCH**
+[hud-find] SUCCESS hudWeapon=0x000003A82B826000 after 1 nodes
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000003A7E6A0B800
+[apply] active 0x000003A828284000
+[pw] weapon 0x000003A828284000 def=60
+[armory-apply] in-game live weapon def=60 team=CT paintKit=1017 (equipped in game 96221A0E61314132)
+[hud-find] START weapon=0x000003A828284000 pawn=0x000003A7E6A0B800
+[hud-find] armsHandle=0xDB8C43E1
+[hud-find] arms=0x000003A80B44B000
+[hud-find] armsNode=0x000003A829EDA080
+[hud-find] firstChild=0x000003A82A81E480
+[hud-find] child[0]=0x000003A82A81E480 owner=0x000003A82B826000 handle=0x12A00B6 resolved=0x000003A828284000 **MATCH**
+[hud-find] SUCCESS hudWeapon=0x000003A82B826000 after 1 nodes
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000003A7E6A0B800
+[apply] active 0x000003A828284000
+[pw] weapon 0x000003A828284000 def=60
+[armory-apply] in-game live weapon def=60 team=CT paintKit=1017 (equipped in game 96221A0E61314132)
+[hud-find] START weapon=0x000003A828284000 pawn=0x000003A7E6A0B800
+[hud-find] armsHandle=0xDB8C43E1
+[hud-find] arms=0x000003A80B44B000
+[hud-find] armsNode=0x000003A829EDA080
+[hud-find] firstChild=0x000003A82A81E480
+[hud-find] child[0]=0x000003A82A81E480 owner=0x000003A82B826000 handle=0x12A00B6 resolved=0x000003A828284000 **MATCH**
+[hud-find] SUCCESS hudWeapon=0x000003A82B826000 after 1 nodes
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000003A7E6A0B800
+[apply] active 0x000003A828284000
+[pw] weapon 0x000003A828284000 def=60
+[armory-apply] in-game live weapon def=60 team=CT paintKit=1017 (equipped in game 96221A0E61314132)
+[hud-find] START weapon=0x000003A828284000 pawn=0x000003A7E6A0B800
+[hud-find] armsHandle=0xDB8C43E1
+[hud-find] arms=0x000003A80B44B000
+[hud-find] armsNode=0x000003A829EDA080
+[hud-find] firstChild=0x000003A82A81E480
+[hud-find] child[0]=0x000003A82A81E480 owner=0x000003A82B826000 handle=0x12A00B6 resolved=0x000003A828284000 **MATCH**
+[hud-find] SUCCESS hudWeapon=0x000003A82B826000 after 1 nodes
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000003A7E6A0B800
+[apply] active 0x000003A828284000
+[pw] weapon 0x000003A828284000 def=60
+[armory-apply] in-game live weapon def=60 team=CT paintKit=1017 (equipped in game 96221A0E61314132)
+[hud-find] START weapon=0x000003A828284000 pawn=0x000003A7E6A0B800
+[hud-find] armsHandle=0xDB8C43E1
+[hud-find] arms=0x000003A80B44B000
+[hud-find] armsNode=0x000003A829EDA080
+[hud-find] firstChild=0x000003A82A81E480
+[hud-find] child[0]=0x000003A82A81E480 owner=0x000003A82B826000 handle=0x12A00B6 resolved=0x000003A828284000 **MATCH**
+[hud-find] SUCCESS hudWeapon=0x000003A82B826000 after 1 nodes
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000003A7E6A0B800
+[apply] active 0x000003A827508000
+[pw] weapon 0x000003A827508000 def=525
+[armory-apply] in-game live weapon def=525 team=CT paintKit=420 (equipped in game 922FEB06198C79C1)
+[hud-find] START weapon=0x000003A827508000 pawn=0x000003A7E6A0B800
+[hud-find] armsHandle=0xDB8C43E1
+[hud-find] arms=0x000003A80B44B000
+[hud-find] armsNode=0x000003A829EDA080
+[hud-find] firstChild=0x000003A82A81E480
+[hud-find] child[0]=0x000003A82A81E480 owner=0x000003A82B826000 handle=0x12A00B6 resolved=0x000003A828284000
+[hud-find] child[2]=0x000003A827EA9C80 owner=0x000003A7E2B1D400 handle=0x1EA80B5 resolved=0x000003A80B3CE000
+[hud-find] child[4]=0x000003A829562C80 owner=0x000003A7E2B1C000 handle=0x10581FE resolved=0x000003A827508000 **MATCH**
+[hud-find] SUCCESS hudWeapon=0x000003A7E2B1C000 after 5 nodes
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000003A7E6A0B800
+[apply] active 0x000003A827508000
+[pw] weapon 0x000003A827508000 def=525
+[armory-apply] in-game live weapon def=525 team=CT paintKit=420 (equipped in game 922FEB06198C79C1)
+[hud-find] START weapon=0x000003A827508000 pawn=0x000003A7E6A0B800
+[hud-find] armsHandle=0xDB8C43E1
+[hud-find] arms=0x000003A80B44B000
+[hud-find] armsNode=0x000003A829EDA080
+[hud-find] firstChild=0x000003A82A81E480
+[hud-find] child[0]=0x000003A82A81E480 owner=0x000003A82B826000 handle=0x12A00B6 resolved=0x000003A828284000
+[hud-find] child[2]=0x000003A827EA9C80 owner=0x000003A7E2B1D400 handle=0x1EA80B5 resolved=0x000003A80B3CE000
+[hud-find] child[4]=0x000003A829562C80 owner=0x000003A7E2B1C000 handle=0x10581FE resolved=0x000003A827508000 **MATCH**
+[hud-find] SUCCESS hudWeapon=0x000003A7E2B1C000 after 5 nodes
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+
+=== SNAPSHOT ===
+[snap] fsnCount=199826 lastStage=12 stage5Count=14331
+[snap] stage histogram:
+[snap]   stage  0: 34749 frames
+[snap]   stage  1: 14729 frames
+[snap]   stage  2: 14729 frames
+[snap]   stage  3: 14717 frames
+[snap]   stage  4: 3 frames
+[snap]   stage  5: 14331 frames
+[snap]   stage  6: 14331 frames
+[snap]   stage  7: 14331 frames
+[snap]   stage  8: 14331 frames
+[snap]   stage 10: 14321 frames
+[snap]   stage 11: 17618 frames
+[snap]   stage 12: 31636 frames
+[snap] dwLocalPlayerController @ 0x00007FFAB6AA2548 -> 0x000003A7E11D4200 
+[snap] dwLocalPlayerPawn       @ 0x00007FFAB6C991E0 -> 0x000003A7722A3000 
+[snap] pawn: vtable=0x00007FFAC41D3740 inClient=0 health=936
+[snap] ctrl: vtable=0x00007FFAB6171680 inClient=1 m_hPlayerPawn@0x92C = 0x01E2812B (idx=299)
+[snap] entitySystem @ 0x00007FFAB6C7FBB8 = 0x000003A755460000 highestEntityIndex=216
+N1SSAN_STATUS|1|2026-11-08T03:19:36Z|24152|armory-obsidian-3.0|READY|reason=runtime_worker_heartbeat
+[snap] entity resolution: 1/16 of indices 1..16 valid
+[snap] ctrl->pawn handle resolve: 0x01E2812B -> 0x000003A7E6A0B800
+[status-write] begin state=READY path=C:\Users\mirac\AppData\Local\n1ssan\status\cs2-24152.status
+[snap] ----------------------------------------
+[status-write] success state=READY error=0
+[apply] tick pawn=0x000003A7E6A0B800
+[apply] active 0x000003A827508000
+[pw] weapon 0x000003A827508000 def=525
+[armory-apply] in-game live weapon def=525 team=CT paintKit=420 (equipped in game 922FEB06198C79C1)
+[hud-find] START weapon=0x000003A827508000 pawn=0x000003A7E6A0B800
+[hud-find] armsHandle=0xDB8C43E1
+[hud-find] arms=0x000003A80B44B000
+[hud-find] armsNode=0x000003A829EDA080
+[hud-find] firstChild=0x000003A82A81E480
+[hud-find] child[0]=0x000003A82A81E480 owner=0x000003A82B826000 handle=0x12A00B6 resolved=0x000003A828284000
+[hud-find] child[2]=0x000003A827EA9C80 owner=0x000003A7E2B1D400 handle=0x1EA80B5 resolved=0x000003A80B3CE000
+[hud-find] child[4]=0x000003A829562C80 owner=0x000003A7E2B1C000 handle=0x10581FE resolved=0x000003A827508000 **MATCH**
+[hud-find] SUCCESS hudWeapon=0x000003A7E2B1C000 after 5 nodes
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000003A7E6A0B800
+[apply] active 0x000003A827508000
+[pw] weapon 0x000003A827508000 def=525
+[armory-apply] in-game live weapon def=525 team=CT paintKit=420 (equipped in game 922FEB06198C79C1)
+[hud-find] START weapon=0x000003A827508000 pawn=0x000003A7E6A0B800
+[hud-find] armsHandle=0xDB8C43E1
+[hud-find] arms=0x000003A80B44B000
+[hud-find] armsNode=0x000003A829EDA080
+[hud-find] firstChild=0x000003A82A81E480
+[hud-find] child[0]=0x000003A82A81E480 owner=0x000003A82B826000 handle=0x12A00B6 resolved=0x000003A828284000
+[hud-find] child[2]=0x000003A827EA9C80 owner=0x000003A7E2B1D400 handle=0x1EA80B5 resolved=0x000003A80B3CE000
+[hud-find] child[4]=0x000003A829562C80 owner=0x000003A7E2B1C000 handle=0x10581FE resolved=0x000003A827508000 **MATCH**
+[hud-find] SUCCESS hudWeapon=0x000003A7E2B1C000 after 5 nodes
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000003A7E6A0B800
+[apply] active 0x000003A827508000
+[pw] weapon 0x000003A827508000 def=525
+[armory-apply] in-game live weapon def=525 team=CT paintKit=420 (equipped in game 922FEB06198C79C1)
+[hud-find] START weapon=0x000003A827508000 pawn=0x000003A7E6A0B800
+[hud-find] armsHandle=0xDB8C43E1
+[hud-find] arms=0x000003A80B44B000
+[hud-find] armsNode=0x000003A829EDA080
+[hud-find] firstChild=0x000003A82A81E480
+[hud-find] child[0]=0x000003A82A81E480 owner=0x000003A82B826000 handle=0x12A00B6 resolved=0x000003A828284000
+[hud-find] child[2]=0x000003A827EA9C80 owner=0x000003A7E2B1D400 handle=0x1EA80B5 resolved=0x000003A80B3CE000
+[hud-find] child[4]=0x000003A829562C80 owner=0x000003A7E2B1C000 handle=0x10581FE resolved=0x000003A827508000 **MATCH**
+[hud-find] SUCCESS hudWeapon=0x000003A7E2B1C000 after 5 nodes
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000003A7E6A0B800
+[apply] active 0x000003A827508000
+[pw] weapon 0x000003A827508000 def=525
+[armory-apply] in-game live weapon def=525 team=CT paintKit=420 (equipped in game 922FEB06198C79C1)
+[hud-find] START weapon=0x000003A827508000 pawn=0x000003A7E6A0B800
+[hud-find] armsHandle=0xDB8C43E1
+[hud-find] arms=0x000003A80B44B000
+[hud-find] armsNode=0x000003A829EDA080
+[hud-find] firstChild=0x000003A82A81E480
+[hud-find] child[0]=0x000003A82A81E480 owner=0x000003A82B826000 handle=0x12A00B6 resolved=0x000003A828284000
+[hud-find] child[2]=0x000003A827EA9C80 owner=0x000003A7E2B1D400 handle=0x1EA80B5 resolved=0x000003A80B3CE000
+[hud-find] child[4]=0x000003A829562C80 owner=0x000003A7E2B1C000 handle=0x10581FE resolved=0x000003A827508000 **MATCH**
+[hud-find] SUCCESS hudWeapon=0x000003A7E2B1C000 after 5 nodes
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000003A7E6A0B800
+[apply] active 0x000003A827508000
+[pw] weapon 0x000003A827508000 def=525
+[armory-apply] in-game live weapon def=525 team=CT paintKit=420 (equipped in game 922FEB06198C79C1)
+[hud-find] START weapon=0x000003A827508000 pawn=0x000003A7E6A0B800
+[hud-find] armsHandle=0xDB8C43E1
+[hud-find] arms=0x000003A80B44B000
+[hud-find] armsNode=0x000003A829EDA080
+[hud-find] firstChild=0x000003A82A81E480
+[hud-find] child[0]=0x000003A82A81E480 owner=0x000003A82B826000 handle=0x12A00B6 resolved=0x000003A828284000
+[hud-find] child[2]=0x000003A827EA9C80 owner=0x000003A7E2B1D400 handle=0x1EA80B5 resolved=0x000003A80B3CE000
+[hud-find] child[4]=0x000003A829562C80 owner=0x000003A7E2B1C000 handle=0x10581FE resolved=0x000003A827508000 **MATCH**
+[hud-find] SUCCESS hudWeapon=0x000003A7E2B1C000 after 5 nodes
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x000003A7E6A0B800
+[apply] active 0x000003A827508000
+[pw] weapon 0x000003A827508000 def=525
+[armory-apply] in-game live weapon def=525 team=CT paintKit=420 (equipped in game 922FEB06198C79C1)
+[hud-find] START weapon=0x000003A827508000 pawn=0x000003A7E6A0B800
+[hud-find] armsHandle=0xDB8C43E1
+[hud-find] arms=0x000003A80B44B000
+[hud-find] armsNode=0x000003A829EDA080
+[hud-find] firstChild=0x000003A82A81E480
+[hud-find] child[0]=0x000003A82A81E480 owner=0x000003A82B826000 handle=0x12A00B6 resolved=0x000003A828284000
+[hud-find] child[2]=0x000003A827EA9C80 owner=0x000003A7E2B1D400 handle=0x1EA80B5 resolved=0x000003A80B3CE000
+[hud-find] child[4]=0x000003A829562C80 owner=0x000003A7E2B1C000 handle=0x10581FE resolved=0x000003A827508000 **MATCH**
+[hud-find] SUCCESS hudWeapon=0x000003A7E2B1C000 after 5 nodes
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
