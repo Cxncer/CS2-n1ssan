@@ -513,6 +513,9 @@ namespace
         target.wear = item.wear;
         target.statTrak = item.statTrak >= 0;
         target.defIndex = item.definition;
+
+        if (attachments)
+            *attachments = item.attachments;
     }
 
     // Rebuilds both derived indexes from the committed inventory. Caller holds
