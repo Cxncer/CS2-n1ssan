@@ -475,14 +475,23 @@ namespace NativeEquipment
         g_lastTick = now;
 
         std::vector<ArmoryInventory::ManagedItem> items;
-        if (!ArmoryInventory::SnapshotManagedItems(items) || items.empty())
+        if (!ArmoryInventory::SnapshotManagedItems(items))
             return;
 
         if (profileId != g_activeProfileId)
         {
             BeginProfile(profileId, now);
+            if (items.empty())
+            {
+                g_restorePending = false;
+                g_restoreAssignments.clear();
+                g_captureAfter = now + 1500;
+            }
             return;
         }
+
+        if (items.empty())
+            return;
 
         if (g_restorePending)
         {
