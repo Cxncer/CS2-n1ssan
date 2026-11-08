@@ -8,6 +8,7 @@
 #include "memory/access.h"
 #include "memory/scanner.h"
 #include "diagnostics/log.h"
+#include <cstring>
 
 uintptr_t g_entityListGlobal = 0;
 
@@ -79,4 +80,66 @@ uintptr_t GetLocalPawn()
         return pawn;
 
     return 0;
+}
+
+// Read-only diagnostic pass for native world charm entities. The entity-list
+// traversal mirrors the already-used matchdetect chunk layout. Entity identity
+// and designer-name offsets are isolated here and used only for observation;
+// no entity is modified or removed by this pass.
+static bool IsDesignerName(uintptr_t entity, const char* expected)
+{
+    uintptr_t identity = 0;
+    uintptr_t name = 0;
+    if (!SafeReadQword(entity + 0x10, identity) || identity < 0x10000 ||
+        !SafeReadQword(identity + 0x20, name) || name < 0x10000)
+        return false;
+
+    for (size_t i = 0; expected[i] != '\0'; ++i)
+    {
+        uint8_t ch = 0;
+        if (!SafeReadU8(name + i, ch) ||
+            ch != static_cast<uint8_t>(expected[i]))
+            return false;
+    }
+
+    uint8_t terminator = 1;
+    return SafeReadU8(name + std::strlen(expected), terminator) && terminator == 0;
+}
+
+void LogWorldKeychainEntities()
+{
+    if (!g_entityListGlobal)
+        return;
+
+    // CGameEntitySystem::m_highestEntityIndex, as used by the existing
+    // FrameStage snapshot traversal.
+    uint32_t highest = 0;
+    if (!SafeReadU32(g_entityListGlobal + 0x2120, highest))
+        return;
+
+    if (highest > 0x7FFE)
+        highest = 0x7FFE;
+
+    uint32_t found = 0;
+    for (uint32_t index = 1; index <= highest; ++index)
+    {
+        const uintptr_t entity = GetEntityByHandle(index);
+        if (!entity || !IsDesignerName(entity, "keychain_module"))
+            continue;
+
+        uintptr_t identity = 0;
+        uint32_t entityHandle = 0;
+        uint32_t ownerHandle = 0;
+        SafeReadQword(entity + 0x10, identity);
+        if (identity > 0x10000)
+            SafeReadU32(identity + 0x10, entityHandle);
+        SafeReadU32(entity + g_off.BE_hOwnerEntity, ownerHandle);
+
+        Log("[charm-entity] world index=%u handle=0x%08X entity=%p owner=0x%08X",
+            index, entityHandle, (void*)entity, ownerHandle);
+        ++found;
+    }
+
+    Log("[charm-entity] world scan complete highest=%u found=%u",
+        highest, found);
 }
