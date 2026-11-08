@@ -21,13 +21,8 @@ namespace ArmoryInventory
         // The player equipped this exact owned instance in CS2's Loadout
         // screen, so the in-game selection decides what is worn.
         EquippedInGame,
-        // The equipment document assigns one exact owned instance for this
-        // team and slot, so the live weapon can be painted unambiguously.
-        Equipped,
-        // Every owned instance for the definition renders identically, so the
-        // definition alone identifies the cosmetics without picking an
-        // arbitrary duplicate.
-        Equivalent
+        // Only the exact native CS2 Loadout selection can resolve an item.
+        EquippedInGame
     };
 
     // One projected instance, as the runtime currently knows it.
@@ -74,9 +69,8 @@ namespace ArmoryInventory
         std::string& detail,
         Attachments::Set* attachments = nullptr);
 
-    // Resolve the owned instance worn in a non-weapon slot ("gloves",
-    // "agent", "zeus") for one team. The player's in-game loadout wins when it
-    // names an Armory instance; the equipment document is the fallback.
+    // Resolve the exact owned instance worn in a non-weapon slot ("gloves",
+    // "agent", "zeus") through CS2's native Loadout selection only.
     ArmoryMatch ResolveTargetForSlot(
         const char* slot,
         uint8_t teamNumber,

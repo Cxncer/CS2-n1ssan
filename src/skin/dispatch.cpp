@@ -129,9 +129,7 @@ bool ProcessWeapon(uintptr_t weaponEnt, uintptr_t pawn)
             return false;
         }
 
-        const char* source =
-            match == ArmoryInventory::ArmoryMatch::EquippedInGame ? "in-game" :
-            match == ArmoryInventory::ArmoryMatch::Equipped ? "assigned" : "equivalent";
+        const char* source = "native-loadout";
 
         Log("[armory-apply] %s live weapon def=%u team=%s paintKit=%d (%s)",
             source, def, teamLabel, equipped.paintKit, matchDetail.c_str());

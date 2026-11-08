@@ -670,8 +670,6 @@ namespace ArmoryInventory
         g_path = g_bridgeDirectory + "armory-inventory.json";
         Log("[armory-inventory] watching for inventory changes: %s", g_path.c_str());
 
-        StartEquipmentWatcher();
-
         std::thread([]()
         {
             FILETIME lastWrite{};
@@ -956,14 +954,9 @@ namespace ArmoryInventory
         return false;
     }
 
-    // The live weapon's EconItemView is server-built, so its item ID never
-    // identifies a projected SOCache instance (it is the default/fallback ID,
-    // or 0 for weapons the client did not equip). Identity therefore comes from
-    // CS2's own loadout first: the player equips one owned instance per slot in
-    // the Loadout screen, and the LoadoutAPI natives name that instance. The
-    // equipment document is the fallback for slots the player never touched,
-    // and a definition is only applied without either when every owned instance
-    // for it renders identically, so no arbitrary duplicate is ever chosen.
+    // Only the exact item selected in CS2's native Loadout is eligible.
+    // No Loadout Builder assignment or definition-only fallback may choose an
+    // otherwise unselected Armory item.
     ArmoryMatch ResolveTargetForWeapon(
         uint16_t definition,
         uint8_t teamNumber,
@@ -982,133 +975,57 @@ namespace ArmoryInventory
             return ArmoryMatch::None;
         }
 
-        std::lock_guard<std::mutex> lock(g_mutex);
+        const int team = (teamNumber == 2) ? 2 : (teamNumber == 3) ? 3 : 0;
+        if (!team)
+        {
+            detail = "team unknown";
+            return ArmoryMatch::None;
+        }
 
+        std::lock_guard<std::mutex> lock(g_mutex);
         if (g_inventoryItems.empty())
         {
             detail = "no projected inventory";
             return ArmoryMatch::None;
         }
 
-        char why[128]{};
-        const int team = (teamNumber == 2) ? 2 : (teamNumber == 3) ? 3 : 0;
+        const char* apiTeam = TeamApiName(team);
+        const uint64_t equippedId = knife
+            ? LoadoutApi::EquippedItemId(apiTeam, "melee")
+            : LoadoutApi::EquippedItemIdForDefinition(apiTeam, definition);
 
-        // 1. What the player equipped in CS2's Loadout screen.
-        if (team)
+        if (!equippedId)
         {
-            const char* apiTeam = TeamApiName(team);
-            const uint64_t equippedId = knife
-                ? LoadoutApi::EquippedItemId(apiTeam, "melee")
-                : LoadoutApi::EquippedItemIdForDefinition(apiTeam, definition);
-
-            if (equippedId)
-            {
-                if (const ArmoryItem* item = FindByIdLocked(equippedId))
-                {
-                    FillTarget(*item, target, attachments);
-                    snprintf(why, sizeof(why), "equipped in game %016llX",
-                        static_cast<unsigned long long>(item->id));
-                    detail = why;
-                    return ArmoryMatch::EquippedInGame;
-                }
-
-                char label[32]{};
-                DefinitionLabel(definition, label);
-                NoteForeignEquipped(team, label, equippedId);
-            }
-        }
-
-        // 2. Explicit equipment assignment.
-        if (knife && team)
-        {
-            const auto assigned = g_equippedKnife.find(static_cast<uint32_t>(team));
-            if (assigned != g_equippedKnife.end())
-            {
-                if (const ArmoryItem* item = FindByIdLocked(assigned->second))
-                {
-                    FillTarget(*item, target, attachments);
-                    snprintf(why, sizeof(why), "assigned knife instance %016llX",
-                        static_cast<unsigned long long>(item->id));
-                    detail = why;
-                    return ArmoryMatch::Equipped;
-                }
-            }
-        }
-        else if (team)
-        {
-            const auto assigned = g_equippedBySlot.find(SlotKey(team, definition));
-            if (assigned != g_equippedBySlot.end())
-            {
-                if (const ArmoryItem* item = FindByIdLocked(assigned->second))
-                {
-                    FillTarget(*item, target, attachments);
-                    snprintf(why, sizeof(why), "assigned instance %016llX",
-                        static_cast<unsigned long long>(item->id));
-                    detail = why;
-                    return ArmoryMatch::Equipped;
-                }
-            }
-        }
-        else
-        {
-            // Unknown team: accept only when both teams agree on one instance.
-            const auto t = g_equippedBySlot.find(SlotKey(2, definition));
-            const auto ct = g_equippedBySlot.find(SlotKey(3, definition));
-            const bool hasT = t != g_equippedBySlot.end();
-            const bool hasCt = ct != g_equippedBySlot.end();
-
-            if (hasT && hasCt && t->second == ct->second)
-            {
-                if (const ArmoryItem* item = FindByIdLocked(t->second))
-                {
-                    FillTarget(*item, target, attachments);
-                    detail = "both teams assigned the same instance";
-                    return ArmoryMatch::Equipped;
-                }
-            }
-            else if (hasT || hasCt)
-            {
-                detail = "team unknown and the teams are assigned different instances";
-                return ArmoryMatch::None;
-            }
-        }
-
-        // 3. Equivalence fallback: only when the definition is unambiguous.
-        const auto groupIt = g_definitionGroups.find(definition);
-        if (groupIt == g_definitionGroups.end())
-        {
-            detail = "not owned in the projected profile";
+            detail = "no native CS2 item selected in this slot";
             return ArmoryMatch::None;
         }
 
-        const DefinitionGroup& group = groupIt->second;
-        if (!group.equivalent)
-        {
-            snprintf(why, sizeof(why),
-                "%u owned instances render differently and none is assigned",
-                static_cast<unsigned>(group.count));
-            detail = why;
-            return ArmoryMatch::None;
-        }
-
-        const ArmoryItem* item = FindByIdLocked(group.id);
+        const ArmoryItem* item = FindByIdLocked(equippedId);
         if (!item)
         {
-            detail = "owned instance unavailable";
+            char label[32]{};
+            DefinitionLabel(definition, label);
+            NoteForeignEquipped(team, knife ? "melee" : label, equippedId);
+            detail = "native selection is not an item in the active Armory profile";
+            return ArmoryMatch::None;
+        }
+
+        if (!knife && item->definition != definition)
+        {
+            detail = "native item definition does not match the live weapon";
             return ArmoryMatch::None;
         }
 
         FillTarget(*item, target, attachments);
-        snprintf(why, sizeof(why), "%u owned instance(s) render identically",
-            static_cast<unsigned>(group.count));
+        char why[128]{};
+        snprintf(why, sizeof(why), "native item instance %016llX",
+            static_cast<unsigned long long>(item->id));
         detail = why;
-        return ArmoryMatch::Equivalent;
+        return ArmoryMatch::EquippedInGame;
     }
 
-    // Slot-named equipment (gloves, agent, zeus). The live pawn carries no item
-    // identity for these slots, so the player's in-game loadout decides; the
-    // equipment document covers slots the player never equipped in game and
-    // nothing is guessed from the inventory.
+    // Non-weapon slots also resolve only through CS2's native selection.
+    // Zeus uses its own definition to ask CS2 for the actual slot name.
     ArmoryMatch ResolveTargetForSlot(
         const char* slot,
         uint8_t teamNumber,
@@ -1118,13 +1035,6 @@ namespace ArmoryInventory
         target = TargetSkin{};
         detail.clear();
 
-        const uint16_t code = SlotNameCode(slot ? slot : "");
-        if (!code)
-        {
-            detail = "unknown slot";
-            return ArmoryMatch::None;
-        }
-
         const int team = (teamNumber == 2) ? 2 : (teamNumber == 3) ? 3 : 0;
         if (!team)
         {
@@ -1132,57 +1042,55 @@ namespace ArmoryInventory
             return ArmoryMatch::None;
         }
 
-        std::lock_guard<std::mutex> lock(g_mutex);
+        const char* apiTeam = TeamApiName(team);
+        const char* nativeSlot = LoadoutApi::NativeSlotName(slot);
+        std::string resolvedSlot;
+        if (!nativeSlot && slot && std::strcmp(slot, "zeus") == 0)
+        {
+            if (LoadoutApi::SlotForDefinition(apiTeam, 31, resolvedSlot))
+                nativeSlot = resolvedSlot.c_str();
+        }
 
+        if (!nativeSlot)
+        {
+            detail = "unknown native slot";
+            return ArmoryMatch::None;
+        }
+
+        std::lock_guard<std::mutex> lock(g_mutex);
         if (g_inventoryItems.empty())
         {
             detail = "no projected inventory";
             return ArmoryMatch::None;
         }
 
-        // 1. What the player equipped in CS2's Loadout screen ("clothing_hands",
-        // "customplayer", "melee").
-        if (const char* nativeSlot = LoadoutApi::NativeSlotName(slot))
+        const uint64_t equippedId =
+            LoadoutApi::EquippedItemId(apiTeam, nativeSlot);
+        if (!equippedId)
         {
-            const uint64_t equippedId =
-                LoadoutApi::EquippedItemId(TeamApiName(team), nativeSlot);
-
-            if (equippedId)
-            {
-                if (const ArmoryItem* item = FindByIdLocked(equippedId))
-                {
-                    FillTarget(*item, target);
-                    char why[160]{};
-                    snprintf(why, sizeof(why), "equipped in game %s instance %016llX",
-                        nativeSlot, static_cast<unsigned long long>(item->id));
-                    detail = why;
-                    return ArmoryMatch::EquippedInGame;
-                }
-
-                NoteForeignEquipped(team, nativeSlot, equippedId);
-            }
-        }
-
-        // 2. Assignment from the equipment document.
-        const auto assigned = g_equippedBySlotName.find(SlotKey(team, code));
-        if (assigned == g_equippedBySlotName.end())
-        {
-            detail = "not equipped in game and no assignment for this slot";
+            detail = "no native CS2 item selected in this slot";
             return ArmoryMatch::None;
         }
 
-        const ArmoryItem* item = FindByIdLocked(assigned->second);
+        const ArmoryItem* item = FindByIdLocked(equippedId);
         if (!item)
         {
-            detail = "assigned instance is not in the projected inventory";
+            NoteForeignEquipped(team, nativeSlot, equippedId);
+            detail = "native selection is not an item in the active Armory profile";
+            return ArmoryMatch::None;
+        }
+
+        if (slot && std::strcmp(slot, "zeus") == 0 && item->definition != 31)
+        {
+            detail = "native equipment slot does not contain the Zeus";
             return ArmoryMatch::None;
         }
 
         FillTarget(*item, target);
         char why[160]{};
-        snprintf(why, sizeof(why), "assigned %s instance %016llX", slot,
-            static_cast<unsigned long long>(item->id));
+        snprintf(why, sizeof(why), "native item %s instance %016llX",
+            nativeSlot, static_cast<unsigned long long>(item->id));
         detail = why;
-        return ArmoryMatch::Equipped;
+        return ArmoryMatch::EquippedInGame;
     }
 }
