@@ -29,6 +29,7 @@
 #include "hooks/knife_animation.h"
 #include "inventory/plan_a.h"
 #include "inventory/armory_inventory.h"
+#include "inventory/native_equipment.h"
 #include "inventory/attachments.h"
 #include "inventory/native_apply.h"
 #include "inventory/runtime_mode.h"
@@ -598,6 +599,7 @@ static void __fastcall FsnDetour(void* pClient, int stage)
     if (!inMatch && runtimeMode == RuntimeMode::Armory)
     {
         ArmoryInventory::AdoptPending();
+        NativeEquipment::Tick();
         Attachments::ObserveAndPersist();
         // The UseTool hook needs client.dll's Panorama script API; retry here
         // when start-up ran before the client had registered it.

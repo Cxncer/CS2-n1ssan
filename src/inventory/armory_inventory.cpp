@@ -928,7 +928,7 @@ namespace ArmoryInventory
         std::lock_guard<std::mutex> lock(g_mutex);
         profileId = g_profileId;
         inventoryRevision = g_inventoryRevision;
-        return !g_inventoryItems.empty();
+        return !g_profileId.empty();
     }
 
     std::string BridgeDirectory()
