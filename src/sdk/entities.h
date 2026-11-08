@@ -13,4 +13,4 @@ uintptr_t ReadHandle(uintptr_t base, uintptr_t off);
 uintptr_t GetEntityByHandle(uint32_t handle);
 uintptr_t GetLocalPawn();
 // Read-only diagnostic: enumerate native world keychain_module entities.
-void LogWorldKeychainEntities();
+void LogWorldKeychainEntities(uintptr_t weapon);
