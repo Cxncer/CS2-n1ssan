@@ -47,6 +47,9 @@ namespace
     ULONGLONG g_lastRestoreAttempt = 0;
     ULONGLONG g_restoreStarted = 0;
     ULONGLONG g_captureAfter = 0;
+    int g_lastInventoryRevision = -1;
+    bool g_profileHadItems = false;
+    std::unordered_map<std::string, std::uint64_t> g_lastManagedIds;
 
     bool ExtractString(const std::string& object, const char* key, std::string& out)
     {
@@ -360,6 +363,42 @@ namespace
         return captured;
     }
 
+    std::unordered_map<std::string, std::uint64_t> ManagedIdsFor(
+        const std::vector<ArmoryInventory::ManagedItem>& items)
+    {
+        std::unordered_map<std::string, std::uint64_t> ids;
+        for (const auto& item : items)
+            ids[item.instanceId] = item.id;
+        return ids;
+    }
+
+    bool SavedInstancesChanged(
+        const std::string& profileId,
+        const std::vector<ArmoryInventory::ManagedItem>& items,
+        const std::unordered_map<std::string, std::uint64_t>& previousIds)
+    {
+        const auto saved = g_profiles.find(profileId);
+        if (saved == g_profiles.end() || saved->second.empty())
+            return false;
+
+        for (const Assignment& assignment : saved->second)
+        {
+            const auto current = std::find_if(
+                items.begin(), items.end(),
+                [&assignment](const ArmoryInventory::ManagedItem& item)
+                {
+                    return item.instanceId == assignment.instanceId;
+                });
+            if (current == items.end())
+                return true;
+
+            const auto previous = previousIds.find(assignment.instanceId);
+            if (previous == previousIds.end() || previous->second != current->id)
+                return true;
+        }
+        return false;
+    }
+
     void BeginProfile(const std::string& profileId, ULONGLONG now)
     {
         g_activeProfileId = profileId;
@@ -490,19 +529,35 @@ namespace NativeEquipment
         if (!ArmoryInventory::SnapshotManagedItems(items))
             return;
 
-        if (profileId != g_activeProfileId)
+        const bool hasItems = !items.empty();
+        const auto currentManagedIds = ManagedIdsFor(items);
+        const bool profileChanged =
+            profileId != g_activeProfileId || (hasItems && !g_profileHadItems);
+        const bool assignedInstanceChanged =
+            !profileChanged &&
+            inventoryRevision != g_lastInventoryRevision &&
+            SavedInstancesChanged(profileId, items, g_lastManagedIds);
+
+        if (profileChanged || assignedInstanceChanged)
         {
             BeginProfile(profileId, now);
-            if (items.empty())
+            if (!hasItems)
             {
                 g_restorePending = false;
                 g_restoreAssignments.clear();
                 g_captureAfter = now + 1500;
             }
+            g_lastInventoryRevision = inventoryRevision;
+            g_lastManagedIds = currentManagedIds;
+            g_profileHadItems = hasItems;
             return;
         }
 
-        if (items.empty())
+        g_lastInventoryRevision = inventoryRevision;
+        g_lastManagedIds = currentManagedIds;
+        g_profileHadItems = hasItems;
+
+        if (!hasItems)
             return;
 
         if (g_restorePending)
