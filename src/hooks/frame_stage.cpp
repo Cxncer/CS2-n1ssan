@@ -563,23 +563,27 @@ static void __fastcall FsnDetour(void* pClient, int stage)
         }
     }
 
-    // Armory inventory is only written while Armory is the selected runtime
-    // source and the player is outside an active match. The same window is when
-    // CS2's own inventory screen can change a weapon's stickers or charm, so new
-    // attachment state is picked up here and handed to the Bridge.
-    if (!inMatch && runtimeMode == RuntimeMode::Armory)
+    // Observe native charm entities in both the inventory screen and active
+    // gameplay. World keychain_module entities may only become visible after a
+    // weapon is equipped, so restricting this diagnostic to the menu misses
+    // the exact state in which duplicate rendering is observed.
+    if (runtimeMode == RuntimeMode::Armory)
     {
-        ArmoryInventory::AdoptPending();
-        Attachments::ObserveAndPersist();
-        // Temporary read-only diagnostic, throttled to avoid a full entity scan
-        // on every render frame. This identifies native charm entities before
-        // any lifecycle/removal code is introduced.
         static uint64_t lastCharmScanMs = 0;
         if (now - lastCharmScanMs >= 5000)
         {
             lastCharmScanMs = now;
             LogWorldKeychainEntities();
         }
+    }
+
+    // Armory inventory writes and attachment observation remain restricted to
+    // the non-match window. CS2's native inventory UI is authoritative for
+    // applying stickers and charms; the Bridge persists the observed result.
+    if (!inMatch && runtimeMode == RuntimeMode::Armory)
+    {
+        ArmoryInventory::AdoptPending();
+        Attachments::ObserveAndPersist();
         // The UseTool hook needs client.dll's Panorama script API; retry here
         // when start-up ran before the client had registered it.
         NativeApply::Tick();
