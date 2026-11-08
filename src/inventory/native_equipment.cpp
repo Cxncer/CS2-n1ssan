@@ -467,6 +467,11 @@ namespace NativeEquipment
 {
     void Tick()
     {
+        const ULONGLONG now = GetTickCount64();
+        if (g_lastTick && now - g_lastTick < 1000)
+            return;
+        g_lastTick = now;
+
         if (ArmoryInventory::HasPending())
             return;
 
@@ -479,11 +484,6 @@ namespace NativeEquipment
         EnsureLoaded();
         if (!g_loaded)
             return;
-
-        const ULONGLONG now = GetTickCount64();
-        if (g_lastTick && now - g_lastTick < 1000)
-            return;
-        g_lastTick = now;
 
         std::vector<ArmoryInventory::ManagedItem> items;
         if (!ArmoryInventory::SnapshotManagedItems(items))
