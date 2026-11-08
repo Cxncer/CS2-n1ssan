@@ -865,9 +865,14 @@ namespace NativeApply
             Attachments::Set current;
             if (!LootSOCache::ReadAttachments(job.targetId, current))
             {
-                // Targeted keychain writes do not require reading or replacing sticker data.
-                Log("[use-tool] charm target snapshot unavailable; using Lootline-style targeted keychain write");
-                current = Attachments::Set{};
+                // Preserve existing stickers when the full SOCache snapshot is unavailable.
+                // CS2's ItemView getters provide the same sticker-slot fallback used by ApplySticker.
+                if (!Attachments::ReadStickerSlotsViaItemView(job.targetId, current))
+                {
+                    Log("[use-tool] charm target stickers could not be read through SOCache or CS2 ItemView; refusing incomplete apply");
+                    return false;
+                }
+                Log("[use-tool] charm target sticker slots read through CS2 ItemView fallback; preserving stickers");
             }
 
             Attachments::Set next = current;
