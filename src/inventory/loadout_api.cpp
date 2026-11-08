@@ -381,6 +381,14 @@ namespace LoadoutApi
         return id;
     }
 
+    bool SlotForDefinition(const char* team, std::uint16_t definition, std::string& slot)
+    {
+        slot.clear();
+        if (!team || !definition || !Initialize())
+            return false;
+        return CallSlotWithDefinition(team, definition, slot) && !slot.empty();
+    }
+
     bool CanEquipItemInSlot(const char* team, std::uint64_t itemId, const char* slot)
     {
         if (!team || !*team || !itemId || !slot || !*slot || !Initialize())

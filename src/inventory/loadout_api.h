@@ -12,6 +12,7 @@
 #pragma once
 
 #include <cstdint>
+#include <string>
 
 namespace LoadoutApi
 {
@@ -35,6 +36,9 @@ namespace LoadoutApi
     // Game thread. Item id the player equipped for a definition, asking CS2 for
     // the slot it belongs to (weapons, knives). 0 when unknown.
     std::uint64_t EquippedItemIdForDefinition(const char* team, std::uint16_t definition);
+
+    // Game thread. Resolves the native slot for a definition ("rifle1", "melee", etc.).
+    bool SlotForDefinition(const char* team, std::uint16_t definition, std::string& slot);
 
     // Game thread. Uses CS2's own CanEquipItemInSlot check before calling its
     // native EquipItemInSlot(team, itemId, slot). Returns false if CS2 rejects it.
