@@ -8,6 +8,7 @@
 #include "memory/access.h"
 #include "memory/scanner.h"
 #include "diagnostics/log.h"
+#include "inventory/engine_schema_diagnostic.h"
 #include <cstring>
 
 uintptr_t g_entityListGlobal = 0;
@@ -106,7 +107,7 @@ static bool IsDesignerName(uintptr_t entity, const char* expected)
     return SafeReadU8(name + std::strlen(expected), terminator) && terminator == 0;
 }
 
-void LogWorldKeychainEntities()
+void LogWorldKeychainEntities(uintptr_t weapon)
 {
     if (!g_entityListGlobal)
         return;
@@ -115,14 +116,28 @@ void LogWorldKeychainEntities()
     if (!client.valid())
         return;
 
-    // The networked highest-entity index does not cover client-only entities.
-    // Lootline traverses the full entity-index range because keychain_module
-    // entities may live in the client-only range beginning at 0x4000.
+    // Resolve the live schema fields once available. The previous hardcoded
+    // BE_hOwnerEntity offset did not match this CS2 build, so owner handles
+    // were logged as 0xFFFFFFFF and could not identify weapon ownership.
+    static uintptr_t ownerHandleOffset = 0;
+    static uintptr_t sceneParentOffset = 0;
+    if (!ownerHandleOffset)
+        ResolveEngineSchemaField("C_BaseEntity", "m_hOwnerEntity", ownerHandleOffset);
+    if (!sceneParentOffset)
+        ResolveEngineSchemaField("CGameSceneNode", "m_pParent", sceneParentOffset);
+
+    uintptr_t weaponSceneNode = 0;
+    if (weapon && g_off.BE_GameSceneNode)
+        SafeReadQword(weapon + g_off.BE_GameSceneNode, weaponSceneNode);
+
     uint32_t highestNetworked = 0;
     SafeReadU32(g_entityListGlobal + 0x2120, highestNetworked);
 
     constexpr uint32_t MAX_ENTITY_INDEX = 0x7FFE;
     uint32_t found = 0;
+    uint32_t onWeapon = 0;
+    uint32_t ownerMatches = 0;
+    uint32_t parentMatches = 0;
     uint32_t validEntities = 0;
     uintptr_t cachedChunk = 0;
     uint32_t cachedChunkIndex = UINT32_MAX;
@@ -154,19 +169,61 @@ void LogWorldKeychainEntities()
         if (!IsDesignerName(entity, "keychain_module"))
             continue;
 
+        ++found;
+
         uintptr_t identity = 0;
         uint32_t entityHandle = 0;
         uint32_t ownerHandle = 0;
         SafeReadQword(entity + 0x10, identity);
         if (identity > 0x10000)
             SafeReadU32(identity + 0x10, entityHandle);
-        SafeReadU32(entity + g_off.BE_hOwnerEntity, ownerHandle);
 
-        Log("[charm-entity] world index=%u handle=0x%08X entity=%p owner=0x%08X",
-            index, entityHandle, (void*)entity, ownerHandle);
-        ++found;
+        bool ownedByWeapon = false;
+        if (weapon && ownerHandleOffset &&
+            SafeReadU32(entity + ownerHandleOffset, ownerHandle) &&
+            HandleValid(ownerHandle))
+        {
+            ownedByWeapon = GetEntityByHandle(ownerHandle) == weapon;
+        }
+
+        bool parentedToWeapon = false;
+        if (weaponSceneNode && sceneParentOffset && g_off.BE_GameSceneNode)
+        {
+            uintptr_t node = 0;
+            if (SafeReadQword(entity + g_off.BE_GameSceneNode, node))
+            {
+                // Match Lootline's bounded scene ancestry check.
+                for (int depth = 0; node && node > 0x10000 && depth < 5; ++depth)
+                {
+                    if (node == weaponSceneNode)
+                    {
+                        parentedToWeapon = true;
+                        break;
+                    }
+
+                    uintptr_t parent = 0;
+                    if (!SafeReadQword(node + sceneParentOffset, parent))
+                        break;
+                    node = parent;
+                }
+            }
+        }
+
+        if (ownedByWeapon) ++ownerMatches;
+        if (parentedToWeapon) ++parentMatches;
+        const bool belongsToWeapon = ownedByWeapon || parentedToWeapon;
+        if (belongsToWeapon) ++onWeapon;
+
+        Log("[charm-entity] world index=%u handle=0x%08X entity=%p owner=0x%08X ownerMatch=%d parentMatch=%d belongs=%d",
+            index, entityHandle, (void*)entity, ownerHandle,
+            ownedByWeapon ? 1 : 0, parentedToWeapon ? 1 : 0,
+            belongsToWeapon ? 1 : 0);
     }
 
-    Log("[charm-entity] world scan complete highestNetworked=%u maxIndex=%u valid=%u found=%u",
-        highestNetworked, MAX_ENTITY_INDEX, validEntities, found);
+    Log("[charm-entity] world scan complete weapon=%p weaponNode=%p highestNetworked=%u maxIndex=%u valid=%u globalFound=%u ownerMatches=%u parentMatches=%u onWeapon=%u ownerOffset=0x%llX parentOffset=0x%llX",
+        (void*)weapon, (void*)weaponSceneNode, highestNetworked,
+        MAX_ENTITY_INDEX, validEntities, found, ownerMatches,
+        parentMatches, onWeapon,
+        static_cast<unsigned long long>(ownerHandleOffset),
+        static_cast<unsigned long long>(sceneParentOffset));
 }
