@@ -111,20 +111,47 @@ void LogWorldKeychainEntities()
     if (!g_entityListGlobal)
         return;
 
-    // CGameEntitySystem::m_highestEntityIndex, as used by the existing
-    // FrameStage snapshot traversal.
-    uint32_t highest = 0;
-    if (!SafeReadU32(g_entityListGlobal + 0x2120, highest))
+    ModuleInfo client = GetClientModule();
+    if (!client.valid())
         return;
 
-    if (highest > 0x7FFE)
-        highest = 0x7FFE;
+    // The networked highest-entity index does not cover client-only entities.
+    // Lootline traverses the full entity-index range because keychain_module
+    // entities may live in the client-only range beginning at 0x4000.
+    uint32_t highestNetworked = 0;
+    SafeReadU32(g_entityListGlobal + 0x2120, highestNetworked);
 
+    constexpr uint32_t MAX_ENTITY_INDEX = 0x7FFE;
     uint32_t found = 0;
-    for (uint32_t index = 1; index <= highest; ++index)
+    uint32_t validEntities = 0;
+    uintptr_t cachedChunk = 0;
+    uint32_t cachedChunkIndex = UINT32_MAX;
+
+    for (uint32_t index = 1; index <= MAX_ENTITY_INDEX; ++index)
     {
-        const uintptr_t entity = GetEntityByHandle(index);
-        if (!entity || !IsDesignerName(entity, "keychain_module"))
+        const uint32_t chunkIndex = index >> 9;
+        if (chunkIndex != cachedChunkIndex)
+        {
+            cachedChunk = 0;
+            SafeReadQword(g_entityListGlobal + (size_t)chunkIndex * 8 + 0x10,
+                cachedChunk);
+            cachedChunkIndex = chunkIndex;
+        }
+
+        if (!cachedChunk)
+            continue;
+
+        uintptr_t entity = 0;
+        if (!SafeReadQword(cachedChunk + (size_t)(index & 0x1FF) * 0x70,
+                entity) || !entity)
+            continue;
+
+        uintptr_t vtable = 0;
+        if (!SafeReadQword(entity, vtable) || !client.inside(vtable))
+            continue;
+
+        ++validEntities;
+        if (!IsDesignerName(entity, "keychain_module"))
             continue;
 
         uintptr_t identity = 0;
@@ -140,6 +167,6 @@ void LogWorldKeychainEntities()
         ++found;
     }
 
-    Log("[charm-entity] world scan complete highest=%u found=%u",
-        highest, found);
+    Log("[charm-entity] world scan complete highestNetworked=%u maxIndex=%u valid=%u found=%u",
+        highestNetworked, MAX_ENTITY_INDEX, validEntities, found);
 }
