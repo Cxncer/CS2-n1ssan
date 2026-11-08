@@ -832,9 +832,22 @@ namespace NativeApply
             sticker.hasSchema = true;
             sticker.schema = job.position >= 0 ? job.position : slot;
 
-            const bool written = LootSOCache::SyncAttachments(job.targetId, next);
-            bool announced = false;
+            bool written = false;
+            if (completeSnapshot)
+            {
+                written = LootSOCache::SyncAttachments(job.targetId, next);
+            }
+            else
+            {
+                // Lootline's SyncStickers behavior: mutate sticker attributes in
+                // place and leave an unreadable charm completely untouched.
+                void* target = LootSOCache::Find(job.targetId);
+                written = target && Attachments::WriteStickerSlots(target, next, &current);
+                if (written)
+                    Log("[use-tool] sticker-only write used: charm attributes preserved; full snapshot unavailable");
+            }
 
+            bool announced = false;
             if (written)
             {
                 announced = LootSOCache::NotifyUpdated(job.targetId);
@@ -843,8 +856,12 @@ namespace NativeApply
                 Log("[use-tool] consumed sticker item %016llX removal=%s",
                     static_cast<unsigned long long>(job.toolId), toolRemoved ? "SUCCESS" : "FAILED");
                 if (toolRemoved) RememberConsumed(job.toolId);
-                Attachments::RecordApplied(
-                    job.targetId, next, job.toolInstanceId, false, slot, toolRemoved);
+
+                // Do not publish a partial attachment snapshot as complete. The
+                // normal observer will persist it once the full SOCache read works.
+                if (completeSnapshot)
+                    Attachments::RecordApplied(
+                        job.targetId, next, job.toolInstanceId, false, slot, toolRemoved);
             }
 
             const bool notified = written &&
