@@ -571,6 +571,15 @@ static void __fastcall FsnDetour(void* pClient, int stage)
     {
         ArmoryInventory::AdoptPending();
         Attachments::ObserveAndPersist();
+        // Temporary read-only diagnostic, throttled to avoid a full entity scan
+        // on every render frame. This identifies native charm entities before
+        // any lifecycle/removal code is introduced.
+        static uint64_t lastCharmScanMs = 0;
+        if (now - lastCharmScanMs >= 5000)
+        {
+            lastCharmScanMs = now;
+            LogWorldKeychainEntities();
+        }
         // The UseTool hook needs client.dll's Panorama script API; retry here
         // when start-up ran before the client had registered it.
         NativeApply::Tick();
