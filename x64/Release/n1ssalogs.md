@@ -167865,3 +167865,5297 @@ N1SSAN_STATUS|1|2026-11-08T15:15:04Z|1188|armory-obsidian-3.0|READY|reason=runti
 [glove-observe] pawn=00000486F4A83000 reapply=0 changed=0 def=0 init=0 idHigh=0x0
 [apply-cache] weapon model cache invalidated
 [apply-cache] left active match pawn
+[status-path] selected=C:\Users\mirac\AppData\Local\n1ssan\status\cs2-9320.status source=LOCALAPPDATA
+
+# n1ssan diagnostic session
+[build] armory-obsidian-3.0
+[build] Operation Armory x Obsidian Build 3.0 | Nov  8 2026 22:09:56
+N1SSAN_STATUS|1|2026-11-08T15:47:32Z|9320|armory-obsidian-3.0|INITIALIZING|reason=worker_started
+[status-write] begin state=INITIALIZING path=C:\Users\mirac\AppData\Local\n1ssan\status\cs2-9320.status
+[status-write] success state=INITIALIZING error=0
+[off] PAWN_MyWearables = 0x1268
+[off] field offsets populated
+[auto-off] dwEntityList                 hit 0x00007FFEE3EC93CB -> rva 0x271FBB8 (val=0000022941478800)
+[auto-off] dwLocalPlayerController      hit 0x00007FFEE3DE5750 -> rva 0x2542548 (val=00000229D7408000)
+[auto-off] dwLocalPlayerPawn            hit 0x00007FFEE3601615 -> rva 0x27391E0 (val=000002295E2B0400)
+[auto-off] summary: matched=3/3
+[off] RVA_ENTITY_LIST           = 0x00007FFEE5BCFBB8
+[off] RVA_LOCALPLAYERCONTROLLER = 0x00007FFEE59F2548
+[off] RVA_LOCALPLAYERPAWN       = 0x00007FFEE5BE91E0
+[bridge] discovered Bridge directory: E:\Vibe Coding\CS2 Lore\CS2 n1ssan\development\n1ssan-web-bridge\
+[runtime-mode] no valid selection yet; waiting for launcher
+[runtime-mode] initialized in neutral mode; waiting for DOMINATE selection
+[schema-live] m_nSubclassID runtime=0x380 hardcoded=0x38C MISMATCH
+[schema-live] subclass resolver ready: 0x380
+[schema-gloves] C_CSPlayerPawn->m_EconGloves = 0x1770
+[schema-gloves] C_CSPlayerPawn->m_bNeedToReApplyGloves = 0x176D
+[schema-gloves] C_EconItemView->m_iItemDefinitionIndex = 0x1BA
+[schema-gloves] C_EconItemView->m_iEntityQuality = 0x1BC
+[schema-gloves] C_EconItemView->m_iItemIDHigh = 0x1D0
+[schema-gloves] C_EconItemView->m_bInitialized = 0x1E8
+[schema-gloves] C_EconItemView->m_bDisallowSOC = 0x1E9
+[schema-gloves] C_EconItemView->m_bRestoreCustomMaterialAfterPrecache = 0x1B8
+[schema-gloves] C_EconItemView->m_AttributeList = 0x208
+[schema-gloves] C_EconItemView->m_NetworkedDynamicAttributes = 0x280
+[schema-gloves] CAttributeList->m_Attributes = 0x8
+[schema-gloves] READY
+[resolve] InvalidateDescription          @ 0x00007FFEE4651350
+[resolve] BuildModernSkin                @ 0x00007FFEE42F5B10
+[resolve] SetMeshGroupMask               @ 0x00007FFEE3F75A90
+[resolve] RegenerateSkins                @ 0x00007FFEE3CDB4B0
+[resolve] ReleaseCompositeMaterials      @ 0x00007FFEE499C4A0
+[resolve] GloveCreatePaintKit            @ 0x00007FFEE46413D0
+[resolve] AgentSetModel                  @ 0x00007FFEE3E15C90
+[resolve] KnifeUpdateSubclass            @ 0x00007FFEE36B9000
+[resolve] GloveSetBodyGroup              @ 0x00007FFEE3E14BB0
+[resolve] MemAlloc                       @ 0x00007FFF27E4DD30
+[resolve] MemFree                        @ 0x00007FFF27E4DD70
+[resolve] CSkeletonInstance->m_modelState = 0x140 (hardcoded)
+[resolve] CModelState->m_hModel = 0xA0 (hardcoded)
+[resolve] entityList @ 0x00007FFEE5BCFBB8 -> 0x0000022941478800
+[glove-paintkit-schema] READY
+[glove-schema] READY
+[plan-a] CEconItemSystem* = 0x00000228B3B33E20 (stored)
+[loot-schema] GetAttributeDefinitionByName @ 0x00007FFEE45E30F0
+[loot-schema] OK (invOffset=0x528D0, setUint=00007FFEE4598E70, setFloat=00007FFEE4599080)
+[socache] CreateBaseTypeCache initialized @ 00007FFEE4ADB820
+[plan-a] shared inventory runtime ready; Loadout injection disabled
+[use-tool] initialize attempt=1 installed=0 mode=0
+[use-tool] placement probe: sticker signature=FOUND
+[use-tool] placement probe: keychain signature=FOUND
+[use-tool] notification: engine=0x00007FFEE5BE91E0 dispatch=vfunc 47 eventId=903
+[use-tool] hook: ok at 0x00007FFEE44B5810 via signature (CS2's inventory applies Armory stickers and charms)
+[use-tool] placement pointers: sticker slot=00007FFEE56CAE90 x=00007FFEE5AA960C y=00007FFEE5AA9610 rotation=00007FFEE5AA9614 wear=00007FFEE5AA9618; charm x=00007FFEE5AA98A8 y=00007FFEE5AA98AC z=00007FFEE5AA98B0
+[use-tool] placement: sticker ok, charm ok
+[use-tool] popup notification: ok (the applying spinner finishes)
+[armory-inventory] watching for inventory changes: E:\Vibe Coding\CS2 Lore\CS2 n1ssan\development\n1ssan-web-bridge\armory-inventory.json
+[armory-equipment] watching for loadout assignments: E:\Vibe Coding\CS2 Lore\CS2 n1ssan\development\n1ssan-web-bridge\armory-equipment.json
+[loadout-api] resolved GetItemID=00007FFEE44585D0 GetSlotEquippedWithDefIndex=00007FFEE446DC10
+[fsn] pClient=0x00007FFEE5A14620 vtable=0x00007FFEE5118230 fn=0x00007FFEE401EFE0 slot=36
+[fsn] hooked (vtable overwrite)
+[fsn] first stage call seen
+
+=== SNAPSHOT ===
+[snap] fsnCount=1 lastStage=0 stage5Count=0
+[snap] stage histogram:
+[snap]   stage  0: 1 frames
+[snap] dwLocalPlayerController @ 0x00007FFEE59F2548 -> 0x00000229D7408000 
+[snap] dwLocalPlayerPawn       @ 0x00007FFEE5BE91E0 -> 0x000002295E2B0400 
+[snap] pawn: vtable=0x00007FFEE8E73740 inClient=0 health=553
+[snap] ctrl: vtable=0x00007FFEE50C1680 inClient=1 m_hPlayerPawn@0x92C = 0x0185800B (idx=11)
+[snap] entitySystem @ 0x00007FFEE5BCFBB8 = 0x0000022941478800 highestEntityIndex=13
+[snap] entity resolution: 12/16 of indices 1..16 valid
+[snap] ctrl->pawn handle resolve: 0x0185800B -> 0x00000229D7B73800
+[snap] ----------------------------------------
+[knife-anim] stage=6 reached
+[glove-observe] pawn=00000229D7B73800 reapply=0 changed=0 def=0 init=0 idHigh=0x0
+[match] network signOn=6 maxClients=1 backgroundMap=0 connected=0 alive=0
+N1SSAN_STATUS|1|2026-11-08T15:47:33Z|9320|armory-obsidian-3.0|CHECKS_PASSED|reason=required_initialization_checks_passed
+[status-write] begin state=CHECKS_PASSED path=C:\Users\mirac\AppData\Local\n1ssan\status\cs2-9320.status
+[status-write] success state=CHECKS_PASSED error=0
+[knife-anim] stage=6 reached
+[diagnostic] runtime=unknown targets=0; awaiting DOMINATE selection
+N1SSAN_STATUS|1|2026-11-08T15:47:33Z|9320|armory-obsidian-3.0|READY|reason=runtime_worker_heartbeat
+[status-write] begin state=READY path=C:\Users\mirac\AppData\Local\n1ssan\status\cs2-9320.status
+[status-write] success state=READY error=0
+[knife-anim] stage=6 reached
+[armory-equipment] index: assignments=0 resolved=0 unresolved=0 conflicts=0 definitions=0 slots=0
+[armory-equipment] reloaded equipment document
+[armory-inventory] staged 14 items (applies outside an active match)
+[runtime-mode] switched to armory
+[runtime-mode] preparing requested mode: armory
+[socache-diag] SOCache resolved inv=00000229419C3000 offset=0x68 cache=00000229B12FA0C0 typeCache=00000229B13D31A0
+[runtime-mode] active mode: armory
+[plan-a] Loadout cleanup: found=0 removed=0 failed=0
+[armory-inventory] preparing replacement set: 14 items
+[loot-schema] attr 'set item texture prefab' (idx 6) -> 0x00000229AC4A9200
+[loot-schema] attr 6 kind=2 (0=float,1=uint32,2=default,3=other)
+[loot-schema] attr 'set item texture seed' (idx 7) -> 0x00000229AC4A92A0
+[loot-schema] attr 7 kind=2 (0=float,1=uint32,2=default,3=other)
+[loot-schema] attr 'set item texture wear' (idx 8) -> 0x00000229AC4A9340
+[loot-schema] attr 8 kind=2 (0=float,1=uint32,2=default,3=other)
+[loot-schema] attr 'kill eater' (idx 80) -> 0x00000229AC4ABDC0
+[loot-schema] attr 'kill eater score type' (idx 81) -> 0x00000229AC4ABE60
+[attach] sticker and charm attributes resolved (6 sticker slots, 1 charm)
+[armory-equipment] index: assignments=0 resolved=0 unresolved=0 conflicts=0 definitions=12 slots=0
+[armory-inventory] replacement committed: desired=14 created=14 retained=0 removed=0 removeFailed=0
+[attach] item 9919302EC58DC70A did not read back its saved attachments: stickers=0 charm=none
+[attach] item 9536605177002A96 did not read back its saved attachments: stickers=0 charm=none
+[attach] item 9CF82CD4592CD5C7 did not read back its saved attachments: stickers=0 charm=none
+[attach] item 9EF2C4042C206579 did not read back its saved attachments: stickers=0 charm=none
+[attach] item 9FE6ABE590502EF4 did not read back its saved attachments: stickers=0 charm=none
+[charm-entity] world scan complete highest=13 found=0
+[use-tool] main thread: panorama CUIEngine::RunFrame vfunc 5 (0x00007FFEE8A66B70)
+[detect] pawn=0x00000229D7B73800 hp=100 signOn=6 bg=0
+
+=== SNAPSHOT ===
+[snap] fsnCount=2789 lastStage=0 stage5Count=226
+[snap] stage histogram:
+[snap]   stage  0: 378 frames
+[snap]   stage  1: 226 frames
+[snap]   stage  2: 226 frames
+[snap]   stage  3: 226 frames
+[snap]   stage  5: 226 frames
+[snap]   stage  6: 226 frames
+[snap]   stage  7: 226 frames
+[snap]   stage  8: 226 frames
+[snap]   stage 10: 226 frames
+[snap]   stage 11: 321 frames
+[snap]   stage 12: 282 frames
+[snap] dwLocalPlayerController @ 0x00007FFEE59F2548 -> 0x00000229D7408000 
+[snap] dwLocalPlayerPawn       @ 0x00007FFEE5BE91E0 -> 0x000002295E2B0400 
+[snap] pawn: vtable=0x00007FFEE8E73740 inClient=0 health=553
+[snap] ctrl: vtable=0x00007FFEE50C1680 inClient=1 m_hPlayerPawn@0x92C = 0x0185800B (idx=11)
+[snap] entitySystem @ 0x00007FFEE5BCFBB8 = 0x0000022941478800 highestEntityIndex=13
+[snap] entity resolution: 12/16 of indices 1..16 valid
+[snap] ctrl->pawn handle resolve: 0x0185800B -> 0x00000229D7B73800
+[snap] ----------------------------------------
+[attach] item 9AD2A303DFC2661B did not read back its saved attachments: stickers=0 charm=none
+[armory-equipment] index: assignments=0 resolved=0 unresolved=0 conflicts=0 definitions=12 slots=0
+[armory-equipment] reloaded equipment document
+[armory-inventory] staged 14 items (applies outside an active match)
+[armory-inventory] preparing replacement set: 14 items
+[armory-inventory] retained item id=9F45014B4918D4CA def=5404
+[armory-inventory] attachments synced on 9F45014B4918D4CA: stickers=0 charm=none
+[armory-inventory] retained item id=98580F04895784C8 def=4730
+[armory-inventory] retained item id=922FEB06198C79C1 def=525
+[armory-inventory] attachments synced on 922FEB06198C79C1: stickers=0 charm=none
+[armory-inventory] retained item id=9B4523A8BFE93866 def=5030
+[armory-inventory] attachments synced on 9B4523A8BFE93866: stickers=0 charm=none
+[armory-inventory] retained item id=9919302EC58DC70A def=16
+[armory-inventory] attachments synced on 9919302EC58DC70A: stickers=1 [0 kit=20 wear=0.000 rot=0.0 off=-0.079,-0.004 schema=4] charm=kit:17 seed=0 off=33.469,0.373,12.120
+[armory-inventory] retained item id=96221A0E61314132 def=60
+[armory-inventory] attachments synced on 96221A0E61314132: stickers=1 [0 kit=42 wear=0.000 rot=0.0 off=0.426,0.013 schema=4] charm=none
+[armory-inventory] retained item id=914A30836F3526FC def=7
+[armory-inventory] attachments synced on 914A30836F3526FC: stickers=0 charm=none
+[armory-inventory] retained item id=9536605177002A96 def=9
+[armory-inventory] attachments synced on 9536605177002A96: stickers=1 [0 kit=70 wear=0.000 rot=0.0 off=-0.252,0.006 schema=4] charm=none
+[armory-inventory] retained item id=9CF82CD4592CD5C7 def=61
+[armory-inventory] attachments synced on 9CF82CD4592CD5C7: stickers=0 charm=kit:7 seed=0 off=1.872,0.344,3.930
+[armory-inventory] retained item id=955F0C957F4C067D def=61
+[armory-inventory] attachments synced on 955F0C957F4C067D: stickers=1 [0 kit=98 wear=0.000 rot=0.0 off=0.000,0.000 schema=2] charm=kit:55 seed=0 off=18.066,0.752,3.900
+[armory-inventory] retained item id=9EF2C4042C206579 def=34
+[armory-inventory] attachments synced on 9EF2C4042C206579: stickers=1 [0 kit=6702 wear=0.000 rot=0.0 off=0.232,0.008 schema=2] charm=kit:70 seed=0 off=1.865,0.749,5.986
+[armory-inventory] retained item id=9AD2A303DFC2661B def=4
+[armory-inventory] attachments synced on 9AD2A303DFC2661B: stickers=1 [0 kit=70 wear=0.000 rot=-40.5 off=0.065,-0.238 schema=3] charm=none
+[armory-inventory] retained item id=91A393008C57670D def=1355
+[armory-inventory] attachments synced on 91A393008C57670D: stickers=0 charm=none
+[armory-inventory] retained item id=9FE6ABE590502EF4 def=7
+[armory-inventory] attachments synced on 9FE6ABE590502EF4: stickers=2 [0 kit=37 wear=0.000 rot=-22.5 off=-0.265,-0.014 schema=1] [1 kit=37 wear=0.000 rot=-10.5 off=-0.315,-0.012 schema=0] charm=kit:23 seed=0 off=0.461,0.495,3.253
+[armory-equipment] index: assignments=0 resolved=0 unresolved=0 conflicts=0 definitions=12 slots=0
+[armory-inventory] replacement committed: desired=14 created=0 retained=14 removed=0 removeFailed=0
+[attach] item 96221A0E61314132 did not read back its saved attachments: stickers=0 charm=none
+[attach] item 955F0C957F4C067D did not read back its saved attachments: stickers=0 charm=none
+[charm-entity] world scan complete highest=13 found=0
+
+=== SNAPSHOT ===
+[snap] fsnCount=5411 lastStage=0 stage5Count=444
+[snap] stage histogram:
+[snap]   stage  0: 708 frames
+[snap]   stage  1: 444 frames
+[snap]   stage  2: 444 frames
+[snap]   stage  3: 444 frames
+[snap]   stage  5: 444 frames
+[snap]   stage  6: 444 frames
+[snap]   stage  7: 444 frames
+[snap]   stage  8: 444 frames
+[snap]   stage 10: 444 frames
+[snap]   stage 11: 642 frames
+[snap]   stage 12: 509 frames
+[snap] dwLocalPlayerController @ 0x00007FFEE59F2548 -> 0x00000229D7408000 
+[snap] dwLocalPlayerPawn       @ 0x00007FFEE5BE91E0 -> 0x000002295E2B0400 
+[snap] pawn: vtable=0x00007FFEE8E73740 inClient=0 health=553
+[snap] ctrl: vtable=0x00007FFEE50C1680 inClient=1 m_hPlayerPawn@0x92C = 0x0185800B (idx=11)
+[snap] entitySystem @ 0x00007FFEE5BCFBB8 = 0x0000022941478800 highestEntityIndex=13
+[snap] entity resolution: 12/16 of indices 1..16 valid
+[snap] ctrl->pawn handle resolve: 0x0185800B -> 0x00000229D7B73800
+[snap] ----------------------------------------
+N1SSAN_STATUS|1|2026-11-08T15:47:43Z|9320|armory-obsidian-3.0|READY|reason=runtime_worker_heartbeat
+[status-write] begin state=READY path=C:\Users\mirac\AppData\Local\n1ssan\status\cs2-9320.status
+[status-write] success state=READY error=0
+[charm-entity] world scan complete highest=13 found=0
+[detect] pawn=0x00000229D7B73800 hp=100 signOn=6 bg=0
+
+=== SNAPSHOT ===
+[snap] fsnCount=8031 lastStage=0 stage5Count=664
+[snap] stage histogram:
+[snap]   stage  0: 1028 frames
+[snap]   stage  1: 664 frames
+[snap]   stage  2: 664 frames
+[snap]   stage  3: 664 frames
+[snap]   stage  5: 664 frames
+[snap]   stage  6: 664 frames
+[snap]   stage  7: 664 frames
+[snap]   stage  8: 664 frames
+[snap]   stage 10: 664 frames
+[snap]   stage 11: 962 frames
+[snap]   stage 12: 729 frames
+[snap] dwLocalPlayerController @ 0x00007FFEE59F2548 -> 0x00000229D7408000 
+[snap] dwLocalPlayerPawn       @ 0x00007FFEE5BE91E0 -> 0x000002295E2B0400 
+[snap] pawn: vtable=0x00007FFEE8E73740 inClient=0 health=553
+[snap] ctrl: vtable=0x00007FFEE50C1680 inClient=1 m_hPlayerPawn@0x92C = 0x0185800B (idx=11)
+[snap] entitySystem @ 0x00007FFEE5BCFBB8 = 0x0000022941478800 highestEntityIndex=13
+[snap] entity resolution: 12/16 of indices 1..16 valid
+[snap] ctrl->pawn handle resolve: 0x0185800B -> 0x00000229D7B73800
+[snap] ----------------------------------------
+[charm-entity] world scan complete highest=13 found=0
+[armory-inventory] staged 15 items (applies outside an active match)
+[armory-inventory] preparing replacement set: 15 items
+[armory-inventory] retained item id=9F45014B4918D4CA def=5404
+[armory-inventory] retained item id=98580F04895784C8 def=4730
+[armory-inventory] retained item id=922FEB06198C79C1 def=525
+[armory-inventory] attachments synced on 922FEB06198C79C1: stickers=0 charm=none
+[armory-inventory] retained item id=9B4523A8BFE93866 def=5030
+[armory-inventory] retained item id=9919302EC58DC70A def=16
+[armory-inventory] attachments synced on 9919302EC58DC70A: stickers=1 [0 kit=20 wear=0.000 rot=0.0 off=-0.079,-0.004 schema=4] charm=kit:17 seed=0 off=33.469,0.373,12.120
+[armory-inventory] retained item id=96221A0E61314132 def=60
+[armory-inventory] attachments synced on 96221A0E61314132: stickers=1 [0 kit=42 wear=0.000 rot=0.0 off=0.426,0.013 schema=4] charm=none
+[armory-inventory] retained item id=914A30836F3526FC def=7
+[armory-inventory] retained item id=9536605177002A96 def=9
+[armory-inventory] attachments synced on 9536605177002A96: stickers=1 [0 kit=70 wear=0.000 rot=0.0 off=-0.252,0.006 schema=4] charm=none
+[armory-inventory] retained item id=9CF82CD4592CD5C7 def=61
+[armory-inventory] attachments synced on 9CF82CD4592CD5C7: stickers=0 charm=kit:7 seed=0 off=1.872,0.344,3.930
+[armory-inventory] retained item id=955F0C957F4C067D def=61
+[armory-inventory] attachments synced on 955F0C957F4C067D: stickers=1 [0 kit=98 wear=0.000 rot=0.0 off=0.000,0.000 schema=2] charm=kit:55 seed=0 off=18.066,0.752,3.900
+[armory-inventory] retained item id=9EF2C4042C206579 def=34
+[armory-inventory] attachments synced on 9EF2C4042C206579: stickers=1 [0 kit=6702 wear=0.000 rot=0.0 off=0.232,0.008 schema=2] charm=kit:70 seed=0 off=1.865,0.749,5.986
+[armory-inventory] retained item id=9AD2A303DFC2661B def=4
+[armory-inventory] attachments synced on 9AD2A303DFC2661B: stickers=1 [0 kit=70 wear=0.000 rot=-40.5 off=0.065,-0.238 schema=3] charm=none
+[armory-inventory] retained item id=91A393008C57670D def=1355
+[armory-inventory] attachments synced on 91A393008C57670D: stickers=0 charm=none
+[armory-inventory] retained item id=9FE6ABE590502EF4 def=7
+[armory-inventory] attachments synced on 9FE6ABE590502EF4: stickers=2 [0 kit=37 wear=0.000 rot=-22.5 off=-0.265,-0.014 schema=1] [1 kit=37 wear=0.000 rot=-10.5 off=-0.315,-0.012 schema=0] charm=kit:23 seed=0 off=0.461,0.495,3.253
+[armory-equipment] index: assignments=0 resolved=0 unresolved=0 conflicts=0 definitions=12 slots=0
+[armory-inventory] replacement committed: desired=15 created=1 retained=14 removed=0 removeFailed=0
+
+=== SNAPSHOT ===
+[snap] fsnCount=10625 lastStage=7 stage5Count=882
+[snap] stage histogram:
+[snap]   stage  0: 1345 frames
+[snap]   stage  1: 882 frames
+[snap]   stage  2: 882 frames
+[snap]   stage  3: 881 frames
+[snap]   stage  5: 882 frames
+[snap]   stage  6: 882 frames
+[snap]   stage  7: 882 frames
+[snap]   stage  8: 881 frames
+[snap]   stage 10: 882 frames
+[snap]   stage 11: 1280 frames
+[snap]   stage 12: 946 frames
+[snap] dwLocalPlayerController @ 0x00007FFEE59F2548 -> 0x00000229D7408000 
+[snap] dwLocalPlayerPawn       @ 0x00007FFEE5BE91E0 -> 0x000002295E2B0400 
+[snap] pawn: vtable=0x00007FFEE8E73740 inClient=0 health=553
+[snap] ctrl: vtable=0x00007FFEE50C1680 inClient=1 m_hPlayerPawn@0x92C = 0x0185800B (idx=11)
+[snap] entitySystem @ 0x00007FFEE5BCFBB8 = 0x0000022941478800 highestEntityIndex=13
+[snap] entity resolution: 12/16 of indices 1..16 valid
+[snap] ctrl->pawn handle resolve: 0x0185800B -> 0x00000229D7B73800
+[snap] ----------------------------------------
+N1SSAN_STATUS|1|2026-11-08T15:47:53Z|9320|armory-obsidian-3.0|READY|reason=runtime_worker_heartbeat
+[status-write] begin state=READY path=C:\Users\mirac\AppData\Local\n1ssan\status\cs2-9320.status
+[status-write] success state=READY error=0
+[armory-inventory] staged 16 items (applies outside an active match)
+[armory-inventory] preparing replacement set: 16 items
+[armory-inventory] retained item id=9F45014B4918D4CA def=5404
+[armory-inventory] retained item id=98580F04895784C8 def=4730
+[armory-inventory] retained item id=922FEB06198C79C1 def=525
+[armory-inventory] retained item id=9B4523A8BFE93866 def=5030
+[armory-inventory] retained item id=9919302EC58DC70A def=16
+[armory-inventory] attachments synced on 9919302EC58DC70A: stickers=1 [0 kit=20 wear=0.000 rot=0.0 off=-0.079,-0.004 schema=4] charm=kit:17 seed=0 off=33.469,0.373,12.120
+[armory-inventory] retained item id=96221A0E61314132 def=60
+[armory-inventory] attachments synced on 96221A0E61314132: stickers=1 [0 kit=42 wear=0.000 rot=0.0 off=0.426,0.013 schema=4] charm=none
+[armory-inventory] retained item id=914A30836F3526FC def=7
+[armory-inventory] retained item id=9536605177002A96 def=9
+[armory-inventory] attachments synced on 9536605177002A96: stickers=1 [0 kit=70 wear=0.000 rot=0.0 off=-0.252,0.006 schema=4] charm=none
+[armory-inventory] retained item id=9CF82CD4592CD5C7 def=61
+[armory-inventory] attachments synced on 9CF82CD4592CD5C7: stickers=0 charm=kit:7 seed=0 off=1.872,0.344,3.930
+[armory-inventory] retained item id=955F0C957F4C067D def=61
+[armory-inventory] attachments synced on 955F0C957F4C067D: stickers=1 [0 kit=98 wear=0.000 rot=0.0 off=0.000,0.000 schema=2] charm=kit:55 seed=0 off=18.066,0.752,3.900
+[armory-inventory] retained item id=9EF2C4042C206579 def=34
+[armory-inventory] attachments synced on 9EF2C4042C206579: stickers=1 [0 kit=6702 wear=0.000 rot=0.0 off=0.232,0.008 schema=2] charm=kit:70 seed=0 off=1.865,0.749,5.986
+[armory-inventory] retained item id=9AD2A303DFC2661B def=4
+[armory-inventory] attachments synced on 9AD2A303DFC2661B: stickers=1 [0 kit=70 wear=0.000 rot=-40.5 off=0.065,-0.238 schema=3] charm=none
+[armory-inventory] retained item id=91A393008C57670D def=1355
+[armory-inventory] attachments synced on 91A393008C57670D: stickers=0 charm=none
+[armory-inventory] retained item id=9FE6ABE590502EF4 def=7
+[armory-inventory] attachments synced on 9FE6ABE590502EF4: stickers=2 [0 kit=37 wear=0.000 rot=-22.5 off=-0.265,-0.014 schema=1] [1 kit=37 wear=0.000 rot=-10.5 off=-0.315,-0.012 schema=0] charm=kit:23 seed=0 off=0.461,0.495,3.253
+[armory-inventory] retained item id=988977C15EA1EF85 def=1355
+[armory-inventory] attachments synced on 988977C15EA1EF85: stickers=0 charm=none
+[armory-equipment] index: assignments=0 resolved=0 unresolved=0 conflicts=0 definitions=12 slots=0
+[armory-inventory] replacement committed: desired=16 created=1 retained=15 removed=0 removeFailed=0
+[detect] pawn=0x00000229D7B73800 hp=100 signOn=6 bg=0
+[charm-entity] world scan complete highest=13 found=0
+
+=== SNAPSHOT ===
+[snap] fsnCount=13217 lastStage=0 stage5Count=1098
+[snap] stage histogram:
+[snap]   stage  0: 1668 frames
+[snap]   stage  1: 1098 frames
+[snap]   stage  2: 1098 frames
+[snap]   stage  3: 1098 frames
+[snap]   stage  5: 1098 frames
+[snap]   stage  6: 1098 frames
+[snap]   stage  7: 1098 frames
+[snap]   stage  8: 1098 frames
+[snap]   stage 10: 1098 frames
+[snap]   stage 11: 1602 frames
+[snap]   stage 12: 1163 frames
+[snap] dwLocalPlayerController @ 0x00007FFEE59F2548 -> 0x00000229D7408000 
+[snap] dwLocalPlayerPawn       @ 0x00007FFEE5BE91E0 -> 0x000002295E2B0400 
+[snap] pawn: vtable=0x00007FFEE8E73740 inClient=0 health=553
+[snap] ctrl: vtable=0x00007FFEE50C1680 inClient=1 m_hPlayerPawn@0x92C = 0x0185800B (idx=11)
+[snap] entitySystem @ 0x00007FFEE5BCFBB8 = 0x0000022941478800 highestEntityIndex=13
+[snap] entity resolution: 12/16 of indices 1..16 valid
+[snap] ctrl->pawn handle resolve: 0x0185800B -> 0x00000229D7B73800
+[snap] ----------------------------------------
+[charm-entity] world scan complete highest=13 found=0
+
+=== SNAPSHOT ===
+[snap] fsnCount=15848 lastStage=0 stage5Count=1319
+[snap] stage histogram:
+[snap]   stage  0: 1989 frames
+[snap]   stage  1: 1319 frames
+[snap]   stage  2: 1319 frames
+[snap]   stage  3: 1319 frames
+[snap]   stage  5: 1319 frames
+[snap]   stage  6: 1319 frames
+[snap]   stage  7: 1319 frames
+[snap]   stage  8: 1319 frames
+[snap]   stage 10: 1319 frames
+[snap]   stage 11: 1923 frames
+[snap]   stage 12: 1384 frames
+[snap] dwLocalPlayerController @ 0x00007FFEE59F2548 -> 0x00000229D7408000 
+[snap] dwLocalPlayerPawn       @ 0x00007FFEE5BE91E0 -> 0x000002295E2B0400 
+[snap] pawn: vtable=0x00007FFEE8E73740 inClient=0 health=553
+[snap] ctrl: vtable=0x00007FFEE50C1680 inClient=1 m_hPlayerPawn@0x92C = 0x0185800B (idx=11)
+[snap] entitySystem @ 0x00007FFEE5BCFBB8 = 0x0000022941478800 highestEntityIndex=13
+[snap] entity resolution: 12/16 of indices 1..16 valid
+[snap] ctrl->pawn handle resolve: 0x0185800B -> 0x00000229D7B73800
+[snap] ----------------------------------------
+N1SSAN_STATUS|1|2026-11-08T15:48:03Z|9320|armory-obsidian-3.0|READY|reason=runtime_worker_heartbeat
+[status-write] begin state=READY path=C:\Users\mirac\AppData\Local\n1ssan\status\cs2-9320.status
+[status-write] success state=READY error=0
+[armory-inventory] staged 17 items (applies outside an active match)
+[armory-inventory] preparing replacement set: 17 items
+[armory-inventory] retained item id=9F45014B4918D4CA def=5404
+[armory-inventory] attachments synced on 9F45014B4918D4CA: stickers=0 charm=none
+[armory-inventory] retained item id=98580F04895784C8 def=4730
+[armory-inventory] retained item id=922FEB06198C79C1 def=525
+[armory-inventory] attachments synced on 922FEB06198C79C1: stickers=0 charm=none
+[armory-inventory] retained item id=9B4523A8BFE93866 def=5030
+[armory-inventory] retained item id=9919302EC58DC70A def=16
+[armory-inventory] attachments synced on 9919302EC58DC70A: stickers=1 [0 kit=20 wear=0.000 rot=0.0 off=-0.079,-0.004 schema=4] charm=kit:17 seed=0 off=33.469,0.373,12.120
+[armory-inventory] retained item id=96221A0E61314132 def=60
+[armory-inventory] attachments synced on 96221A0E61314132: stickers=1 [0 kit=42 wear=0.000 rot=0.0 off=0.426,0.013 schema=4] charm=none
+[armory-inventory] retained item id=914A30836F3526FC def=7
+[armory-inventory] attachments synced on 914A30836F3526FC: stickers=0 charm=none
+[armory-inventory] retained item id=9536605177002A96 def=9
+[armory-inventory] attachments synced on 9536605177002A96: stickers=1 [0 kit=70 wear=0.000 rot=0.0 off=-0.252,0.006 schema=4] charm=none
+[armory-inventory] retained item id=9CF82CD4592CD5C7 def=61
+[armory-inventory] attachments synced on 9CF82CD4592CD5C7: stickers=0 charm=kit:7 seed=0 off=1.872,0.344,3.930
+[armory-inventory] retained item id=955F0C957F4C067D def=61
+[armory-inventory] attachments synced on 955F0C957F4C067D: stickers=1 [0 kit=98 wear=0.000 rot=0.0 off=0.000,0.000 schema=2] charm=kit:55 seed=0 off=18.066,0.752,3.900
+[armory-inventory] retained item id=9EF2C4042C206579 def=34
+[armory-inventory] attachments synced on 9EF2C4042C206579: stickers=1 [0 kit=6702 wear=0.000 rot=0.0 off=0.232,0.008 schema=2] charm=kit:70 seed=0 off=1.865,0.749,5.986
+[armory-inventory] retained item id=9AD2A303DFC2661B def=4
+[armory-inventory] attachments synced on 9AD2A303DFC2661B: stickers=1 [0 kit=70 wear=0.000 rot=-40.5 off=0.065,-0.238 schema=3] charm=none
+[armory-inventory] retained item id=91A393008C57670D def=1355
+[armory-inventory] attachments synced on 91A393008C57670D: stickers=0 charm=none
+[armory-inventory] retained item id=9FE6ABE590502EF4 def=7
+[armory-inventory] attachments synced on 9FE6ABE590502EF4: stickers=2 [0 kit=37 wear=0.000 rot=-22.5 off=-0.265,-0.014 schema=1] [1 kit=37 wear=0.000 rot=-10.5 off=-0.315,-0.012 schema=0] charm=kit:23 seed=0 off=0.461,0.495,3.253
+[armory-inventory] retained item id=988977C15EA1EF85 def=1355
+[armory-inventory] attachments synced on 988977C15EA1EF85: stickers=0 charm=none
+[armory-inventory] retained item id=95CDD4BFE4A8E81E def=1355
+[armory-equipment] index: assignments=0 resolved=0 unresolved=0 conflicts=0 definitions=12 slots=0
+[armory-inventory] replacement committed: desired=17 created=1 retained=16 removed=0 removeFailed=0
+[detect] pawn=0x00000229D7B73800 hp=100 signOn=6 bg=0
+[charm-entity] world scan complete highest=13 found=0
+
+=== SNAPSHOT ===
+[snap] fsnCount=18432 lastStage=0 stage5Count=1535
+[snap] stage histogram:
+[snap]   stage  0: 2309 frames
+[snap]   stage  1: 1535 frames
+[snap]   stage  2: 1535 frames
+[snap]   stage  3: 1535 frames
+[snap]   stage  5: 1535 frames
+[snap]   stage  6: 1535 frames
+[snap]   stage  7: 1535 frames
+[snap]   stage  8: 1535 frames
+[snap]   stage 10: 1535 frames
+[snap]   stage 11: 2243 frames
+[snap]   stage 12: 1600 frames
+[snap] dwLocalPlayerController @ 0x00007FFEE59F2548 -> 0x00000229D7408000 
+[snap] dwLocalPlayerPawn       @ 0x00007FFEE5BE91E0 -> 0x000002295E2B0400 
+[snap] pawn: vtable=0x00007FFEE8E73740 inClient=0 health=553
+[snap] ctrl: vtable=0x00007FFEE50C1680 inClient=1 m_hPlayerPawn@0x92C = 0x0185800B (idx=11)
+[snap] entitySystem @ 0x00007FFEE5BCFBB8 = 0x0000022941478800 highestEntityIndex=13
+[snap] entity resolution: 12/16 of indices 1..16 valid
+[snap] ctrl->pawn handle resolve: 0x0185800B -> 0x00000229D7B73800
+[snap] ----------------------------------------
+[charm-entity] world scan complete highest=13 found=0
+
+=== SNAPSHOT ===
+[snap] fsnCount=21054 lastStage=0 stage5Count=1755
+[snap] stage histogram:
+[snap]   stage  0: 2630 frames
+[snap]   stage  1: 1755 frames
+[snap]   stage  2: 1755 frames
+[snap]   stage  3: 1755 frames
+[snap]   stage  5: 1755 frames
+[snap]   stage  6: 1755 frames
+[snap]   stage  7: 1755 frames
+[snap]   stage  8: 1755 frames
+[snap]   stage 10: 1755 frames
+[snap]   stage 11: 2564 frames
+[snap]   stage 12: 1820 frames
+[snap] dwLocalPlayerController @ 0x00007FFEE59F2548 -> 0x00000229D7408000 
+[snap] dwLocalPlayerPawn       @ 0x00007FFEE5BE91E0 -> 0x000002295E2B0400 
+[snap] pawn: vtable=0x00007FFEE8E73740 inClient=0 health=553
+[snap] ctrl: vtable=0x00007FFEE50C1680 inClient=1 m_hPlayerPawn@0x92C = 0x0185800B (idx=11)
+[snap] entitySystem @ 0x00007FFEE5BCFBB8 = 0x0000022941478800 highestEntityIndex=13
+[snap] entity resolution: 12/16 of indices 1..16 valid
+[snap] ctrl->pawn handle resolve: 0x0185800B -> 0x00000229D7B73800
+[snap] ----------------------------------------
+N1SSAN_STATUS|1|2026-11-08T15:48:13Z|9320|armory-obsidian-3.0|READY|reason=runtime_worker_heartbeat
+[status-write] begin state=READY path=C:\Users\mirac\AppData\Local\n1ssan\status\cs2-9320.status
+[status-write] success state=READY error=0
+[armory-inventory] staged 18 items (applies outside an active match)
+[armory-inventory] preparing replacement set: 18 items
+[armory-inventory] retained item id=9F45014B4918D4CA def=5404
+[armory-inventory] retained item id=98580F04895784C8 def=4730
+[armory-inventory] retained item id=922FEB06198C79C1 def=525
+[armory-inventory] retained item id=9B4523A8BFE93866 def=5030
+[armory-inventory] retained item id=9919302EC58DC70A def=16
+[armory-inventory] attachments synced on 9919302EC58DC70A: stickers=1 [0 kit=20 wear=0.000 rot=0.0 off=-0.079,-0.004 schema=4] charm=kit:17 seed=0 off=33.469,0.373,12.120
+[armory-inventory] retained item id=96221A0E61314132 def=60
+[armory-inventory] attachments synced on 96221A0E61314132: stickers=1 [0 kit=42 wear=0.000 rot=0.0 off=0.426,0.013 schema=4] charm=none
+[armory-inventory] retained item id=914A30836F3526FC def=7
+[armory-inventory] retained item id=9536605177002A96 def=9
+[armory-inventory] attachments synced on 9536605177002A96: stickers=1 [0 kit=70 wear=0.000 rot=0.0 off=-0.252,0.006 schema=4] charm=none
+[armory-inventory] retained item id=9CF82CD4592CD5C7 def=61
+[armory-inventory] attachments synced on 9CF82CD4592CD5C7: stickers=0 charm=kit:7 seed=0 off=1.872,0.344,3.930
+[armory-inventory] retained item id=955F0C957F4C067D def=61
+[armory-inventory] attachments synced on 955F0C957F4C067D: stickers=1 [0 kit=98 wear=0.000 rot=0.0 off=0.000,0.000 schema=2] charm=kit:55 seed=0 off=18.066,0.752,3.900
+[armory-inventory] retained item id=9EF2C4042C206579 def=34
+[armory-inventory] attachments synced on 9EF2C4042C206579: stickers=1 [0 kit=6702 wear=0.000 rot=0.0 off=0.232,0.008 schema=2] charm=kit:70 seed=0 off=1.865,0.749,5.986
+[armory-inventory] retained item id=9AD2A303DFC2661B def=4
+[armory-inventory] attachments synced on 9AD2A303DFC2661B: stickers=1 [0 kit=70 wear=0.000 rot=-40.5 off=0.065,-0.238 schema=3] charm=none
+[armory-inventory] retained item id=91A393008C57670D def=1355
+[armory-inventory] attachments synced on 91A393008C57670D: stickers=0 charm=none
+[armory-inventory] retained item id=9FE6ABE590502EF4 def=7
+[armory-inventory] attachments synced on 9FE6ABE590502EF4: stickers=2 [0 kit=37 wear=0.000 rot=-22.5 off=-0.265,-0.014 schema=1] [1 kit=37 wear=0.000 rot=-10.5 off=-0.315,-0.012 schema=0] charm=kit:23 seed=0 off=0.461,0.495,3.253
+[armory-inventory] retained item id=988977C15EA1EF85 def=1355
+[armory-inventory] attachments synced on 988977C15EA1EF85: stickers=0 charm=none
+[armory-inventory] retained item id=95CDD4BFE4A8E81E def=1355
+[armory-inventory] retained item id=995FB84ADED491FB def=1355
+[armory-equipment] index: assignments=0 resolved=0 unresolved=0 conflicts=0 definitions=13 slots=0
+[armory-inventory] replacement committed: desired=18 created=1 retained=17 removed=0 removeFailed=0
+[detect] pawn=0x00000229D7B73800 hp=100 signOn=6 bg=0
+[charm-entity] world scan complete highest=13 found=0
+
+=== SNAPSHOT ===
+[snap] fsnCount=23649 lastStage=0 stage5Count=1972
+[snap] stage histogram:
+[snap]   stage  0: 2951 frames
+[snap]   stage  1: 1972 frames
+[snap]   stage  2: 1972 frames
+[snap]   stage  3: 1972 frames
+[snap]   stage  5: 1972 frames
+[snap]   stage  6: 1972 frames
+[snap]   stage  7: 1972 frames
+[snap]   stage  8: 1972 frames
+[snap]   stage 10: 1972 frames
+[snap]   stage 11: 2885 frames
+[snap]   stage 12: 2037 frames
+[snap] dwLocalPlayerController @ 0x00007FFEE59F2548 -> 0x00000229D7408000 
+[snap] dwLocalPlayerPawn       @ 0x00007FFEE5BE91E0 -> 0x000002295E2B0400 
+[snap] pawn: vtable=0x00007FFEE8E73740 inClient=0 health=553
+[snap] ctrl: vtable=0x00007FFEE50C1680 inClient=1 m_hPlayerPawn@0x92C = 0x0185800B (idx=11)
+[snap] entitySystem @ 0x00007FFEE5BCFBB8 = 0x0000022941478800 highestEntityIndex=13
+[snap] entity resolution: 12/16 of indices 1..16 valid
+[snap] ctrl->pawn handle resolve: 0x0185800B -> 0x00000229D7B73800
+[snap] ----------------------------------------
+[charm-entity] world scan complete highest=13 found=0
+
+=== SNAPSHOT ===
+[snap] fsnCount=26278 lastStage=0 stage5Count=2193
+[snap] stage histogram:
+[snap]   stage  0: 3271 frames
+[snap]   stage  1: 2193 frames
+[snap]   stage  2: 2193 frames
+[snap]   stage  3: 2193 frames
+[snap]   stage  5: 2193 frames
+[snap]   stage  6: 2193 frames
+[snap]   stage  7: 2193 frames
+[snap]   stage  8: 2193 frames
+[snap]   stage 10: 2193 frames
+[snap]   stage 11: 3205 frames
+[snap]   stage 12: 2258 frames
+[snap] dwLocalPlayerController @ 0x00007FFEE59F2548 -> 0x00000229D7408000 
+[snap] dwLocalPlayerPawn       @ 0x00007FFEE5BE91E0 -> 0x000002295E2B0400 
+[snap] pawn: vtable=0x00007FFEE8E73740 inClient=0 health=553
+[snap] ctrl: vtable=0x00007FFEE50C1680 inClient=1 m_hPlayerPawn@0x92C = 0x0185800B (idx=11)
+[snap] entitySystem @ 0x00007FFEE5BCFBB8 = 0x0000022941478800 highestEntityIndex=13
+[snap] entity resolution: 12/16 of indices 1..16 valid
+[snap] ctrl->pawn handle resolve: 0x0185800B -> 0x00000229D7B73800
+[snap] ----------------------------------------
+N1SSAN_STATUS|1|2026-11-08T15:48:23Z|9320|armory-obsidian-3.0|READY|reason=runtime_worker_heartbeat
+[status-write] begin state=READY path=C:\Users\mirac\AppData\Local\n1ssan\status\cs2-9320.status
+[status-write] success state=READY error=0
+[armory-inventory] staged 19 items (applies outside an active match)
+[armory-inventory] preparing replacement set: 19 items
+[armory-inventory] retained item id=9F45014B4918D4CA def=5404
+[armory-inventory] retained item id=98580F04895784C8 def=4730
+[armory-inventory] retained item id=922FEB06198C79C1 def=525
+[armory-inventory] attachments synced on 922FEB06198C79C1: stickers=0 charm=none
+[armory-inventory] retained item id=9B4523A8BFE93866 def=5030
+[armory-inventory] retained item id=9919302EC58DC70A def=16
+[armory-inventory] attachments synced on 9919302EC58DC70A: stickers=1 [0 kit=20 wear=0.000 rot=0.0 off=-0.079,-0.004 schema=4] charm=kit:17 seed=0 off=33.469,0.373,12.120
+[armory-inventory] retained item id=96221A0E61314132 def=60
+[armory-inventory] attachments synced on 96221A0E61314132: stickers=1 [0 kit=42 wear=0.000 rot=0.0 off=0.426,0.013 schema=4] charm=none
+[armory-inventory] retained item id=914A30836F3526FC def=7
+[armory-inventory] retained item id=9536605177002A96 def=9
+[armory-inventory] attachments synced on 9536605177002A96: stickers=1 [0 kit=70 wear=0.000 rot=0.0 off=-0.252,0.006 schema=4] charm=none
+[armory-inventory] retained item id=9CF82CD4592CD5C7 def=61
+[armory-inventory] attachments synced on 9CF82CD4592CD5C7: stickers=0 charm=kit:7 seed=0 off=1.872,0.344,3.930
+[armory-inventory] retained item id=955F0C957F4C067D def=61
+[armory-inventory] attachments synced on 955F0C957F4C067D: stickers=1 [0 kit=98 wear=0.000 rot=0.0 off=0.000,0.000 schema=2] charm=kit:55 seed=0 off=18.066,0.752,3.900
+[armory-inventory] retained item id=9EF2C4042C206579 def=34
+[armory-inventory] attachments synced on 9EF2C4042C206579: stickers=1 [0 kit=6702 wear=0.000 rot=0.0 off=0.232,0.008 schema=2] charm=kit:70 seed=0 off=1.865,0.749,5.986
+[armory-inventory] retained item id=9AD2A303DFC2661B def=4
+[armory-inventory] attachments synced on 9AD2A303DFC2661B: stickers=1 [0 kit=70 wear=0.000 rot=-40.5 off=0.065,-0.238 schema=3] charm=none
+[armory-inventory] retained item id=91A393008C57670D def=1355
+[armory-inventory] attachments synced on 91A393008C57670D: stickers=0 charm=none
+[armory-inventory] retained item id=9FE6ABE590502EF4 def=7
+[armory-inventory] attachments synced on 9FE6ABE590502EF4: stickers=2 [0 kit=37 wear=0.000 rot=-22.5 off=-0.265,-0.014 schema=1] [1 kit=37 wear=0.000 rot=-10.5 off=-0.315,-0.012 schema=0] charm=kit:23 seed=0 off=0.461,0.495,3.253
+[armory-inventory] retained item id=988977C15EA1EF85 def=1355
+[armory-inventory] attachments synced on 988977C15EA1EF85: stickers=0 charm=none
+[armory-inventory] retained item id=95CDD4BFE4A8E81E def=1355
+[armory-inventory] retained item id=995FB84ADED491FB def=1355
+[armory-inventory] retained item id=9AF02F74A285D5C2 def=1209
+[armory-inventory] attachments synced on 9AF02F74A285D5C2: stickers=0 charm=none
+[armory-equipment] index: assignments=0 resolved=0 unresolved=0 conflicts=0 definitions=13 slots=0
+[armory-inventory] replacement committed: desired=19 created=1 retained=18 removed=0 removeFailed=0
+[armory-equipment] index: assignments=0 resolved=0 unresolved=0 conflicts=0 definitions=13 slots=0
+[armory-equipment] reloaded equipment document
+[armory-inventory] staged 19 items (applies outside an active match)
+[armory-inventory] preparing replacement set: 19 items
+[armory-inventory] retained item id=9F45014B4918D4CA def=5404
+[armory-inventory] attachments synced on 9F45014B4918D4CA: stickers=0 charm=none
+[armory-inventory] retained item id=98580F04895784C8 def=4730
+[armory-inventory] retained item id=922FEB06198C79C1 def=525
+[armory-inventory] attachments synced on 922FEB06198C79C1: stickers=0 charm=none
+[armory-inventory] retained item id=9B4523A8BFE93866 def=5030
+[armory-inventory] attachments synced on 9B4523A8BFE93866: stickers=0 charm=none
+[armory-inventory] retained item id=9919302EC58DC70A def=16
+[armory-inventory] attachments synced on 9919302EC58DC70A: stickers=1 [0 kit=20 wear=0.000 rot=0.0 off=-0.079,-0.004 schema=4] charm=kit:17 seed=0 off=33.469,0.373,12.120
+[armory-inventory] retained item id=96221A0E61314132 def=60
+[armory-inventory] attachments synced on 96221A0E61314132: stickers=1 [0 kit=42 wear=0.000 rot=0.0 off=0.426,0.013 schema=4] charm=none
+[armory-inventory] retained item id=914A30836F3526FC def=7
+[armory-inventory] retained item id=9536605177002A96 def=9
+[armory-inventory] attachments synced on 9536605177002A96: stickers=1 [0 kit=70 wear=0.000 rot=0.0 off=-0.252,0.006 schema=4] charm=none
+[armory-inventory] retained item id=9CF82CD4592CD5C7 def=61
+[armory-inventory] attachments synced on 9CF82CD4592CD5C7: stickers=0 charm=kit:7 seed=0 off=1.872,0.344,3.930
+[armory-inventory] retained item id=955F0C957F4C067D def=61
+[armory-inventory] attachments synced on 955F0C957F4C067D: stickers=1 [0 kit=98 wear=0.000 rot=0.0 off=0.000,0.000 schema=2] charm=kit:55 seed=0 off=18.066,0.752,3.900
+[armory-inventory] retained item id=9EF2C4042C206579 def=34
+[armory-inventory] attachments synced on 9EF2C4042C206579: stickers=1 [0 kit=6702 wear=0.000 rot=0.0 off=0.232,0.008 schema=2] charm=kit:70 seed=0 off=1.865,0.749,5.986
+[armory-inventory] retained item id=9AD2A303DFC2661B def=4
+[armory-inventory] attachments synced on 9AD2A303DFC2661B: stickers=1 [0 kit=70 wear=0.000 rot=-40.5 off=0.065,-0.238 schema=3] charm=none
+[armory-inventory] retained item id=91A393008C57670D def=1355
+[armory-inventory] attachments synced on 91A393008C57670D: stickers=0 charm=none
+[armory-inventory] retained item id=9FE6ABE590502EF4 def=7
+[armory-inventory] attachments synced on 9FE6ABE590502EF4: stickers=2 [0 kit=37 wear=0.000 rot=-22.5 off=-0.265,-0.014 schema=1] [1 kit=37 wear=0.000 rot=-10.5 off=-0.315,-0.012 schema=0] charm=kit:23 seed=0 off=0.461,0.495,3.253
+[armory-inventory] retained item id=988977C15EA1EF85 def=1355
+[armory-inventory] attachments synced on 988977C15EA1EF85: stickers=0 charm=none
+[armory-inventory] retained item id=95CDD4BFE4A8E81E def=1355
+[armory-inventory] retained item id=995FB84ADED491FB def=1355
+[armory-inventory] retained item id=9AF02F74A285D5C2 def=1209
+[armory-inventory] attachments synced on 9AF02F74A285D5C2: stickers=0 charm=none
+[armory-inventory] retained item id=998701B6041F17DE def=1209
+[armory-inventory] attachments synced on 998701B6041F17DE: stickers=0 charm=none
+[armory-equipment] index: assignments=0 resolved=0 unresolved=0 conflicts=0 definitions=13 slots=0
+[armory-inventory] replacement committed: desired=19 created=0 retained=19 removed=0 removeFailed=0
+[detect] pawn=0x00000229D7B73800 hp=100 signOn=6 bg=0
+[charm-entity] world scan complete highest=13 found=0
+
+=== SNAPSHOT ===
+[snap] fsnCount=29131 lastStage=0 stage5Count=2420
+[snap] stage histogram:
+[snap]   stage  0: 3676 frames
+[snap]   stage  1: 2420 frames
+[snap]   stage  2: 2420 frames
+[snap]   stage  3: 2420 frames
+[snap]   stage  5: 2420 frames
+[snap]   stage  6: 2420 frames
+[snap]   stage  7: 2420 frames
+[snap]   stage  8: 2420 frames
+[snap]   stage 10: 2420 frames
+[snap]   stage 11: 3525 frames
+[snap]   stage 12: 2570 frames
+[snap] dwLocalPlayerController @ 0x00007FFEE59F2548 -> 0x00000229D7408000 
+[snap] dwLocalPlayerPawn       @ 0x00007FFEE5BE91E0 -> 0x000002295E2B0400 
+[snap] pawn: vtable=0x00007FFEE8E73740 inClient=0 health=553
+[snap] ctrl: vtable=0x00007FFEE50C1680 inClient=1 m_hPlayerPawn@0x92C = 0x0185800B (idx=11)
+[snap] entitySystem @ 0x00007FFEE5BCFBB8 = 0x0000022941478800 highestEntityIndex=13
+[snap] entity resolution: 12/16 of indices 1..16 valid
+[snap] ctrl->pawn handle resolve: 0x0185800B -> 0x00000229D7B73800
+[snap] ----------------------------------------
+[charm-entity] world scan complete highest=13 found=0
+
+=== SNAPSHOT ===
+[snap] fsnCount=33653 lastStage=0 stage5Count=2738
+[snap] stage histogram:
+[snap]   stage  0: 4506 frames
+[snap]   stage  1: 2738 frames
+[snap]   stage  2: 2738 frames
+[snap]   stage  3: 2738 frames
+[snap]   stage  5: 2738 frames
+[snap]   stage  6: 2738 frames
+[snap]   stage  7: 2738 frames
+[snap]   stage  8: 2738 frames
+[snap]   stage 10: 2738 frames
+[snap]   stage 11: 3845 frames
+[snap]   stage 12: 3398 frames
+[snap] dwLocalPlayerController @ 0x00007FFEE59F2548 -> 0x00000229D7408000 
+[snap] dwLocalPlayerPawn       @ 0x00007FFEE5BE91E0 -> 0x000002295E2B0400 
+[snap] pawn: vtable=0x00007FFEE8E73740 inClient=0 health=553
+[snap] ctrl: vtable=0x00007FFEE50C1680 inClient=1 m_hPlayerPawn@0x92C = 0x0185800B (idx=11)
+[snap] entitySystem @ 0x00007FFEE5BCFBB8 = 0x0000022941478800 highestEntityIndex=13
+[snap] entity resolution: 12/16 of indices 1..16 valid
+[snap] ctrl->pawn handle resolve: 0x0185800B -> 0x00000229D7B73800
+[snap] ----------------------------------------
+N1SSAN_STATUS|1|2026-11-08T15:48:33Z|9320|armory-obsidian-3.0|READY|reason=runtime_worker_heartbeat
+[status-write] begin state=READY path=C:\Users\mirac\AppData\Local\n1ssan\status\cs2-9320.status
+[status-write] success state=READY error=0
+[detect] pawn=0x00000229D7B73800 hp=100 signOn=6 bg=0
+[charm-entity] world scan complete highest=13 found=0
+
+=== SNAPSHOT ===
+[snap] fsnCount=38126 lastStage=10 stage5Count=3058
+[snap] stage histogram:
+[snap]   stage  0: 5302 frames
+[snap]   stage  1: 3058 frames
+[snap]   stage  2: 3058 frames
+[snap]   stage  3: 3058 frames
+[snap]   stage  5: 3058 frames
+[snap]   stage  6: 3058 frames
+[snap]   stage  7: 3058 frames
+[snap]   stage  8: 3058 frames
+[snap]   stage 10: 3059 frames
+[snap]   stage 11: 4165 frames
+[snap]   stage 12: 4194 frames
+[snap] dwLocalPlayerController @ 0x00007FFEE59F2548 -> 0x00000229D7408000 
+[snap] dwLocalPlayerPawn       @ 0x00007FFEE5BE91E0 -> 0x000002295E2B0400 
+[snap] pawn: vtable=0x00007FFEE8E73740 inClient=0 health=553
+[snap] ctrl: vtable=0x00007FFEE50C1680 inClient=1 m_hPlayerPawn@0x92C = 0x0185800B (idx=11)
+[snap] entitySystem @ 0x00007FFEE5BCFBB8 = 0x0000022941478800 highestEntityIndex=13
+[snap] entity resolution: 12/16 of indices 1..16 valid
+[snap] ctrl->pawn handle resolve: 0x0185800B -> 0x00000229D7B73800
+[snap] ----------------------------------------
+[charm-entity] world scan complete highest=13 found=0
+
+=== SNAPSHOT ===
+[snap] fsnCount=41484 lastStage=0 stage5Count=3317
+[snap] stage histogram:
+[snap]   stage  0: 5816 frames
+[snap]   stage  1: 3317 frames
+[snap]   stage  2: 3317 frames
+[snap]   stage  3: 3317 frames
+[snap]   stage  5: 3317 frames
+[snap]   stage  6: 3317 frames
+N1SSAN_STATUS|1|2026-11-08T15:48:43Z|9320|armory-obsidian-3.0|READY|reason=runtime_worker_heartbeat
+[snap]   stage  7: 3317 frames
+[status-write] begin state=READY path=C:\Users\mirac\AppData\Local\n1ssan\status\cs2-9320.status
+[snap]   stage  8: 3317 frames
+[snap]   stage 10: 3317 frames
+[snap]   stage 11: 4486 frames
+[snap]   stage 12: 4646 frames
+[status-write] success state=READY error=0
+[snap] dwLocalPlayerController @ 0x00007FFEE59F2548 -> 0x00000229D7408000 
+[snap] dwLocalPlayerPawn       @ 0x00007FFEE5BE91E0 -> 0x000002295E2B0400 
+[snap] pawn: vtable=0x00007FFEE8E73740 inClient=0 health=553
+[snap] ctrl: vtable=0x00007FFEE50C1680 inClient=1 m_hPlayerPawn@0x92C = 0x0185800B (idx=11)
+[snap] entitySystem @ 0x00007FFEE5BCFBB8 = 0x0000022941478800 highestEntityIndex=13
+[snap] entity resolution: 12/16 of indices 1..16 valid
+[snap] ctrl->pawn handle resolve: 0x0185800B -> 0x00000229D7B73800
+[snap] ----------------------------------------
+[detect] pawn=0x00000229D7B73800 hp=100 signOn=6 bg=0
+[charm-entity] world scan complete highest=13 found=0
+
+=== SNAPSHOT ===
+[snap] fsnCount=44056 lastStage=0 stage5Count=3527
+[snap] stage histogram:
+[snap]   stage  0: 6157 frames
+[snap]   stage  1: 3527 frames
+[snap]   stage  2: 3527 frames
+[snap]   stage  3: 3527 frames
+[snap]   stage  5: 3527 frames
+[snap]   stage  6: 3527 frames
+[snap]   stage  7: 3527 frames
+[snap]   stage  8: 3527 frames
+[snap]   stage 10: 3527 frames
+[snap]   stage 11: 4806 frames
+[snap]   stage 12: 4877 frames
+[snap] dwLocalPlayerController @ 0x00007FFEE59F2548 -> 0x00000229D7408000 
+[snap] dwLocalPlayerPawn       @ 0x00007FFEE5BE91E0 -> 0x000002295E2B0400 
+[snap] pawn: vtable=0x00007FFEE8E73740 inClient=0 health=553
+[snap] ctrl: vtable=0x00007FFEE50C1680 inClient=1 m_hPlayerPawn@0x92C = 0x0185800B (idx=11)
+[snap] entitySystem @ 0x00007FFEE5BCFBB8 = 0x0000022941478800 highestEntityIndex=13
+[snap] entity resolution: 12/16 of indices 1..16 valid
+[snap] ctrl->pawn handle resolve: 0x0185800B -> 0x00000229D7B73800
+[snap] ----------------------------------------
+[charm-entity] world scan complete highest=13 found=0
+
+=== SNAPSHOT ===
+[snap] fsnCount=47802 lastStage=0 stage5Count=3817
+[snap] stage histogram:
+[snap]   stage  0: 6725 frames
+[snap]   stage  1: 3817 frames
+[snap]   stage  2: 3817 frames
+[snap]   stage  3: 3817 frames
+[snap]   stage  5: 3817 frames
+[snap]   stage  6: 3817 frames
+[snap]   stage  7: 3817 frames
+N1SSAN_STATUS|1|2026-11-08T15:48:53Z|9320|armory-obsidian-3.0|READY|reason=runtime_worker_heartbeat
+[snap]   stage  8: 3817 frames
+[snap]   stage 10: 3817 frames
+[status-write] begin state=READY path=C:\Users\mirac\AppData\Local\n1ssan\status\cs2-9320.status
+[snap]   stage 11: 5127 frames
+[snap]   stage 12: 5414 frames
+[snap] dwLocalPlayerController @ 0x00007FFEE59F2548 -> 0x00000229D7408000 
+[snap] dwLocalPlayerPawn       @ 0x00007FFEE5BE91E0 -> 0x000002295E2B0400 
+[status-write] success state=READY error=0
+[snap] pawn: vtable=0x00007FFEE8E73740 inClient=0 health=553
+[snap] ctrl: vtable=0x00007FFEE50C1680 inClient=1 m_hPlayerPawn@0x92C = 0x0185800B (idx=11)
+[snap] entitySystem @ 0x00007FFEE5BCFBB8 = 0x0000022941478800 highestEntityIndex=13
+[snap] entity resolution: 12/16 of indices 1..16 valid
+[snap] ctrl->pawn handle resolve: 0x0185800B -> 0x00000229D7B73800
+[snap] ----------------------------------------
+[use-tool] hook-entry #1 mode=2 api=00000228B326CD00 toolArg=00000229C9E6FD40 targetArg=00000229C9E677C0 original=00007FFEE2D40FC0
+[use-tool] charm 30 on 914A30836F3526FC: at the popup's spot - applying
+[use-tool] hook-entry #1 decision=handled locally
+[detect] pawn=0x00000229D7B73800 hp=100 signOn=6 bg=0
+[charm-entity] world scan complete highest=13 found=0
+[attach] Lootline ItemViewById resolved @ 00007FFEE3CED190
+[attach] ItemViewById read 914A30836F3526FC via CS2 getters
+[use-tool] charm target sticker slots read through CS2 ItemView fallback; preserving stickers
+[use-tool] consumed charm item 995FB84ADED491FB removal=SUCCESS
+[attach] immediate native observation stickers=0 charm=kit:30 seed=0 off=23.891,0.367,2.287 for item-1794105099681-k0fuq (914A30836F3526FC), source=item-1794152883545-yy5uk consumed=1 file=written
+[use-tool] charm 30 (seed 0) hung on 914A30836F3526FC at x 23.891 y 0.367 z 2.287 (the popup's spot): attributes written, inventory told, popup NOT told, charm item used up
+
+=== SNAPSHOT ===
+[snap] fsnCount=51548 lastStage=0 stage5Count=4131
+[snap] stage histogram:
+[snap]   stage  0: 7185 frames
+[snap]   stage  1: 4131 frames
+[snap]   stage  2: 4131 frames
+[snap]   stage  3: 4131 frames
+[snap]   stage  5: 4131 frames
+[snap]   stage  6: 4131 frames
+[snap]   stage  7: 4131 frames
+[snap]   stage  8: 4131 frames
+[snap]   stage 10: 4131 frames
+[snap]   stage 11: 5448 frames
+[snap]   stage 12: 5867 frames
+[snap] dwLocalPlayerController @ 0x00007FFEE59F2548 -> 0x00000229D7408000 
+[snap] dwLocalPlayerPawn       @ 0x00007FFEE5BE91E0 -> 0x000002295E2B0400 
+[snap] pawn: vtable=0x00007FFEE8E73740 inClient=0 health=553
+[snap] ctrl: vtable=0x00007FFEE50C1680 inClient=1 m_hPlayerPawn@0x92C = 0x0185800B (idx=11)
+[snap] entitySystem @ 0x00007FFEE5BCFBB8 = 0x0000022941478800 highestEntityIndex=13
+[snap] entity resolution: 12/16 of indices 1..16 valid
+[snap] ctrl->pawn handle resolve: 0x0185800B -> 0x00000229D7B73800
+[snap] ----------------------------------------
+[armory-inventory] staged 18 items (applies outside an active match)
+[armory-inventory] preparing replacement set: 18 items
+[armory-inventory] retained item id=9F45014B4918D4CA def=5404
+[armory-inventory] retained item id=98580F04895784C8 def=4730
+[armory-inventory] retained item id=922FEB06198C79C1 def=525
+[armory-inventory] attachments synced on 922FEB06198C79C1: stickers=0 charm=none
+[armory-inventory] retained item id=9B4523A8BFE93866 def=5030
+[armory-inventory] attachments synced on 9B4523A8BFE93866: stickers=0 charm=none
+[armory-inventory] retained item id=9919302EC58DC70A def=16
+[armory-inventory] attachments synced on 9919302EC58DC70A: stickers=1 [0 kit=20 wear=0.000 rot=0.0 off=-0.079,-0.004 schema=4] charm=kit:17 seed=0 off=33.469,0.373,12.120
+[armory-inventory] retained item id=96221A0E61314132 def=60
+[armory-inventory] attachments synced on 96221A0E61314132: stickers=1 [0 kit=42 wear=0.000 rot=0.0 off=0.426,0.013 schema=4] charm=none
+[armory-inventory] retained item id=914A30836F3526FC def=7
+[armory-inventory] attachments synced on 914A30836F3526FC: stickers=0 charm=kit:30 seed=0 off=23.891,0.367,2.287
+[armory-inventory] retained item id=9536605177002A96 def=9
+[armory-inventory] attachments synced on 9536605177002A96: stickers=1 [0 kit=70 wear=0.000 rot=0.0 off=-0.252,0.006 schema=4] charm=none
+[armory-inventory] retained item id=9CF82CD4592CD5C7 def=61
+[armory-inventory] attachments synced on 9CF82CD4592CD5C7: stickers=0 charm=kit:7 seed=0 off=1.872,0.344,3.930
+[armory-inventory] retained item id=955F0C957F4C067D def=61
+[armory-inventory] attachments synced on 955F0C957F4C067D: stickers=1 [0 kit=98 wear=0.000 rot=0.0 off=0.000,0.000 schema=2] charm=kit:55 seed=0 off=18.066,0.752,3.900
+[armory-inventory] retained item id=9EF2C4042C206579 def=34
+[armory-inventory] attachments synced on 9EF2C4042C206579: stickers=1 [0 kit=6702 wear=0.000 rot=0.0 off=0.232,0.008 schema=2] charm=kit:70 seed=0 off=1.865,0.749,5.986
+[armory-inventory] retained item id=9AD2A303DFC2661B def=4
+[armory-inventory] attachments synced on 9AD2A303DFC2661B: stickers=1 [0 kit=70 wear=0.000 rot=-40.5 off=0.065,-0.238 schema=3] charm=none
+[armory-inventory] retained item id=91A393008C57670D def=1355
+[armory-inventory] attachments synced on 91A393008C57670D: stickers=0 charm=none
+[armory-inventory] retained item id=9FE6ABE590502EF4 def=7
+[armory-inventory] attachments synced on 9FE6ABE590502EF4: stickers=2 [0 kit=37 wear=0.000 rot=-22.5 off=-0.265,-0.014 schema=1] [1 kit=37 wear=0.000 rot=-10.5 off=-0.315,-0.012 schema=0] charm=kit:23 seed=0 off=0.461,0.495,3.253
+[armory-inventory] retained item id=988977C15EA1EF85 def=1355
+[armory-inventory] attachments synced on 988977C15EA1EF85: stickers=0 charm=none
+[armory-inventory] retained item id=95CDD4BFE4A8E81E def=1355
+[armory-inventory] attachments synced on 95CDD4BFE4A8E81E: stickers=0 charm=none
+[armory-inventory] retained item id=9AF02F74A285D5C2 def=1209
+[armory-inventory] attachments synced on 9AF02F74A285D5C2: stickers=0 charm=none
+[armory-inventory] retained item id=998701B6041F17DE def=1209
+[armory-equipment] index: assignments=0 resolved=0 unresolved=0 conflicts=0 definitions=13 slots=0
+[armory-inventory] replacement committed: desired=18 created=0 retained=18 removed=0 removeFailed=0
+[charm-entity] world scan complete highest=13 found=0
+
+=== SNAPSHOT ===
+[snap] fsnCount=55741 lastStage=0 stage5Count=4442
+[snap] stage histogram:
+[snap]   stage  0: 7882 frames
+N1SSAN_STATUS|1|2026-11-08T15:49:03Z|9320|armory-obsidian-3.0|READY|reason=runtime_worker_heartbeat
+[snap]   stage  1: 4442 frames
+[status-write] begin state=READY path=C:\Users\mirac\AppData\Local\n1ssan\status\cs2-9320.status
+[snap]   stage  2: 4442 frames
+[snap]   stage  3: 4442 frames
+[snap]   stage  5: 4442 frames
+[snap]   stage  6: 4442 frames
+[snap]   stage  7: 4442 frames
+[snap]   stage  8: 4442 frames
+[snap]   stage 10: 4442 frames
+[snap]   stage 11: 5768 frames
+[snap]   stage 12: 6555 frames
+[snap] dwLocalPlayerController @ 0x00007FFEE59F2548 -> 0x00000229D7408000 
+[status-write] success state=READY error=0
+[snap] dwLocalPlayerPawn       @ 0x00007FFEE5BE91E0 -> 0x000002295E2B0400 
+[snap] pawn: vtable=0x00007FFEE8E73740 inClient=0 health=553
+[snap] ctrl: vtable=0x00007FFEE50C1680 inClient=1 m_hPlayerPawn@0x92C = 0x0185800B (idx=11)
+[snap] entitySystem @ 0x00007FFEE5BCFBB8 = 0x0000022941478800 highestEntityIndex=13
+[snap] entity resolution: 12/16 of indices 1..16 valid
+[snap] ctrl->pawn handle resolve: 0x0185800B -> 0x00000229D7B73800
+[snap] ----------------------------------------
+[detect] pawn=0x00000229D7B73800 hp=100 signOn=6 bg=0
+[charm-entity] world scan complete highest=13 found=0
+
+=== SNAPSHOT ===
+[snap] fsnCount=59662 lastStage=0 stage5Count=4759
+[snap] stage histogram:
+[snap]   stage  0: 8416 frames
+[snap]   stage  1: 4759 frames
+[snap]   stage  2: 4759 frames
+[snap]   stage  3: 4759 frames
+[snap]   stage  5: 4759 frames
+[snap]   stage  6: 4759 frames
+[snap]   stage  7: 4759 frames
+[snap]   stage  8: 4759 frames
+[snap]   stage 10: 4759 frames
+[snap]   stage 11: 6088 frames
+[snap]   stage 12: 7086 frames
+[snap] dwLocalPlayerController @ 0x00007FFEE59F2548 -> 0x00000229D7408000 
+[snap] dwLocalPlayerPawn       @ 0x00007FFEE5BE91E0 -> 0x000002295E2B0400 
+[snap] pawn: vtable=0x00007FFEE8E73740 inClient=0 health=553
+[snap] ctrl: vtable=0x00007FFEE50C1680 inClient=1 m_hPlayerPawn@0x92C = 0x0185800B (idx=11)
+[snap] entitySystem @ 0x00007FFEE5BCFBB8 = 0x0000022941478800 highestEntityIndex=13
+[snap] entity resolution: 12/16 of indices 1..16 valid
+[snap] ctrl->pawn handle resolve: 0x0185800B -> 0x00000229D7B73800
+[snap] ----------------------------------------
+[charm-entity] world scan complete highest=13 found=0
+[use-tool] hook-entry #2 mode=2 api=00000228B326CD00 toolArg=0000022985084F20 targetArg=0000022985083A00 original=00007FFEE2D40FC0
+[use-tool] sticker 10383 on 914A30836F3526FC: at the popup's spot - applying
+[use-tool] hook-entry #2 decision=handled locally
+[attach] ItemViewById read 914A30836F3526FC via CS2 getters
+[use-tool] sticker target ItemView fallback; profile charm recovered for exact item
+[use-tool] sticker-only write used: charm attributes preserved; full snapshot unavailable
+[use-tool] consumed sticker item 9AF02F74A285D5C2 removal=SUCCESS
+[attach] immediate native observation stickers=1 [0 kit=10383 wear=0.000 rot=0.0 off=0.026,0.005 schema=0] charm=kit:30 seed=0 off=23.891,0.367,2.287 for item-1794105099681-k0fuq (914A30836F3526FC), source=item-1794152894629-t3qk8 consumed=1 file=written
+[use-tool] sticker 10383 applied to 914A30836F3526FC in slot 0 (position 0): attributes written, inventory told, popup NOT told, sticker item used up
+
+=== SNAPSHOT ===
+[snap] fsnCount=63460 lastStage=12 stage5Count=5076
+[snap] stage histogram:
+[snap]   stage  0: 8888 frames
+[snap]   stage  1: 5076 frames
+[snap]   stage  2: 5076 frames
+[snap]   stage  3: 5076 frames
+N1SSAN_STATUS|1|2026-11-08T15:49:13Z|9320|armory-obsidian-3.0|READY|reason=runtime_worker_heartbeat
+[snap]   stage  5: 5076 frames
+[status-write] begin state=READY path=C:\Users\mirac\AppData\Local\n1ssan\status\cs2-9320.status
+[snap]   stage  6: 5076 frames
+[snap]   stage  7: 5076 frames
+[snap]   stage  8: 5076 frames
+[snap]   stage 10: 5076 frames
+[snap]   stage 11: 6409 frames
+[snap]   stage 12: 7555 frames
+[snap] dwLocalPlayerController @ 0x00007FFEE59F2548 -> 0x00000229D7408000 
+[status-write] success state=READY error=0
+[snap] dwLocalPlayerPawn       @ 0x00007FFEE5BE91E0 -> 0x000002295E2B0400 
+[snap] pawn: vtable=0x00007FFEE8E73740 inClient=0 health=553
+[snap] ctrl: vtable=0x00007FFEE50C1680 inClient=1 m_hPlayerPawn@0x92C = 0x0185800B (idx=11)
+[snap] entitySystem @ 0x00007FFEE5BCFBB8 = 0x0000022941478800 highestEntityIndex=13
+[snap] entity resolution: 12/16 of indices 1..16 valid
+[snap] ctrl->pawn handle resolve: 0x0185800B -> 0x00000229D7B73800
+[snap] ----------------------------------------
+[armory-inventory] staged 17 items (applies outside an active match)
+[armory-inventory] preparing replacement set: 17 items
+[armory-inventory] retained item id=9F45014B4918D4CA def=5404
+[armory-inventory] attachments synced on 9F45014B4918D4CA: stickers=0 charm=none
+[armory-inventory] retained item id=98580F04895784C8 def=4730
+[armory-inventory] retained item id=922FEB06198C79C1 def=525
+[armory-inventory] attachments synced on 922FEB06198C79C1: stickers=0 charm=none
+[armory-inventory] retained item id=9B4523A8BFE93866 def=5030
+[armory-inventory] attachments synced on 9B4523A8BFE93866: stickers=0 charm=none
+[armory-inventory] retained item id=9919302EC58DC70A def=16
+[armory-inventory] attachments synced on 9919302EC58DC70A: stickers=1 [0 kit=20 wear=0.000 rot=0.0 off=-0.079,-0.004 schema=4] charm=kit:17 seed=0 off=33.469,0.373,12.120
+[armory-inventory] retained item id=96221A0E61314132 def=60
+[armory-inventory] attachments synced on 96221A0E61314132: stickers=1 [0 kit=42 wear=0.000 rot=0.0 off=0.426,0.013 schema=4] charm=none
+[armory-inventory] retained item id=914A30836F3526FC def=7
+[armory-inventory] attachments synced on 914A30836F3526FC: stickers=1 [0 kit=10383 wear=0.000 rot=0.0 off=0.026,0.005 schema=0] charm=kit:30 seed=0 off=23.891,0.367,2.287
+[armory-inventory] retained item id=9536605177002A96 def=9
+[armory-inventory] attachments synced on 9536605177002A96: stickers=1 [0 kit=70 wear=0.000 rot=0.0 off=-0.252,0.006 schema=4] charm=none
+[armory-inventory] retained item id=9CF82CD4592CD5C7 def=61
+[armory-inventory] attachments synced on 9CF82CD4592CD5C7: stickers=0 charm=kit:7 seed=0 off=1.872,0.344,3.930
+[armory-inventory] retained item id=955F0C957F4C067D def=61
+[armory-inventory] attachments synced on 955F0C957F4C067D: stickers=1 [0 kit=98 wear=0.000 rot=0.0 off=0.000,0.000 schema=2] charm=kit:55 seed=0 off=18.066,0.752,3.900
+[armory-inventory] retained item id=9EF2C4042C206579 def=34
+[armory-inventory] attachments synced on 9EF2C4042C206579: stickers=1 [0 kit=6702 wear=0.000 rot=0.0 off=0.232,0.008 schema=2] charm=kit:70 seed=0 off=1.865,0.749,5.986
+[armory-inventory] retained item id=9AD2A303DFC2661B def=4
+[armory-inventory] attachments synced on 9AD2A303DFC2661B: stickers=1 [0 kit=70 wear=0.000 rot=-40.5 off=0.065,-0.238 schema=3] charm=none
+[armory-inventory] retained item id=91A393008C57670D def=1355
+[armory-inventory] attachments synced on 91A393008C57670D: stickers=0 charm=none
+[armory-inventory] retained item id=9FE6ABE590502EF4 def=7
+[armory-inventory] attachments synced on 9FE6ABE590502EF4: stickers=2 [0 kit=37 wear=0.000 rot=-22.5 off=-0.265,-0.014 schema=1] [1 kit=37 wear=0.000 rot=-10.5 off=-0.315,-0.012 schema=0] charm=kit:23 seed=0 off=0.461,0.495,3.253
+[armory-inventory] retained item id=988977C15EA1EF85 def=1355
+[armory-inventory] attachments synced on 988977C15EA1EF85: stickers=0 charm=none
+[armory-inventory] retained item id=95CDD4BFE4A8E81E def=1355
+[armory-inventory] attachments synced on 95CDD4BFE4A8E81E: stickers=0 charm=none
+[armory-inventory] retained item id=998701B6041F17DE def=1209
+[armory-inventory] attachments synced on 998701B6041F17DE: stickers=0 charm=none
+[armory-equipment] index: assignments=0 resolved=0 unresolved=0 conflicts=0 definitions=13 slots=0
+[armory-inventory] replacement committed: desired=17 created=0 retained=17 removed=0 removeFailed=0
+[detect] pawn=0x00000229D7B73800 hp=100 signOn=6 bg=0
+[charm-entity] world scan complete highest=13 found=0
+
+=== SNAPSHOT ===
+[snap] fsnCount=67412 lastStage=0 stage5Count=5383
+[snap] stage histogram:
+[snap]   stage  0: 9483 frames
+[snap]   stage  1: 5383 frames
+[snap]   stage  2: 5383 frames
+[snap]   stage  3: 5383 frames
+[snap]   stage  5: 5383 frames
+[snap]   stage  6: 5383 frames
+[snap]   stage  7: 5383 frames
+[snap]   stage  8: 5383 frames
+[snap]   stage 10: 5383 frames
+[snap]   stage 11: 6728 frames
+[snap]   stage 12: 8137 frames
+[snap] dwLocalPlayerController @ 0x00007FFEE59F2548 -> 0x00000229D7408000 
+[snap] dwLocalPlayerPawn       @ 0x00007FFEE5BE91E0 -> 0x000002295E2B0400 
+[snap] pawn: vtable=0x00007FFEE8E73740 inClient=0 health=553
+[snap] ctrl: vtable=0x00007FFEE50C1680 inClient=1 m_hPlayerPawn@0x92C = 0x0185800B (idx=11)
+[snap] entitySystem @ 0x00007FFEE5BCFBB8 = 0x0000022941478800 highestEntityIndex=13
+[snap] entity resolution: 12/16 of indices 1..16 valid
+[snap] ctrl->pawn handle resolve: 0x0185800B -> 0x00000229D7B73800
+[snap] ----------------------------------------
+[charm-entity] world scan complete highest=13 found=0
+
+=== SNAPSHOT ===
+[snap] fsnCount=70740 lastStage=5 stage5Count=5647
+[snap] stage histogram:
+[snap]   stage  0: 9961 frames
+[snap]   stage  1: 5647 frames
+[snap]   stage  2: 5647 frames
+[snap]   stage  3: 5646 frames
+[snap]   stage  5: 5647 frames
+[snap]   stage  6: 5646 frames
+[snap]   stage  7: 5646 frames
+[snap]   stage  8: 5646 frames
+[snap]   stage 10: 5647 frames
+[snap]   stage 11: 7049 frames
+[snap]   stage 12: 8558 frames
+[snap] dwLocalPlayerController @ 0x00007FFEE59F2548 -> 0x00000229D7408000 
+[snap] dwLocalPlayerPawn       @ 0x00007FFEE5BE91E0 -> 0x000002295E2B0400 
+[snap] pawn: vtable=0x00007FFEE8E73740 inClient=0 health=553
+[snap] ctrl: vtable=0x00007FFEE50C1680 inClient=1 m_hPlayerPawn@0x92C = 0x0185800B (idx=11)
+[snap] entitySystem @ 0x00007FFEE5BCFBB8 = 0x0000022941478800 highestEntityIndex=13
+[snap] entity resolution: 12/16 of indices 1..16 valid
+[snap] ctrl->pawn handle resolve: 0x0185800B -> 0x00000229D7B73800
+[snap] ----------------------------------------
+N1SSAN_STATUS|1|2026-11-08T15:49:23Z|9320|armory-obsidian-3.0|READY|reason=runtime_worker_heartbeat
+[status-write] begin state=READY path=C:\Users\mirac\AppData\Local\n1ssan\status\cs2-9320.status
+[status-write] success state=READY error=0
+[detect] pawn=0x00000229D7B73800 hp=100 signOn=6 bg=0
+[charm-entity] world scan complete highest=13 found=0
+
+=== SNAPSHOT ===
+[snap] fsnCount=73346 lastStage=0 stage5Count=5865
+[snap] stage histogram:
+[snap]   stage  0: 10281 frames
+[snap]   stage  1: 5865 frames
+[snap]   stage  2: 5865 frames
+[snap]   stage  3: 5865 frames
+[snap]   stage  5: 5865 frames
+[snap]   stage  6: 5865 frames
+[snap]   stage  7: 5865 frames
+[snap]   stage  8: 5865 frames
+[snap]   stage 10: 5865 frames
+[snap]   stage 11: 7368 frames
+[snap]   stage 12: 8777 frames
+[snap] dwLocalPlayerController @ 0x00007FFEE59F2548 -> 0x00000229D7408000 
+[snap] dwLocalPlayerPawn       @ 0x00007FFEE5BE91E0 -> 0x000002295E2B0400 
+[snap] pawn: vtable=0x00007FFEE8E73740 inClient=0 health=553
+[snap] ctrl: vtable=0x00007FFEE50C1680 inClient=1 m_hPlayerPawn@0x92C = 0x0185800B (idx=11)
+[snap] entitySystem @ 0x00007FFEE5BCFBB8 = 0x0000022941478800 highestEntityIndex=13
+[snap] entity resolution: 12/16 of indices 1..16 valid
+[snap] ctrl->pawn handle resolve: 0x0185800B -> 0x00000229D7B73800
+[snap] ----------------------------------------
+[charm-entity] world scan complete highest=13 found=0
+
+=== SNAPSHOT ===
+[snap] fsnCount=75964 lastStage=7 stage5Count=6085
+[snap] stage histogram:
+[snap]   stage  0: 10601 frames
+[snap]   stage  1: 6085 frames
+[snap]   stage  2: 6085 frames
+[snap]   stage  3: 6084 frames
+[snap]   stage  5: 6085 frames
+[snap]   stage  6: 6085 frames
+[snap]   stage  7: 6085 frames
+[snap]   stage  8: 6084 frames
+[snap]   stage 10: 6085 frames
+[snap]   stage 11: 7689 frames
+[snap]   stage 12: 8996 frames
+[snap] dwLocalPlayerController @ 0x00007FFEE59F2548 -> 0x00000229D7408000 
+[snap] dwLocalPlayerPawn       @ 0x00007FFEE5BE91E0 -> 0x000002295E2B0400 
+[snap] pawn: vtable=0x00007FFEE8E73740 inClient=0 health=553
+[snap] ctrl: vtable=0x00007FFEE50C1680 inClient=1 m_hPlayerPawn@0x92C = 0x0185800B (idx=11)
+[snap] entitySystem @ 0x00007FFEE5BCFBB8 = 0x0000022941478800 highestEntityIndex=13
+[snap] entity resolution: 12/16 of indices 1..16 valid
+[snap] ctrl->pawn handle resolve: 0x0185800B -> 0x00000229D7B73800
+[snap] ----------------------------------------
+N1SSAN_STATUS|1|2026-11-08T15:49:33Z|9320|armory-obsidian-3.0|READY|reason=runtime_worker_heartbeat
+[status-write] begin state=READY path=C:\Users\mirac\AppData\Local\n1ssan\status\cs2-9320.status
+[status-write] success state=READY error=0
+[detect] pawn=0x00000229D7B73800 hp=100 signOn=6 bg=0
+[charm-entity] world scan complete highest=13 found=0
+
+=== SNAPSHOT ===
+[snap] fsnCount=78570 lastStage=0 stage5Count=6303
+[snap] stage histogram:
+[snap]   stage  0: 10922 frames
+[snap]   stage  1: 6303 frames
+[snap]   stage  2: 6303 frames
+[snap]   stage  3: 6303 frames
+[snap]   stage  5: 6303 frames
+[snap]   stage  6: 6303 frames
+[snap]   stage  7: 6303 frames
+[snap]   stage  8: 6303 frames
+[snap]   stage 10: 6303 frames
+[snap]   stage 11: 8009 frames
+[snap]   stage 12: 9215 frames
+[snap] dwLocalPlayerController @ 0x00007FFEE59F2548 -> 0x00000229D7408000 
+[snap] dwLocalPlayerPawn       @ 0x00007FFEE5BE91E0 -> 0x000002295E2B0400 
+[snap] pawn: vtable=0x00007FFEE8E73740 inClient=0 health=553
+[snap] ctrl: vtable=0x00007FFEE50C1680 inClient=1 m_hPlayerPawn@0x92C = 0x0185800B (idx=11)
+[snap] entitySystem @ 0x00007FFEE5BCFBB8 = 0x0000022941478800 highestEntityIndex=13
+[snap] entity resolution: 12/16 of indices 1..16 valid
+[snap] ctrl->pawn handle resolve: 0x0185800B -> 0x00000229D7B73800
+[snap] ----------------------------------------
+[charm-entity] world scan complete highest=13 found=0
+N1SSAN_STATUS|1|2026-11-08T15:49:43Z|9320|armory-obsidian-3.0|READY|reason=runtime_worker_heartbeat
+[status-write] begin state=READY path=C:\Users\mirac\AppData\Local\n1ssan\status\cs2-9320.status
+
+=== SNAPSHOT ===
+[snap] fsnCount=81181 lastStage=0 stage5Count=6522
+[snap] stage histogram:
+[snap]   stage  0: 11242 frames
+[status-write] success state=READY error=0
+[snap]   stage  1: 6522 frames
+[snap]   stage  2: 6522 frames
+[snap]   stage  3: 6522 frames
+[snap]   stage  5: 6522 frames
+[snap]   stage  6: 6522 frames
+[snap]   stage  7: 6522 frames
+[snap]   stage  8: 6522 frames
+[snap]   stage 10: 6522 frames
+[snap]   stage 11: 8329 frames
+[snap]   stage 12: 9434 frames
+[snap] dwLocalPlayerController @ 0x00007FFEE59F2548 -> 0x00000229D7408000 
+[snap] dwLocalPlayerPawn       @ 0x00007FFEE5BE91E0 -> 0x000002295E2B0400 
+[snap] pawn: vtable=0x00007FFEE8E73740 inClient=0 health=553
+[snap] ctrl: vtable=0x00007FFEE50C1680 inClient=1 m_hPlayerPawn@0x92C = 0x0185800B (idx=11)
+[snap] entitySystem @ 0x00007FFEE5BCFBB8 = 0x0000022941478800 highestEntityIndex=13
+[snap] entity resolution: 12/16 of indices 1..16 valid
+[snap] ctrl->pawn handle resolve: 0x0185800B -> 0x00000229D7B73800
+[snap] ----------------------------------------
+[detect] pawn=0x00000229D7B73800 hp=100 signOn=6 bg=0
+[charm-entity] world scan complete highest=13 found=0
+
+=== SNAPSHOT ===
+[snap] fsnCount=83794 lastStage=0 stage5Count=6741
+[snap] stage histogram:
+[snap]   stage  0: 11563 frames
+[snap]   stage  1: 6741 frames
+[snap]   stage  2: 6741 frames
+[snap]   stage  3: 6741 frames
+[snap]   stage  5: 6741 frames
+[snap]   stage  6: 6741 frames
+[snap]   stage  7: 6741 frames
+[snap]   stage  8: 6741 frames
+[snap]   stage 10: 6741 frames
+[snap]   stage 11: 8650 frames
+[snap]   stage 12: 9653 frames
+[snap] dwLocalPlayerController @ 0x00007FFEE59F2548 -> 0x00000229D7408000 
+[snap] dwLocalPlayerPawn       @ 0x00007FFEE5BE91E0 -> 0x000002295E2B0400 
+[snap] pawn: vtable=0x00007FFEE8E73740 inClient=0 health=553
+[snap] ctrl: vtable=0x00007FFEE50C1680 inClient=1 m_hPlayerPawn@0x92C = 0x0185800B (idx=11)
+[snap] entitySystem @ 0x00007FFEE5BCFBB8 = 0x0000022941478800 highestEntityIndex=13
+[snap] entity resolution: 12/16 of indices 1..16 valid
+[snap] ctrl->pawn handle resolve: 0x0185800B -> 0x00000229D7B73800
+[snap] ----------------------------------------
+[charm-entity] world scan complete highest=13 found=0
+N1SSAN_STATUS|1|2026-11-08T15:49:53Z|9320|armory-obsidian-3.0|READY|reason=runtime_worker_heartbeat
+[status-write] begin state=READY path=C:\Users\mirac\AppData\Local\n1ssan\status\cs2-9320.status
+[status-write] success state=READY error=0
+
+=== SNAPSHOT ===
+[snap] fsnCount=86398 lastStage=0 stage5Count=6959
+[snap] stage histogram:
+[snap]   stage  0: 11884 frames
+[snap]   stage  1: 6959 frames
+[snap]   stage  2: 6959 frames
+[snap]   stage  3: 6959 frames
+[snap]   stage  5: 6959 frames
+[snap]   stage  6: 6959 frames
+[snap]   stage  7: 6959 frames
+[snap]   stage  8: 6959 frames
+[snap]   stage 10: 6959 frames
+[snap]   stage 11: 8971 frames
+[snap]   stage 12: 9871 frames
+[snap] dwLocalPlayerController @ 0x00007FFEE59F2548 -> 0x00000229D7408000 
+[snap] dwLocalPlayerPawn       @ 0x00007FFEE5BE91E0 -> 0x000002295E2B0400 
+[snap] pawn: vtable=0x00007FFEE8E73740 inClient=0 health=553
+[snap] ctrl: vtable=0x00007FFEE50C1680 inClient=1 m_hPlayerPawn@0x92C = 0x0185800B (idx=11)
+[snap] entitySystem @ 0x00007FFEE5BCFBB8 = 0x0000022941478800 highestEntityIndex=13
+[snap] entity resolution: 12/16 of indices 1..16 valid
+[snap] ctrl->pawn handle resolve: 0x0185800B -> 0x00000229D7B73800
+[snap] ----------------------------------------
+[detect] pawn=0x00000229D7B73800 hp=100 signOn=6 bg=0
+[charm-entity] world scan complete highest=13 found=0
+
+=== SNAPSHOT ===
+[snap] fsnCount=89011 lastStage=0 stage5Count=7178
+[snap] stage histogram:
+[snap]   stage  0: 12205 frames
+[snap]   stage  1: 7178 frames
+[snap]   stage  2: 7178 frames
+[snap]   stage  3: 7178 frames
+[snap]   stage  5: 7178 frames
+[snap]   stage  6: 7178 frames
+[snap]   stage  7: 7178 frames
+[snap]   stage  8: 7178 frames
+[snap]   stage 10: 7178 frames
+[snap]   stage 11: 9292 frames
+[snap]   stage 12: 10090 frames
+[snap] dwLocalPlayerController @ 0x00007FFEE59F2548 -> 0x00000229D7408000 
+[snap] dwLocalPlayerPawn       @ 0x00007FFEE5BE91E0 -> 0x000002295E2B0400 
+[snap] pawn: vtable=0x00007FFEE8E73740 inClient=0 health=553
+[snap] ctrl: vtable=0x00007FFEE50C1680 inClient=1 m_hPlayerPawn@0x92C = 0x0185800B (idx=11)
+[snap] entitySystem @ 0x00007FFEE5BCFBB8 = 0x0000022941478800 highestEntityIndex=13
+[snap] entity resolution: 12/16 of indices 1..16 valid
+[snap] ctrl->pawn handle resolve: 0x0185800B -> 0x00000229D7B73800
+[snap] ----------------------------------------
+[charm-entity] world scan complete highest=13 found=0
+N1SSAN_STATUS|1|2026-11-08T15:50:03Z|9320|armory-obsidian-3.0|READY|reason=runtime_worker_heartbeat
+[status-write] begin state=READY path=C:\Users\mirac\AppData\Local\n1ssan\status\cs2-9320.status
+[status-write] success state=READY error=0
+
+=== SNAPSHOT ===
+[snap] fsnCount=91622 lastStage=0 stage5Count=7397
+[snap] stage histogram:
+[snap]   stage  0: 12525 frames
+[snap]   stage  1: 7397 frames
+[snap]   stage  2: 7397 frames
+[snap]   stage  3: 7397 frames
+[snap]   stage  5: 7397 frames
+[snap]   stage  6: 7397 frames
+[snap]   stage  7: 7397 frames
+[snap]   stage  8: 7397 frames
+[snap]   stage 10: 7397 frames
+[snap]   stage 11: 9612 frames
+[snap]   stage 12: 10309 frames
+[snap] dwLocalPlayerController @ 0x00007FFEE59F2548 -> 0x00000229D7408000 
+[snap] dwLocalPlayerPawn       @ 0x00007FFEE5BE91E0 -> 0x000002295E2B0400 
+[snap] pawn: vtable=0x00007FFEE8E73740 inClient=0 health=553
+[snap] ctrl: vtable=0x00007FFEE50C1680 inClient=1 m_hPlayerPawn@0x92C = 0x0185800B (idx=11)
+[snap] entitySystem @ 0x00007FFEE5BCFBB8 = 0x0000022941478800 highestEntityIndex=13
+[snap] entity resolution: 12/16 of indices 1..16 valid
+[snap] ctrl->pawn handle resolve: 0x0185800B -> 0x00000229D7B73800
+[snap] ----------------------------------------
+[detect] pawn=0x00000229D7B73800 hp=100 signOn=6 bg=0
+[charm-entity] world scan complete highest=13 found=0
+
+=== SNAPSHOT ===
+[snap] fsnCount=94225 lastStage=11 stage5Count=7615
+[snap] stage histogram:
+[snap]   stage  0: 12845 frames
+[snap]   stage  1: 7615 frames
+[snap]   stage  2: 7615 frames
+[snap]   stage  3: 7615 frames
+[snap]   stage  5: 7615 frames
+[snap]   stage  6: 7615 frames
+[snap]   stage  7: 7615 frames
+[snap]   stage  8: 7615 frames
+[snap]   stage 10: 7615 frames
+[snap]   stage 11: 9933 frames
+[snap]   stage 12: 10527 frames
+[snap] dwLocalPlayerController @ 0x00007FFEE59F2548 -> 0x00000229D7408000 
+[snap] dwLocalPlayerPawn       @ 0x00007FFEE5BE91E0 -> 0x000002295E2B0400 
+[snap] pawn: vtable=0x00007FFEE8E73740 inClient=0 health=553
+[snap] ctrl: vtable=0x00007FFEE50C1680 inClient=1 m_hPlayerPawn@0x92C = 0x0185800B (idx=11)
+[snap] entitySystem @ 0x00007FFEE5BCFBB8 = 0x0000022941478800 highestEntityIndex=13
+[snap] entity resolution: 12/16 of indices 1..16 valid
+[snap] ctrl->pawn handle resolve: 0x0185800B -> 0x00000229D7B73800
+[snap] ----------------------------------------
+[charm-entity] world scan complete highest=13 found=0
+N1SSAN_STATUS|1|2026-11-08T15:50:13Z|9320|armory-obsidian-3.0|READY|reason=runtime_worker_heartbeat
+[status-write] begin state=READY path=C:\Users\mirac\AppData\Local\n1ssan\status\cs2-9320.status
+[status-write] success state=READY error=0
+
+=== SNAPSHOT ===
+[snap] fsnCount=96828 lastStage=0 stage5Count=7833
+[snap] stage histogram:
+[snap]   stage  0: 13166 frames
+[snap]   stage  1: 7833 frames
+[snap]   stage  2: 7833 frames
+[snap]   stage  3: 7833 frames
+[snap]   stage  5: 7833 frames
+[snap]   stage  6: 7833 frames
+[snap]   stage  7: 7833 frames
+[snap]   stage  8: 7833 frames
+[snap]   stage 10: 7833 frames
+[snap]   stage 11: 10253 frames
+[snap]   stage 12: 10745 frames
+[snap] dwLocalPlayerController @ 0x00007FFEE59F2548 -> 0x00000229D7408000 
+[snap] dwLocalPlayerPawn       @ 0x00007FFEE5BE91E0 -> 0x000002295E2B0400 
+[snap] pawn: vtable=0x00007FFEE8E73740 inClient=0 health=553
+[snap] ctrl: vtable=0x00007FFEE50C1680 inClient=1 m_hPlayerPawn@0x92C = 0x0185800B (idx=11)
+[snap] entitySystem @ 0x00007FFEE5BCFBB8 = 0x0000022941478800 highestEntityIndex=13
+[snap] entity resolution: 12/16 of indices 1..16 valid
+[snap] ctrl->pawn handle resolve: 0x0185800B -> 0x00000229D7B73800
+[snap] ----------------------------------------
+[detect] pawn=0x00000229D7B73800 hp=100 signOn=6 bg=0
+[charm-entity] world scan complete highest=13 found=0
+
+=== SNAPSHOT ===
+[snap] fsnCount=99430 lastStage=0 stage5Count=8051
+[snap] stage histogram:
+[snap]   stage  0: 13486 frames
+[snap]   stage  1: 8051 frames
+[snap]   stage  2: 8051 frames
+[snap]   stage  3: 8051 frames
+[snap]   stage  5: 8051 frames
+[snap]   stage  6: 8051 frames
+[snap]   stage  7: 8051 frames
+[snap]   stage  8: 8051 frames
+[snap]   stage 10: 8051 frames
+[snap]   stage 11: 10573 frames
+[snap]   stage 12: 10963 frames
+[snap] dwLocalPlayerController @ 0x00007FFEE59F2548 -> 0x00000229D7408000 
+[snap] dwLocalPlayerPawn       @ 0x00007FFEE5BE91E0 -> 0x000002295E2B0400 
+[snap] pawn: vtable=0x00007FFEE8E73740 inClient=0 health=553
+[snap] ctrl: vtable=0x00007FFEE50C1680 inClient=1 m_hPlayerPawn@0x92C = 0x0185800B (idx=11)
+[snap] entitySystem @ 0x00007FFEE5BCFBB8 = 0x0000022941478800 highestEntityIndex=13
+[snap] entity resolution: 12/16 of indices 1..16 valid
+[snap] ctrl->pawn handle resolve: 0x0185800B -> 0x00000229D7B73800
+[snap] ----------------------------------------
+[charm-entity] world scan complete highest=13 found=0
+N1SSAN_STATUS|1|2026-11-08T15:50:23Z|9320|armory-obsidian-3.0|READY|reason=runtime_worker_heartbeat
+[status-write] begin state=READY path=C:\Users\mirac\AppData\Local\n1ssan\status\cs2-9320.status
+[status-write] success state=READY error=0
+
+=== SNAPSHOT ===
+[snap] fsnCount=102043 lastStage=0 stage5Count=8270
+[snap] stage histogram:
+[snap]   stage  0: 13807 frames
+[snap]   stage  1: 8270 frames
+[snap]   stage  2: 8270 frames
+[snap]   stage  3: 8270 frames
+[snap]   stage  5: 8270 frames
+[snap]   stage  6: 8270 frames
+[snap]   stage  7: 8270 frames
+[snap]   stage  8: 8270 frames
+[snap]   stage 10: 8270 frames
+[snap]   stage 11: 10894 frames
+[snap]   stage 12: 11182 frames
+[snap] dwLocalPlayerController @ 0x00007FFEE59F2548 -> 0x00000229D7408000 
+[snap] dwLocalPlayerPawn       @ 0x00007FFEE5BE91E0 -> 0x000002295E2B0400 
+[snap] pawn: vtable=0x00007FFEE8E73740 inClient=0 health=553
+[snap] ctrl: vtable=0x00007FFEE50C1680 inClient=1 m_hPlayerPawn@0x92C = 0x0185800B (idx=11)
+[snap] entitySystem @ 0x00007FFEE5BCFBB8 = 0x0000022941478800 highestEntityIndex=13
+[snap] entity resolution: 12/16 of indices 1..16 valid
+[snap] ctrl->pawn handle resolve: 0x0185800B -> 0x00000229D7B73800
+[snap] ----------------------------------------
+[detect] pawn=0x00000229D7B73800 hp=100 signOn=6 bg=0
+[charm-entity] world scan complete highest=13 found=0
+
+=== SNAPSHOT ===
+[snap] fsnCount=104645 lastStage=0 stage5Count=8488
+[snap] stage histogram:
+[snap]   stage  0: 14127 frames
+[snap]   stage  1: 8488 frames
+[snap]   stage  2: 8488 frames
+[snap]   stage  3: 8488 frames
+[snap]   stage  5: 8488 frames
+[snap]   stage  6: 8488 frames
+[snap]   stage  7: 8488 frames
+[snap]   stage  8: 8488 frames
+[snap]   stage 10: 8488 frames
+[snap]   stage 11: 11214 frames
+[snap]   stage 12: 11400 frames
+[snap] dwLocalPlayerController @ 0x00007FFEE59F2548 -> 0x00000229D7408000 
+[snap] dwLocalPlayerPawn       @ 0x00007FFEE5BE91E0 -> 0x000002295E2B0400 
+[snap] pawn: vtable=0x00007FFEE8E73740 inClient=0 health=553
+[snap] ctrl: vtable=0x00007FFEE50C1680 inClient=1 m_hPlayerPawn@0x92C = 0x0185800B (idx=11)
+[snap] entitySystem @ 0x00007FFEE5BCFBB8 = 0x0000022941478800 highestEntityIndex=13
+[snap] entity resolution: 12/16 of indices 1..16 valid
+[snap] ctrl->pawn handle resolve: 0x0185800B -> 0x00000229D7B73800
+[snap] ----------------------------------------
+[armory-equipment] index: assignments=0 resolved=0 unresolved=0 conflicts=0 definitions=13 slots=0
+[armory-equipment] reloaded equipment document
+[armory-inventory] staged 17 items (applies outside an active match)
+[armory-inventory] preparing replacement set: 17 items
+[armory-inventory] retained item id=9F45014B4918D4CA def=5404
+[armory-inventory] attachments synced on 9F45014B4918D4CA: stickers=0 charm=none
+[armory-inventory] retained item id=98580F04895784C8 def=4730
+[armory-inventory] retained item id=922FEB06198C79C1 def=525
+[armory-inventory] attachments synced on 922FEB06198C79C1: stickers=0 charm=none
+[armory-inventory] retained item id=9B4523A8BFE93866 def=5030
+[armory-inventory] attachments synced on 9B4523A8BFE93866: stickers=0 charm=none
+[armory-inventory] retained item id=9919302EC58DC70A def=16
+[armory-inventory] attachments synced on 9919302EC58DC70A: stickers=1 [0 kit=20 wear=0.000 rot=0.0 off=-0.079,-0.004 schema=4] charm=kit:17 seed=0 off=33.469,0.373,12.120
+[armory-inventory] retained item id=96221A0E61314132 def=60
+[armory-inventory] attachments synced on 96221A0E61314132: stickers=1 [0 kit=42 wear=0.000 rot=0.0 off=0.426,0.013 schema=4] charm=none
+[armory-inventory] retained item id=914A30836F3526FC def=7
+[armory-inventory] attachments synced on 914A30836F3526FC: stickers=1 [0 kit=10383 wear=0.000 rot=0.0 off=0.026,0.005 schema=0] charm=kit:30 seed=0 off=23.891,0.367,2.287
+[armory-inventory] retained item id=9536605177002A96 def=9
+[armory-inventory] attachments synced on 9536605177002A96: stickers=1 [0 kit=70 wear=0.000 rot=0.0 off=-0.252,0.006 schema=4] charm=none
+[armory-inventory] retained item id=9CF82CD4592CD5C7 def=61
+[armory-inventory] attachments synced on 9CF82CD4592CD5C7: stickers=0 charm=kit:7 seed=0 off=1.872,0.344,3.930
+[armory-inventory] retained item id=955F0C957F4C067D def=61
+[armory-inventory] attachments synced on 955F0C957F4C067D: stickers=1 [0 kit=98 wear=0.000 rot=0.0 off=0.000,0.000 schema=2] charm=kit:55 seed=0 off=18.066,0.752,3.900
+[armory-inventory] retained item id=9EF2C4042C206579 def=34
+[armory-inventory] attachments synced on 9EF2C4042C206579: stickers=1 [0 kit=6702 wear=0.000 rot=0.0 off=0.232,0.008 schema=2] charm=kit:70 seed=0 off=1.865,0.749,5.986
+[armory-inventory] retained item id=9AD2A303DFC2661B def=4
+[armory-inventory] attachments synced on 9AD2A303DFC2661B: stickers=1 [0 kit=70 wear=0.000 rot=-40.5 off=0.065,-0.238 schema=3] charm=none
+[armory-inventory] retained item id=91A393008C57670D def=1355
+[armory-inventory] attachments synced on 91A393008C57670D: stickers=0 charm=none
+[armory-inventory] retained item id=9FE6ABE590502EF4 def=7
+[armory-inventory] attachments synced on 9FE6ABE590502EF4: stickers=2 [0 kit=37 wear=0.000 rot=-22.5 off=-0.265,-0.014 schema=1] [1 kit=37 wear=0.000 rot=-10.5 off=-0.315,-0.012 schema=0] charm=kit:23 seed=0 off=0.461,0.495,3.253
+[armory-inventory] retained item id=988977C15EA1EF85 def=1355
+[armory-inventory] attachments synced on 988977C15EA1EF85: stickers=0 charm=none
+[armory-inventory] retained item id=95CDD4BFE4A8E81E def=1355
+[armory-inventory] attachments synced on 95CDD4BFE4A8E81E: stickers=0 charm=none
+[armory-inventory] retained item id=998701B6041F17DE def=1209
+[armory-inventory] attachments synced on 998701B6041F17DE: stickers=0 charm=none
+[armory-equipment] index: assignments=0 resolved=0 unresolved=0 conflicts=0 definitions=13 slots=0
+[armory-inventory] replacement committed: desired=17 created=0 retained=17 removed=0 removeFailed=0
+[charm-entity] world scan complete highest=13 found=0
+N1SSAN_STATUS|1|2026-11-08T15:50:33Z|9320|armory-obsidian-3.0|READY|reason=runtime_worker_heartbeat
+[status-write] begin state=READY path=C:\Users\mirac\AppData\Local\n1ssan\status\cs2-9320.status
+[status-write] success state=READY error=0
+
+=== SNAPSHOT ===
+[snap] fsnCount=107220 lastStage=0 stage5Count=8703
+[snap] stage histogram:
+[snap]   stage  0: 14447 frames
+[snap]   stage  1: 8703 frames
+[snap]   stage  2: 8703 frames
+[snap]   stage  3: 8703 frames
+[snap]   stage  5: 8703 frames
+[snap]   stage  6: 8703 frames
+[snap]   stage  7: 8703 frames
+[snap]   stage  8: 8703 frames
+[snap]   stage 10: 8703 frames
+[snap]   stage 11: 11534 frames
+[snap]   stage 12: 11615 frames
+[snap] dwLocalPlayerController @ 0x00007FFEE59F2548 -> 0x00000229D7408000 
+[snap] dwLocalPlayerPawn       @ 0x00007FFEE5BE91E0 -> 0x000002295E2B0400 
+[snap] pawn: vtable=0x00007FFEE8E73740 inClient=0 health=553
+[snap] ctrl: vtable=0x00007FFEE50C1680 inClient=1 m_hPlayerPawn@0x92C = 0x0185800B (idx=11)
+[snap] entitySystem @ 0x00007FFEE5BCFBB8 = 0x0000022941478800 highestEntityIndex=13
+[snap] entity resolution: 12/16 of indices 1..16 valid
+[snap] ctrl->pawn handle resolve: 0x0185800B -> 0x00000229D7B73800
+[snap] ----------------------------------------
+[detect] pawn=0x00000229D7B73800 hp=100 signOn=6 bg=0
+[charm-entity] world scan complete highest=13 found=0
+
+=== SNAPSHOT ===
+[snap] fsnCount=109823 lastStage=11 stage5Count=8921
+[snap] stage histogram:
+[snap]   stage  0: 14767 frames
+[snap]   stage  1: 8921 frames
+[snap]   stage  2: 8921 frames
+[snap]   stage  3: 8921 frames
+[snap]   stage  5: 8921 frames
+[snap]   stage  6: 8921 frames
+[snap]   stage  7: 8921 frames
+[snap]   stage  8: 8921 frames
+[snap]   stage 10: 8921 frames
+[snap]   stage 11: 11855 frames
+[snap]   stage 12: 11833 frames
+[snap] dwLocalPlayerController @ 0x00007FFEE59F2548 -> 0x00000229D7408000 
+[snap] dwLocalPlayerPawn       @ 0x00007FFEE5BE91E0 -> 0x000002295E2B0400 
+[snap] pawn: vtable=0x00007FFEE8E73740 inClient=0 health=553
+[snap] ctrl: vtable=0x00007FFEE50C1680 inClient=1 m_hPlayerPawn@0x92C = 0x0185800B (idx=11)
+[snap] entitySystem @ 0x00007FFEE5BCFBB8 = 0x0000022941478800 highestEntityIndex=13
+[snap] entity resolution: 12/16 of indices 1..16 valid
+[snap] ctrl->pawn handle resolve: 0x0185800B -> 0x00000229D7B73800
+[snap] ----------------------------------------
+[charm-entity] world scan complete highest=13 found=0
+N1SSAN_STATUS|1|2026-11-08T15:50:43Z|9320|armory-obsidian-3.0|READY|reason=runtime_worker_heartbeat
+[status-write] begin state=READY path=C:\Users\mirac\AppData\Local\n1ssan\status\cs2-9320.status
+[status-write] success state=READY error=0
+
+=== SNAPSHOT ===
+[snap] fsnCount=112444 lastStage=0 stage5Count=9141
+[snap] stage histogram:
+[snap]   stage  0: 15088 frames
+[snap]   stage  1: 9141 frames
+[snap]   stage  2: 9141 frames
+[snap]   stage  3: 9141 frames
+[snap]   stage  5: 9141 frames
+[snap]   stage  6: 9141 frames
+[snap]   stage  7: 9141 frames
+[snap]   stage  8: 9141 frames
+[snap]   stage 10: 9141 frames
+[snap]   stage 11: 12175 frames
+[snap]   stage 12: 12053 frames
+[snap] dwLocalPlayerController @ 0x00007FFEE59F2548 -> 0x00000229D7408000 
+[snap] dwLocalPlayerPawn       @ 0x00007FFEE5BE91E0 -> 0x000002295E2B0400 
+[snap] pawn: vtable=0x00007FFEE8E73740 inClient=0 health=553
+[snap] ctrl: vtable=0x00007FFEE50C1680 inClient=1 m_hPlayerPawn@0x92C = 0x0185800B (idx=11)
+[snap] entitySystem @ 0x00007FFEE5BCFBB8 = 0x0000022941478800 highestEntityIndex=13
+[snap] entity resolution: 12/16 of indices 1..16 valid
+[snap] ctrl->pawn handle resolve: 0x0185800B -> 0x00000229D7B73800
+[snap] ----------------------------------------
+[armory-inventory] staged 18 items (applies outside an active match)
+[armory-inventory] preparing replacement set: 18 items
+[armory-inventory] retained item id=9F45014B4918D4CA def=5404
+[armory-inventory] attachments synced on 9F45014B4918D4CA: stickers=0 charm=none
+[armory-inventory] retained item id=98580F04895784C8 def=4730
+[armory-inventory] retained item id=922FEB06198C79C1 def=525
+[armory-inventory] attachments synced on 922FEB06198C79C1: stickers=0 charm=none
+[armory-inventory] retained item id=9B4523A8BFE93866 def=5030
+[armory-inventory] attachments synced on 9B4523A8BFE93866: stickers=0 charm=none
+[armory-inventory] retained item id=9919302EC58DC70A def=16
+[armory-inventory] attachments synced on 9919302EC58DC70A: stickers=1 [0 kit=20 wear=0.000 rot=0.0 off=-0.079,-0.004 schema=4] charm=kit:17 seed=0 off=33.469,0.373,12.120
+[armory-inventory] retained item id=96221A0E61314132 def=60
+[armory-inventory] attachments synced on 96221A0E61314132: stickers=1 [0 kit=42 wear=0.000 rot=0.0 off=0.426,0.013 schema=4] charm=none
+[armory-inventory] retained item id=914A30836F3526FC def=7
+[armory-inventory] attachments synced on 914A30836F3526FC: stickers=1 [0 kit=10383 wear=0.000 rot=0.0 off=0.026,0.005 schema=0] charm=kit:30 seed=0 off=23.891,0.367,2.287
+[armory-inventory] retained item id=9536605177002A96 def=9
+[armory-inventory] attachments synced on 9536605177002A96: stickers=1 [0 kit=70 wear=0.000 rot=0.0 off=-0.252,0.006 schema=4] charm=none
+[armory-inventory] retained item id=9CF82CD4592CD5C7 def=61
+[armory-inventory] attachments synced on 9CF82CD4592CD5C7: stickers=0 charm=kit:7 seed=0 off=1.872,0.344,3.930
+[armory-inventory] retained item id=955F0C957F4C067D def=61
+[armory-inventory] attachments synced on 955F0C957F4C067D: stickers=1 [0 kit=98 wear=0.000 rot=0.0 off=0.000,0.000 schema=2] charm=kit:55 seed=0 off=18.066,0.752,3.900
+[armory-inventory] retained item id=9EF2C4042C206579 def=34
+[armory-inventory] attachments synced on 9EF2C4042C206579: stickers=1 [0 kit=6702 wear=0.000 rot=0.0 off=0.232,0.008 schema=2] charm=kit:70 seed=0 off=1.865,0.749,5.986
+[armory-inventory] retained item id=9AD2A303DFC2661B def=4
+[armory-inventory] attachments synced on 9AD2A303DFC2661B: stickers=1 [0 kit=70 wear=0.000 rot=-40.5 off=0.065,-0.238 schema=3] charm=none
+[armory-inventory] retained item id=91A393008C57670D def=1355
+[armory-inventory] attachments synced on 91A393008C57670D: stickers=0 charm=none
+[armory-inventory] retained item id=9FE6ABE590502EF4 def=7
+[armory-inventory] attachments synced on 9FE6ABE590502EF4: stickers=2 [0 kit=37 wear=0.000 rot=-22.5 off=-0.265,-0.014 schema=1] [1 kit=37 wear=0.000 rot=-10.5 off=-0.315,-0.012 schema=0] charm=kit:23 seed=0 off=0.461,0.495,3.253
+[armory-inventory] retained item id=988977C15EA1EF85 def=1355
+[armory-inventory] attachments synced on 988977C15EA1EF85: stickers=0 charm=none
+[armory-inventory] retained item id=95CDD4BFE4A8E81E def=1355
+[armory-inventory] attachments synced on 95CDD4BFE4A8E81E: stickers=0 charm=none
+[armory-inventory] retained item id=998701B6041F17DE def=1209
+[armory-inventory] attachments synced on 998701B6041F17DE: stickers=0 charm=none
+[armory-equipment] index: assignments=0 resolved=0 unresolved=0 conflicts=0 definitions=14 slots=0
+[armory-inventory] replacement committed: desired=18 created=1 retained=17 removed=0 removeFailed=0
+[detect] pawn=0x00000229D7B73800 hp=100 signOn=6 bg=0
+[charm-entity] world scan complete highest=13 found=0
+
+=== SNAPSHOT ===
+[snap] fsnCount=115026 lastStage=7 stage5Count=9357
+[snap] stage histogram:
+[snap]   stage  0: 15408 frames
+[snap]   stage  1: 9357 frames
+[snap]   stage  2: 9357 frames
+[snap]   stage  3: 9356 frames
+[snap]   stage  5: 9357 frames
+[snap]   stage  6: 9357 frames
+[snap]   stage  7: 9357 frames
+[snap]   stage  8: 9356 frames
+[snap]   stage 10: 9357 frames
+[snap]   stage 11: 12496 frames
+[snap]   stage 12: 12268 frames
+[snap] dwLocalPlayerController @ 0x00007FFEE59F2548 -> 0x00000229D7408000 
+[snap] dwLocalPlayerPawn       @ 0x00007FFEE5BE91E0 -> 0x000002295E2B0400 
+[snap] pawn: vtable=0x00007FFEE8E73740 inClient=0 health=553
+[snap] ctrl: vtable=0x00007FFEE50C1680 inClient=1 m_hPlayerPawn@0x92C = 0x0185800B (idx=11)
+[snap] entitySystem @ 0x00007FFEE5BCFBB8 = 0x0000022941478800 highestEntityIndex=13
+[snap] entity resolution: 12/16 of indices 1..16 valid
+[snap] ctrl->pawn handle resolve: 0x0185800B -> 0x00000229D7B73800
+[snap] ----------------------------------------
+[charm-entity] world scan complete highest=13 found=0
+N1SSAN_STATUS|1|2026-11-08T15:50:53Z|9320|armory-obsidian-3.0|READY|reason=runtime_worker_heartbeat
+[status-write] begin state=READY path=C:\Users\mirac\AppData\Local\n1ssan\status\cs2-9320.status
+[status-write] success state=READY error=0
+
+=== SNAPSHOT ===
+[snap] fsnCount=117641 lastStage=0 stage5Count=9576
+[snap] stage histogram:
+[snap]   stage  0: 15729 frames
+[snap]   stage  1: 9576 frames
+[snap]   stage  2: 9576 frames
+[snap]   stage  3: 9576 frames
+[snap]   stage  5: 9576 frames
+[snap]   stage  6: 9576 frames
+[snap]   stage  7: 9576 frames
+[snap]   stage  8: 9576 frames
+[snap]   stage 10: 9576 frames
+[snap]   stage 11: 12816 frames
+[snap]   stage 12: 12488 frames
+[snap] dwLocalPlayerController @ 0x00007FFEE59F2548 -> 0x00000229D7408000 
+[snap] dwLocalPlayerPawn       @ 0x00007FFEE5BE91E0 -> 0x000002295E2B0400 
+[snap] pawn: vtable=0x00007FFEE8E73740 inClient=0 health=553
+[snap] ctrl: vtable=0x00007FFEE50C1680 inClient=1 m_hPlayerPawn@0x92C = 0x0185800B (idx=11)
+[snap] entitySystem @ 0x00007FFEE5BCFBB8 = 0x0000022941478800 highestEntityIndex=13
+[snap] entity resolution: 12/16 of indices 1..16 valid
+[snap] ctrl->pawn handle resolve: 0x0185800B -> 0x00000229D7B73800
+[snap] ----------------------------------------
+[armory-inventory] staged 19 items (applies outside an active match)
+[armory-inventory] preparing replacement set: 19 items
+[armory-inventory] retained item id=9F45014B4918D4CA def=5404
+[armory-inventory] attachments synced on 9F45014B4918D4CA: stickers=0 charm=none
+[armory-inventory] retained item id=98580F04895784C8 def=4730
+[armory-inventory] retained item id=922FEB06198C79C1 def=525
+[armory-inventory] attachments synced on 922FEB06198C79C1: stickers=0 charm=none
+[armory-inventory] retained item id=9B4523A8BFE93866 def=5030
+[armory-inventory] attachments synced on 9B4523A8BFE93866: stickers=0 charm=none
+[armory-inventory] retained item id=9919302EC58DC70A def=16
+[armory-inventory] attachments synced on 9919302EC58DC70A: stickers=1 [0 kit=20 wear=0.000 rot=0.0 off=-0.079,-0.004 schema=4] charm=kit:17 seed=0 off=33.469,0.373,12.120
+[armory-inventory] retained item id=96221A0E61314132 def=60
+[armory-inventory] attachments synced on 96221A0E61314132: stickers=1 [0 kit=42 wear=0.000 rot=0.0 off=0.426,0.013 schema=4] charm=none
+[armory-inventory] retained item id=914A30836F3526FC def=7
+[armory-inventory] attachments synced on 914A30836F3526FC: stickers=1 [0 kit=10383 wear=0.000 rot=0.0 off=0.026,0.005 schema=0] charm=kit:30 seed=0 off=23.891,0.367,2.287
+[armory-inventory] retained item id=9536605177002A96 def=9
+[armory-inventory] attachments synced on 9536605177002A96: stickers=1 [0 kit=70 wear=0.000 rot=0.0 off=-0.252,0.006 schema=4] charm=none
+[armory-inventory] retained item id=9CF82CD4592CD5C7 def=61
+[armory-inventory] attachments synced on 9CF82CD4592CD5C7: stickers=0 charm=kit:7 seed=0 off=1.872,0.344,3.930
+[armory-inventory] retained item id=955F0C957F4C067D def=61
+[armory-inventory] attachments synced on 955F0C957F4C067D: stickers=1 [0 kit=98 wear=0.000 rot=0.0 off=0.000,0.000 schema=2] charm=kit:55 seed=0 off=18.066,0.752,3.900
+[armory-inventory] retained item id=9EF2C4042C206579 def=34
+[armory-inventory] attachments synced on 9EF2C4042C206579: stickers=1 [0 kit=6702 wear=0.000 rot=0.0 off=0.232,0.008 schema=2] charm=kit:70 seed=0 off=1.865,0.749,5.986
+[armory-inventory] retained item id=9AD2A303DFC2661B def=4
+[armory-inventory] attachments synced on 9AD2A303DFC2661B: stickers=1 [0 kit=70 wear=0.000 rot=-40.5 off=0.065,-0.238 schema=3] charm=none
+[armory-inventory] retained item id=91A393008C57670D def=1355
+[armory-inventory] attachments synced on 91A393008C57670D: stickers=0 charm=none
+[armory-inventory] retained item id=9FE6ABE590502EF4 def=7
+[armory-inventory] attachments synced on 9FE6ABE590502EF4: stickers=2 [0 kit=37 wear=0.000 rot=-22.5 off=-0.265,-0.014 schema=1] [1 kit=37 wear=0.000 rot=-10.5 off=-0.315,-0.012 schema=0] charm=kit:23 seed=0 off=0.461,0.495,3.253
+[armory-inventory] retained item id=988977C15EA1EF85 def=1355
+[armory-inventory] attachments synced on 988977C15EA1EF85: stickers=0 charm=none
+[armory-inventory] retained item id=95CDD4BFE4A8E81E def=1355
+[armory-inventory] attachments synced on 95CDD4BFE4A8E81E: stickers=0 charm=none
+[armory-inventory] retained item id=998701B6041F17DE def=1209
+[armory-inventory] attachments synced on 998701B6041F17DE: stickers=0 charm=none
+[armory-inventory] retained item id=99B4B549581CBBD5 def=500
+[armory-inventory] attachments synced on 99B4B549581CBBD5: stickers=0 charm=none
+[armory-equipment] index: assignments=0 resolved=0 unresolved=0 conflicts=0 definitions=15 slots=0
+[armory-inventory] replacement committed: desired=19 created=1 retained=18 removed=0 removeFailed=0
+[armory-equipment] index: assignments=0 resolved=0 unresolved=0 conflicts=0 definitions=15 slots=0
+[armory-equipment] reloaded equipment document
+[armory-inventory] staged 19 items (applies outside an active match)
+[armory-inventory] preparing replacement set: 19 items
+[armory-inventory] retained item id=9F45014B4918D4CA def=5404
+[armory-inventory] attachments synced on 9F45014B4918D4CA: stickers=0 charm=none
+[armory-inventory] retained item id=98580F04895784C8 def=4730
+[armory-inventory] retained item id=922FEB06198C79C1 def=525
+[armory-inventory] attachments synced on 922FEB06198C79C1: stickers=0 charm=none
+[armory-inventory] retained item id=9B4523A8BFE93866 def=5030
+[armory-inventory] attachments synced on 9B4523A8BFE93866: stickers=0 charm=none
+[armory-inventory] retained item id=9919302EC58DC70A def=16
+[armory-inventory] attachments synced on 9919302EC58DC70A: stickers=1 [0 kit=20 wear=0.000 rot=0.0 off=-0.079,-0.004 schema=4] charm=kit:17 seed=0 off=33.469,0.373,12.120
+[armory-inventory] retained item id=96221A0E61314132 def=60
+[armory-inventory] attachments synced on 96221A0E61314132: stickers=1 [0 kit=42 wear=0.000 rot=0.0 off=0.426,0.013 schema=4] charm=none
+[armory-inventory] retained item id=914A30836F3526FC def=7
+[armory-inventory] attachments synced on 914A30836F3526FC: stickers=1 [0 kit=10383 wear=0.000 rot=0.0 off=0.026,0.005 schema=0] charm=kit:30 seed=0 off=23.891,0.367,2.287
+[armory-inventory] retained item id=9536605177002A96 def=9
+[armory-inventory] attachments synced on 9536605177002A96: stickers=1 [0 kit=70 wear=0.000 rot=0.0 off=-0.252,0.006 schema=4] charm=none
+[armory-inventory] retained item id=9CF82CD4592CD5C7 def=61
+[armory-inventory] attachments synced on 9CF82CD4592CD5C7: stickers=0 charm=kit:7 seed=0 off=1.872,0.344,3.930
+[armory-inventory] retained item id=955F0C957F4C067D def=61
+[armory-inventory] attachments synced on 955F0C957F4C067D: stickers=1 [0 kit=98 wear=0.000 rot=0.0 off=0.000,0.000 schema=2] charm=kit:55 seed=0 off=18.066,0.752,3.900
+[armory-inventory] retained item id=9EF2C4042C206579 def=34
+[armory-inventory] attachments synced on 9EF2C4042C206579: stickers=1 [0 kit=6702 wear=0.000 rot=0.0 off=0.232,0.008 schema=2] charm=kit:70 seed=0 off=1.865,0.749,5.986
+[armory-inventory] retained item id=9AD2A303DFC2661B def=4
+[armory-inventory] attachments synced on 9AD2A303DFC2661B: stickers=1 [0 kit=70 wear=0.000 rot=-40.5 off=0.065,-0.238 schema=3] charm=none
+[armory-inventory] retained item id=91A393008C57670D def=1355
+[armory-inventory] attachments synced on 91A393008C57670D: stickers=0 charm=none
+[armory-inventory] retained item id=9FE6ABE590502EF4 def=7
+[armory-inventory] attachments synced on 9FE6ABE590502EF4: stickers=2 [0 kit=37 wear=0.000 rot=-22.5 off=-0.265,-0.014 schema=1] [1 kit=37 wear=0.000 rot=-10.5 off=-0.315,-0.012 schema=0] charm=kit:23 seed=0 off=0.461,0.495,3.253
+[armory-inventory] retained item id=988977C15EA1EF85 def=1355
+[armory-inventory] attachments synced on 988977C15EA1EF85: stickers=0 charm=none
+[armory-inventory] retained item id=95CDD4BFE4A8E81E def=1355
+[armory-inventory] attachments synced on 95CDD4BFE4A8E81E: stickers=0 charm=none
+[armory-inventory] retained item id=998701B6041F17DE def=1209
+[armory-inventory] attachments synced on 998701B6041F17DE: stickers=0 charm=none
+[armory-inventory] retained item id=99B4B549581CBBD5 def=500
+[armory-inventory] retained item id=99992896905CD857 def=5031
+[armory-inventory] attachments synced on 99992896905CD857: stickers=0 charm=none
+[armory-equipment] index: assignments=0 resolved=0 unresolved=0 conflicts=0 definitions=15 slots=0
+[armory-inventory] replacement committed: desired=19 created=0 retained=19 removed=0 removeFailed=0
+[detect] pawn=0x00000229D7B73800 hp=100 signOn=6 bg=0
+[charm-entity] world scan complete highest=13 found=0
+
+=== SNAPSHOT ===
+[snap] fsnCount=120579 lastStage=0 stage5Count=9808
+[snap] stage histogram:
+[snap]   stage  0: 16154 frames
+[snap]   stage  1: 9808 frames
+[snap]   stage  2: 9808 frames
+[snap]   stage  3: 9808 frames
+[snap]   stage  5: 9808 frames
+[snap]   stage  6: 9808 frames
+[snap]   stage  7: 9808 frames
+[snap]   stage  8: 9808 frames
+[snap]   stage 10: 9808 frames
+[snap]   stage 11: 13137 frames
+[snap]   stage 12: 12824 frames
+[snap] dwLocalPlayerController @ 0x00007FFEE59F2548 -> 0x00000229D7408000 
+[snap] dwLocalPlayerPawn       @ 0x00007FFEE5BE91E0 -> 0x000002295E2B0400 
+[snap] pawn: vtable=0x00007FFEE8E73740 inClient=0 health=553
+[snap] ctrl: vtable=0x00007FFEE50C1680 inClient=1 m_hPlayerPawn@0x92C = 0x0185800B (idx=11)
+[snap] entitySystem @ 0x00007FFEE5BCFBB8 = 0x0000022941478800 highestEntityIndex=13
+[snap] entity resolution: 12/16 of indices 1..16 valid
+[snap] ctrl->pawn handle resolve: 0x0185800B -> 0x00000229D7B73800
+[snap] ----------------------------------------
+[charm-entity] world scan complete highest=13 found=0
+N1SSAN_STATUS|1|2026-11-08T15:51:03Z|9320|armory-obsidian-3.0|READY|reason=runtime_worker_heartbeat
+[status-write] begin state=READY path=C:\Users\mirac\AppData\Local\n1ssan\status\cs2-9320.status
+[status-write] success state=READY error=0
+
+=== SNAPSHOT ===
+[snap] fsnCount=124951 lastStage=0 stage5Count=10126
+[snap] stage histogram:
+[snap]   stage  0: 16909 frames
+[snap]   stage  1: 10126 frames
+[snap]   stage  2: 10126 frames
+[snap]   stage  3: 10126 frames
+[snap]   stage  5: 10126 frames
+[snap]   stage  6: 10126 frames
+[snap]   stage  7: 10126 frames
+[snap]   stage  8: 10126 frames
+[snap]   stage 10: 10126 frames
+[snap]   stage 11: 13457 frames
+[snap]   stage 12: 13577 frames
+[snap] dwLocalPlayerController @ 0x00007FFEE59F2548 -> 0x00000229D7408000 
+[snap] dwLocalPlayerPawn       @ 0x00007FFEE5BE91E0 -> 0x000002295E2B0400 
+[snap] pawn: vtable=0x00007FFEE8E73740 inClient=0 health=553
+[snap] ctrl: vtable=0x00007FFEE50C1680 inClient=1 m_hPlayerPawn@0x92C = 0x0185800B (idx=11)
+[snap] entitySystem @ 0x00007FFEE5BCFBB8 = 0x0000022941478800 highestEntityIndex=13
+[snap] entity resolution: 12/16 of indices 1..16 valid
+[snap] ctrl->pawn handle resolve: 0x0185800B -> 0x00000229D7B73800
+[snap] ----------------------------------------
+[detect] pawn=0x00000229D7B73800 hp=100 signOn=6 bg=0
+[charm-entity] world scan complete highest=13 found=0
+
+=== SNAPSHOT ===
+[snap] fsnCount=129216 lastStage=0 stage5Count=10445
+[snap] stage histogram:
+[snap]   stage  0: 17606 frames
+[snap]   stage  1: 10445 frames
+[snap]   stage  2: 10445 frames
+[snap]   stage  3: 10445 frames
+[snap]   stage  5: 10445 frames
+[snap]   stage  6: 10445 frames
+[snap]   stage  7: 10445 frames
+[snap]   stage  8: 10445 frames
+[snap]   stage 10: 10445 frames
+[snap]   stage 11: 13777 frames
+[snap]   stage 12: 14273 frames
+[snap] dwLocalPlayerController @ 0x00007FFEE59F2548 -> 0x00000229D7408000 
+[snap] dwLocalPlayerPawn       @ 0x00007FFEE5BE91E0 -> 0x000002295E2B0400 
+[snap] pawn: vtable=0x00007FFEE8E73740 inClient=0 health=553
+[snap] ctrl: vtable=0x00007FFEE50C1680 inClient=1 m_hPlayerPawn@0x92C = 0x0185800B (idx=11)
+[snap] entitySystem @ 0x00007FFEE5BCFBB8 = 0x0000022941478800 highestEntityIndex=13
+[snap] entity resolution: 12/16 of indices 1..16 valid
+[snap] ctrl->pawn handle resolve: 0x0185800B -> 0x00000229D7B73800
+[snap] ----------------------------------------
+[charm-entity] world scan complete highest=13 found=0
+N1SSAN_STATUS|1|2026-11-08T15:51:13Z|9320|armory-obsidian-3.0|READY|reason=runtime_worker_heartbeat
+[status-write] begin state=READY path=C:\Users\mirac\AppData\Local\n1ssan\status\cs2-9320.status
+[status-write] success state=READY error=0
+
+=== SNAPSHOT ===
+[snap] fsnCount=133409 lastStage=0 stage5Count=10764
+[snap] stage histogram:
+[snap]   stage  0: 18267 frames
+[snap]   stage  1: 10764 frames
+[snap]   stage  2: 10764 frames
+[snap]   stage  3: 10764 frames
+[snap]   stage  5: 10764 frames
+[snap]   stage  6: 10764 frames
+[snap]   stage  7: 10764 frames
+[snap]   stage  8: 10764 frames
+[snap]   stage 10: 10764 frames
+[snap]   stage 11: 14097 frames
+[snap]   stage 12: 14933 frames
+[snap] dwLocalPlayerController @ 0x00007FFEE59F2548 -> 0x00000229D7408000 
+[snap] dwLocalPlayerPawn       @ 0x00007FFEE5BE91E0 -> 0x000002295E2B0400 
+[snap] pawn: vtable=0x00007FFEE8E73740 inClient=0 health=553
+[snap] ctrl: vtable=0x00007FFEE50C1680 inClient=1 m_hPlayerPawn@0x92C = 0x0185800B (idx=11)
+[snap] entitySystem @ 0x00007FFEE5BCFBB8 = 0x0000022941478800 highestEntityIndex=13
+[snap] entity resolution: 12/16 of indices 1..16 valid
+[snap] ctrl->pawn handle resolve: 0x0185800B -> 0x00000229D7B73800
+[snap] ----------------------------------------
+[detect] pawn=0x00000229D7B73800 hp=100 signOn=6 bg=0
+[charm-entity] world scan complete highest=13 found=0
+
+=== SNAPSHOT ===
+[snap] fsnCount=137564 lastStage=0 stage5Count=11085
+[snap] stage histogram:
+[snap]   stage  0: 18900 frames
+[snap]   stage  1: 11085 frames
+[snap]   stage  2: 11085 frames
+[snap]   stage  3: 11085 frames
+[snap]   stage  5: 11085 frames
+[snap]   stage  6: 11085 frames
+[snap]   stage  7: 11085 frames
+[snap]   stage  8: 11085 frames
+[snap]   stage 10: 11085 frames
+[snap]   stage 11: 14418 frames
+[snap]   stage 12: 15566 frames
+[snap] dwLocalPlayerController @ 0x00007FFEE59F2548 -> 0x00000229D7408000 
+[snap] dwLocalPlayerPawn       @ 0x00007FFEE5BE91E0 -> 0x000002295E2B0400 
+[snap] pawn: vtable=0x00007FFEE8E73740 inClient=0 health=553
+[snap] ctrl: vtable=0x00007FFEE50C1680 inClient=1 m_hPlayerPawn@0x92C = 0x0185800B (idx=11)
+[snap] entitySystem @ 0x00007FFEE5BCFBB8 = 0x0000022941478800 highestEntityIndex=13
+[snap] entity resolution: 12/16 of indices 1..16 valid
+[snap] ctrl->pawn handle resolve: 0x0185800B -> 0x00000229D7B73800
+[snap] ----------------------------------------
+[charm-entity] world scan complete highest=13 found=0
+N1SSAN_STATUS|1|2026-11-08T15:51:23Z|9320|armory-obsidian-3.0|READY|reason=runtime_worker_heartbeat
+[status-write] begin state=READY path=C:\Users\mirac\AppData\Local\n1ssan\status\cs2-9320.status
+[status-write] success state=READY error=0
+
+=== SNAPSHOT ===
+[snap] fsnCount=141707 lastStage=0 stage5Count=11402
+[snap] stage histogram:
+[snap]   stage  0: 19545 frames
+[snap]   stage  1: 11402 frames
+[snap]   stage  2: 11402 frames
+[snap]   stage  3: 11402 frames
+[snap]   stage  5: 11402 frames
+[snap]   stage  6: 11402 frames
+[snap]   stage  7: 11402 frames
+[snap]   stage  8: 11402 frames
+[snap]   stage 10: 11402 frames
+[snap]   stage 11: 14738 frames
+[snap]   stage 12: 16208 frames
+[snap] dwLocalPlayerController @ 0x00007FFEE59F2548 -> 0x00000229D7408000 
+[snap] dwLocalPlayerPawn       @ 0x00007FFEE5BE91E0 -> 0x000002295E2B0400 
+[snap] pawn: vtable=0x00007FFEE8E73740 inClient=0 health=553
+[snap] ctrl: vtable=0x00007FFEE50C1680 inClient=1 m_hPlayerPawn@0x92C = 0x0185800B (idx=11)
+[snap] entitySystem @ 0x00007FFEE5BCFBB8 = 0x0000022941478800 highestEntityIndex=13
+[snap] entity resolution: 12/16 of indices 1..16 valid
+[snap] ctrl->pawn handle resolve: 0x0185800B -> 0x00000229D7B73800
+[snap] ----------------------------------------
+[detect] pawn=0x00000229D7B73800 hp=100 signOn=6 bg=0
+[charm-entity] world scan complete highest=13 found=0
+
+=== SNAPSHOT ===
+[snap] fsnCount=145767 lastStage=0 stage5Count=11718
+[snap] stage histogram:
+[snap]   stage  0: 20153 frames
+[snap]   stage  1: 11718 frames
+[snap]   stage  2: 11718 frames
+[snap]   stage  3: 11718 frames
+[snap]   stage  5: 11718 frames
+[snap]   stage  6: 11718 frames
+[snap]   stage  7: 11718 frames
+[snap]   stage  8: 11718 frames
+[snap]   stage 10: 11718 frames
+[snap]   stage 11: 15058 frames
+[snap]   stage 12: 16812 frames
+[snap] dwLocalPlayerController @ 0x00007FFEE59F2548 -> 0x00000229D7408000 
+[snap] dwLocalPlayerPawn       @ 0x00007FFEE5BE91E0 -> 0x000002295E2B0400 
+[snap] pawn: vtable=0x00007FFEE8E73740 inClient=0 health=553
+[snap] ctrl: vtable=0x00007FFEE50C1680 inClient=1 m_hPlayerPawn@0x92C = 0x0185800B (idx=11)
+[snap] entitySystem @ 0x00007FFEE5BCFBB8 = 0x0000022941478800 highestEntityIndex=13
+[snap] entity resolution: 12/16 of indices 1..16 valid
+[snap] ctrl->pawn handle resolve: 0x0185800B -> 0x00000229D7B73800
+[snap] ----------------------------------------
+[use-tool] hook-entry #3 mode=2 api=00000228B326CD00 toolArg=00000229DAC8D3C0 targetArg=00000229DAC81440 original=00007FFEE2D40FC0
+[use-tool] charm 16 on 9AD2A303DFC2661B: at the popup's spot - applying
+[use-tool] hook-entry #3 decision=handled locally
+[attach] ItemViewById read 9AD2A303DFC2661B via CS2 getters
+[use-tool] charm target sticker slots read through CS2 ItemView fallback; preserving stickers
+[use-tool] consumed charm item 95CDD4BFE4A8E81E removal=SUCCESS
+[attach] immediate native observation stickers=1 [0 kit=70 wear=0.000 rot=-40.5 off=0.065,-0.238 schema=3] charm=kit:16 seed=0 off=5.696,0.479,1.680 for item-1794105299922-rgmzp (9AD2A303DFC2661B), source=item-1794152876072-i7e93 consumed=1 file=written
+[use-tool] charm 16 (seed 0) hung on 9AD2A303DFC2661B at x 5.696 y 0.479 z 1.680 (the popup's spot): attributes written, inventory told, popup NOT told, charm item used up
+[armory-inventory] staged 18 items (applies outside an active match)
+[armory-inventory] preparing replacement set: 18 items
+[armory-inventory] retained item id=9F45014B4918D4CA def=5404
+[armory-inventory] attachments synced on 9F45014B4918D4CA: stickers=0 charm=none
+[armory-inventory] retained item id=98580F04895784C8 def=4730
+[armory-inventory] retained item id=922FEB06198C79C1 def=525
+[armory-inventory] attachments synced on 922FEB06198C79C1: stickers=0 charm=none
+[armory-inventory] retained item id=9B4523A8BFE93866 def=5030
+[armory-inventory] attachments synced on 9B4523A8BFE93866: stickers=0 charm=none
+[armory-inventory] retained item id=9919302EC58DC70A def=16
+[armory-inventory] attachments synced on 9919302EC58DC70A: stickers=1 [0 kit=20 wear=0.000 rot=0.0 off=-0.079,-0.004 schema=4] charm=kit:17 seed=0 off=33.469,0.373,12.120
+[armory-inventory] retained item id=96221A0E61314132 def=60
+[armory-inventory] attachments synced on 96221A0E61314132: stickers=1 [0 kit=42 wear=0.000 rot=0.0 off=0.426,0.013 schema=4] charm=none
+[armory-inventory] retained item id=914A30836F3526FC def=7
+[armory-inventory] attachments synced on 914A30836F3526FC: stickers=1 [0 kit=10383 wear=0.000 rot=0.0 off=0.026,0.005 schema=0] charm=kit:30 seed=0 off=23.891,0.367,2.287
+[armory-inventory] retained item id=9536605177002A96 def=9
+[armory-inventory] attachments synced on 9536605177002A96: stickers=1 [0 kit=70 wear=0.000 rot=0.0 off=-0.252,0.006 schema=4] charm=none
+[armory-inventory] retained item id=9CF82CD4592CD5C7 def=61
+[armory-inventory] attachments synced on 9CF82CD4592CD5C7: stickers=0 charm=kit:7 seed=0 off=1.872,0.344,3.930
+[armory-inventory] retained item id=955F0C957F4C067D def=61
+[armory-inventory] attachments synced on 955F0C957F4C067D: stickers=1 [0 kit=98 wear=0.000 rot=0.0 off=0.000,0.000 schema=2] charm=kit:55 seed=0 off=18.066,0.752,3.900
+[armory-inventory] retained item id=9EF2C4042C206579 def=34
+[armory-inventory] attachments synced on 9EF2C4042C206579: stickers=1 [0 kit=6702 wear=0.000 rot=0.0 off=0.232,0.008 schema=2] charm=kit:70 seed=0 off=1.865,0.749,5.986
+[armory-inventory] retained item id=9AD2A303DFC2661B def=4
+[armory-inventory] attachments synced on 9AD2A303DFC2661B: stickers=1 [0 kit=70 wear=0.000 rot=-40.5 off=0.065,-0.238 schema=3] charm=kit:16 seed=0 off=5.696,0.479,1.680
+[armory-inventory] retained item id=91A393008C57670D def=1355
+[armory-inventory] attachments synced on 91A393008C57670D: stickers=0 charm=none
+[armory-inventory] retained item id=9FE6ABE590502EF4 def=7
+[armory-inventory] attachments synced on 9FE6ABE590502EF4: stickers=2 [0 kit=37 wear=0.000 rot=-22.5 off=-0.265,-0.014 schema=1] [1 kit=37 wear=0.000 rot=-10.5 off=-0.315,-0.012 schema=0] charm=kit:23 seed=0 off=0.461,0.495,3.253
+[armory-inventory] retained item id=988977C15EA1EF85 def=1355
+[armory-inventory] attachments synced on 988977C15EA1EF85: stickers=0 charm=none
+[armory-inventory] retained item id=998701B6041F17DE def=1209
+[armory-inventory] attachments synced on 998701B6041F17DE: stickers=0 charm=none
+[armory-inventory] retained item id=99B4B549581CBBD5 def=500
+[armory-inventory] attachments synced on 99B4B549581CBBD5: stickers=0 charm=none
+[armory-inventory] retained item id=99992896905CD857 def=5031
+[armory-inventory] attachments synced on 99992896905CD857: stickers=0 charm=none
+[armory-equipment] index: assignments=0 resolved=0 unresolved=0 conflicts=0 definitions=15 slots=0
+[armory-inventory] replacement committed: desired=18 created=0 retained=18 removed=0 removeFailed=0
+[charm-entity] world scan complete highest=13 found=0
+N1SSAN_STATUS|1|2026-11-08T15:51:33Z|9320|armory-obsidian-3.0|READY|reason=runtime_worker_heartbeat
+[status-write] begin state=READY path=C:\Users\mirac\AppData\Local\n1ssan\status\cs2-9320.status
+[status-write] success state=READY error=0
+
+=== SNAPSHOT ===
+[snap] fsnCount=149672 lastStage=0 stage5Count=12025
+[snap] stage histogram:
+[snap]   stage  0: 20724 frames
+[snap]   stage  1: 12025 frames
+[snap]   stage  2: 12025 frames
+[snap]   stage  3: 12025 frames
+[snap]   stage  5: 12025 frames
+[snap]   stage  6: 12025 frames
+[snap]   stage  7: 12025 frames
+[snap]   stage  8: 12025 frames
+[snap]   stage 10: 12025 frames
+[snap]   stage 11: 15378 frames
+[snap]   stage 12: 17370 frames
+[snap] dwLocalPlayerController @ 0x00007FFEE59F2548 -> 0x00000229D7408000 
+[snap] dwLocalPlayerPawn       @ 0x00007FFEE5BE91E0 -> 0x000002295E2B0400 
+[snap] pawn: vtable=0x00007FFEE8E73740 inClient=0 health=553
+[snap] ctrl: vtable=0x00007FFEE50C1680 inClient=1 m_hPlayerPawn@0x92C = 0x0185800B (idx=11)
+[snap] entitySystem @ 0x00007FFEE5BCFBB8 = 0x0000022941478800 highestEntityIndex=13
+[snap] entity resolution: 12/16 of indices 1..16 valid
+[snap] ctrl->pawn handle resolve: 0x0185800B -> 0x00000229D7B73800
+[snap] ----------------------------------------
+[detect] pawn=0x00000229D7B73800 hp=100 signOn=6 bg=0
+[charm-entity] world scan complete highest=13 found=0
+
+=== SNAPSHOT ===
+[snap] fsnCount=153643 lastStage=0 stage5Count=12342
+[snap] stage histogram:
+[snap]   stage  0: 21283 frames
+[snap]   stage  1: 12342 frames
+[snap]   stage  2: 12342 frames
+[snap]   stage  3: 12342 frames
+[snap]   stage  5: 12342 frames
+[snap]   stage  6: 12342 frames
+[snap]   stage  7: 12342 frames
+[snap]   stage  8: 12342 frames
+[snap]   stage 10: 12342 frames
+[snap]   stage 11: 15698 frames
+[snap]   stage 12: 17926 frames
+[snap] dwLocalPlayerController @ 0x00007FFEE59F2548 -> 0x00000229D7408000 
+[snap] dwLocalPlayerPawn       @ 0x00007FFEE5BE91E0 -> 0x000002295E2B0400 
+[snap] pawn: vtable=0x00007FFEE8E73740 inClient=0 health=553
+[snap] ctrl: vtable=0x00007FFEE50C1680 inClient=1 m_hPlayerPawn@0x92C = 0x0185800B (idx=11)
+[snap] entitySystem @ 0x00007FFEE5BCFBB8 = 0x0000022941478800 highestEntityIndex=13
+[snap] entity resolution: 12/16 of indices 1..16 valid
+[snap] ctrl->pawn handle resolve: 0x0185800B -> 0x00000229D7B73800
+[snap] ----------------------------------------
+[use-tool] hook-entry #4 mode=2 api=00000228B326CD00 toolArg=00000229C8F52DC0 targetArg=00000229C8F58200 original=00007FFEE2D40FC0
+[use-tool] charm 9 on 9536605177002A96: at the popup's spot - applying
+[use-tool] hook-entry #4 decision=handled locally
+[attach] ItemViewById read 9536605177002A96 via CS2 getters
+[use-tool] charm target sticker slots read through CS2 ItemView fallback; preserving stickers
+[use-tool] consumed charm item 988977C15EA1EF85 removal=SUCCESS
+[attach] immediate native observation stickers=1 [0 kit=70 wear=0.000 rot=0.0 off=-0.252,0.006 schema=4] charm=kit:9 seed=0 off=8.577,1.372,11.233 for item-1794105197869-7umla (9536605177002A96), source=item-1794152872481-jd5nl consumed=1 file=written
+[use-tool] charm 9 (seed 0) hung on 9536605177002A96 at x 8.577 y 1.372 z 11.233 (the popup's spot): attributes written, inventory told, popup NOT told, charm item used up
+[armory-inventory] staged 17 items (applies outside an active match)
+[armory-inventory] preparing replacement set: 17 items
+[armory-inventory] retained item id=9F45014B4918D4CA def=5404
+[armory-inventory] attachments synced on 9F45014B4918D4CA: stickers=0 charm=none
+[armory-inventory] retained item id=98580F04895784C8 def=4730
+[armory-inventory] retained item id=922FEB06198C79C1 def=525
+[armory-inventory] attachments synced on 922FEB06198C79C1: stickers=0 charm=none
+[armory-inventory] retained item id=9B4523A8BFE93866 def=5030
+[armory-inventory] attachments synced on 9B4523A8BFE93866: stickers=0 charm=none
+[armory-inventory] retained item id=9919302EC58DC70A def=16
+[armory-inventory] attachments synced on 9919302EC58DC70A: stickers=1 [0 kit=20 wear=0.000 rot=0.0 off=-0.079,-0.004 schema=4] charm=kit:17 seed=0 off=33.469,0.373,12.120
+[armory-inventory] retained item id=96221A0E61314132 def=60
+[armory-inventory] attachments synced on 96221A0E61314132: stickers=1 [0 kit=42 wear=0.000 rot=0.0 off=0.426,0.013 schema=4] charm=none
+[armory-inventory] retained item id=914A30836F3526FC def=7
+[armory-inventory] attachments synced on 914A30836F3526FC: stickers=1 [0 kit=10383 wear=0.000 rot=0.0 off=0.026,0.005 schema=0] charm=kit:30 seed=0 off=23.891,0.367,2.287
+[armory-inventory] retained item id=9536605177002A96 def=9
+[armory-inventory] attachments synced on 9536605177002A96: stickers=1 [0 kit=70 wear=0.000 rot=0.0 off=-0.252,0.006 schema=4] charm=kit:9 seed=0 off=8.577,1.372,11.233
+[armory-inventory] retained item id=9CF82CD4592CD5C7 def=61
+[armory-inventory] attachments synced on 9CF82CD4592CD5C7: stickers=0 charm=kit:7 seed=0 off=1.872,0.344,3.930
+[armory-inventory] retained item id=955F0C957F4C067D def=61
+[armory-inventory] attachments synced on 955F0C957F4C067D: stickers=1 [0 kit=98 wear=0.000 rot=0.0 off=0.000,0.000 schema=2] charm=kit:55 seed=0 off=18.066,0.752,3.900
+[armory-inventory] retained item id=9EF2C4042C206579 def=34
+[armory-inventory] attachments synced on 9EF2C4042C206579: stickers=1 [0 kit=6702 wear=0.000 rot=0.0 off=0.232,0.008 schema=2] charm=kit:70 seed=0 off=1.865,0.749,5.986
+[armory-inventory] retained item id=9AD2A303DFC2661B def=4
+[armory-inventory] attachments synced on 9AD2A303DFC2661B: stickers=1 [0 kit=70 wear=0.000 rot=-40.5 off=0.065,-0.238 schema=3] charm=kit:16 seed=0 off=5.696,0.479,1.680
+[armory-inventory] retained item id=91A393008C57670D def=1355
+[armory-inventory] attachments synced on 91A393008C57670D: stickers=0 charm=none
+[armory-inventory] retained item id=9FE6ABE590502EF4 def=7
+[armory-inventory] attachments synced on 9FE6ABE590502EF4: stickers=2 [0 kit=37 wear=0.000 rot=-22.5 off=-0.265,-0.014 schema=1] [1 kit=37 wear=0.000 rot=-10.5 off=-0.315,-0.012 schema=0] charm=kit:23 seed=0 off=0.461,0.495,3.253
+[armory-inventory] retained item id=998701B6041F17DE def=1209
+[armory-inventory] attachments synced on 998701B6041F17DE: stickers=0 charm=none
+[armory-inventory] retained item id=99B4B549581CBBD5 def=500
+[armory-inventory] attachments synced on 99B4B549581CBBD5: stickers=0 charm=none
+[armory-inventory] retained item id=99992896905CD857 def=5031
+[armory-inventory] attachments synced on 99992896905CD857: stickers=0 charm=none
+[armory-equipment] index: assignments=0 resolved=0 unresolved=0 conflicts=0 definitions=15 slots=0
+[armory-inventory] replacement committed: desired=17 created=0 retained=17 removed=0 removeFailed=0
+[charm-entity] world scan complete highest=13 found=0
+N1SSAN_STATUS|1|2026-11-08T15:51:43Z|9320|armory-obsidian-3.0|READY|reason=runtime_worker_heartbeat
+[status-write] begin state=READY path=C:\Users\mirac\AppData\Local\n1ssan\status\cs2-9320.status
+[status-write] success state=READY error=0
+
+=== SNAPSHOT ===
+[snap] fsnCount=157540 lastStage=0 stage5Count=12653
+[snap] stage histogram:
+[snap]   stage  0: 21832 frames
+[snap]   stage  1: 12653 frames
+[snap]   stage  2: 12653 frames
+[snap]   stage  3: 12653 frames
+[snap]   stage  5: 12653 frames
+[snap]   stage  6: 12653 frames
+[snap]   stage  7: 12653 frames
+[snap]   stage  8: 12653 frames
+[snap]   stage 10: 12653 frames
+[snap]   stage 11: 16019 frames
+[snap]   stage 12: 18465 frames
+[snap] dwLocalPlayerController @ 0x00007FFEE59F2548 -> 0x00000229D7408000 
+[snap] dwLocalPlayerPawn       @ 0x00007FFEE5BE91E0 -> 0x000002295E2B0400 
+[snap] pawn: vtable=0x00007FFEE8E73740 inClient=0 health=553
+[snap] ctrl: vtable=0x00007FFEE50C1680 inClient=1 m_hPlayerPawn@0x92C = 0x0185800B (idx=11)
+[snap] entitySystem @ 0x00007FFEE5BCFBB8 = 0x0000022941478800 highestEntityIndex=13
+[snap] entity resolution: 12/16 of indices 1..16 valid
+[snap] ctrl->pawn handle resolve: 0x0185800B -> 0x00000229D7B73800
+[snap] ----------------------------------------
+
+=== SNAPSHOT ===
+[snap] fsnCount=161203 lastStage=1 stage5Count=12872
+[snap] stage histogram:
+[snap]   stage  0: 22677 frames
+[snap]   stage  1: 12873 frames
+[snap]   stage  2: 12872 frames
+[snap]   stage  3: 12872 frames
+[snap]   stage  5: 12872 frames
+[snap]   stage  6: 12872 frames
+[snap]   stage  7: 12872 frames
+[snap]   stage  8: 12872 frames
+[snap]   stage 10: 12872 frames
+[snap]   stage 11: 16240 frames
+[snap]   stage 12: 19309 frames
+[snap] dwLocalPlayerController @ 0x00007FFEE59F2548 -> 0x0000000000000000 
+[snap] dwLocalPlayerPawn       @ 0x00007FFEE5BE91E0 -> 0x000002295E2B0400 
+[snap] pawn: vtable=0x00007FFEE8E73740 inClient=0 health=553
+[snap] ctrl: null or below 0x10000 - not connected
+[snap] entitySystem @ 0x00007FFEE5BCFBB8 = 0x0000022941478800 highestEntityIndex=0
+[snap] entity resolution: 0/16 of indices 1..16 valid
+[snap] ----------------------------------------
+[glove-observe] pawn=000002295E2B0400 reapply=0 changed=48 def=0 init=0 idHigh=0x0
+[charm-entity] world scan complete highest=205 found=0
+[detect] pawn=0x000002295E2B0400 hp=553 signOn=5 bg=0
+[glove-observe] pawn=00000229D2B01800 reapply=0 changed=0 def=0 init=0 idHigh=0x0
+N1SSAN_STATUS|1|2026-11-08T15:51:53Z|9320|armory-obsidian-3.0|READY|reason=runtime_worker_heartbeat
+[status-write] begin state=READY path=C:\Users\mirac\AppData\Local\n1ssan\status\cs2-9320.status
+[status-write] success state=READY error=0
+
+=== SNAPSHOT ===
+[snap] fsnCount=166424 lastStage=0 stage5Count=13154
+[snap] stage histogram:
+[snap]   stage  0: 23886 frames
+[snap]   stage  1: 13232 frames
+[snap]   stage  2: 13232 frames
+[snap]   stage  3: 13228 frames
+[snap]   stage  4: 1 frames
+[snap]   stage  5: 13154 frames
+[snap]   stage  6: 13154 frames
+[snap]   stage  7: 13154 frames
+[snap]   stage  8: 13154 frames
+[snap]   stage 10: 13154 frames
+[snap]   stage 11: 16529 frames
+[snap]   stage 12: 20546 frames
+[snap] dwLocalPlayerController @ 0x00007FFEE59F2548 -> 0x00000228C2B71A00 
+[snap] dwLocalPlayerPawn       @ 0x00007FFEE5BE91E0 -> 0x000002295E2B0400 
+[snap] pawn: vtable=0x00007FFEE8E73740 inClient=0 health=553
+[snap] ctrl: vtable=0x00007FFEE50C1680 inClient=1 m_hPlayerPawn@0x92C = 0x01C681A1 (idx=417)
+[snap] entitySystem @ 0x00007FFEE5BCFBB8 = 0x0000022941478800 highestEntityIndex=205
+[snap] entity resolution: 1/16 of indices 1..16 valid
+[snap] ctrl->pawn handle resolve: 0x01C681A1 -> 0x00000229D2B01800
+[snap] ----------------------------------------
+[charm-entity] world scan complete highest=205 found=0
+
+=== SNAPSHOT ===
+[snap] fsnCount=171962 lastStage=0 stage5Count=13474
+[snap] stage histogram:
+[snap]   stage  0: 25215 frames
+[snap]   stage  1: 13552 frames
+[snap]   stage  2: 13552 frames
+[snap]   stage  3: 13548 frames
+[snap]   stage  4: 1 frames
+[snap]   stage  5: 13474 frames
+[snap]   stage  6: 13474 frames
+[snap]   stage  7: 13474 frames
+[snap]   stage  8: 13474 frames
+[snap]   stage 10: 13474 frames
+[snap]   stage 11: 16849 frames
+[snap]   stage 12: 21875 frames
+[snap] dwLocalPlayerController @ 0x00007FFEE59F2548 -> 0x00000228C2B71A00 
+[snap] dwLocalPlayerPawn       @ 0x00007FFEE5BE91E0 -> 0x000002295E2B0400 
+[snap] pawn: vtable=0x00007FFEE8E73740 inClient=0 health=553
+[snap] ctrl: vtable=0x00007FFEE50C1680 inClient=1 m_hPlayerPawn@0x92C = 0x01C681A1 (idx=417)
+[snap] entitySystem @ 0x00007FFEE5BCFBB8 = 0x0000022941478800 highestEntityIndex=205
+[snap] entity resolution: 1/16 of indices 1..16 valid
+[snap] ctrl->pawn handle resolve: 0x01C681A1 -> 0x00000229D2B01800
+[snap] ----------------------------------------
+[detect] pawn=0x00000229D2B01800 hp=100 signOn=6 bg=0
+[charm-entity] world scan complete highest=205 found=0
+N1SSAN_STATUS|1|2026-11-08T15:52:03Z|9320|armory-obsidian-3.0|READY|reason=runtime_worker_heartbeat
+[status-write] begin state=READY path=C:\Users\mirac\AppData\Local\n1ssan\status\cs2-9320.status
+[status-write] success state=READY error=0
+
+=== SNAPSHOT ===
+[snap] fsnCount=177423 lastStage=0 stage5Count=13789
+[snap] stage histogram:
+[snap]   stage  0: 26528 frames
+[snap]   stage  1: 13867 frames
+[snap]   stage  2: 13867 frames
+[snap]   stage  3: 13863 frames
+[snap]   stage  4: 1 frames
+[snap]   stage  5: 13789 frames
+[snap]   stage  6: 13789 frames
+[snap]   stage  7: 13789 frames
+[snap]   stage  8: 13789 frames
+[snap]   stage 10: 13789 frames
+[snap]   stage 11: 17169 frames
+[snap]   stage 12: 23183 frames
+[snap] dwLocalPlayerController @ 0x00007FFEE59F2548 -> 0x00000228C2B71A00 
+[snap] dwLocalPlayerPawn       @ 0x00007FFEE5BE91E0 -> 0x000002295E2B0400 
+[snap] pawn: vtable=0x00007FFEE8E73740 inClient=0 health=553
+[snap] ctrl: vtable=0x00007FFEE50C1680 inClient=1 m_hPlayerPawn@0x92C = 0x01C681A1 (idx=417)
+[snap] entitySystem @ 0x00007FFEE5BCFBB8 = 0x0000022941478800 highestEntityIndex=209
+[snap] entity resolution: 1/16 of indices 1..16 valid
+[snap] ctrl->pawn handle resolve: 0x01C681A1 -> 0x00000229D2B01800
+[snap] ----------------------------------------
+[charm-entity] world scan complete highest=209 found=0
+[apply-cache] weapon model cache invalidated
+[apply-cache] pawn changed: 00000229D2B01800
+[match] FOUND pawn=0x00000229D2B01800 hp=100 signOn=6 bg=0 connected=0
+[apply] tick pawn=0x00000229D2B01800
+[apply] wData=0x0000000000000002 count=357056192
+[apply] activeHandle=0x010B81D6
+[apply] active 0x00000229C8086000
+[pw] weapon=0x00000229C8086000 view=0x00000229C80872E0
+[pw]   view+0x00 = 0xE51C55F0
+[pw]   view+0x04 = 0x00007FFE
+[pw]   view+0x08 = 0x00000000
+[pw]   view+0x0C = 0x00000000
+[pw]   view+0x10 = 0xFFFFFFFE
+[pw]   view+0x14 = 0x00000000
+[pw]   view+0x18 = 0x00000000
+[pw]   view+0x1C = 0x00000000
+[pw]   view+0x20 = 0x00000000
+[pw]   view+0x24 = 0x00000000
+[pw]   view+0x28 = 0x00000000
+[pw]   view+0x2C = 0x00000000
+[pw]   view+0x30 = 0x00000000
+[pw]   view+0x34 = 0x00000000
+[pw]   view+0x38 = 0x00000000
+[pw]   view+0x3C = 0x00000000
+[pw] weapon+0x1290..0x12F0:
+[pw]   +0x1290 = 0x00007FFEE51C5790
+[pw]   +0x1298 = 0x0000000000000000
+[pw]   +0x12A0 = 0x0000000000000000
+[pw]   +0x12A8 = 0x0000000000000000
+[pw]   +0x12B0 = 0x010B81D600000001
+[pw]   +0x12B8 = 0x0000000100000000
+[pw]   +0x12C0 = 0x0000000000000000
+[pw]   +0x12C8 = 0x0000000000000000
+[pw]   +0x12D0 = 0x0000000000000000
+[pw]   +0x12D8 = 0x0000000000000000
+[pw]   +0x12E0 = 0x00007FFEE51C55F0
+[pw]   +0x12E8 = 0x0000000000000000
+[pw] weapon 0x00000229C8086000 def=61
+[team] pawn=0x00000229D2B01800, scanning +0x380..0x400:
+[team]   pawn+0x3BC (u8)  = 1
+[armory-apply] in-game live weapon def=61 team=CT paintKit=332 (equipped in game 955F0C957F4C067D)
+[apply] enter (weapon=0x00000229C8086000 def=61 pk=332)
+[apply] world view pre-write: size=0 data=0x0000000000000000
+[attr-diag] item=00000229C80872E0 size=0 data=0000000000000000 alloc=0
+[attr-entry] 0: def=6 value=332.000 initial=332.000
+[attr-entry] 1: def=7 value=124.000 initial=124.000
+[attr-entry] 2: def=8 value=0.246550 initial=0.246550
+[attr] attachments written (12 attributes): stickers=1 [0 kit=98 wear=0.000 rot=0.0 off=0.000,0.000 schema=2] charm=kit:55 seed=0 off=18.066,0.752,3.900
+[apply] world post-create: size=17 data=00000229D381A000 alloc=25
+[apply] world view 0x00000229C80872E0 painted (pk=332)
+[hud-find] START weapon=0x00000229C8086000 pawn=0x00000229D2B01800
+[hud-find] armsHandle=0xFFFFFFFF
+[hud-find] FAIL: invalid arms handle
+[apply-cache] rebuilding weapon=00000229C8086000 hud=0000000000000000 def=61 pk=332
+[apply-diagnostic] weaponChanged=1 gloveUpdate=0 regenAvailable=1
+[skin-regenerate] calling pRegenerateSkins weaponChanged=1
+[skin-regenerate] returned
+[armory-gloves] applied def=5030 team=CT (equipped in game clothing_hands instance 9B4523A8BFE93866)
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[armory-agent] nothing applied team=CT (not equipped in game and no assignment for this slot)
+[apply-cache] weapon model cache invalidated
+[glove-observe] pawn=00000229D2B01800 reapply=0 changed=0 def=5030 init=1 idHigh=0xFFFFFFFF
+[apply-cache] weapon model cache invalidated
+[apply-cache] weapon model cache invalidated
+[apply-cache] weapon model cache invalidated
+[apply] tick pawn=0x00000229D2B01800
+[apply] active 0x00000229C8086000
+[pw] weapon 0x00000229C8086000 def=61
+[armory-apply] in-game live weapon def=61 team=CT paintKit=332 (equipped in game 955F0C957F4C067D)
+[hud-find] START weapon=0x00000229C8086000 pawn=0x00000229D2B01800
+[hud-find] armsHandle=0xD994261
+[hud-find] arms=0x00000229E2FFD000
+[hud-find] armsNode=0x0000022A144CD080
+[hud-find] firstChild=0x00000228C38CD080
+[hud-find] child[1]=0x0000022982478C80 owner=0x00000228C2BE6800 handle=0x4901D5 resolved=0x00000229C8084000
+[hud-find] child[2]=0x0000022982478080 owner=0x00000228C2BE5400 handle=0x10B81D6 resolved=0x00000229C8086000 **MATCH**
+[hud-find] SUCCESS hudWeapon=0x00000228C2BE5400 after 3 nodes
+[apply-cache] rebuilding weapon=00000229C8086000 hud=00000228C2BE5400 def=61 pk=332
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x00000229D2B01800
+[apply] active 0x00000229C8086000
+[pw] weapon 0x00000229C8086000 def=61
+[armory-apply] in-game live weapon def=61 team=CT paintKit=332 (equipped in game 955F0C957F4C067D)
+[hud-find] START weapon=0x00000229C8086000 pawn=0x00000229D2B01800
+[hud-find] armsHandle=0xD994261
+[hud-find] arms=0x00000229E2FFD000
+[hud-find] armsNode=0x0000022A144CD080
+[hud-find] firstChild=0x0000022A13AD1C80
+[hud-find] child[2]=0x0000022982478C80 owner=0x00000228C2BE6800 handle=0x4901D5 resolved=0x00000229C8084000
+[hud-find] child[3]=0x0000022982478080 owner=0x00000228C2BE5400 handle=0x10B81D6 resolved=0x00000229C8086000 **MATCH**
+[hud-find] SUCCESS hudWeapon=0x00000228C2BE5400 after 4 nodes
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply-cache] weapon model cache invalidated
+[apply-cache] weapon model cache invalidated
+[apply-cache] weapon model cache invalidated
+[apply-cache] weapon model cache invalidated
+[apply] tick pawn=0x00000229D2B01800
+[apply] active 0x00000229C8086000
+[pw] weapon 0x00000229C8086000 def=61
+[armory-apply] in-game live weapon def=61 team=CT paintKit=332 (equipped in game 955F0C957F4C067D)
+[hud-find] START weapon=0x00000229C8086000 pawn=0x00000229D2B01800
+[hud-find] armsHandle=0xD994261
+[hud-find] arms=0x00000229E2FFD000
+[hud-find] armsNode=0x0000022A144CD080
+[hud-find] firstChild=0x0000022A13AD7C80
+[hud-find] child[2]=0x0000022982478C80 owner=0x00000228C2BE6800 handle=0x4901D5 resolved=0x00000229C8084000
+[hud-find] child[3]=0x0000022982478080 owner=0x00000228C2BE5400 handle=0x10B81D6 resolved=0x00000229C8086000 **MATCH**
+[hud-find] SUCCESS hudWeapon=0x00000228C2BE5400 after 4 nodes
+[apply-cache] rebuilding weapon=00000229C8086000 hud=00000228C2BE5400 def=61 pk=332
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x00000229D2B01800
+[apply] active 0x00000229C8086000
+[pw] weapon 0x00000229C8086000 def=61
+[armory-apply] in-game live weapon def=61 team=CT paintKit=332 (equipped in game 955F0C957F4C067D)
+[hud-find] START weapon=0x00000229C8086000 pawn=0x00000229D2B01800
+[hud-find] armsHandle=0xD994261
+[hud-find] arms=0x00000229E2FFD000
+[hud-find] armsNode=0x0000022A144CD080
+[hud-find] firstChild=0x0000022A13AD7C80
+[hud-find] child[2]=0x0000022982478C80 owner=0x00000228C2BE6800 handle=0x4901D5 resolved=0x00000229C8084000
+[hud-find] child[3]=0x0000022982478080 owner=0x00000228C2BE5400 handle=0x10B81D6 resolved=0x00000229C8086000 **MATCH**
+[hud-find] SUCCESS hudWeapon=0x00000228C2BE5400 after 4 nodes
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x00000229D2B01800
+[apply] active 0x00000229C8086000
+[pw] weapon 0x00000229C8086000 def=61
+[armory-apply] in-game live weapon def=61 team=CT paintKit=332 (equipped in game 955F0C957F4C067D)
+[hud-find] START weapon=0x00000229C8086000 pawn=0x00000229D2B01800
+[hud-find] armsHandle=0xD994261
+[hud-find] arms=0x00000229E2FFD000
+[hud-find] armsNode=0x0000022A144CD080
+[hud-find] firstChild=0x0000022A13AD7C80
+[hud-find] child[2]=0x0000022982478C80 owner=0x00000228C2BE6800 handle=0x4901D5 resolved=0x00000229C8084000
+[hud-find] child[3]=0x0000022982478080 owner=0x00000228C2BE5400 handle=0x10B81D6 resolved=0x00000229C8086000 **MATCH**
+[hud-find] SUCCESS hudWeapon=0x00000228C2BE5400 after 4 nodes
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply-cache] weapon model cache invalidated
+[apply-cache] weapon model cache invalidated
+[apply-cache] weapon model cache invalidated
+[apply-cache] weapon model cache invalidated
+[apply] tick pawn=0x00000229D2B01800
+[apply] active 0x00000229C8084000
+[pw] weapon 0x00000229C8084000 def=42
+[armory-apply] in-game live weapon def=42 team=CT paintKit=420 (equipped in game 922FEB06198C79C1)
+[knife] SetModel (schema): weapons/models/knife/knife_skeleton/weapon_knife_skeleton.vmdl
+[apply] enter (weapon=0x00000229C8084000 def=525 pk=420)
+[apply] world view pre-write: size=0 data=0x0000000000000000
+[attr-diag] item=00000229C80852E0 size=0 data=0000000000000000 alloc=0
+[attr-entry] 0: def=6 value=420.000 initial=420.000
+[attr-entry] 1: def=7 value=144.000 initial=144.000
+[attr-entry] 2: def=8 value=0.002350 initial=0.002350
+[apply] world post-create: size=3 data=00000228C3908980 alloc=11
+[apply] world view 0x00000229C80852E0 painted (pk=420)
+[hud-find] START weapon=0x00000229C8084000 pawn=0x00000229D2B01800
+[hud-find] armsHandle=0xD994261
+[hud-find] arms=0x00000229E2FFD000
+[hud-find] armsNode=0x0000022A144CD080
+[hud-find] firstChild=0x0000022A13AD5880
+[hud-find] child[2]=0x0000022982478080 owner=0x00000228C2BE5400 handle=0x10B81D6 resolved=0x00000229C8086000
+[hud-find] NO MATCH walked=3 finalChild=0x0000000000000000
+[apply-cache] rebuilding weapon=00000229C8084000 hud=0000000000000000 def=525 pk=420
+[hud-name] weapon selection entry refreshed: 00000229C8084000
+[apply-diagnostic] weaponChanged=1 gloveUpdate=0 regenAvailable=1
+[skin-regenerate] calling pRegenerateSkins weaponChanged=1
+[skin-regenerate] returned
+[apply] tick pawn=0x00000229D2B01800
+[apply] active 0x00000229C8084000
+[pw] weapon 0x00000229C8084000 def=525
+[armory-apply] in-game live weapon def=525 team=CT paintKit=420 (equipped in game 922FEB06198C79C1)
+[hud-find] START weapon=0x00000229C8084000 pawn=0x00000229D2B01800
+[hud-find] armsHandle=0xD994261
+[hud-find] arms=0x00000229E2FFD000
+[hud-find] armsNode=0x0000022A144CD080
+[hud-find] firstChild=0x0000022A13AD6480
+[hud-find] child[0]=0x0000022A13AD6480 owner=0x00000228C2C14C00 handle=0x4901D5 resolved=0x00000229C8084000 **MATCH**
+[hud-find] SUCCESS hudWeapon=0x00000228C2C14C00 after 1 nodes
+[apply-cache] rebuilding weapon=00000229C8084000 hud=00000228C2C14C00 def=525 pk=420
+[knife] HUD SetModel (schema): weapons/models/knife/knife_skeleton/weapon_knife_skeleton.vmdl
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x00000229D2B01800
+[apply] active 0x00000229C8084000
+[pw] weapon 0x00000229C8084000 def=525
+[armory-apply] in-game live weapon def=525 team=CT paintKit=420 (equipped in game 922FEB06198C79C1)
+[hud-find] START weapon=0x00000229C8084000 pawn=0x00000229D2B01800
+[hud-find] armsHandle=0xD994261
+[hud-find] arms=0x00000229E2FFD000
+[hud-find] armsNode=0x0000022A144CD080
+[hud-find] firstChild=0x0000022A13AD6480
+[hud-find] child[0]=0x0000022A13AD6480 owner=0x00000228C2C14C00 handle=0x4901D5 resolved=0x00000229C8084000 **MATCH**
+[hud-find] SUCCESS hudWeapon=0x00000228C2C14C00 after 1 nodes
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x00000229D2B01800
+[apply] active 0x00000229C8084000
+[pw] weapon 0x00000229C8084000 def=525
+[armory-apply] in-game live weapon def=525 team=CT paintKit=420 (equipped in game 922FEB06198C79C1)
+[hud-find] START weapon=0x00000229C8084000 pawn=0x00000229D2B01800
+[hud-find] armsHandle=0xD994261
+[hud-find] arms=0x00000229E2FFD000
+[hud-find] armsNode=0x0000022A144CD080
+[hud-find] firstChild=0x0000022A13AD6480
+[hud-find] child[0]=0x0000022A13AD6480 owner=0x00000228C2C14C00 handle=0x4901D5 resolved=0x00000229C8084000 **MATCH**
+[hud-find] SUCCESS hudWeapon=0x00000228C2C14C00 after 1 nodes
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x00000229D2B01800
+[apply] active 0x00000229C8084000
+[pw] weapon 0x00000229C8084000 def=525
+[armory-apply] in-game live weapon def=525 team=CT paintKit=420 (equipped in game 922FEB06198C79C1)
+[hud-find] START weapon=0x00000229C8084000 pawn=0x00000229D2B01800
+[hud-find] armsHandle=0xD994261
+[hud-find] arms=0x00000229E2FFD000
+[hud-find] armsNode=0x0000022A144CD080
+[hud-find] firstChild=0x0000022A13AD6480
+[hud-find] child[0]=0x0000022A13AD6480 owner=0x00000228C2C14C00 handle=0x4901D5 resolved=0x00000229C8084000 **MATCH**
+[hud-find] SUCCESS hudWeapon=0x00000228C2C14C00 after 1 nodes
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x00000229D2B01800
+[apply] active 0x00000229C8084000
+[pw] weapon 0x00000229C8084000 def=525
+[armory-apply] in-game live weapon def=525 team=CT paintKit=420 (equipped in game 922FEB06198C79C1)
+[hud-find] START weapon=0x00000229C8084000 pawn=0x00000229D2B01800
+[hud-find] armsHandle=0xD994261
+[hud-find] arms=0x00000229E2FFD000
+[hud-find] armsNode=0x0000022A144CD080
+[hud-find] firstChild=0x0000022A13AD6480
+[hud-find] child[0]=0x0000022A13AD6480 owner=0x00000228C2C14C00 handle=0x4901D5 resolved=0x00000229C8084000 **MATCH**
+[hud-find] SUCCESS hudWeapon=0x00000228C2C14C00 after 1 nodes
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x00000229D2B01800
+[apply] active 0x00000229C8084000
+[pw] weapon 0x00000229C8084000 def=525
+[armory-apply] in-game live weapon def=525 team=CT paintKit=420 (equipped in game 922FEB06198C79C1)
+[hud-find] START weapon=0x00000229C8084000 pawn=0x00000229D2B01800
+[hud-find] armsHandle=0xD994261
+[hud-find] arms=0x00000229E2FFD000
+[hud-find] armsNode=0x0000022A144CD080
+[hud-find] firstChild=0x0000022A13AD6480
+[hud-find] child[0]=0x0000022A13AD6480 owner=0x00000228C2C14C00 handle=0x4901D5 resolved=0x00000229C8084000 **MATCH**
+[hud-find] SUCCESS hudWeapon=0x00000228C2C14C00 after 1 nodes
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply-cache] weapon model cache invalidated
+[apply-cache] weapon model cache invalidated
+[apply-cache] weapon model cache invalidated
+[apply-cache] weapon model cache invalidated
+[apply] tick pawn=0x00000229D2B01800
+[apply] active 0x00000229C8084000
+[pw] weapon 0x00000229C8084000 def=525
+[armory-apply] in-game live weapon def=525 team=CT paintKit=420 (equipped in game 922FEB06198C79C1)
+[hud-find] START weapon=0x00000229C8084000 pawn=0x00000229D2B01800
+[hud-find] armsHandle=0xD994261
+[hud-find] arms=0x00000229E2FFD000
+[hud-find] armsNode=0x0000022A144CD080
+[hud-find] firstChild=0x00000228C2C25080
+[hud-find] child[1]=0x0000022A13AD6480 owner=0x00000228C2C14C00 handle=0x4901D5 resolved=0x00000229C8084000 **MATCH**
+[hud-find] SUCCESS hudWeapon=0x00000228C2C14C00 after 2 nodes
+[apply-cache] rebuilding weapon=00000229C8084000 hud=00000228C2C14C00 def=525 pk=420
+[knife] HUD SetModel (schema): weapons/models/knife/knife_skeleton/weapon_knife_skeleton.vmdl
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x00000229D2B01800
+[apply] active 0x00000229C8084000
+[pw] weapon 0x00000229C8084000 def=525
+[armory-apply] in-game live weapon def=525 team=CT paintKit=420 (equipped in game 922FEB06198C79C1)
+[hud-find] START weapon=0x00000229C8084000 pawn=0x00000229D2B01800
+[hud-find] armsHandle=0xD994261
+[hud-find] arms=0x00000229E2FFD000
+[hud-find] armsNode=0x0000022A144CD080
+[hud-find] firstChild=0x00000228C2C25080
+[hud-find] child[1]=0x0000022A13AD6480 owner=0x00000228C2C14C00 handle=0x4901D5 resolved=0x00000229C8084000 **MATCH**
+[hud-find] SUCCESS hudWeapon=0x00000228C2C14C00 after 2 nodes
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x00000229D2B01800
+[apply] active 0x00000229C8084000
+[pw] weapon 0x00000229C8084000 def=525
+[armory-apply] in-game live weapon def=525 team=CT paintKit=420 (equipped in game 922FEB06198C79C1)
+[hud-find] START weapon=0x00000229C8084000 pawn=0x00000229D2B01800
+[hud-find] armsHandle=0xD994261
+[hud-find] arms=0x00000229E2FFD000
+[hud-find] armsNode=0x0000022A144CD080
+[hud-find] firstChild=0x00000228C2C25080
+[hud-find] child[1]=0x0000022A13AD6480 owner=0x00000228C2C14C00 handle=0x4901D5 resolved=0x00000229C8084000 **MATCH**
+[hud-find] SUCCESS hudWeapon=0x00000228C2C14C00 after 2 nodes
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x00000229D2B01800
+[apply] active 0x00000229C8086000
+[pw] weapon 0x00000229C8086000 def=61
+[armory-apply] in-game live weapon def=61 team=CT paintKit=332 (equipped in game 955F0C957F4C067D)
+[hud-find] START weapon=0x00000229C8086000 pawn=0x00000229D2B01800
+[hud-find] armsHandle=0xD994261
+[hud-find] arms=0x00000229E2FFD000
+[hud-find] armsNode=0x0000022A144CD080
+[hud-find] firstChild=0x00000228C2C25080
+[hud-find] child[1]=0x0000022A13AD6480 owner=0x00000228C2C14C00 handle=0x4901D5 resolved=0x00000229C8084000
+[hud-find] child[3]=0x0000022982478080 owner=0x00000228C2BE5400 handle=0x10B81D6 resolved=0x00000229C8086000 **MATCH**
+[hud-find] SUCCESS hudWeapon=0x00000228C2BE5400 after 4 nodes
+[apply-cache] rebuilding weapon=00000229C8086000 hud=00000228C2BE5400 def=61 pk=332
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+
+=== SNAPSHOT ===
+[snap] fsnCount=182672 lastStage=7 stage5Count=14096
+[snap] stage histogram:
+[snap]   stage  0: 27772 frames
+[snap]   stage  1: 14174 frames
+[snap]   stage  2: 14174 frames
+[snap]   stage  3: 14169 frames
+[snap]   stage  4: 1 frames
+[snap]   stage  5: 14096 frames
+[snap]   stage  6: 14096 frames
+[snap]   stage  7: 14096 frames
+[snap]   stage  8: 14095 frames
+[snap]   stage 10: 14096 frames
+[snap]   stage 11: 17484 frames
+[snap]   stage 12: 24419 frames
+[snap] dwLocalPlayerController @ 0x00007FFEE59F2548 -> 0x00000228C2B71A00 
+[snap] dwLocalPlayerPawn       @ 0x00007FFEE5BE91E0 -> 0x000002295E2B0400 
+[snap] pawn: vtable=0x00007FFEE8E73740 inClient=0 health=553
+[snap] ctrl: vtable=0x00007FFEE50C1680 inClient=1 m_hPlayerPawn@0x92C = 0x01C681A1 (idx=417)
+[snap] entitySystem @ 0x00007FFEE5BCFBB8 = 0x0000022941478800 highestEntityIndex=211
+[snap] entity resolution: 1/16 of indices 1..16 valid
+[snap] ctrl->pawn handle resolve: 0x01C681A1 -> 0x00000229D2B01800
+[snap] ----------------------------------------
+[apply] tick pawn=0x00000229D2B01800
+[apply] active 0x00000229C8086000
+[pw] weapon 0x00000229C8086000 def=61
+[armory-apply] in-game live weapon def=61 team=CT paintKit=332 (equipped in game 955F0C957F4C067D)
+[hud-find] START weapon=0x00000229C8086000 pawn=0x00000229D2B01800
+[hud-find] armsHandle=0xD994261
+[hud-find] arms=0x00000229E2FFD000
+[hud-find] armsNode=0x0000022A144CD080
+[hud-find] firstChild=0x00000228C2C25080
+[hud-find] child[1]=0x0000022A13AD6480 owner=0x00000228C2C14C00 handle=0x4901D5 resolved=0x00000229C8084000
+[hud-find] child[3]=0x0000022982478080 owner=0x00000228C2BE5400 handle=0x10B81D6 resolved=0x00000229C8086000 **MATCH**
+[hud-find] SUCCESS hudWeapon=0x00000228C2BE5400 after 4 nodes
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x00000229D2B01800
+[apply] active 0x00000229C8086000
+[pw] weapon 0x00000229C8086000 def=61
+[armory-apply] in-game live weapon def=61 team=CT paintKit=332 (equipped in game 955F0C957F4C067D)
+[hud-find] START weapon=0x00000229C8086000 pawn=0x00000229D2B01800
+[hud-find] armsHandle=0xD994261
+[hud-find] arms=0x00000229E2FFD000
+[hud-find] armsNode=0x0000022A144CD080
+[hud-find] firstChild=0x00000228C2C25080
+[hud-find] child[1]=0x0000022A13AD6480 owner=0x00000228C2C14C00 handle=0x4901D5 resolved=0x00000229C8084000
+[hud-find] child[3]=0x0000022982478080 owner=0x00000228C2BE5400 handle=0x10B81D6 resolved=0x00000229C8086000 **MATCH**
+[hud-find] SUCCESS hudWeapon=0x00000228C2BE5400 after 4 nodes
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x00000229D2B01800
+[apply] active 0x00000229C8086000
+[pw] weapon 0x00000229C8086000 def=61
+[armory-apply] in-game live weapon def=61 team=CT paintKit=332 (equipped in game 955F0C957F4C067D)
+[hud-find] START weapon=0x00000229C8086000 pawn=0x00000229D2B01800
+[hud-find] armsHandle=0xD994261
+[hud-find] arms=0x00000229E2FFD000
+[hud-find] armsNode=0x0000022A144CD080
+[hud-find] firstChild=0x00000228C2C25080
+[hud-find] child[1]=0x0000022A13AD6480 owner=0x00000228C2C14C00 handle=0x4901D5 resolved=0x00000229C8084000
+[hud-find] child[3]=0x0000022982478080 owner=0x00000228C2BE5400 handle=0x10B81D6 resolved=0x00000229C8086000 **MATCH**
+[hud-find] SUCCESS hudWeapon=0x00000228C2BE5400 after 4 nodes
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x00000229D2B01800
+[apply] active 0x00000229C8086000
+[pw] weapon 0x00000229C8086000 def=61
+[armory-apply] in-game live weapon def=61 team=CT paintKit=332 (equipped in game 955F0C957F4C067D)
+[hud-find] START weapon=0x00000229C8086000 pawn=0x00000229D2B01800
+[hud-find] armsHandle=0xD994261
+[hud-find] arms=0x00000229E2FFD000
+[hud-find] armsNode=0x0000022A144CD080
+[hud-find] firstChild=0x00000228C2C25080
+[hud-find] child[1]=0x0000022A13AD6480 owner=0x00000228C2C14C00 handle=0x4901D5 resolved=0x00000229C8084000
+[hud-find] child[3]=0x0000022982478080 owner=0x00000228C2BE5400 handle=0x10B81D6 resolved=0x00000229C8086000 **MATCH**
+[hud-find] SUCCESS hudWeapon=0x00000228C2BE5400 after 4 nodes
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x00000229D2B01800
+[apply] active 0x00000229C8086000
+[pw] weapon 0x00000229C8086000 def=61
+[armory-apply] in-game live weapon def=61 team=CT paintKit=332 (equipped in game 955F0C957F4C067D)
+[hud-find] START weapon=0x00000229C8086000 pawn=0x00000229D2B01800
+[hud-find] armsHandle=0xD994261
+[hud-find] arms=0x00000229E2FFD000
+[hud-find] armsNode=0x0000022A144CD080
+[hud-find] firstChild=0x00000228C2C25080
+[hud-find] child[1]=0x0000022A13AD6480 owner=0x00000228C2C14C00 handle=0x4901D5 resolved=0x00000229C8084000
+[hud-find] child[3]=0x0000022982478080 owner=0x00000228C2BE5400 handle=0x10B81D6 resolved=0x00000229C8086000 **MATCH**
+[hud-find] SUCCESS hudWeapon=0x00000228C2BE5400 after 4 nodes
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x00000229D2B01800
+[apply] active 0x00000229C8086000
+[pw] weapon 0x00000229C8086000 def=61
+[armory-apply] in-game live weapon def=61 team=CT paintKit=332 (equipped in game 955F0C957F4C067D)
+[hud-find] START weapon=0x00000229C8086000 pawn=0x00000229D2B01800
+[hud-find] armsHandle=0xD994261
+[hud-find] arms=0x00000229E2FFD000
+[hud-find] armsNode=0x0000022A144CD080
+[hud-find] firstChild=0x00000228C2C25080
+[hud-find] child[1]=0x0000022A13AD6480 owner=0x00000228C2C14C00 handle=0x4901D5 resolved=0x00000229C8084000
+[hud-find] child[3]=0x0000022982478080 owner=0x00000228C2BE5400 handle=0x10B81D6 resolved=0x00000229C8086000 **MATCH**
+[hud-find] SUCCESS hudWeapon=0x00000228C2BE5400 after 4 nodes
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x00000229D2B01800
+[apply] active 0x00000229C8086000
+[pw] weapon 0x00000229C8086000 def=61
+[armory-apply] in-game live weapon def=61 team=CT paintKit=332 (equipped in game 955F0C957F4C067D)
+[hud-find] START weapon=0x00000229C8086000 pawn=0x00000229D2B01800
+[hud-find] armsHandle=0xD994261
+[hud-find] arms=0x00000229E2FFD000
+[hud-find] armsNode=0x0000022A144CD080
+[hud-find] firstChild=0x00000228C2C25080
+[hud-find] child[1]=0x0000022A13AD6480 owner=0x00000228C2C14C00 handle=0x4901D5 resolved=0x00000229C8084000
+[hud-find] child[3]=0x0000022982478080 owner=0x00000228C2BE5400 handle=0x10B81D6 resolved=0x00000229C8086000 **MATCH**
+[hud-find] SUCCESS hudWeapon=0x00000228C2BE5400 after 4 nodes
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x00000229D2B01800
+[apply] active 0x00000229C8086000
+[pw] weapon 0x00000229C8086000 def=61
+[armory-apply] in-game live weapon def=61 team=CT paintKit=332 (equipped in game 955F0C957F4C067D)
+[hud-find] START weapon=0x00000229C8086000 pawn=0x00000229D2B01800
+[hud-find] armsHandle=0xD994261
+[hud-find] arms=0x00000229E2FFD000
+[hud-find] armsNode=0x0000022A144CD080
+[hud-find] firstChild=0x00000228C2C25080
+[hud-find] child[1]=0x0000022A13AD6480 owner=0x00000228C2C14C00 handle=0x4901D5 resolved=0x00000229C8084000
+[hud-find] child[3]=0x0000022982478080 owner=0x00000228C2BE5400 handle=0x10B81D6 resolved=0x00000229C8086000 **MATCH**
+[hud-find] SUCCESS hudWeapon=0x00000228C2BE5400 after 4 nodes
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x00000229D2B01800
+[apply] active 0x00000229C8086000
+[pw] weapon 0x00000229C8086000 def=61
+[armory-apply] in-game live weapon def=61 team=CT paintKit=332 (equipped in game 955F0C957F4C067D)
+[hud-find] START weapon=0x00000229C8086000 pawn=0x00000229D2B01800
+[hud-find] armsHandle=0xD994261
+[hud-find] arms=0x00000229E2FFD000
+[hud-find] armsNode=0x0000022A144CD080
+[hud-find] firstChild=0x00000228C2C25080
+[hud-find] child[1]=0x0000022A13AD6480 owner=0x00000228C2C14C00 handle=0x4901D5 resolved=0x00000229C8084000
+[hud-find] child[3]=0x0000022982478080 owner=0x00000228C2BE5400 handle=0x10B81D6 resolved=0x00000229C8086000 **MATCH**
+[hud-find] SUCCESS hudWeapon=0x00000228C2BE5400 after 4 nodes
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x00000229D2B01800
+[apply] active 0x00000229C8084000
+[pw] weapon 0x00000229C8084000 def=525
+[armory-apply] in-game live weapon def=525 team=CT paintKit=420 (equipped in game 922FEB06198C79C1)
+[hud-find] START weapon=0x00000229C8084000 pawn=0x00000229D2B01800
+[hud-find] armsHandle=0xD994261
+[hud-find] arms=0x00000229E2FFD000
+[hud-find] armsNode=0x0000022A144CD080
+[hud-find] firstChild=0x00000228C2C25080
+[hud-find] child[1]=0x0000022A13AD6480 owner=0x00000228C2C14C00 handle=0x4901D5 resolved=0x00000229C8084000 **MATCH**
+[hud-find] SUCCESS hudWeapon=0x00000228C2C14C00 after 2 nodes
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x00000229D2B01800
+[apply] active 0x00000229C8086000
+[pw] weapon 0x00000229C8086000 def=61
+[armory-apply] in-game live weapon def=61 team=CT paintKit=332 (equipped in game 955F0C957F4C067D)
+[hud-find] START weapon=0x00000229C8086000 pawn=0x00000229D2B01800
+[hud-find] armsHandle=0xD994261
+[hud-find] arms=0x00000229E2FFD000
+[hud-find] armsNode=0x0000022A144CD080
+[hud-find] firstChild=0x00000228C2C25080
+[hud-find] child[1]=0x0000022A13AD6480 owner=0x00000228C2C14C00 handle=0x4901D5 resolved=0x00000229C8084000
+[hud-find] child[3]=0x0000022982478080 owner=0x00000228C2BE5400 handle=0x10B81D6 resolved=0x00000229C8086000 **MATCH**
+[hud-find] SUCCESS hudWeapon=0x00000228C2BE5400 after 4 nodes
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x00000229D2B01800
+[apply] active 0x00000229C8086000
+[pw] weapon 0x00000229C8086000 def=61
+[armory-apply] in-game live weapon def=61 team=CT paintKit=332 (equipped in game 955F0C957F4C067D)
+[hud-find] START weapon=0x00000229C8086000 pawn=0x00000229D2B01800
+[hud-find] armsHandle=0xD994261
+[hud-find] arms=0x00000229E2FFD000
+[hud-find] armsNode=0x0000022A144CD080
+[hud-find] firstChild=0x00000228C2C25080
+[hud-find] child[1]=0x0000022A13AD6480 owner=0x00000228C2C14C00 handle=0x4901D5 resolved=0x00000229C8084000
+[hud-find] child[3]=0x0000022982478080 owner=0x00000228C2BE5400 handle=0x10B81D6 resolved=0x00000229C8086000 **MATCH**
+[hud-find] SUCCESS hudWeapon=0x00000228C2BE5400 after 4 nodes
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x00000229D2B01800
+[apply] active 0x00000229C8086000
+[pw] weapon 0x00000229C8086000 def=61
+[armory-apply] in-game live weapon def=61 team=CT paintKit=332 (equipped in game 955F0C957F4C067D)
+[hud-find] START weapon=0x00000229C8086000 pawn=0x00000229D2B01800
+[hud-find] armsHandle=0xD994261
+[hud-find] arms=0x00000229E2FFD000
+[hud-find] armsNode=0x0000022A144CD080
+[hud-find] firstChild=0x00000228C2C25080
+[hud-find] child[1]=0x0000022A13AD6480 owner=0x00000228C2C14C00 handle=0x4901D5 resolved=0x00000229C8084000
+[hud-find] child[3]=0x0000022982478080 owner=0x00000228C2BE5400 handle=0x10B81D6 resolved=0x00000229C8086000 **MATCH**
+[hud-find] SUCCESS hudWeapon=0x00000228C2BE5400 after 4 nodes
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x00000229D2B01800
+[apply] active 0x00000229C8086000
+[pw] weapon 0x00000229C8086000 def=61
+[armory-apply] in-game live weapon def=61 team=CT paintKit=332 (equipped in game 955F0C957F4C067D)
+[hud-find] START weapon=0x00000229C8086000 pawn=0x00000229D2B01800
+[hud-find] armsHandle=0xD994261
+[hud-find] arms=0x00000229E2FFD000
+[hud-find] armsNode=0x0000022A144CD080
+[hud-find] firstChild=0x00000228C2C25080
+[hud-find] child[1]=0x0000022A13AD6480 owner=0x00000228C2C14C00 handle=0x4901D5 resolved=0x00000229C8084000
+[hud-find] child[3]=0x0000022982478080 owner=0x00000228C2BE5400 handle=0x10B81D6 resolved=0x00000229C8086000 **MATCH**
+[hud-find] SUCCESS hudWeapon=0x00000228C2BE5400 after 4 nodes
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x00000229D2B01800
+[apply] active 0x00000229C8086000
+[pw] weapon 0x00000229C8086000 def=61
+[armory-apply] in-game live weapon def=61 team=CT paintKit=332 (equipped in game 955F0C957F4C067D)
+[hud-find] START weapon=0x00000229C8086000 pawn=0x00000229D2B01800
+[hud-find] armsHandle=0xD994261
+[hud-find] arms=0x00000229E2FFD000
+[hud-find] armsNode=0x0000022A144CD080
+[hud-find] firstChild=0x00000228C2C25080
+[hud-find] child[1]=0x0000022A13AD6480 owner=0x00000228C2C14C00 handle=0x4901D5 resolved=0x00000229C8084000
+[hud-find] child[3]=0x0000022982478080 owner=0x00000228C2BE5400 handle=0x10B81D6 resolved=0x00000229C8086000 **MATCH**
+[hud-find] SUCCESS hudWeapon=0x00000228C2BE5400 after 4 nodes
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x00000229D2B01800
+[apply] active 0x00000229C8084000
+[pw] weapon 0x00000229C8084000 def=525
+[armory-apply] in-game live weapon def=525 team=CT paintKit=420 (equipped in game 922FEB06198C79C1)
+[hud-find] START weapon=0x00000229C8084000 pawn=0x00000229D2B01800
+[hud-find] armsHandle=0xD994261
+[hud-find] arms=0x00000229E2FFD000
+[hud-find] armsNode=0x0000022A144CD080
+[hud-find] firstChild=0x00000228C2C25080
+[hud-find] child[1]=0x0000022A13AD6480 owner=0x00000228C2C14C00 handle=0x4901D5 resolved=0x00000229C8084000 **MATCH**
+[hud-find] SUCCESS hudWeapon=0x00000228C2C14C00 after 2 nodes
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x00000229D2B01800
+[apply] active 0x00000229C8086000
+[pw] weapon 0x00000229C8086000 def=61
+[armory-apply] in-game live weapon def=61 team=CT paintKit=332 (equipped in game 955F0C957F4C067D)
+[hud-find] START weapon=0x00000229C8086000 pawn=0x00000229D2B01800
+[hud-find] armsHandle=0xD994261
+[hud-find] arms=0x00000229E2FFD000
+[hud-find] armsNode=0x0000022A144CD080
+[hud-find] firstChild=0x00000228C2C25080
+[hud-find] child[1]=0x0000022A13AD6480 owner=0x00000228C2C14C00 handle=0x4901D5 resolved=0x00000229C8084000
+[hud-find] child[3]=0x0000022982478080 owner=0x00000228C2BE5400 handle=0x10B81D6 resolved=0x00000229C8086000 **MATCH**
+[hud-find] SUCCESS hudWeapon=0x00000228C2BE5400 after 4 nodes
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x00000229D2B01800
+[apply] active 0x00000229C8086000
+[pw] weapon 0x00000229C8086000 def=61
+[armory-apply] in-game live weapon def=61 team=CT paintKit=332 (equipped in game 955F0C957F4C067D)
+[hud-find] START weapon=0x00000229C8086000 pawn=0x00000229D2B01800
+[hud-find] armsHandle=0xD994261
+[hud-find] arms=0x00000229E2FFD000
+[hud-find] armsNode=0x0000022A144CD080
+[hud-find] firstChild=0x00000228C2C25080
+[hud-find] child[1]=0x0000022A13AD6480 owner=0x00000228C2C14C00 handle=0x4901D5 resolved=0x00000229C8084000
+[hud-find] child[3]=0x0000022982478080 owner=0x00000228C2BE5400 handle=0x10B81D6 resolved=0x00000229C8086000 **MATCH**
+[hud-find] SUCCESS hudWeapon=0x00000228C2BE5400 after 4 nodes
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x00000229D2B01800
+[apply] active 0x00000229C8086000
+[pw] weapon 0x00000229C8086000 def=61
+[armory-apply] in-game live weapon def=61 team=CT paintKit=332 (equipped in game 955F0C957F4C067D)
+[hud-find] START weapon=0x00000229C8086000 pawn=0x00000229D2B01800
+[hud-find] armsHandle=0xD994261
+[hud-find] arms=0x00000229E2FFD000
+[hud-find] armsNode=0x0000022A144CD080
+[hud-find] firstChild=0x00000228C2C25080
+[hud-find] child[1]=0x0000022A13AD6480 owner=0x00000228C2C14C00 handle=0x4901D5 resolved=0x00000229C8084000
+[hud-find] child[3]=0x0000022982478080 owner=0x00000228C2BE5400 handle=0x10B81D6 resolved=0x00000229C8086000 **MATCH**
+[hud-find] SUCCESS hudWeapon=0x00000228C2BE5400 after 4 nodes
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+N1SSAN_STATUS|1|2026-11-08T15:52:13Z|9320|armory-obsidian-3.0|READY|reason=runtime_worker_heartbeat
+[status-write] begin state=READY path=C:\Users\mirac\AppData\Local\n1ssan\status\cs2-9320.status
+[status-write] success state=READY error=0
+[apply] tick pawn=0x00000229D2B01800
+[apply] active 0x00000229C8086000
+[pw] weapon 0x00000229C8086000 def=61
+[armory-apply] in-game live weapon def=61 team=CT paintKit=332 (equipped in game 955F0C957F4C067D)
+[hud-find] START weapon=0x00000229C8086000 pawn=0x00000229D2B01800
+[hud-find] armsHandle=0xD994261
+[hud-find] arms=0x00000229E2FFD000
+[hud-find] armsNode=0x0000022A144CD080
+[hud-find] firstChild=0x00000228C2C25080
+[hud-find] child[1]=0x0000022A13AD6480 owner=0x00000228C2C14C00 handle=0x4901D5 resolved=0x00000229C8084000
+[hud-find] child[3]=0x0000022982478080 owner=0x00000228C2BE5400 handle=0x10B81D6 resolved=0x00000229C8086000 **MATCH**
+[hud-find] SUCCESS hudWeapon=0x00000228C2BE5400 after 4 nodes
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+
+=== SNAPSHOT ===
+[snap] fsnCount=188341 lastStage=12 stage5Count=14416
+[snap] stage histogram:
+[snap]   stage  0: 29165 frames
+[snap]   stage  1: 14494 frames
+[snap]   stage  2: 14494 frames
+[snap]   stage  3: 14490 frames
+[snap]   stage  4: 1 frames
+[snap]   stage  5: 14416 frames
+[snap]   stage  6: 14416 frames
+[snap]   stage  7: 14416 frames
+[snap]   stage  8: 14416 frames
+[snap]   stage 10: 14416 frames
+[snap]   stage 11: 17804 frames
+[snap]   stage 12: 25813 frames
+[snap] dwLocalPlayerController @ 0x00007FFEE59F2548 -> 0x00000228C2B71A00 
+[snap] dwLocalPlayerPawn       @ 0x00007FFEE5BE91E0 -> 0x000002295E2B0400 
+[snap] pawn: vtable=0x00007FFEE8E73740 inClient=0 health=553
+[snap] ctrl: vtable=0x00007FFEE50C1680 inClient=1 m_hPlayerPawn@0x92C = 0x01C681A1 (idx=417)
+[snap] entitySystem @ 0x00007FFEE5BCFBB8 = 0x0000022941478800 highestEntityIndex=211
+[snap] entity resolution: 1/16 of indices 1..16 valid
+[snap] ctrl->pawn handle resolve: 0x01C681A1 -> 0x00000229D2B01800
+[snap] ----------------------------------------
+[apply] tick pawn=0x00000229D2B01800
+[apply] active 0x00000229C8086000
+[pw] weapon 0x00000229C8086000 def=61
+[armory-apply] in-game live weapon def=61 team=CT paintKit=332 (equipped in game 955F0C957F4C067D)
+[hud-find] START weapon=0x00000229C8086000 pawn=0x00000229D2B01800
+[hud-find] armsHandle=0xD994261
+[hud-find] arms=0x00000229E2FFD000
+[hud-find] armsNode=0x0000022A144CD080
+[hud-find] firstChild=0x00000228C2C25080
+[hud-find] child[1]=0x0000022A13AD6480 owner=0x00000228C2C14C00 handle=0x4901D5 resolved=0x00000229C8084000
+[hud-find] child[3]=0x0000022982478080 owner=0x00000228C2BE5400 handle=0x10B81D6 resolved=0x00000229C8086000 **MATCH**
+[hud-find] SUCCESS hudWeapon=0x00000228C2BE5400 after 4 nodes
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x00000229D2B01800
+[apply] active 0x00000229C8086000
+[pw] weapon 0x00000229C8086000 def=61
+[armory-apply] in-game live weapon def=61 team=CT paintKit=332 (equipped in game 955F0C957F4C067D)
+[hud-find] START weapon=0x00000229C8086000 pawn=0x00000229D2B01800
+[hud-find] armsHandle=0xD994261
+[hud-find] arms=0x00000229E2FFD000
+[hud-find] armsNode=0x0000022A144CD080
+[hud-find] firstChild=0x00000228C2C25080
+[hud-find] child[1]=0x0000022A13AD6480 owner=0x00000228C2C14C00 handle=0x4901D5 resolved=0x00000229C8084000
+[hud-find] child[3]=0x0000022982478080 owner=0x00000228C2BE5400 handle=0x10B81D6 resolved=0x00000229C8086000 **MATCH**
+[hud-find] SUCCESS hudWeapon=0x00000228C2BE5400 after 4 nodes
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x00000229D2B01800
+[apply] active 0x00000229C8084000
+[pw] weapon 0x00000229C8084000 def=525
+[armory-apply] in-game live weapon def=525 team=CT paintKit=420 (equipped in game 922FEB06198C79C1)
+[hud-find] START weapon=0x00000229C8084000 pawn=0x00000229D2B01800
+[hud-find] armsHandle=0xD994261
+[hud-find] arms=0x00000229E2FFD000
+[hud-find] armsNode=0x0000022A144CD080
+[hud-find] firstChild=0x00000228C2C25080
+[hud-find] child[1]=0x0000022A13AD6480 owner=0x00000228C2C14C00 handle=0x4901D5 resolved=0x00000229C8084000 **MATCH**
+[hud-find] SUCCESS hudWeapon=0x00000228C2C14C00 after 2 nodes
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x00000229D2B01800
+[apply] active 0x00000229C8084000
+[pw] weapon 0x00000229C8084000 def=525
+[armory-apply] in-game live weapon def=525 team=CT paintKit=420 (equipped in game 922FEB06198C79C1)
+[hud-find] START weapon=0x00000229C8084000 pawn=0x00000229D2B01800
+[hud-find] armsHandle=0xD994261
+[hud-find] arms=0x00000229E2FFD000
+[hud-find] armsNode=0x0000022A144CD080
+[hud-find] firstChild=0x00000228C2C25080
+[hud-find] child[1]=0x0000022A13AD6480 owner=0x00000228C2C14C00 handle=0x4901D5 resolved=0x00000229C8084000 **MATCH**
+[hud-find] SUCCESS hudWeapon=0x00000228C2C14C00 after 2 nodes
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x00000229D2B01800
+[apply] active 0x00000229C8084000
+[pw] weapon 0x00000229C8084000 def=525
+[armory-apply] in-game live weapon def=525 team=CT paintKit=420 (equipped in game 922FEB06198C79C1)
+[hud-find] START weapon=0x00000229C8084000 pawn=0x00000229D2B01800
+[hud-find] armsHandle=0xD994261
+[hud-find] arms=0x00000229E2FFD000
+[hud-find] armsNode=0x0000022A144CD080
+[hud-find] firstChild=0x00000228C2C25080
+[hud-find] child[1]=0x0000022A13AD6480 owner=0x00000228C2C14C00 handle=0x4901D5 resolved=0x00000229C8084000 **MATCH**
+[hud-find] SUCCESS hudWeapon=0x00000228C2C14C00 after 2 nodes
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x00000229D2B01800
+[apply] active 0x00000229C8084000
+[pw] weapon 0x00000229C8084000 def=525
+[armory-apply] in-game live weapon def=525 team=CT paintKit=420 (equipped in game 922FEB06198C79C1)
+[hud-find] START weapon=0x00000229C8084000 pawn=0x00000229D2B01800
+[hud-find] armsHandle=0xD994261
+[hud-find] arms=0x00000229E2FFD000
+[hud-find] armsNode=0x0000022A144CD080
+[hud-find] firstChild=0x00000228C2C25080
+[hud-find] child[1]=0x0000022A13AD6480 owner=0x00000228C2C14C00 handle=0x4901D5 resolved=0x00000229C8084000 **MATCH**
+[hud-find] SUCCESS hudWeapon=0x00000228C2C14C00 after 2 nodes
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x00000229D2B01800
+[apply] active 0x00000229C808C000
+[pw] weapon 0x00000229C808C000 def=9
+[armory-loadout] team=ct def=9 holds item 51964091960, which is not a projected instance
+[armory-apply] equivalent live weapon def=9 team=CT paintKit=756 (1 owned instance(s) render identically)
+[apply] enter (weapon=0x00000229C808C000 def=9 pk=756)
+[apply] world view pre-write: size=0 data=0x0000000000000000
+[attr-diag] item=00000229C808D2E0 size=0 data=0000000000000000 alloc=0
+[attr-entry] 0: def=6 value=756.000 initial=756.000
+[attr-entry] 1: def=7 value=113.000 initial=113.000
+[attr-entry] 2: def=8 value=0.070590 initial=0.070590
+[attr] attachments written (12 attributes): stickers=1 [0 kit=70 wear=0.000 rot=0.0 off=-0.252,0.006 schema=4] charm=kit:9 seed=0 off=8.577,1.372,11.233
+[apply] world post-create: size=15 data=00000229A931BB00 alloc=23
+[apply] world view 0x00000229C808D2E0 painted (pk=756)
+[hud-find] START weapon=0x00000229C808C000 pawn=0x00000229D2B01800
+[hud-find] armsHandle=0xD994261
+[hud-find] arms=0x00000229E2FFD000
+[hud-find] armsNode=0x0000022A144CD080
+[hud-find] firstChild=0x00000229E2625C80
+[hud-find] child[0]=0x00000229E2625C80 owner=0x0000022985682800 handle=0x1BE81D8 resolved=0x00000229C808C000 **MATCH**
+[hud-find] SUCCESS hudWeapon=0x0000022985682800 after 1 nodes
+[apply-cache] rebuilding weapon=00000229C808C000 hud=0000022985682800 def=9 pk=756
+[hud-name] weapon selection entry refreshed: 00000229C808C000
+[apply-diagnostic] weaponChanged=1 gloveUpdate=0 regenAvailable=1
+[skin-regenerate] calling pRegenerateSkins weaponChanged=1
+[skin-regenerate] returned
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[apply] tick pawn=0x00000229D2B01800
+[apply] active 0x00000229C808C000
+[pw] weapon 0x00000229C808C000 def=9
+[armory-loadout] team=ct def=9 holds item 51964091960, which is not a projected instance
+[armory-apply] equivalent live weapon def=9 team=CT paintKit=756 (1 owned instance(s) render identically)
+[hud-find] START weapon=0x00000229C808C000 pawn=0x00000229D2B01800
+[hud-find] armsHandle=0xD994261
+[hud-find] arms=0x00000229E2FFD000
+[hud-find] armsNode=0x0000022A144CD080
+[hud-find] firstChild=0x00000229E2625C80
+[hud-find] child[0]=0x00000229E2625C80 owner=0x0000022985682800 handle=0x1BE81D8 resolved=0x00000229C808C000 **MATCH**
+[hud-find] SUCCESS hudWeapon=0x0000022985682800 after 1 nodes
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[apply] tick pawn=0x00000229D2B01800
+[apply] active 0x00000229C808C000
+[pw] weapon 0x00000229C808C000 def=9
+[armory-loadout] team=ct def=9 holds item 51964091960, which is not a projected instance
+[armory-apply] equivalent live weapon def=9 team=CT paintKit=756 (1 owned instance(s) render identically)
+[hud-find] START weapon=0x00000229C808C000 pawn=0x00000229D2B01800
+[hud-find] armsHandle=0xD994261
+[hud-find] arms=0x00000229E2FFD000
+[hud-find] armsNode=0x0000022A144CD080
+[hud-find] firstChild=0x00000229E2625C80
+[hud-find] child[0]=0x00000229E2625C80 owner=0x0000022985682800 handle=0x1BE81D8 resolved=0x00000229C808C000 **MATCH**
+[hud-find] SUCCESS hudWeapon=0x0000022985682800 after 1 nodes
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[apply] tick pawn=0x00000229D2B01800
+[apply] active 0x00000229C808C000
+[pw] weapon 0x00000229C808C000 def=9
+[armory-loadout] team=ct def=9 holds item 51964091960, which is not a projected instance
+[armory-apply] equivalent live weapon def=9 team=CT paintKit=756 (1 owned instance(s) render identically)
+[hud-find] START weapon=0x00000229C808C000 pawn=0x00000229D2B01800
+[hud-find] armsHandle=0xD994261
+[hud-find] arms=0x00000229E2FFD000
+[hud-find] armsNode=0x0000022A144CD080
+[hud-find] firstChild=0x00000229E2625C80
+[hud-find] child[0]=0x00000229E2625C80 owner=0x0000022985682800 handle=0x1BE81D8 resolved=0x00000229C808C000 **MATCH**
+[hud-find] SUCCESS hudWeapon=0x0000022985682800 after 1 nodes
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[apply] tick pawn=0x00000229D2B01800
+[apply] active 0x00000229C808C000
+[pw] weapon 0x00000229C808C000 def=9
+[armory-loadout] team=ct def=9 holds item 51964091960, which is not a projected instance
+[armory-apply] equivalent live weapon def=9 team=CT paintKit=756 (1 owned instance(s) render identically)
+[hud-find] START weapon=0x00000229C808C000 pawn=0x00000229D2B01800
+[hud-find] armsHandle=0xD994261
+[hud-find] arms=0x00000229E2FFD000
+[hud-find] armsNode=0x0000022A144CD080
+[hud-find] firstChild=0x00000229E2625C80
+[hud-find] child[0]=0x00000229E2625C80 owner=0x0000022985682800 handle=0x1BE81D8 resolved=0x00000229C808C000 **MATCH**
+[hud-find] SUCCESS hudWeapon=0x0000022985682800 after 1 nodes
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[apply] tick pawn=0x00000229D2B01800
+[apply] active 0x00000229C808C000
+[pw] weapon 0x00000229C808C000 def=9
+[armory-loadout] team=ct def=9 holds item 51964091960, which is not a projected instance
+[armory-apply] equivalent live weapon def=9 team=CT paintKit=756 (1 owned instance(s) render identically)
+[hud-find] START weapon=0x00000229C808C000 pawn=0x00000229D2B01800
+[hud-find] armsHandle=0xD994261
+[hud-find] arms=0x00000229E2FFD000
+[hud-find] armsNode=0x0000022A144CD080
+[hud-find] firstChild=0x00000229E2625C80
+[hud-find] child[0]=0x00000229E2625C80 owner=0x0000022985682800 handle=0x1BE81D8 resolved=0x00000229C808C000 **MATCH**
+[hud-find] SUCCESS hudWeapon=0x0000022985682800 after 1 nodes
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[apply] tick pawn=0x00000229D2B01800
+[apply] active 0x00000229C808C000
+[pw] weapon 0x00000229C808C000 def=9
+[armory-loadout] team=ct def=9 holds item 51964091960, which is not a projected instance
+[armory-apply] equivalent live weapon def=9 team=CT paintKit=756 (1 owned instance(s) render identically)
+[hud-find] START weapon=0x00000229C808C000 pawn=0x00000229D2B01800
+[hud-find] armsHandle=0xD994261
+[hud-find] arms=0x00000229E2FFD000
+[hud-find] armsNode=0x0000022A144CD080
+[hud-find] firstChild=0x00000229E2625C80
+[hud-find] child[0]=0x00000229E2625C80 owner=0x0000022985682800 handle=0x1BE81D8 resolved=0x00000229C808C000 **MATCH**
+[hud-find] SUCCESS hudWeapon=0x0000022985682800 after 1 nodes
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[apply] tick pawn=0x00000229D2B01800
+[apply] active 0x00000229C808C000
+[pw] weapon 0x00000229C808C000 def=9
+[armory-loadout] team=ct def=9 holds item 51964091960, which is not a projected instance
+[armory-apply] equivalent live weapon def=9 team=CT paintKit=756 (1 owned instance(s) render identically)
+[hud-find] START weapon=0x00000229C808C000 pawn=0x00000229D2B01800
+[hud-find] armsHandle=0xD994261
+[hud-find] arms=0x00000229E2FFD000
+[hud-find] armsNode=0x0000022A144CD080
+[hud-find] firstChild=0x00000229E2625C80
+[hud-find] child[0]=0x00000229E2625C80 owner=0x0000022985682800 handle=0x1BE81D8 resolved=0x00000229C808C000 **MATCH**
+[hud-find] SUCCESS hudWeapon=0x0000022985682800 after 1 nodes
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[apply] tick pawn=0x00000229D2B01800
+[apply] active 0x00000229C808C000
+[pw] weapon 0x00000229C808C000 def=9
+[armory-loadout] team=ct def=9 holds item 51964091960, which is not a projected instance
+[armory-apply] equivalent live weapon def=9 team=CT paintKit=756 (1 owned instance(s) render identically)
+[hud-find] START weapon=0x00000229C808C000 pawn=0x00000229D2B01800
+[hud-find] armsHandle=0xD994261
+[hud-find] arms=0x00000229E2FFD000
+[hud-find] armsNode=0x0000022A144CD080
+[hud-find] firstChild=0x00000229E2625C80
+[hud-find] child[0]=0x00000229E2625C80 owner=0x0000022985682800 handle=0x1BE81D8 resolved=0x00000229C808C000 **MATCH**
+[hud-find] SUCCESS hudWeapon=0x0000022985682800 after 1 nodes
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[apply] tick pawn=0x00000229D2B01800
+[apply] active 0x00000229C808C000
+[pw] weapon 0x00000229C808C000 def=9
+[armory-loadout] team=ct def=9 holds item 51964091960, which is not a projected instance
+[armory-apply] equivalent live weapon def=9 team=CT paintKit=756 (1 owned instance(s) render identically)
+[hud-find] START weapon=0x00000229C808C000 pawn=0x00000229D2B01800
+[hud-find] armsHandle=0xD994261
+[hud-find] arms=0x00000229E2FFD000
+[hud-find] armsNode=0x0000022A144CD080
+[hud-find] firstChild=0x00000229E2625C80
+[hud-find] child[0]=0x00000229E2625C80 owner=0x0000022985682800 handle=0x1BE81D8 resolved=0x00000229C808C000 **MATCH**
+[hud-find] SUCCESS hudWeapon=0x0000022985682800 after 1 nodes
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[apply] tick pawn=0x00000229D2B01800
+[apply] active 0x00000229C808C000
+[pw] weapon 0x00000229C808C000 def=9
+[armory-loadout] team=ct def=9 holds item 51964091960, which is not a projected instance
+[armory-apply] equivalent live weapon def=9 team=CT paintKit=756 (1 owned instance(s) render identically)
+[hud-find] START weapon=0x00000229C808C000 pawn=0x00000229D2B01800
+[hud-find] armsHandle=0xD994261
+[hud-find] arms=0x00000229E2FFD000
+[hud-find] armsNode=0x0000022A144CD080
+[hud-find] firstChild=0x00000229E2625C80
+[hud-find] child[0]=0x00000229E2625C80 owner=0x0000022985682800 handle=0x1BE81D8 resolved=0x00000229C808C000 **MATCH**
+[hud-find] SUCCESS hudWeapon=0x0000022985682800 after 1 nodes
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[apply] tick pawn=0x00000229D2B01800
+[apply] active 0x00000229C808C000
+[pw] weapon 0x00000229C808C000 def=9
+[armory-loadout] team=ct def=9 holds item 51964091960, which is not a projected instance
+[armory-apply] equivalent live weapon def=9 team=CT paintKit=756 (1 owned instance(s) render identically)
+[hud-find] START weapon=0x00000229C808C000 pawn=0x00000229D2B01800
+[hud-find] armsHandle=0xD994261
+[hud-find] arms=0x00000229E2FFD000
+[hud-find] armsNode=0x0000022A144CD080
+[hud-find] firstChild=0x00000229E2625C80
+[hud-find] child[0]=0x00000229E2625C80 owner=0x0000022985682800 handle=0x1BE81D8 resolved=0x00000229C808C000 **MATCH**
+[hud-find] SUCCESS hudWeapon=0x0000022985682800 after 1 nodes
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[apply] tick pawn=0x00000229D2B01800
+[apply] active 0x00000229C808C000
+[pw] weapon 0x00000229C808C000 def=9
+[armory-loadout] team=ct def=9 holds item 51964091960, which is not a projected instance
+[armory-apply] equivalent live weapon def=9 team=CT paintKit=756 (1 owned instance(s) render identically)
+[hud-find] START weapon=0x00000229C808C000 pawn=0x00000229D2B01800
+[hud-find] armsHandle=0xD994261
+[hud-find] arms=0x00000229E2FFD000
+[hud-find] armsNode=0x0000022A144CD080
+[hud-find] firstChild=0x00000229E2625C80
+[hud-find] child[0]=0x00000229E2625C80 owner=0x0000022985682800 handle=0x1BE81D8 resolved=0x00000229C808C000 **MATCH**
+[hud-find] SUCCESS hudWeapon=0x0000022985682800 after 1 nodes
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+
+=== SNAPSHOT ===
+[snap] fsnCount=193737 lastStage=12 stage5Count=14734
+[snap] stage histogram:
+[snap]   stage  0: 30432 frames
+[snap]   stage  1: 14812 frames
+[snap]   stage  2: 14812 frames
+[snap]   stage  3: 14808 frames
+[snap]   stage  4: 1 frames
+[snap]   stage  5: 14734 frames
+[snap]   stage  6: 14734 frames
+[snap]   stage  7: 14734 frames
+[snap]   stage  8: 14734 frames
+[snap]   stage 10: 14734 frames
+[snap]   stage 11: 18124 frames
+[snap]   stage 12: 27078 frames
+[snap] dwLocalPlayerController @ 0x00007FFEE59F2548 -> 0x00000228C2B71A00 
+[snap] dwLocalPlayerPawn       @ 0x00007FFEE5BE91E0 -> 0x000002295E2B0400 
+[snap] pawn: vtable=0x00007FFEE8E73740 inClient=0 health=553
+[snap] ctrl: vtable=0x00007FFEE50C1680 inClient=1 m_hPlayerPawn@0x92C = 0x01C681A1 (idx=417)
+[snap] entitySystem @ 0x00007FFEE5BCFBB8 = 0x0000022941478800 highestEntityIndex=212
+[snap] entity resolution: 1/16 of indices 1..16 valid
+[snap] ctrl->pawn handle resolve: 0x01C681A1 -> 0x00000229D2B01800
+[snap] ----------------------------------------
+[apply] tick pawn=0x00000229D2B01800
+[apply] active 0x00000229C808C000
+[pw] weapon 0x00000229C808C000 def=9
+[armory-loadout] team=ct def=9 holds item 51964091960, which is not a projected instance
+[armory-apply] equivalent live weapon def=9 team=CT paintKit=756 (1 owned instance(s) render identically)
+[hud-find] START weapon=0x00000229C808C000 pawn=0x00000229D2B01800
+[hud-find] armsHandle=0xD994261
+[hud-find] arms=0x00000229E2FFD000
+[hud-find] armsNode=0x0000022A144CD080
+[hud-find] firstChild=0x00000229E2625C80
+[hud-find] child[0]=0x00000229E2625C80 owner=0x0000022985682800 handle=0x1BE81D8 resolved=0x00000229C808C000 **MATCH**
+[hud-find] SUCCESS hudWeapon=0x0000022985682800 after 1 nodes
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[apply] tick pawn=0x00000229D2B01800
+[apply] active 0x00000229C808C000
+[pw] weapon 0x00000229C808C000 def=9
+[armory-loadout] team=ct def=9 holds item 51964091960, which is not a projected instance
+[armory-apply] equivalent live weapon def=9 team=CT paintKit=756 (1 owned instance(s) render identically)
+[hud-find] START weapon=0x00000229C808C000 pawn=0x00000229D2B01800
+[hud-find] armsHandle=0xD994261
+[hud-find] arms=0x00000229E2FFD000
+[hud-find] armsNode=0x0000022A144CD080
+[hud-find] firstChild=0x00000229E2625C80
+[hud-find] child[0]=0x00000229E2625C80 owner=0x0000022985682800 handle=0x1BE81D8 resolved=0x00000229C808C000 **MATCH**
+[hud-find] SUCCESS hudWeapon=0x0000022985682800 after 1 nodes
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[apply] tick pawn=0x00000229D2B01800
+[apply] active 0x00000229C808C000
+[pw] weapon 0x00000229C808C000 def=9
+[armory-loadout] team=ct def=9 holds item 51964091960, which is not a projected instance
+[armory-apply] equivalent live weapon def=9 team=CT paintKit=756 (1 owned instance(s) render identically)
+[hud-find] START weapon=0x00000229C808C000 pawn=0x00000229D2B01800
+[hud-find] armsHandle=0xD994261
+[hud-find] arms=0x00000229E2FFD000
+[hud-find] armsNode=0x0000022A144CD080
+[hud-find] firstChild=0x00000229E2625C80
+[hud-find] child[0]=0x00000229E2625C80 owner=0x0000022985682800 handle=0x1BE81D8 resolved=0x00000229C808C000 **MATCH**
+[hud-find] SUCCESS hudWeapon=0x0000022985682800 after 1 nodes
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[apply] tick pawn=0x00000229D2B01800
+[apply] active 0x00000229C808C000
+[pw] weapon 0x00000229C808C000 def=9
+[armory-loadout] team=ct def=9 holds item 51964091960, which is not a projected instance
+[armory-apply] equivalent live weapon def=9 team=CT paintKit=756 (1 owned instance(s) render identically)
+[hud-find] START weapon=0x00000229C808C000 pawn=0x00000229D2B01800
+[hud-find] armsHandle=0xD994261
+[hud-find] arms=0x00000229E2FFD000
+[hud-find] armsNode=0x0000022A144CD080
+[hud-find] firstChild=0x00000229E2625C80
+[hud-find] child[0]=0x00000229E2625C80 owner=0x0000022985682800 handle=0x1BE81D8 resolved=0x00000229C808C000 **MATCH**
+[hud-find] SUCCESS hudWeapon=0x0000022985682800 after 1 nodes
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[apply] tick pawn=0x00000229D2B01800
+[apply] active 0x00000229C808C000
+[pw] weapon 0x00000229C808C000 def=9
+[armory-loadout] team=ct def=9 holds item 51964091960, which is not a projected instance
+[armory-apply] equivalent live weapon def=9 team=CT paintKit=756 (1 owned instance(s) render identically)
+[hud-find] START weapon=0x00000229C808C000 pawn=0x00000229D2B01800
+[hud-find] armsHandle=0xD994261
+[hud-find] arms=0x00000229E2FFD000
+[hud-find] armsNode=0x0000022A144CD080
+[hud-find] firstChild=0x00000229E2625C80
+[hud-find] child[0]=0x00000229E2625C80 owner=0x0000022985682800 handle=0x1BE81D8 resolved=0x00000229C808C000 **MATCH**
+[hud-find] SUCCESS hudWeapon=0x0000022985682800 after 1 nodes
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[apply] tick pawn=0x00000229D2B01800
+[apply] active 0x00000229C808C000
+[pw] weapon 0x00000229C808C000 def=9
+[armory-loadout] team=ct def=9 holds item 51964091960, which is not a projected instance
+[armory-apply] equivalent live weapon def=9 team=CT paintKit=756 (1 owned instance(s) render identically)
+[hud-find] START weapon=0x00000229C808C000 pawn=0x00000229D2B01800
+[hud-find] armsHandle=0xD994261
+[hud-find] arms=0x00000229E2FFD000
+[hud-find] armsNode=0x0000022A144CD080
+[hud-find] firstChild=0x00000229E2625C80
+[hud-find] child[0]=0x00000229E2625C80 owner=0x0000022985682800 handle=0x1BE81D8 resolved=0x00000229C808C000 **MATCH**
+[hud-find] SUCCESS hudWeapon=0x0000022985682800 after 1 nodes
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[apply] tick pawn=0x00000229D2B01800
+[apply] active 0x00000229C808C000
+[pw] weapon 0x00000229C808C000 def=9
+[armory-loadout] team=ct def=9 holds item 51964091960, which is not a projected instance
+[armory-apply] equivalent live weapon def=9 team=CT paintKit=756 (1 owned instance(s) render identically)
+[hud-find] START weapon=0x00000229C808C000 pawn=0x00000229D2B01800
+[hud-find] armsHandle=0xD994261
+[hud-find] arms=0x00000229E2FFD000
+[hud-find] armsNode=0x0000022A144CD080
+[hud-find] firstChild=0x00000229E2625C80
+[hud-find] child[0]=0x00000229E2625C80 owner=0x0000022985682800 handle=0x1BE81D8 resolved=0x00000229C808C000 **MATCH**
+[hud-find] SUCCESS hudWeapon=0x0000022985682800 after 1 nodes
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[armory-loadout] team=ct customplayer holds item 17293822569102709677, which is not a projected instance
+[apply] tick pawn=0x00000229D2B01800
+[apply] active 0x0000022984798000
+[pw] weapon 0x0000022984798000 def=16
+[armory-apply] in-game live weapon def=16 team=CT paintKit=844 (equipped in game 9919302EC58DC70A)
+[apply] enter (weapon=0x0000022984798000 def=16 pk=844)
+[apply] world view pre-write: size=0 data=0x0000000000000000
+[attr-diag] item=00000229847992E0 size=0 data=0000000000000000 alloc=0
+[attr-entry] 0: def=6 value=844.000 initial=844.000
+[attr-entry] 1: def=7 value=12.000 initial=12.000
+[attr-entry] 2: def=8 value=0.139500 initial=0.139500
+[attr] attachments written (12 attributes): stickers=1 [0 kit=20 wear=0.000 rot=0.0 off=-0.079,-0.004 schema=4] charm=kit:17 seed=0 off=33.469,0.373,12.120
+[apply] world post-create: size=17 data=0000022984755800 alloc=25
+[apply] world view 0x00000229847992E0 painted (pk=844)
+[hud-find] START weapon=0x0000022984798000 pawn=0x00000229D2B01800
+[hud-find] armsHandle=0xD994261
+[hud-find] arms=0x00000229E2FFD000
+[hud-find] armsNode=0x0000022A144CD080
+[hud-find] firstChild=0x00000228C2C25080
+[hud-find] child[1]=0x0000022A13AD6480 owner=0x00000228C2C14C00 handle=0x4901D5 resolved=0x00000229C8084000
+[hud-find] child[3]=0x0000022982478080 owner=0x00000228C2BE5400 handle=0x10B81D6 resolved=0x00000229C8086000
+[hud-find] NO MATCH walked=4 finalChild=0x0000000000000000
+[apply-cache] rebuilding weapon=0000022984798000 hud=0000000000000000 def=16 pk=844
+[hud-name] weapon selection entry refreshed: 0000022984798000
+[apply-diagnostic] weaponChanged=1 gloveUpdate=0 regenAvailable=1
+[skin-regenerate] calling pRegenerateSkins weaponChanged=1
+[skin-regenerate] returned
+[apply] tick pawn=0x00000229D2B01800
+[apply] active 0x0000022984798000
+[pw] weapon 0x0000022984798000 def=16
+[armory-apply] in-game live weapon def=16 team=CT paintKit=844 (equipped in game 9919302EC58DC70A)
+[hud-find] START weapon=0x0000022984798000 pawn=0x00000229D2B01800
+[hud-find] armsHandle=0xD994261
+[hud-find] arms=0x00000229E2FFD000
+[hud-find] armsNode=0x0000022A144CD080
+[hud-find] firstChild=0x0000022A13AD8880
+[hud-find] child[0]=0x0000022A13AD8880 owner=0x00000228C2C37C00 handle=0x1701D9 resolved=0x0000022984798000 **MATCH**
+[hud-find] SUCCESS hudWeapon=0x00000228C2C37C00 after 1 nodes
+[apply-cache] rebuilding weapon=0000022984798000 hud=00000228C2C37C00 def=16 pk=844
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x00000229D2B01800
+[apply] active 0x0000022984798000
+[pw] weapon 0x0000022984798000 def=16
+[armory-apply] in-game live weapon def=16 team=CT paintKit=844 (equipped in game 9919302EC58DC70A)
+[hud-find] START weapon=0x0000022984798000 pawn=0x00000229D2B01800
+[hud-find] armsHandle=0xD994261
+[hud-find] arms=0x00000229E2FFD000
+[hud-find] armsNode=0x0000022A144CD080
+[hud-find] firstChild=0x0000022A13AD8880
+[hud-find] child[0]=0x0000022A13AD8880 owner=0x00000228C2C37C00 handle=0x1701D9 resolved=0x0000022984798000 **MATCH**
+[hud-find] SUCCESS hudWeapon=0x00000228C2C37C00 after 1 nodes
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x00000229D2B01800
+[apply] active 0x0000022984798000
+[pw] weapon 0x0000022984798000 def=16
+[armory-apply] in-game live weapon def=16 team=CT paintKit=844 (equipped in game 9919302EC58DC70A)
+[hud-find] START weapon=0x0000022984798000 pawn=0x00000229D2B01800
+[hud-find] armsHandle=0xD994261
+[hud-find] arms=0x00000229E2FFD000
+[hud-find] armsNode=0x0000022A144CD080
+[hud-find] firstChild=0x0000022A13AD8880
+[hud-find] child[0]=0x0000022A13AD8880 owner=0x00000228C2C37C00 handle=0x1701D9 resolved=0x0000022984798000 **MATCH**
+[hud-find] SUCCESS hudWeapon=0x00000228C2C37C00 after 1 nodes
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x00000229D2B01800
+[apply] active 0x0000022984798000
+[pw] weapon 0x0000022984798000 def=16
+[armory-apply] in-game live weapon def=16 team=CT paintKit=844 (equipped in game 9919302EC58DC70A)
+[hud-find] START weapon=0x0000022984798000 pawn=0x00000229D2B01800
+[hud-find] armsHandle=0xD994261
+[hud-find] arms=0x00000229E2FFD000
+[hud-find] armsNode=0x0000022A144CD080
+[hud-find] firstChild=0x0000022A13AD8880
+[hud-find] child[0]=0x0000022A13AD8880 owner=0x00000228C2C37C00 handle=0x1701D9 resolved=0x0000022984798000 **MATCH**
+[hud-find] SUCCESS hudWeapon=0x00000228C2C37C00 after 1 nodes
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x00000229D2B01800
+[apply] active 0x0000022984798000
+[pw] weapon 0x0000022984798000 def=16
+[armory-apply] in-game live weapon def=16 team=CT paintKit=844 (equipped in game 9919302EC58DC70A)
+[hud-find] START weapon=0x0000022984798000 pawn=0x00000229D2B01800
+[hud-find] armsHandle=0xD994261
+[hud-find] arms=0x00000229E2FFD000
+[hud-find] armsNode=0x0000022A144CD080
+[hud-find] firstChild=0x0000022A13AD8880
+[hud-find] child[0]=0x0000022A13AD8880 owner=0x00000228C2C37C00 handle=0x1701D9 resolved=0x0000022984798000 **MATCH**
+[hud-find] SUCCESS hudWeapon=0x00000228C2C37C00 after 1 nodes
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x00000229D2B01800
+[apply] active 0x0000022984798000
+[pw] weapon 0x0000022984798000 def=16
+[armory-apply] in-game live weapon def=16 team=CT paintKit=844 (equipped in game 9919302EC58DC70A)
+[hud-find] START weapon=0x0000022984798000 pawn=0x00000229D2B01800
+[hud-find] armsHandle=0xD994261
+[hud-find] arms=0x00000229E2FFD000
+[hud-find] armsNode=0x0000022A144CD080
+[hud-find] firstChild=0x0000022A13AD8880
+[hud-find] child[0]=0x0000022A13AD8880 owner=0x00000228C2C37C00 handle=0x1701D9 resolved=0x0000022984798000 **MATCH**
+[hud-find] SUCCESS hudWeapon=0x00000228C2C37C00 after 1 nodes
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x00000229D2B01800
+[apply] active 0x0000022984798000
+[pw] weapon 0x0000022984798000 def=16
+[armory-apply] in-game live weapon def=16 team=CT paintKit=844 (equipped in game 9919302EC58DC70A)
+[hud-find] START weapon=0x0000022984798000 pawn=0x00000229D2B01800
+[hud-find] armsHandle=0xD994261
+[hud-find] arms=0x00000229E2FFD000
+[hud-find] armsNode=0x0000022A144CD080
+[hud-find] firstChild=0x0000022A13AD8880
+[hud-find] child[0]=0x0000022A13AD8880 owner=0x00000228C2C37C00 handle=0x1701D9 resolved=0x0000022984798000 **MATCH**
+[hud-find] SUCCESS hudWeapon=0x00000228C2C37C00 after 1 nodes
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x00000229D2B01800
+[apply] active 0x0000022984798000
+[pw] weapon 0x0000022984798000 def=16
+[armory-apply] in-game live weapon def=16 team=CT paintKit=844 (equipped in game 9919302EC58DC70A)
+[hud-find] START weapon=0x0000022984798000 pawn=0x00000229D2B01800
+[hud-find] armsHandle=0xD994261
+[hud-find] arms=0x00000229E2FFD000
+[hud-find] armsNode=0x0000022A144CD080
+[hud-find] firstChild=0x0000022A13AD8880
+[hud-find] child[0]=0x0000022A13AD8880 owner=0x00000228C2C37C00 handle=0x1701D9 resolved=0x0000022984798000 **MATCH**
+[hud-find] SUCCESS hudWeapon=0x00000228C2C37C00 after 1 nodes
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x00000229D2B01800
+[apply] active 0x0000022984798000
+[pw] weapon 0x0000022984798000 def=16
+[armory-apply] in-game live weapon def=16 team=CT paintKit=844 (equipped in game 9919302EC58DC70A)
+[hud-find] START weapon=0x0000022984798000 pawn=0x00000229D2B01800
+[hud-find] armsHandle=0xD994261
+[hud-find] arms=0x00000229E2FFD000
+[hud-find] armsNode=0x0000022A144CD080
+[hud-find] firstChild=0x0000022A13AD8880
+[hud-find] child[0]=0x0000022A13AD8880 owner=0x00000228C2C37C00 handle=0x1701D9 resolved=0x0000022984798000 **MATCH**
+[hud-find] SUCCESS hudWeapon=0x00000228C2C37C00 after 1 nodes
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x00000229D2B01800
+[apply] active 0x0000022984798000
+[pw] weapon 0x0000022984798000 def=16
+[armory-apply] in-game live weapon def=16 team=CT paintKit=844 (equipped in game 9919302EC58DC70A)
+[hud-find] START weapon=0x0000022984798000 pawn=0x00000229D2B01800
+[hud-find] armsHandle=0xD994261
+[hud-find] arms=0x00000229E2FFD000
+[hud-find] armsNode=0x0000022A144CD080
+[hud-find] firstChild=0x0000022A13AD8880
+[hud-find] child[0]=0x0000022A13AD8880 owner=0x00000228C2C37C00 handle=0x1701D9 resolved=0x0000022984798000 **MATCH**
+[hud-find] SUCCESS hudWeapon=0x00000228C2C37C00 after 1 nodes
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x00000229D2B01800
+[apply] active 0x0000022984798000
+[pw] weapon 0x0000022984798000 def=16
+[armory-apply] in-game live weapon def=16 team=CT paintKit=844 (equipped in game 9919302EC58DC70A)
+[hud-find] START weapon=0x0000022984798000 pawn=0x00000229D2B01800
+[hud-find] armsHandle=0xD994261
+[hud-find] arms=0x00000229E2FFD000
+[hud-find] armsNode=0x0000022A144CD080
+[hud-find] firstChild=0x0000022A13AD8880
+[hud-find] child[0]=0x0000022A13AD8880 owner=0x00000228C2C37C00 handle=0x1701D9 resolved=0x0000022984798000 **MATCH**
+[hud-find] SUCCESS hudWeapon=0x00000228C2C37C00 after 1 nodes
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+N1SSAN_STATUS|1|2026-11-08T15:52:23Z|9320|armory-obsidian-3.0|READY|reason=runtime_worker_heartbeat
+[status-write] begin state=READY path=C:\Users\mirac\AppData\Local\n1ssan\status\cs2-9320.status
+[apply] tick pawn=0x00000229D2B01800
+[apply] active 0x0000022984798000
+[pw] weapon 0x0000022984798000 def=16
+[armory-apply] in-game live weapon def=16 team=CT paintKit=844 (equipped in game 9919302EC58DC70A)
+[status-write] success state=READY error=0
+[hud-find] START weapon=0x0000022984798000 pawn=0x00000229D2B01800
+[hud-find] armsHandle=0xD994261
+[hud-find] arms=0x00000229E2FFD000
+[hud-find] armsNode=0x0000022A144CD080
+[hud-find] firstChild=0x0000022A13AD8880
+[hud-find] child[0]=0x0000022A13AD8880 owner=0x00000228C2C37C00 handle=0x1701D9 resolved=0x0000022984798000 **MATCH**
+[hud-find] SUCCESS hudWeapon=0x00000228C2C37C00 after 1 nodes
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+
+=== SNAPSHOT ===
+[snap] fsnCount=198925 lastStage=12 stage5Count=15052
+[snap] stage histogram:
+[snap]   stage  0: 31595 frames
+[snap]   stage  1: 15130 frames
+[snap]   stage  2: 15130 frames
+[snap]   stage  3: 15126 frames
+[snap]   stage  4: 1 frames
+[snap]   stage  5: 15052 frames
+[snap]   stage  6: 15052 frames
+[snap]   stage  7: 15052 frames
+[snap]   stage  8: 15052 frames
+[snap]   stage 10: 15052 frames
+[snap]   stage 11: 18444 frames
+[snap]   stage 12: 28239 frames
+[snap] dwLocalPlayerController @ 0x00007FFEE59F2548 -> 0x00000228C2B71A00 
+[snap] dwLocalPlayerPawn       @ 0x00007FFEE5BE91E0 -> 0x000002295E2B0400 
+[snap] pawn: vtable=0x00007FFEE8E73740 inClient=0 health=553
+[snap] ctrl: vtable=0x00007FFEE50C1680 inClient=1 m_hPlayerPawn@0x92C = 0x01C681A1 (idx=417)
+[snap] entitySystem @ 0x00007FFEE5BCFBB8 = 0x0000022941478800 highestEntityIndex=213
+[snap] entity resolution: 1/16 of indices 1..16 valid
+[snap] ctrl->pawn handle resolve: 0x01C681A1 -> 0x00000229D2B01800
+[snap] ----------------------------------------
+[apply] tick pawn=0x00000229D2B01800
+[apply] active 0x0000022984798000
+[pw] weapon 0x0000022984798000 def=16
+[armory-apply] in-game live weapon def=16 team=CT paintKit=844 (equipped in game 9919302EC58DC70A)
+[hud-find] START weapon=0x0000022984798000 pawn=0x00000229D2B01800
+[hud-find] armsHandle=0xD994261
+[hud-find] arms=0x00000229E2FFD000
+[hud-find] armsNode=0x0000022A144CD080
+[hud-find] firstChild=0x0000022A13AD8880
+[hud-find] child[0]=0x0000022A13AD8880 owner=0x00000228C2C37C00 handle=0x1701D9 resolved=0x0000022984798000 **MATCH**
+[hud-find] SUCCESS hudWeapon=0x00000228C2C37C00 after 1 nodes
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x00000229D2B01800
+[apply] active 0x0000022984798000
+[pw] weapon 0x0000022984798000 def=16
+[armory-apply] in-game live weapon def=16 team=CT paintKit=844 (equipped in game 9919302EC58DC70A)
+[hud-find] START weapon=0x0000022984798000 pawn=0x00000229D2B01800
+[hud-find] armsHandle=0xD994261
+[hud-find] arms=0x00000229E2FFD000
+[hud-find] armsNode=0x0000022A144CD080
+[hud-find] firstChild=0x0000022A13AD8880
+[hud-find] child[0]=0x0000022A13AD8880 owner=0x00000228C2C37C00 handle=0x1701D9 resolved=0x0000022984798000 **MATCH**
+[hud-find] SUCCESS hudWeapon=0x00000228C2C37C00 after 1 nodes
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x00000229D2B01800
+[apply] active 0x0000022984798000
+[pw] weapon 0x0000022984798000 def=16
+[armory-apply] in-game live weapon def=16 team=CT paintKit=844 (equipped in game 9919302EC58DC70A)
+[hud-find] START weapon=0x0000022984798000 pawn=0x00000229D2B01800
+[hud-find] armsHandle=0xD994261
+[hud-find] arms=0x00000229E2FFD000
+[hud-find] armsNode=0x0000022A144CD080
+[hud-find] firstChild=0x0000022A13AD8880
+[hud-find] child[0]=0x0000022A13AD8880 owner=0x00000228C2C37C00 handle=0x1701D9 resolved=0x0000022984798000 **MATCH**
+[hud-find] SUCCESS hudWeapon=0x00000228C2C37C00 after 1 nodes
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x00000229D2B01800
+[apply] active 0x0000022984798000
+[pw] weapon 0x0000022984798000 def=16
+[armory-apply] in-game live weapon def=16 team=CT paintKit=844 (equipped in game 9919302EC58DC70A)
+[hud-find] START weapon=0x0000022984798000 pawn=0x00000229D2B01800
+[hud-find] armsHandle=0xD994261
+[hud-find] arms=0x00000229E2FFD000
+[hud-find] armsNode=0x0000022A144CD080
+[hud-find] firstChild=0x0000022A13AD8880
+[hud-find] child[0]=0x0000022A13AD8880 owner=0x00000228C2C37C00 handle=0x1701D9 resolved=0x0000022984798000 **MATCH**
+[hud-find] SUCCESS hudWeapon=0x00000228C2C37C00 after 1 nodes
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x00000229D2B01800
+[apply] active 0x0000022984798000
+[pw] weapon 0x0000022984798000 def=16
+[armory-apply] in-game live weapon def=16 team=CT paintKit=844 (equipped in game 9919302EC58DC70A)
+[hud-find] START weapon=0x0000022984798000 pawn=0x00000229D2B01800
+[hud-find] armsHandle=0xD994261
+[hud-find] arms=0x00000229E2FFD000
+[hud-find] armsNode=0x0000022A144CD080
+[hud-find] firstChild=0x0000022A13AD8880
+[hud-find] child[0]=0x0000022A13AD8880 owner=0x00000228C2C37C00 handle=0x1701D9 resolved=0x0000022984798000 **MATCH**
+[hud-find] SUCCESS hudWeapon=0x00000228C2C37C00 after 1 nodes
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x00000229D2B01800
+[apply] active 0x0000022984798000
+[pw] weapon 0x0000022984798000 def=16
+[armory-apply] in-game live weapon def=16 team=CT paintKit=844 (equipped in game 9919302EC58DC70A)
+[hud-find] START weapon=0x0000022984798000 pawn=0x00000229D2B01800
+[hud-find] armsHandle=0xD994261
+[hud-find] arms=0x00000229E2FFD000
+[hud-find] armsNode=0x0000022A144CD080
+[hud-find] firstChild=0x0000022A13AD8880
+[hud-find] child[0]=0x0000022A13AD8880 owner=0x00000228C2C37C00 handle=0x1701D9 resolved=0x0000022984798000 **MATCH**
+[hud-find] SUCCESS hudWeapon=0x00000228C2C37C00 after 1 nodes
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x00000229D2B01800
+[apply] active 0x0000022984798000
+[pw] weapon 0x0000022984798000 def=16
+[armory-apply] in-game live weapon def=16 team=CT paintKit=844 (equipped in game 9919302EC58DC70A)
+[hud-find] START weapon=0x0000022984798000 pawn=0x00000229D2B01800
+[hud-find] armsHandle=0xD994261
+[hud-find] arms=0x00000229E2FFD000
+[hud-find] armsNode=0x0000022A144CD080
+[hud-find] firstChild=0x0000022A13AD8880
+[hud-find] child[0]=0x0000022A13AD8880 owner=0x00000228C2C37C00 handle=0x1701D9 resolved=0x0000022984798000 **MATCH**
+[hud-find] SUCCESS hudWeapon=0x00000228C2C37C00 after 1 nodes
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x00000229D2B01800
+[apply] active 0x0000022984798000
+[pw] weapon 0x0000022984798000 def=16
+[armory-apply] in-game live weapon def=16 team=CT paintKit=844 (equipped in game 9919302EC58DC70A)
+[hud-find] START weapon=0x0000022984798000 pawn=0x00000229D2B01800
+[hud-find] armsHandle=0xD994261
+[hud-find] arms=0x00000229E2FFD000
+[hud-find] armsNode=0x0000022A144CD080
+[hud-find] firstChild=0x0000022A13AD8880
+[hud-find] child[0]=0x0000022A13AD8880 owner=0x00000228C2C37C00 handle=0x1701D9 resolved=0x0000022984798000 **MATCH**
+[hud-find] SUCCESS hudWeapon=0x00000228C2C37C00 after 1 nodes
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x00000229D2B01800
+[apply] active 0x0000022984798000
+[pw] weapon 0x0000022984798000 def=16
+[armory-apply] in-game live weapon def=16 team=CT paintKit=844 (equipped in game 9919302EC58DC70A)
+[hud-find] START weapon=0x0000022984798000 pawn=0x00000229D2B01800
+[hud-find] armsHandle=0xD994261
+[hud-find] arms=0x00000229E2FFD000
+[hud-find] armsNode=0x0000022A144CD080
+[hud-find] firstChild=0x0000022A13AD8880
+[hud-find] child[0]=0x0000022A13AD8880 owner=0x00000228C2C37C00 handle=0x1701D9 resolved=0x0000022984798000 **MATCH**
+[hud-find] SUCCESS hudWeapon=0x00000228C2C37C00 after 1 nodes
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x00000229D2B01800
+[apply] active 0x0000022984798000
+[pw] weapon 0x0000022984798000 def=16
+[armory-apply] in-game live weapon def=16 team=CT paintKit=844 (equipped in game 9919302EC58DC70A)
+[hud-find] START weapon=0x0000022984798000 pawn=0x00000229D2B01800
+[hud-find] armsHandle=0xD994261
+[hud-find] arms=0x00000229E2FFD000
+[hud-find] armsNode=0x0000022A144CD080
+[hud-find] firstChild=0x0000022A13AD8880
+[hud-find] child[0]=0x0000022A13AD8880 owner=0x00000228C2C37C00 handle=0x1701D9 resolved=0x0000022984798000 **MATCH**
+[hud-find] SUCCESS hudWeapon=0x00000228C2C37C00 after 1 nodes
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x00000229D2B01800
+[apply] active 0x0000022984798000
+[pw] weapon 0x0000022984798000 def=16
+[armory-apply] in-game live weapon def=16 team=CT paintKit=844 (equipped in game 9919302EC58DC70A)
+[hud-find] START weapon=0x0000022984798000 pawn=0x00000229D2B01800
+[hud-find] armsHandle=0xD994261
+[hud-find] arms=0x00000229E2FFD000
+[hud-find] armsNode=0x0000022A144CD080
+[hud-find] firstChild=0x0000022A13AD8880
+[hud-find] child[0]=0x0000022A13AD8880 owner=0x00000228C2C37C00 handle=0x1701D9 resolved=0x0000022984798000 **MATCH**
+[hud-find] SUCCESS hudWeapon=0x00000228C2C37C00 after 1 nodes
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x00000229D2B01800
+[apply] active 0x0000022984798000
+[pw] weapon 0x0000022984798000 def=16
+[armory-apply] in-game live weapon def=16 team=CT paintKit=844 (equipped in game 9919302EC58DC70A)
+[hud-find] START weapon=0x0000022984798000 pawn=0x00000229D2B01800
+[hud-find] armsHandle=0xD994261
+[hud-find] arms=0x00000229E2FFD000
+[hud-find] armsNode=0x0000022A144CD080
+[hud-find] firstChild=0x0000022A13AD8880
+[hud-find] child[0]=0x0000022A13AD8880 owner=0x00000228C2C37C00 handle=0x1701D9 resolved=0x0000022984798000 **MATCH**
+[hud-find] SUCCESS hudWeapon=0x00000228C2C37C00 after 1 nodes
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x00000229D2B01800
+[apply] active 0x0000022984798000
+[pw] weapon 0x0000022984798000 def=16
+[armory-apply] in-game live weapon def=16 team=CT paintKit=844 (equipped in game 9919302EC58DC70A)
+[hud-find] START weapon=0x0000022984798000 pawn=0x00000229D2B01800
+[hud-find] armsHandle=0xD994261
+[hud-find] arms=0x00000229E2FFD000
+[hud-find] armsNode=0x0000022A144CD080
+[hud-find] firstChild=0x0000022A13AD8880
+[hud-find] child[0]=0x0000022A13AD8880 owner=0x00000228C2C37C00 handle=0x1701D9 resolved=0x0000022984798000 **MATCH**
+[hud-find] SUCCESS hudWeapon=0x00000228C2C37C00 after 1 nodes
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x00000229D2B01800
+[apply] active 0x0000022984798000
+[pw] weapon 0x0000022984798000 def=16
+[armory-apply] in-game live weapon def=16 team=CT paintKit=844 (equipped in game 9919302EC58DC70A)
+[hud-find] START weapon=0x0000022984798000 pawn=0x00000229D2B01800
+[hud-find] armsHandle=0xD994261
+[hud-find] arms=0x00000229E2FFD000
+[hud-find] armsNode=0x0000022A144CD080
+[hud-find] firstChild=0x0000022A13AD8880
+[hud-find] child[0]=0x0000022A13AD8880 owner=0x00000228C2C37C00 handle=0x1701D9 resolved=0x0000022984798000 **MATCH**
+[hud-find] SUCCESS hudWeapon=0x00000228C2C37C00 after 1 nodes
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x00000229D2B01800
+[apply] active 0x0000022984798000
+[pw] weapon 0x0000022984798000 def=16
+[armory-apply] in-game live weapon def=16 team=CT paintKit=844 (equipped in game 9919302EC58DC70A)
+[hud-find] START weapon=0x0000022984798000 pawn=0x00000229D2B01800
+[hud-find] armsHandle=0xD994261
+[hud-find] arms=0x00000229E2FFD000
+[hud-find] armsNode=0x0000022A144CD080
+[hud-find] firstChild=0x0000022A13AD8880
+[hud-find] child[0]=0x0000022A13AD8880 owner=0x00000228C2C37C00 handle=0x1701D9 resolved=0x0000022984798000 **MATCH**
+[hud-find] SUCCESS hudWeapon=0x00000228C2C37C00 after 1 nodes
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x00000229D2B01800
+[apply] active 0x0000022984798000
+[pw] weapon 0x0000022984798000 def=16
+[armory-apply] in-game live weapon def=16 team=CT paintKit=844 (equipped in game 9919302EC58DC70A)
+[hud-find] START weapon=0x0000022984798000 pawn=0x00000229D2B01800
+[hud-find] armsHandle=0xD994261
+[hud-find] arms=0x00000229E2FFD000
+[hud-find] armsNode=0x0000022A144CD080
+[hud-find] firstChild=0x0000022A13AD8880
+[hud-find] child[0]=0x0000022A13AD8880 owner=0x00000228C2C37C00 handle=0x1701D9 resolved=0x0000022984798000 **MATCH**
+[hud-find] SUCCESS hudWeapon=0x00000228C2C37C00 after 1 nodes
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x00000229D2B01800
+[apply] active 0x0000022984798000
+[pw] weapon 0x0000022984798000 def=16
+[armory-apply] in-game live weapon def=16 team=CT paintKit=844 (equipped in game 9919302EC58DC70A)
+[hud-find] START weapon=0x0000022984798000 pawn=0x00000229D2B01800
+[hud-find] armsHandle=0xD994261
+[hud-find] arms=0x00000229E2FFD000
+[hud-find] armsNode=0x0000022A144CD080
+[hud-find] firstChild=0x0000022A13AD8880
+[hud-find] child[0]=0x0000022A13AD8880 owner=0x00000228C2C37C00 handle=0x1701D9 resolved=0x0000022984798000 **MATCH**
+[hud-find] SUCCESS hudWeapon=0x00000228C2C37C00 after 1 nodes
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x00000229D2B01800
+[apply] active 0x0000022984798000
+[pw] weapon 0x0000022984798000 def=16
+[armory-apply] in-game live weapon def=16 team=CT paintKit=844 (equipped in game 9919302EC58DC70A)
+[hud-find] START weapon=0x0000022984798000 pawn=0x00000229D2B01800
+[hud-find] armsHandle=0xD994261
+[hud-find] arms=0x00000229E2FFD000
+[hud-find] armsNode=0x0000022A144CD080
+[hud-find] firstChild=0x0000022A13AD8880
+[hud-find] child[0]=0x0000022A13AD8880 owner=0x00000228C2C37C00 handle=0x1701D9 resolved=0x0000022984798000 **MATCH**
+[hud-find] SUCCESS hudWeapon=0x00000228C2C37C00 after 1 nodes
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x00000229D2B01800
+[apply] active 0x0000022984798000
+[pw] weapon 0x0000022984798000 def=16
+[armory-apply] in-game live weapon def=16 team=CT paintKit=844 (equipped in game 9919302EC58DC70A)
+[hud-find] START weapon=0x0000022984798000 pawn=0x00000229D2B01800
+[hud-find] armsHandle=0xD994261
+[hud-find] arms=0x00000229E2FFD000
+[hud-find] armsNode=0x0000022A144CD080
+[hud-find] firstChild=0x0000022A13AD8880
+[hud-find] child[0]=0x0000022A13AD8880 owner=0x00000228C2C37C00 handle=0x1701D9 resolved=0x0000022984798000 **MATCH**
+[hud-find] SUCCESS hudWeapon=0x00000228C2C37C00 after 1 nodes
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+
+=== SNAPSHOT ===
+[snap] fsnCount=204366 lastStage=0 stage5Count=15372
+[snap] stage histogram:
+[snap]   stage  0: 32876 frames
+[snap]   stage  1: 15450 frames
+[snap]   stage  2: 15450 frames
+[snap]   stage  3: 15446 frames
+[snap]   stage  4: 1 frames
+[snap]   stage  5: 15372 frames
+[snap]   stage  6: 15372 frames
+[snap]   stage  7: 15372 frames
+[snap]   stage  8: 15372 frames
+[snap]   stage 10: 15372 frames
+[snap]   stage 11: 18764 frames
+[snap]   stage 12: 29519 frames
+[snap] dwLocalPlayerController @ 0x00007FFEE59F2548 -> 0x00000228C2B71A00 
+[snap] dwLocalPlayerPawn       @ 0x00007FFEE5BE91E0 -> 0x000002295E2B0400 
+[snap] pawn: vtable=0x00007FFEE8E73740 inClient=0 health=553
+[snap] ctrl: vtable=0x00007FFEE50C1680 inClient=1 m_hPlayerPawn@0x92C = 0x01C681A1 (idx=417)
+[snap] entitySystem @ 0x00007FFEE5BCFBB8 = 0x0000022941478800 highestEntityIndex=213
+[snap] entity resolution: 1/16 of indices 1..16 valid
+[snap] ctrl->pawn handle resolve: 0x01C681A1 -> 0x00000229D2B01800
+[snap] ----------------------------------------
+[apply] tick pawn=0x00000229D2B01800
+[apply] active 0x0000022984798000
+[pw] weapon 0x0000022984798000 def=16
+[armory-apply] in-game live weapon def=16 team=CT paintKit=844 (equipped in game 9919302EC58DC70A)
+[hud-find] START weapon=0x0000022984798000 pawn=0x00000229D2B01800
+[hud-find] armsHandle=0xD994261
+[hud-find] arms=0x00000229E2FFD000
+[hud-find] armsNode=0x0000022A144CD080
+[hud-find] firstChild=0x0000022A13AD8880
+[hud-find] child[0]=0x0000022A13AD8880 owner=0x00000228C2C37C00 handle=0x1701D9 resolved=0x0000022984798000 **MATCH**
+[hud-find] SUCCESS hudWeapon=0x00000228C2C37C00 after 1 nodes
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x00000229D2B01800
+[apply] active 0x0000022984798000
+[pw] weapon 0x0000022984798000 def=16
+[armory-apply] in-game live weapon def=16 team=CT paintKit=844 (equipped in game 9919302EC58DC70A)
+[hud-find] START weapon=0x0000022984798000 pawn=0x00000229D2B01800
+[hud-find] armsHandle=0xD994261
+[hud-find] arms=0x00000229E2FFD000
+[hud-find] armsNode=0x0000022A144CD080
+[hud-find] firstChild=0x0000022A13AD8880
+[hud-find] child[0]=0x0000022A13AD8880 owner=0x00000228C2C37C00 handle=0x1701D9 resolved=0x0000022984798000 **MATCH**
+[hud-find] SUCCESS hudWeapon=0x00000228C2C37C00 after 1 nodes
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x00000229D2B01800
+[apply] active 0x0000022984798000
+[pw] weapon 0x0000022984798000 def=16
+[armory-apply] in-game live weapon def=16 team=CT paintKit=844 (equipped in game 9919302EC58DC70A)
+[hud-find] START weapon=0x0000022984798000 pawn=0x00000229D2B01800
+[hud-find] armsHandle=0xD994261
+[hud-find] arms=0x00000229E2FFD000
+[hud-find] armsNode=0x0000022A144CD080
+[hud-find] firstChild=0x0000022A13AD8880
+[hud-find] child[0]=0x0000022A13AD8880 owner=0x00000228C2C37C00 handle=0x1701D9 resolved=0x0000022984798000 **MATCH**
+[hud-find] SUCCESS hudWeapon=0x00000228C2C37C00 after 1 nodes
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x00000229D2B01800
+[apply] active 0x0000022984798000
+[pw] weapon 0x0000022984798000 def=16
+[armory-apply] in-game live weapon def=16 team=CT paintKit=844 (equipped in game 9919302EC58DC70A)
+[hud-find] START weapon=0x0000022984798000 pawn=0x00000229D2B01800
+[hud-find] armsHandle=0xD994261
+[hud-find] arms=0x00000229E2FFD000
+[hud-find] armsNode=0x0000022A144CD080
+[hud-find] firstChild=0x0000022A13AD8880
+[hud-find] child[0]=0x0000022A13AD8880 owner=0x00000228C2C37C00 handle=0x1701D9 resolved=0x0000022984798000 **MATCH**
+[hud-find] SUCCESS hudWeapon=0x00000228C2C37C00 after 1 nodes
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x00000229D2B01800
+[apply] active 0x0000022984798000
+[pw] weapon 0x0000022984798000 def=16
+[armory-apply] in-game live weapon def=16 team=CT paintKit=844 (equipped in game 9919302EC58DC70A)
+[hud-find] START weapon=0x0000022984798000 pawn=0x00000229D2B01800
+[hud-find] armsHandle=0xD994261
+[hud-find] arms=0x00000229E2FFD000
+[hud-find] armsNode=0x0000022A144CD080
+[hud-find] firstChild=0x0000022A13AD8880
+[hud-find] child[0]=0x0000022A13AD8880 owner=0x00000228C2C37C00 handle=0x1701D9 resolved=0x0000022984798000 **MATCH**
+[hud-find] SUCCESS hudWeapon=0x00000228C2C37C00 after 1 nodes
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x00000229D2B01800
+[apply] active 0x0000022984798000
+[pw] weapon 0x0000022984798000 def=16
+[armory-apply] in-game live weapon def=16 team=CT paintKit=844 (equipped in game 9919302EC58DC70A)
+[hud-find] START weapon=0x0000022984798000 pawn=0x00000229D2B01800
+[hud-find] armsHandle=0xD994261
+[hud-find] arms=0x00000229E2FFD000
+[hud-find] armsNode=0x0000022A144CD080
+[hud-find] firstChild=0x0000022A13AD8880
+[hud-find] child[0]=0x0000022A13AD8880 owner=0x00000228C2C37C00 handle=0x1701D9 resolved=0x0000022984798000 **MATCH**
+[hud-find] SUCCESS hudWeapon=0x00000228C2C37C00 after 1 nodes
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x00000229D2B01800
+[apply] active 0x0000022984798000
+[pw] weapon 0x0000022984798000 def=16
+[armory-apply] in-game live weapon def=16 team=CT paintKit=844 (equipped in game 9919302EC58DC70A)
+[hud-find] START weapon=0x0000022984798000 pawn=0x00000229D2B01800
+[hud-find] armsHandle=0xD994261
+[hud-find] arms=0x00000229E2FFD000
+[hud-find] armsNode=0x0000022A144CD080
+[hud-find] firstChild=0x0000022A13AD8880
+[hud-find] child[0]=0x0000022A13AD8880 owner=0x00000228C2C37C00 handle=0x1701D9 resolved=0x0000022984798000 **MATCH**
+[hud-find] SUCCESS hudWeapon=0x00000228C2C37C00 after 1 nodes
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x00000229D2B01800
+[apply] active 0x0000022984798000
+[pw] weapon 0x0000022984798000 def=16
+[armory-apply] in-game live weapon def=16 team=CT paintKit=844 (equipped in game 9919302EC58DC70A)
+[hud-find] START weapon=0x0000022984798000 pawn=0x00000229D2B01800
+[hud-find] armsHandle=0xD994261
+[hud-find] arms=0x00000229E2FFD000
+[hud-find] armsNode=0x0000022A144CD080
+[hud-find] firstChild=0x0000022A13AD8880
+[hud-find] child[0]=0x0000022A13AD8880 owner=0x00000228C2C37C00 handle=0x1701D9 resolved=0x0000022984798000 **MATCH**
+[hud-find] SUCCESS hudWeapon=0x00000228C2C37C00 after 1 nodes
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x00000229D2B01800
+[apply] active 0x0000022984798000
+[pw] weapon 0x0000022984798000 def=16
+[armory-apply] in-game live weapon def=16 team=CT paintKit=844 (equipped in game 9919302EC58DC70A)
+[hud-find] START weapon=0x0000022984798000 pawn=0x00000229D2B01800
+[hud-find] armsHandle=0xD994261
+[hud-find] arms=0x00000229E2FFD000
+[hud-find] armsNode=0x0000022A144CD080
+[hud-find] firstChild=0x0000022A13AD8880
+[hud-find] child[0]=0x0000022A13AD8880 owner=0x00000228C2C37C00 handle=0x1701D9 resolved=0x0000022984798000 **MATCH**
+[hud-find] SUCCESS hudWeapon=0x00000228C2C37C00 after 1 nodes
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x00000229D2B01800
+[apply] active 0x0000022984798000
+[pw] weapon 0x0000022984798000 def=16
+[armory-apply] in-game live weapon def=16 team=CT paintKit=844 (equipped in game 9919302EC58DC70A)
+[hud-find] START weapon=0x0000022984798000 pawn=0x00000229D2B01800
+[hud-find] armsHandle=0xD994261
+[hud-find] arms=0x00000229E2FFD000
+[hud-find] armsNode=0x0000022A144CD080
+[hud-find] firstChild=0x0000022A13AD8880
+[hud-find] child[0]=0x0000022A13AD8880 owner=0x00000228C2C37C00 handle=0x1701D9 resolved=0x0000022984798000 **MATCH**
+[hud-find] SUCCESS hudWeapon=0x00000228C2C37C00 after 1 nodes
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x00000229D2B01800
+[apply] active 0x00000229C8086000
+[pw] weapon 0x00000229C8086000 def=61
+[armory-apply] in-game live weapon def=61 team=CT paintKit=332 (equipped in game 955F0C957F4C067D)
+[hud-find] START weapon=0x00000229C8086000 pawn=0x00000229D2B01800
+[hud-find] armsHandle=0xD994261
+[hud-find] arms=0x00000229E2FFD000
+[hud-find] armsNode=0x0000022A144CD080
+[hud-find] firstChild=0x0000022A13AD8880
+[hud-find] child[0]=0x0000022A13AD8880 owner=0x00000228C2C37C00 handle=0x1701D9 resolved=0x0000022984798000
+[hud-find] child[2]=0x0000022A13AD6480 owner=0x00000228C2C14C00 handle=0x4901D5 resolved=0x00000229C8084000
+[hud-find] child[4]=0x0000022982478080 owner=0x00000228C2BE5400 handle=0x10B81D6 resolved=0x00000229C8086000 **MATCH**
+[hud-find] SUCCESS hudWeapon=0x00000228C2BE5400 after 5 nodes
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x00000229D2B01800
+[apply] active 0x00000229C8086000
+[pw] weapon 0x00000229C8086000 def=61
+[armory-apply] in-game live weapon def=61 team=CT paintKit=332 (equipped in game 955F0C957F4C067D)
+[hud-find] START weapon=0x00000229C8086000 pawn=0x00000229D2B01800
+[hud-find] armsHandle=0xD994261
+[hud-find] arms=0x00000229E2FFD000
+[hud-find] armsNode=0x0000022A144CD080
+[hud-find] firstChild=0x0000022A13AD8880
+[hud-find] child[0]=0x0000022A13AD8880 owner=0x00000228C2C37C00 handle=0x1701D9 resolved=0x0000022984798000
+[hud-find] child[2]=0x0000022A13AD6480 owner=0x00000228C2C14C00 handle=0x4901D5 resolved=0x00000229C8084000
+[hud-find] child[4]=0x0000022982478080 owner=0x00000228C2BE5400 handle=0x10B81D6 resolved=0x00000229C8086000 **MATCH**
+[hud-find] SUCCESS hudWeapon=0x00000228C2BE5400 after 5 nodes
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x00000229D2B01800
+[apply] active 0x00000229C8086000
+[pw] weapon 0x00000229C8086000 def=61
+[armory-apply] in-game live weapon def=61 team=CT paintKit=332 (equipped in game 955F0C957F4C067D)
+[hud-find] START weapon=0x00000229C8086000 pawn=0x00000229D2B01800
+[hud-find] armsHandle=0xD994261
+[hud-find] arms=0x00000229E2FFD000
+[hud-find] armsNode=0x0000022A144CD080
+[hud-find] firstChild=0x0000022A13AD8880
+[hud-find] child[0]=0x0000022A13AD8880 owner=0x00000228C2C37C00 handle=0x1701D9 resolved=0x0000022984798000
+[hud-find] child[2]=0x0000022A13AD6480 owner=0x00000228C2C14C00 handle=0x4901D5 resolved=0x00000229C8084000
+[hud-find] child[4]=0x0000022982478080 owner=0x00000228C2BE5400 handle=0x10B81D6 resolved=0x00000229C8086000 **MATCH**
+[hud-find] SUCCESS hudWeapon=0x00000228C2BE5400 after 5 nodes
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x00000229D2B01800
+[apply] active 0x00000229C8086000
+[pw] weapon 0x00000229C8086000 def=61
+[armory-apply] in-game live weapon def=61 team=CT paintKit=332 (equipped in game 955F0C957F4C067D)
+[hud-find] START weapon=0x00000229C8086000 pawn=0x00000229D2B01800
+[hud-find] armsHandle=0xD994261
+[hud-find] arms=0x00000229E2FFD000
+[hud-find] armsNode=0x0000022A144CD080
+[hud-find] firstChild=0x0000022A13AD8880
+[hud-find] child[0]=0x0000022A13AD8880 owner=0x00000228C2C37C00 handle=0x1701D9 resolved=0x0000022984798000
+[hud-find] child[2]=0x0000022A13AD6480 owner=0x00000228C2C14C00 handle=0x4901D5 resolved=0x00000229C8084000
+[hud-find] child[4]=0x0000022982478080 owner=0x00000228C2BE5400 handle=0x10B81D6 resolved=0x00000229C8086000 **MATCH**
+[hud-find] SUCCESS hudWeapon=0x00000228C2BE5400 after 5 nodes
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x00000229D2B01800
+[apply] active 0x00000229C8086000
+[pw] weapon 0x00000229C8086000 def=61
+[armory-apply] in-game live weapon def=61 team=CT paintKit=332 (equipped in game 955F0C957F4C067D)
+[hud-find] START weapon=0x00000229C8086000 pawn=0x00000229D2B01800
+[hud-find] armsHandle=0xD994261
+[hud-find] arms=0x00000229E2FFD000
+[hud-find] armsNode=0x0000022A144CD080
+[hud-find] firstChild=0x0000022A13AD8880
+[hud-find] child[0]=0x0000022A13AD8880 owner=0x00000228C2C37C00 handle=0x1701D9 resolved=0x0000022984798000
+[hud-find] child[2]=0x0000022A13AD6480 owner=0x00000228C2C14C00 handle=0x4901D5 resolved=0x00000229C8084000
+[hud-find] child[4]=0x0000022982478080 owner=0x00000228C2BE5400 handle=0x10B81D6 resolved=0x00000229C8086000 **MATCH**
+[hud-find] SUCCESS hudWeapon=0x00000228C2BE5400 after 5 nodes
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x00000229D2B01800
+[apply] active 0x00000229E36B0000
+[pw] weapon 0x00000229E36B0000 def=4
+[armory-apply] in-game live weapon def=4 team=T paintKit=1208 (equipped in game 9AD2A303DFC2661B)
+[apply] enter (weapon=0x00000229E36B0000 def=4 pk=1208)
+[apply] world view pre-write: size=0 data=0x0000000000000000
+[attr-diag] item=00000229E36B12E0 size=0 data=0000000000000000 alloc=0
+[attr-entry] 0: def=6 value=1208.000 initial=1208.000
+[attr-entry] 1: def=7 value=1.000 initial=1.000
+[attr-entry] 2: def=8 value=0.140760 initial=0.140760
+[attr] attachments written (12 attributes): stickers=1 [0 kit=70 wear=0.000 rot=-40.5 off=0.065,-0.238 schema=3] charm=kit:16 seed=0 off=5.696,0.479,1.680
+[apply] world post-create: size=15 data=0000022A12645100 alloc=23
+[apply] world view 0x00000229E36B12E0 painted (pk=1208)
+[hud-find] START weapon=0x00000229E36B0000 pawn=0x00000229D2B01800
+[hud-find] armsHandle=0xD994261
+[hud-find] arms=0x00000229E2FFD000
+[hud-find] armsNode=0x0000022A144CD080
+[hud-find] firstChild=0x0000022A13AD8880
+[hud-find] child[0]=0x0000022A13AD8880 owner=0x00000228C2C37C00 handle=0x1701D9 resolved=0x0000022984798000
+[hud-find] child[2]=0x0000022A13AD6480 owner=0x00000228C2C14C00 handle=0x4901D5 resolved=0x00000229C8084000
+[hud-find] child[4]=0x0000022982478080 owner=0x00000228C2BE5400 handle=0x10B81D6 resolved=0x00000229C8086000
+[hud-find] NO MATCH walked=5 finalChild=0x0000000000000000
+[apply-cache] rebuilding weapon=00000229E36B0000 hud=0000000000000000 def=4 pk=1208
+[apply-diagnostic] weaponChanged=1 gloveUpdate=0 regenAvailable=1
+[skin-regenerate] calling pRegenerateSkins weaponChanged=1
+[skin-regenerate] returned
+[armory-gloves] applied def=5031 team=T (equipped in game clothing_hands instance 99992896905CD857)
+[armory-loadout] team=t customplayer holds item 17293822569102709676, which is not a projected instance
+[armory-agent] nothing applied team=T (not equipped in game and no assignment for this slot)
+[glove-observe] pawn=00000229D2B01800 reapply=1 changed=0 def=0 init=0 idHigh=0xFFFFFFFF
+[apply-cache] weapon model cache invalidated
+[glove-observe] pawn=00000229D2B01800 reapply=0 changed=0 def=5031 init=1 idHigh=0xFFFFFFFF
+[apply-cache] weapon model cache invalidated
+[apply] tick pawn=0x00000229D2B01800
+[apply] active 0x00000229E36B0000
+[pw] weapon 0x00000229E36B0000 def=4
+[armory-apply] in-game live weapon def=4 team=T paintKit=1208 (equipped in game 9AD2A303DFC2661B)
+[hud-find] START weapon=0x00000229E36B0000 pawn=0x00000229D2B01800
+[hud-find] armsHandle=0xE6CD410F
+[hud-find] arms=0x00000229E333D800
+[hud-find] armsNode=0x00000229E302DC80
+[hud-find] firstChild=0x00000229E2D1BC80
+[hud-find] child[1]=0x00000229E376C880 owner=0x00000229E3749000 handle=0x1B81DC resolved=0x00000229E36B0000 **MATCH**
+[hud-find] SUCCESS hudWeapon=0x00000229E3749000 after 2 nodes
+[apply-cache] rebuilding weapon=00000229E36B0000 hud=00000229E3749000 def=4 pk=1208
+[apply-diagnostic] weaponChanged=0 gloveUpdate=1 regenAvailable=1
+[apply-cache] weapon model cache invalidated
+[apply-cache] weapon model cache invalidated
+[apply] tick pawn=0x00000229D2B01800
+[apply] active 0x00000229E36B0000
+[pw] weapon 0x00000229E36B0000 def=4
+[armory-apply] in-game live weapon def=4 team=T paintKit=1208 (equipped in game 9AD2A303DFC2661B)
+[hud-find] START weapon=0x00000229E36B0000 pawn=0x00000229D2B01800
+[hud-find] armsHandle=0xE6CD410F
+[hud-find] arms=0x00000229E333D800
+[hud-find] armsNode=0x00000229E302DC80
+[hud-find] firstChild=0x0000022A13AD4080
+[hud-find] child[2]=0x00000229E376C880 owner=0x00000229E3749000 handle=0x1B81DC resolved=0x00000229E36B0000 **MATCH**
+[hud-find] SUCCESS hudWeapon=0x00000229E3749000 after 3 nodes
+[apply-cache] rebuilding weapon=00000229E36B0000 hud=00000229E3749000 def=4 pk=1208
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x00000229D2B01800
+[apply] active 0x00000229E36B0000
+[pw] weapon 0x00000229E36B0000 def=4
+[armory-apply] in-game live weapon def=4 team=T paintKit=1208 (equipped in game 9AD2A303DFC2661B)
+[hud-find] START weapon=0x00000229E36B0000 pawn=0x00000229D2B01800
+[hud-find] armsHandle=0xE6CD410F
+[hud-find] arms=0x00000229E333D800
+[hud-find] armsNode=0x00000229E302DC80
+[hud-find] firstChild=0x0000022A13AD4080
+[hud-find] child[2]=0x00000229E376C880 owner=0x00000229E3749000 handle=0x1B81DC resolved=0x00000229E36B0000 **MATCH**
+[hud-find] SUCCESS hudWeapon=0x00000229E3749000 after 3 nodes
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+N1SSAN_STATUS|1|2026-11-08T15:52:33Z|9320|armory-obsidian-3.0|READY|reason=runtime_worker_heartbeat
+[status-write] begin state=READY path=C:\Users\mirac\AppData\Local\n1ssan\status\cs2-9320.status
+[status-write] success state=READY error=0
+
+=== SNAPSHOT ===
+[snap] fsnCount=209452 lastStage=0 stage5Count=15678
+[snap] stage histogram:
+[snap]   stage  0: 34042 frames
+[snap]   stage  1: 15756 frames
+[snap]   stage  2: 15756 frames
+[snap]   stage  3: 15752 frames
+[snap]   stage  4: 1 frames
+[snap]   stage  5: 15678 frames
+[snap]   stage  6: 15678 frames
+[snap]   stage  7: 15678 frames
+[snap]   stage  8: 15678 frames
+[snap]   stage 10: 15678 frames
+[snap]   stage 11: 19079 frames
+[snap]   stage 12: 30676 frames
+[snap] dwLocalPlayerController @ 0x00007FFEE59F2548 -> 0x00000228C2B71A00 
+[snap] dwLocalPlayerPawn       @ 0x00007FFEE5BE91E0 -> 0x000002295E2B0400 
+[snap] pawn: vtable=0x00007FFEE8E73740 inClient=0 health=553
+[snap] ctrl: vtable=0x00007FFEE50C1680 inClient=1 m_hPlayerPawn@0x92C = 0x01C681A1 (idx=417)
+[snap] entitySystem @ 0x00007FFEE5BCFBB8 = 0x0000022941478800 highestEntityIndex=212
+[snap] entity resolution: 1/16 of indices 1..16 valid
+[snap] ctrl->pawn handle resolve: 0x01C681A1 -> 0x00000229D2B01800
+[snap] ----------------------------------------
+[apply] tick pawn=0x00000229D2B01800
+[apply] active 0x00000229E36B0000
+[pw] weapon 0x00000229E36B0000 def=4
+[armory-apply] in-game live weapon def=4 team=T paintKit=1208 (equipped in game 9AD2A303DFC2661B)
+[hud-find] START weapon=0x00000229E36B0000 pawn=0x00000229D2B01800
+[hud-find] armsHandle=0xE6CD410F
+[hud-find] arms=0x00000229E333D800
+[hud-find] armsNode=0x00000229E302DC80
+[hud-find] firstChild=0x0000022A13AD4080
+[hud-find] child[2]=0x00000229E376C880 owner=0x00000229E3749000 handle=0x1B81DC resolved=0x00000229E36B0000 **MATCH**
+[hud-find] SUCCESS hudWeapon=0x00000229E3749000 after 3 nodes
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x00000229D2B01800
+[apply] active 0x00000229E36B0000
+[pw] weapon 0x00000229E36B0000 def=4
+[armory-apply] in-game live weapon def=4 team=T paintKit=1208 (equipped in game 9AD2A303DFC2661B)
+[hud-find] START weapon=0x00000229E36B0000 pawn=0x00000229D2B01800
+[hud-find] armsHandle=0xE6CD410F
+[hud-find] arms=0x00000229E333D800
+[hud-find] armsNode=0x00000229E302DC80
+[hud-find] firstChild=0x0000022A13AD4080
+[hud-find] child[2]=0x00000229E376C880 owner=0x00000229E3749000 handle=0x1B81DC resolved=0x00000229E36B0000 **MATCH**
+[hud-find] SUCCESS hudWeapon=0x00000229E3749000 after 3 nodes
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x00000229D2B01800
+[apply] active 0x00000229E36B0000
+[pw] weapon 0x00000229E36B0000 def=4
+[armory-apply] in-game live weapon def=4 team=T paintKit=1208 (equipped in game 9AD2A303DFC2661B)
+[hud-find] START weapon=0x00000229E36B0000 pawn=0x00000229D2B01800
+[hud-find] armsHandle=0xE6CD410F
+[hud-find] arms=0x00000229E333D800
+[hud-find] armsNode=0x00000229E302DC80
+[hud-find] firstChild=0x0000022A13AD4080
+[hud-find] child[2]=0x00000229E376C880 owner=0x00000229E3749000 handle=0x1B81DC resolved=0x00000229E36B0000 **MATCH**
+[hud-find] SUCCESS hudWeapon=0x00000229E3749000 after 3 nodes
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x00000229D2B01800
+[apply] active 0x00000229E36B0000
+[pw] weapon 0x00000229E36B0000 def=4
+[armory-apply] in-game live weapon def=4 team=T paintKit=1208 (equipped in game 9AD2A303DFC2661B)
+[hud-find] START weapon=0x00000229E36B0000 pawn=0x00000229D2B01800
+[hud-find] armsHandle=0xE6CD410F
+[hud-find] arms=0x00000229E333D800
+[hud-find] armsNode=0x00000229E302DC80
+[hud-find] firstChild=0x0000022A13AD4080
+[hud-find] child[2]=0x00000229E376C880 owner=0x00000229E3749000 handle=0x1B81DC resolved=0x00000229E36B0000 **MATCH**
+[hud-find] SUCCESS hudWeapon=0x00000229E3749000 after 3 nodes
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x00000229D2B01800
+[apply] active 0x00000229E36B0000
+[pw] weapon 0x00000229E36B0000 def=4
+[armory-apply] in-game live weapon def=4 team=T paintKit=1208 (equipped in game 9AD2A303DFC2661B)
+[hud-find] START weapon=0x00000229E36B0000 pawn=0x00000229D2B01800
+[hud-find] armsHandle=0xE6CD410F
+[hud-find] arms=0x00000229E333D800
+[hud-find] armsNode=0x00000229E302DC80
+[hud-find] firstChild=0x0000022A13AD4080
+[hud-find] child[2]=0x00000229E376C880 owner=0x00000229E3749000 handle=0x1B81DC resolved=0x00000229E36B0000 **MATCH**
+[hud-find] SUCCESS hudWeapon=0x00000229E3749000 after 3 nodes
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x00000229D2B01800
+[apply] active 0x00000229E36B0000
+[pw] weapon 0x00000229E36B0000 def=4
+[armory-apply] in-game live weapon def=4 team=T paintKit=1208 (equipped in game 9AD2A303DFC2661B)
+[hud-find] START weapon=0x00000229E36B0000 pawn=0x00000229D2B01800
+[hud-find] armsHandle=0xE6CD410F
+[hud-find] arms=0x00000229E333D800
+[hud-find] armsNode=0x00000229E302DC80
+[hud-find] firstChild=0x0000022A13AD4080
+[hud-find] child[2]=0x00000229E376C880 owner=0x00000229E3749000 handle=0x1B81DC resolved=0x00000229E36B0000 **MATCH**
+[hud-find] SUCCESS hudWeapon=0x00000229E3749000 after 3 nodes
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x00000229D2B01800
+[apply] active 0x00000229E36B0000
+[pw] weapon 0x00000229E36B0000 def=4
+[armory-apply] in-game live weapon def=4 team=T paintKit=1208 (equipped in game 9AD2A303DFC2661B)
+[hud-find] START weapon=0x00000229E36B0000 pawn=0x00000229D2B01800
+[hud-find] armsHandle=0xE6CD410F
+[hud-find] arms=0x00000229E333D800
+[hud-find] armsNode=0x00000229E302DC80
+[hud-find] firstChild=0x0000022A13AD4080
+[hud-find] child[2]=0x00000229E376C880 owner=0x00000229E3749000 handle=0x1B81DC resolved=0x00000229E36B0000 **MATCH**
+[hud-find] SUCCESS hudWeapon=0x00000229E3749000 after 3 nodes
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x00000229D2B01800
+[apply] active 0x00000229E30FE000
+[pw] weapon 0x00000229E30FE000 def=59
+[armory-apply] in-game live weapon def=59 team=T paintKit=571 (equipped in game 99B4B549581CBBD5)
+[knife] SetModel (schema): weapons/models/knife/knife_bayonet/weapon_knife_bayonet.vmdl
+[apply] enter (weapon=0x00000229E30FE000 def=500 pk=571)
+[apply] world view pre-write: size=0 data=0x0000000000000000
+[attr-diag] item=00000229E30FF2E0 size=0 data=0000000000000000 alloc=0
+[attr-entry] 0: def=6 value=571.000 initial=571.000
+[attr-entry] 1: def=7 value=199.000 initial=199.000
+[attr-entry] 2: def=8 value=0.005880 initial=0.005880
+[apply] world post-create: size=3 data=00000229C8374200 alloc=11
+[apply] world view 0x00000229E30FF2E0 painted (pk=571)
+[hud-find] START weapon=0x00000229E30FE000 pawn=0x00000229D2B01800
+[hud-find] armsHandle=0xE6CD410F
+[hud-find] arms=0x00000229E333D800
+[hud-find] armsNode=0x00000229E302DC80
+[hud-find] firstChild=0x0000022A13AD4080
+[hud-find] child[2]=0x00000229E376C880 owner=0x00000229E3749000 handle=0x1B81DC resolved=0x00000229E36B0000
+[hud-find] NO MATCH walked=3 finalChild=0x0000000000000000
+[apply-cache] rebuilding weapon=00000229E30FE000 hud=0000000000000000 def=500 pk=571
+[hud-name] weapon selection entry refreshed: 00000229E30FE000
+[apply-diagnostic] weaponChanged=1 gloveUpdate=0 regenAvailable=1
+[skin-regenerate] calling pRegenerateSkins weaponChanged=1
+[skin-regenerate] returned
+[apply] tick pawn=0x00000229D2B01800
+[apply] active 0x00000229E30FE000
+[pw] weapon 0x00000229E30FE000 def=500
+[armory-apply] in-game live weapon def=500 team=T paintKit=571 (equipped in game 99B4B549581CBBD5)
+[hud-find] START weapon=0x00000229E30FE000 pawn=0x00000229D2B01800
+[hud-find] armsHandle=0xE6CD410F
+[hud-find] arms=0x00000229E333D800
+[hud-find] armsNode=0x00000229E302DC80
+[hud-find] firstChild=0x00000229E3EF7C80
+[hud-find] child[0]=0x00000229E3EF7C80 owner=0x0000022A13E42C00 handle=0x5081DB resolved=0x00000229E30FE000 **MATCH**
+[hud-find] SUCCESS hudWeapon=0x0000022A13E42C00 after 1 nodes
+[apply-cache] rebuilding weapon=00000229E30FE000 hud=0000022A13E42C00 def=500 pk=571
+[knife] HUD SetModel (schema): weapons/models/knife/knife_bayonet/weapon_knife_bayonet.vmdl
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x00000229D2B01800
+[apply] active 0x00000229E30FE000
+[pw] weapon 0x00000229E30FE000 def=500
+[armory-apply] in-game live weapon def=500 team=T paintKit=571 (equipped in game 99B4B549581CBBD5)
+[hud-find] START weapon=0x00000229E30FE000 pawn=0x00000229D2B01800
+[hud-find] armsHandle=0xE6CD410F
+[hud-find] arms=0x00000229E333D800
+[hud-find] armsNode=0x00000229E302DC80
+[hud-find] firstChild=0x00000229E3EF7C80
+[hud-find] child[0]=0x00000229E3EF7C80 owner=0x0000022A13E42C00 handle=0x5081DB resolved=0x00000229E30FE000 **MATCH**
+[hud-find] SUCCESS hudWeapon=0x0000022A13E42C00 after 1 nodes
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x00000229D2B01800
+[apply] active 0x00000229E30FE000
+[pw] weapon 0x00000229E30FE000 def=500
+[armory-apply] in-game live weapon def=500 team=T paintKit=571 (equipped in game 99B4B549581CBBD5)
+[hud-find] START weapon=0x00000229E30FE000 pawn=0x00000229D2B01800
+[hud-find] armsHandle=0xE6CD410F
+[hud-find] arms=0x00000229E333D800
+[hud-find] armsNode=0x00000229E302DC80
+[hud-find] firstChild=0x00000229E3EF7C80
+[hud-find] child[0]=0x00000229E3EF7C80 owner=0x0000022A13E42C00 handle=0x5081DB resolved=0x00000229E30FE000 **MATCH**
+[hud-find] SUCCESS hudWeapon=0x0000022A13E42C00 after 1 nodes
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x00000229D2B01800
+[apply] active 0x00000229E30FE000
+[pw] weapon 0x00000229E30FE000 def=500
+[armory-apply] in-game live weapon def=500 team=T paintKit=571 (equipped in game 99B4B549581CBBD5)
+[hud-find] START weapon=0x00000229E30FE000 pawn=0x00000229D2B01800
+[hud-find] armsHandle=0xE6CD410F
+[hud-find] arms=0x00000229E333D800
+[hud-find] armsNode=0x00000229E302DC80
+[hud-find] firstChild=0x00000229E3EF7C80
+[hud-find] child[0]=0x00000229E3EF7C80 owner=0x0000022A13E42C00 handle=0x5081DB resolved=0x00000229E30FE000 **MATCH**
+[hud-find] SUCCESS hudWeapon=0x0000022A13E42C00 after 1 nodes
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x00000229D2B01800
+[apply] active 0x00000229E30FE000
+[pw] weapon 0x00000229E30FE000 def=500
+[armory-apply] in-game live weapon def=500 team=T paintKit=571 (equipped in game 99B4B549581CBBD5)
+[hud-find] START weapon=0x00000229E30FE000 pawn=0x00000229D2B01800
+[hud-find] armsHandle=0xE6CD410F
+[hud-find] arms=0x00000229E333D800
+[hud-find] armsNode=0x00000229E302DC80
+[hud-find] firstChild=0x00000229E3EF7C80
+[hud-find] child[0]=0x00000229E3EF7C80 owner=0x0000022A13E42C00 handle=0x5081DB resolved=0x00000229E30FE000 **MATCH**
+[hud-find] SUCCESS hudWeapon=0x0000022A13E42C00 after 1 nodes
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x00000229D2B01800
+[apply] active 0x00000229E30FE000
+[pw] weapon 0x00000229E30FE000 def=500
+[armory-apply] in-game live weapon def=500 team=T paintKit=571 (equipped in game 99B4B549581CBBD5)
+[hud-find] START weapon=0x00000229E30FE000 pawn=0x00000229D2B01800
+[hud-find] armsHandle=0xE6CD410F
+[hud-find] arms=0x00000229E333D800
+[hud-find] armsNode=0x00000229E302DC80
+[hud-find] firstChild=0x00000229E3EF7C80
+[hud-find] child[0]=0x00000229E3EF7C80 owner=0x0000022A13E42C00 handle=0x5081DB resolved=0x00000229E30FE000 **MATCH**
+[hud-find] SUCCESS hudWeapon=0x0000022A13E42C00 after 1 nodes
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x00000229D2B01800
+[apply] active 0x00000229E30FE000
+[pw] weapon 0x00000229E30FE000 def=500
+[armory-apply] in-game live weapon def=500 team=T paintKit=571 (equipped in game 99B4B549581CBBD5)
+[hud-find] START weapon=0x00000229E30FE000 pawn=0x00000229D2B01800
+[hud-find] armsHandle=0xE6CD410F
+[hud-find] arms=0x00000229E333D800
+[hud-find] armsNode=0x00000229E302DC80
+[hud-find] firstChild=0x00000229E3EF7C80
+[hud-find] child[0]=0x00000229E3EF7C80 owner=0x0000022A13E42C00 handle=0x5081DB resolved=0x00000229E30FE000 **MATCH**
+[hud-find] SUCCESS hudWeapon=0x0000022A13E42C00 after 1 nodes
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x00000229D2B01800
+[apply] active 0x00000229E30FE000
+[pw] weapon 0x00000229E30FE000 def=500
+[armory-apply] in-game live weapon def=500 team=T paintKit=571 (equipped in game 99B4B549581CBBD5)
+[hud-find] START weapon=0x00000229E30FE000 pawn=0x00000229D2B01800
+[hud-find] armsHandle=0xE6CD410F
+[hud-find] arms=0x00000229E333D800
+[hud-find] armsNode=0x00000229E302DC80
+[hud-find] firstChild=0x00000229E3EF7C80
+[hud-find] child[0]=0x00000229E3EF7C80 owner=0x0000022A13E42C00 handle=0x5081DB resolved=0x00000229E30FE000 **MATCH**
+[hud-find] SUCCESS hudWeapon=0x0000022A13E42C00 after 1 nodes
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x00000229D2B01800
+[apply] active 0x00000229E36B0000
+[pw] weapon 0x00000229E36B0000 def=4
+[armory-apply] in-game live weapon def=4 team=T paintKit=1208 (equipped in game 9AD2A303DFC2661B)
+[hud-find] START weapon=0x00000229E36B0000 pawn=0x00000229D2B01800
+[hud-find] armsHandle=0xE6CD410F
+[hud-find] arms=0x00000229E333D800
+[hud-find] armsNode=0x00000229E302DC80
+[hud-find] firstChild=0x00000229E3EF7C80
+[hud-find] child[0]=0x00000229E3EF7C80 owner=0x0000022A13E42C00 handle=0x5081DB resolved=0x00000229E30FE000
+[hud-find] child[3]=0x00000229E376C880 owner=0x00000229E3749000 handle=0x1B81DC resolved=0x00000229E36B0000 **MATCH**
+[hud-find] SUCCESS hudWeapon=0x00000229E3749000 after 4 nodes
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x00000229D2B01800
+[apply] active 0x00000229E36B0000
+[pw] weapon 0x00000229E36B0000 def=4
+[armory-apply] in-game live weapon def=4 team=T paintKit=1208 (equipped in game 9AD2A303DFC2661B)
+[hud-find] START weapon=0x00000229E36B0000 pawn=0x00000229D2B01800
+[hud-find] armsHandle=0xE6CD410F
+[hud-find] arms=0x00000229E333D800
+[hud-find] armsNode=0x00000229E302DC80
+[hud-find] firstChild=0x00000229E3EF7C80
+[hud-find] child[0]=0x00000229E3EF7C80 owner=0x0000022A13E42C00 handle=0x5081DB resolved=0x00000229E30FE000
+[hud-find] child[3]=0x00000229E376C880 owner=0x00000229E3749000 handle=0x1B81DC resolved=0x00000229E36B0000 **MATCH**
+[hud-find] SUCCESS hudWeapon=0x00000229E3749000 after 4 nodes
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x00000229D2B01800
+[apply] active 0x00000229E36B0000
+[pw] weapon 0x00000229E36B0000 def=4
+[armory-apply] in-game live weapon def=4 team=T paintKit=1208 (equipped in game 9AD2A303DFC2661B)
+[hud-find] START weapon=0x00000229E36B0000 pawn=0x00000229D2B01800
+[hud-find] armsHandle=0xE6CD410F
+[hud-find] arms=0x00000229E333D800
+[hud-find] armsNode=0x00000229E302DC80
+[hud-find] firstChild=0x00000229E3EF7C80
+[hud-find] child[0]=0x00000229E3EF7C80 owner=0x0000022A13E42C00 handle=0x5081DB resolved=0x00000229E30FE000
+[hud-find] child[3]=0x00000229E376C880 owner=0x00000229E3749000 handle=0x1B81DC resolved=0x00000229E36B0000 **MATCH**
+[hud-find] SUCCESS hudWeapon=0x00000229E3749000 after 4 nodes
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x00000229D2B01800
+[apply] active 0x00000229E36B0000
+[pw] weapon 0x00000229E36B0000 def=4
+[armory-apply] in-game live weapon def=4 team=T paintKit=1208 (equipped in game 9AD2A303DFC2661B)
+[hud-find] START weapon=0x00000229E36B0000 pawn=0x00000229D2B01800
+[hud-find] armsHandle=0xE6CD410F
+[hud-find] arms=0x00000229E333D800
+[hud-find] armsNode=0x00000229E302DC80
+[hud-find] firstChild=0x00000229E3EF7C80
+[hud-find] child[0]=0x00000229E3EF7C80 owner=0x0000022A13E42C00 handle=0x5081DB resolved=0x00000229E30FE000
+[hud-find] child[3]=0x00000229E376C880 owner=0x00000229E3749000 handle=0x1B81DC resolved=0x00000229E36B0000 **MATCH**
+[hud-find] SUCCESS hudWeapon=0x00000229E3749000 after 4 nodes
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+
+=== SNAPSHOT ===
+[snap] fsnCount=215052 lastStage=0 stage5Count=15996
+[snap] stage histogram:
+[snap]   stage  0: 35411 frames
+[snap]   stage  1: 16074 frames
+[snap]   stage  2: 16074 frames
+[snap]   stage  3: 16070 frames
+[snap]   stage  4: 1 frames
+[snap]   stage  5: 15996 frames
+[snap]   stage  6: 15996 frames
+[snap]   stage  7: 15996 frames
+[snap]   stage  8: 15996 frames
+[snap]   stage 10: 15996 frames
+[snap]   stage 11: 19399 frames
+[snap]   stage 12: 32043 frames
+[snap] dwLocalPlayerController @ 0x00007FFEE59F2548 -> 0x00000228C2B71A00 
+[snap] dwLocalPlayerPawn       @ 0x00007FFEE5BE91E0 -> 0x000002295E2B0400 
+[snap] pawn: vtable=0x00007FFEE8E73740 inClient=0 health=553
+[snap] ctrl: vtable=0x00007FFEE50C1680 inClient=1 m_hPlayerPawn@0x92C = 0x01C681A1 (idx=417)
+[snap] entitySystem @ 0x00007FFEE5BCFBB8 = 0x0000022941478800 highestEntityIndex=212
+[snap] entity resolution: 1/16 of indices 1..16 valid
+[snap] ctrl->pawn handle resolve: 0x01C681A1 -> 0x00000229D2B01800
+[snap] ----------------------------------------
+[apply] tick pawn=0x00000229D2B01800
+[apply] active 0x00000229E36B0000
+[pw] weapon 0x00000229E36B0000 def=4
+[armory-apply] in-game live weapon def=4 team=T paintKit=1208 (equipped in game 9AD2A303DFC2661B)
+[hud-find] START weapon=0x00000229E36B0000 pawn=0x00000229D2B01800
+[hud-find] armsHandle=0xE6CD410F
+[hud-find] arms=0x00000229E333D800
+[hud-find] armsNode=0x00000229E302DC80
+[hud-find] firstChild=0x00000229E3EF7C80
+[hud-find] child[0]=0x00000229E3EF7C80 owner=0x0000022A13E42C00 handle=0x5081DB resolved=0x00000229E30FE000
+[hud-find] child[3]=0x00000229E376C880 owner=0x00000229E3749000 handle=0x1B81DC resolved=0x00000229E36B0000 **MATCH**
+[hud-find] SUCCESS hudWeapon=0x00000229E3749000 after 4 nodes
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x00000229D2B01800
+[apply] active 0x00000229E36B0000
+[pw] weapon 0x00000229E36B0000 def=4
+[armory-apply] in-game live weapon def=4 team=T paintKit=1208 (equipped in game 9AD2A303DFC2661B)
+[hud-find] START weapon=0x00000229E36B0000 pawn=0x00000229D2B01800
+[hud-find] armsHandle=0xE6CD410F
+[hud-find] arms=0x00000229E333D800
+[hud-find] armsNode=0x00000229E302DC80
+[hud-find] firstChild=0x00000229E3EF7C80
+[hud-find] child[0]=0x00000229E3EF7C80 owner=0x0000022A13E42C00 handle=0x5081DB resolved=0x00000229E30FE000
+[hud-find] child[3]=0x00000229E376C880 owner=0x00000229E3749000 handle=0x1B81DC resolved=0x00000229E36B0000 **MATCH**
+[hud-find] SUCCESS hudWeapon=0x00000229E3749000 after 4 nodes
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x00000229D2B01800
+[apply] active 0x00000229E36B0000
+[pw] weapon 0x00000229E36B0000 def=4
+[armory-apply] in-game live weapon def=4 team=T paintKit=1208 (equipped in game 9AD2A303DFC2661B)
+[hud-find] START weapon=0x00000229E36B0000 pawn=0x00000229D2B01800
+[hud-find] armsHandle=0xE6CD410F
+[hud-find] arms=0x00000229E333D800
+[hud-find] armsNode=0x00000229E302DC80
+[hud-find] firstChild=0x00000229E3EF7C80
+[hud-find] child[0]=0x00000229E3EF7C80 owner=0x0000022A13E42C00 handle=0x5081DB resolved=0x00000229E30FE000
+[hud-find] child[3]=0x00000229E376C880 owner=0x00000229E3749000 handle=0x1B81DC resolved=0x00000229E36B0000 **MATCH**
+[hud-find] SUCCESS hudWeapon=0x00000229E3749000 after 4 nodes
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x00000229D2B01800
+[apply] active 0x00000229E36B0000
+[pw] weapon 0x00000229E36B0000 def=4
+[armory-apply] in-game live weapon def=4 team=T paintKit=1208 (equipped in game 9AD2A303DFC2661B)
+[hud-find] START weapon=0x00000229E36B0000 pawn=0x00000229D2B01800
+[hud-find] armsHandle=0xE6CD410F
+[hud-find] arms=0x00000229E333D800
+[hud-find] armsNode=0x00000229E302DC80
+[hud-find] firstChild=0x00000229E3EF7C80
+[hud-find] child[0]=0x00000229E3EF7C80 owner=0x0000022A13E42C00 handle=0x5081DB resolved=0x00000229E30FE000
+[hud-find] child[3]=0x00000229E376C880 owner=0x00000229E3749000 handle=0x1B81DC resolved=0x00000229E36B0000 **MATCH**
+[hud-find] SUCCESS hudWeapon=0x00000229E3749000 after 4 nodes
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x00000229D2B01800
+[apply] active 0x00000229E2AB8000
+[pw] weapon 0x00000229E2AB8000 def=7
+[armory-apply] in-game live weapon def=7 team=T paintKit=1466 (equipped in game 914A30836F3526FC)
+[apply] enter (weapon=0x00000229E2AB8000 def=7 pk=1466)
+[apply] world view pre-write: size=0 data=0x0000000000000000
+[attr-diag] item=00000229E2AB92E0 size=0 data=0000000000000000 alloc=0
+[attr-entry] 0: def=6 value=1466.000 initial=1466.000
+[attr-entry] 1: def=7 value=66.000 initial=66.000
+[attr-entry] 2: def=8 value=0.180670 initial=0.180670
+[attr] attachments written (12 attributes): stickers=1 [0 kit=10383 wear=0.000 rot=0.0 off=0.026,0.005 schema=0] charm=kit:30 seed=0 off=23.891,0.367,2.287
+[apply] world post-create: size=17 data=00000228C3A96800 alloc=25
+[apply] world view 0x00000229E2AB92E0 painted (pk=1466)
+[hud-find] START weapon=0x00000229E2AB8000 pawn=0x00000229D2B01800
+[hud-find] armsHandle=0xE6CD410F
+[hud-find] arms=0x00000229E333D800
+[hud-find] armsNode=0x00000229E302DC80
+[hud-find] firstChild=0x00000229E376E080
+[hud-find] child[0]=0x00000229E376E080 owner=0x00000228C2BECC00 handle=0xE301DD resolved=0x00000229E2AB8000 **MATCH**
+[hud-find] SUCCESS hudWeapon=0x00000228C2BECC00 after 1 nodes
+[apply-cache] rebuilding weapon=00000229E2AB8000 hud=00000228C2BECC00 def=7 pk=1466
+[hud-name] weapon selection entry refreshed: 00000229E2AB8000
+[apply-diagnostic] weaponChanged=1 gloveUpdate=0 regenAvailable=1
+[skin-regenerate] calling pRegenerateSkins weaponChanged=1
+[skin-regenerate] returned
+[apply] tick pawn=0x00000229D2B01800
+[apply] active 0x00000229E2AB8000
+[pw] weapon 0x00000229E2AB8000 def=7
+[armory-apply] in-game live weapon def=7 team=T paintKit=1466 (equipped in game 914A30836F3526FC)
+[hud-find] START weapon=0x00000229E2AB8000 pawn=0x00000229D2B01800
+[hud-find] armsHandle=0xE6CD410F
+[hud-find] arms=0x00000229E333D800
+[hud-find] armsNode=0x00000229E302DC80
+[hud-find] firstChild=0x00000229E376E080
+[hud-find] child[0]=0x00000229E376E080 owner=0x00000228C2BECC00 handle=0xE301DD resolved=0x00000229E2AB8000 **MATCH**
+[hud-find] SUCCESS hudWeapon=0x00000228C2BECC00 after 1 nodes
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x00000229D2B01800
+[apply] active 0x00000229E2AB8000
+[pw] weapon 0x00000229E2AB8000 def=7
+[armory-apply] in-game live weapon def=7 team=T paintKit=1466 (equipped in game 914A30836F3526FC)
+[hud-find] START weapon=0x00000229E2AB8000 pawn=0x00000229D2B01800
+[hud-find] armsHandle=0xE6CD410F
+[hud-find] arms=0x00000229E333D800
+[hud-find] armsNode=0x00000229E302DC80
+[hud-find] firstChild=0x00000229E376E080
+[hud-find] child[0]=0x00000229E376E080 owner=0x00000228C2BECC00 handle=0xE301DD resolved=0x00000229E2AB8000 **MATCH**
+[hud-find] SUCCESS hudWeapon=0x00000228C2BECC00 after 1 nodes
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x00000229D2B01800
+[apply] active 0x00000229E2AB8000
+[pw] weapon 0x00000229E2AB8000 def=7
+[armory-apply] in-game live weapon def=7 team=T paintKit=1466 (equipped in game 914A30836F3526FC)
+[hud-find] START weapon=0x00000229E2AB8000 pawn=0x00000229D2B01800
+[hud-find] armsHandle=0xE6CD410F
+[hud-find] arms=0x00000229E333D800
+[hud-find] armsNode=0x00000229E302DC80
+[hud-find] firstChild=0x00000229E376E080
+[hud-find] child[0]=0x00000229E376E080 owner=0x00000228C2BECC00 handle=0xE301DD resolved=0x00000229E2AB8000 **MATCH**
+[hud-find] SUCCESS hudWeapon=0x00000228C2BECC00 after 1 nodes
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x00000229D2B01800
+[apply] active 0x00000229E2AB8000
+[pw] weapon 0x00000229E2AB8000 def=7
+[armory-apply] in-game live weapon def=7 team=T paintKit=1466 (equipped in game 914A30836F3526FC)
+[hud-find] START weapon=0x00000229E2AB8000 pawn=0x00000229D2B01800
+[hud-find] armsHandle=0xE6CD410F
+[hud-find] arms=0x00000229E333D800
+[hud-find] armsNode=0x00000229E302DC80
+[hud-find] firstChild=0x00000229E376E080
+[hud-find] child[0]=0x00000229E376E080 owner=0x00000228C2BECC00 handle=0xE301DD resolved=0x00000229E2AB8000 **MATCH**
+[hud-find] SUCCESS hudWeapon=0x00000228C2BECC00 after 1 nodes
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x00000229D2B01800
+[apply] active 0x00000229E2AB8000
+[pw] weapon 0x00000229E2AB8000 def=7
+[armory-apply] in-game live weapon def=7 team=T paintKit=1466 (equipped in game 914A30836F3526FC)
+[hud-find] START weapon=0x00000229E2AB8000 pawn=0x00000229D2B01800
+[hud-find] armsHandle=0xE6CD410F
+[hud-find] arms=0x00000229E333D800
+[hud-find] armsNode=0x00000229E302DC80
+[hud-find] firstChild=0x00000229E376E080
+[hud-find] child[0]=0x00000229E376E080 owner=0x00000228C2BECC00 handle=0xE301DD resolved=0x00000229E2AB8000 **MATCH**
+[hud-find] SUCCESS hudWeapon=0x00000228C2BECC00 after 1 nodes
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x00000229D2B01800
+[apply] active 0x00000229E2AB8000
+[pw] weapon 0x00000229E2AB8000 def=7
+[armory-apply] in-game live weapon def=7 team=T paintKit=1466 (equipped in game 914A30836F3526FC)
+[hud-find] START weapon=0x00000229E2AB8000 pawn=0x00000229D2B01800
+[hud-find] armsHandle=0xE6CD410F
+[hud-find] arms=0x00000229E333D800
+[hud-find] armsNode=0x00000229E302DC80
+[hud-find] firstChild=0x00000229E376E080
+[hud-find] child[0]=0x00000229E376E080 owner=0x00000228C2BECC00 handle=0xE301DD resolved=0x00000229E2AB8000 **MATCH**
+[hud-find] SUCCESS hudWeapon=0x00000228C2BECC00 after 1 nodes
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x00000229D2B01800
+[apply] active 0x00000229E2AB8000
+[pw] weapon 0x00000229E2AB8000 def=7
+[armory-apply] in-game live weapon def=7 team=T paintKit=1466 (equipped in game 914A30836F3526FC)
+[hud-find] START weapon=0x00000229E2AB8000 pawn=0x00000229D2B01800
+[hud-find] armsHandle=0xE6CD410F
+[hud-find] arms=0x00000229E333D800
+[hud-find] armsNode=0x00000229E302DC80
+[hud-find] firstChild=0x00000229E376E080
+[hud-find] child[0]=0x00000229E376E080 owner=0x00000228C2BECC00 handle=0xE301DD resolved=0x00000229E2AB8000 **MATCH**
+[hud-find] SUCCESS hudWeapon=0x00000228C2BECC00 after 1 nodes
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x00000229D2B01800
+[apply] active 0x00000229E2AB8000
+[pw] weapon 0x00000229E2AB8000 def=7
+[armory-apply] in-game live weapon def=7 team=T paintKit=1466 (equipped in game 914A30836F3526FC)
+[hud-find] START weapon=0x00000229E2AB8000 pawn=0x00000229D2B01800
+[hud-find] armsHandle=0xE6CD410F
+[hud-find] arms=0x00000229E333D800
+[hud-find] armsNode=0x00000229E302DC80
+[hud-find] firstChild=0x00000229E376E080
+[hud-find] child[0]=0x00000229E376E080 owner=0x00000228C2BECC00 handle=0xE301DD resolved=0x00000229E2AB8000 **MATCH**
+[hud-find] SUCCESS hudWeapon=0x00000228C2BECC00 after 1 nodes
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x00000229D2B01800
+[apply] active 0x00000229E2AB8000
+[pw] weapon 0x00000229E2AB8000 def=7
+[armory-apply] in-game live weapon def=7 team=T paintKit=1466 (equipped in game 914A30836F3526FC)
+[hud-find] START weapon=0x00000229E2AB8000 pawn=0x00000229D2B01800
+[hud-find] armsHandle=0xE6CD410F
+[hud-find] arms=0x00000229E333D800
+[hud-find] armsNode=0x00000229E302DC80
+[hud-find] firstChild=0x00000229E376E080
+[hud-find] child[0]=0x00000229E376E080 owner=0x00000228C2BECC00 handle=0xE301DD resolved=0x00000229E2AB8000 **MATCH**
+[hud-find] SUCCESS hudWeapon=0x00000228C2BECC00 after 1 nodes
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x00000229D2B01800
+[apply] active 0x00000229E2AB8000
+[pw] weapon 0x00000229E2AB8000 def=7
+[armory-apply] in-game live weapon def=7 team=T paintKit=1466 (equipped in game 914A30836F3526FC)
+[hud-find] START weapon=0x00000229E2AB8000 pawn=0x00000229D2B01800
+[hud-find] armsHandle=0xE6CD410F
+[hud-find] arms=0x00000229E333D800
+[hud-find] armsNode=0x00000229E302DC80
+[hud-find] firstChild=0x00000229E376E080
+[hud-find] child[0]=0x00000229E376E080 owner=0x00000228C2BECC00 handle=0xE301DD resolved=0x00000229E2AB8000 **MATCH**
+[hud-find] SUCCESS hudWeapon=0x00000228C2BECC00 after 1 nodes
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x00000229D2B01800
+[apply] active 0x00000229E2AB8000
+[pw] weapon 0x00000229E2AB8000 def=7
+[armory-apply] in-game live weapon def=7 team=T paintKit=1466 (equipped in game 914A30836F3526FC)
+[hud-find] START weapon=0x00000229E2AB8000 pawn=0x00000229D2B01800
+[hud-find] armsHandle=0xE6CD410F
+[hud-find] arms=0x00000229E333D800
+[hud-find] armsNode=0x00000229E302DC80
+[hud-find] firstChild=0x00000229E376E080
+[hud-find] child[0]=0x00000229E376E080 owner=0x00000228C2BECC00 handle=0xE301DD resolved=0x00000229E2AB8000 **MATCH**
+[hud-find] SUCCESS hudWeapon=0x00000228C2BECC00 after 1 nodes
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x00000229D2B01800
+[apply] active 0x00000229E2AB8000
+[pw] weapon 0x00000229E2AB8000 def=7
+[armory-apply] in-game live weapon def=7 team=T paintKit=1466 (equipped in game 914A30836F3526FC)
+[hud-find] START weapon=0x00000229E2AB8000 pawn=0x00000229D2B01800
+[hud-find] armsHandle=0xE6CD410F
+[hud-find] arms=0x00000229E333D800
+[hud-find] armsNode=0x00000229E302DC80
+[hud-find] firstChild=0x00000229E376E080
+[hud-find] child[0]=0x00000229E376E080 owner=0x00000228C2BECC00 handle=0xE301DD resolved=0x00000229E2AB8000 **MATCH**
+[hud-find] SUCCESS hudWeapon=0x00000228C2BECC00 after 1 nodes
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x00000229D2B01800
+[apply] active 0x00000229E2AB8000
+[pw] weapon 0x00000229E2AB8000 def=7
+[armory-apply] in-game live weapon def=7 team=T paintKit=1466 (equipped in game 914A30836F3526FC)
+[hud-find] START weapon=0x00000229E2AB8000 pawn=0x00000229D2B01800
+[hud-find] armsHandle=0xE6CD410F
+[hud-find] arms=0x00000229E333D800
+[hud-find] armsNode=0x00000229E302DC80
+[hud-find] firstChild=0x00000229E376E080
+[hud-find] child[0]=0x00000229E376E080 owner=0x00000228C2BECC00 handle=0xE301DD resolved=0x00000229E2AB8000 **MATCH**
+[hud-find] SUCCESS hudWeapon=0x00000228C2BECC00 after 1 nodes
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x00000229D2B01800
+[apply] active 0x00000229E2AB8000
+[pw] weapon 0x00000229E2AB8000 def=7
+[armory-apply] in-game live weapon def=7 team=T paintKit=1466 (equipped in game 914A30836F3526FC)
+[hud-find] START weapon=0x00000229E2AB8000 pawn=0x00000229D2B01800
+[hud-find] armsHandle=0xE6CD410F
+[hud-find] arms=0x00000229E333D800
+[hud-find] armsNode=0x00000229E302DC80
+[hud-find] firstChild=0x00000229E376E080
+[hud-find] child[0]=0x00000229E376E080 owner=0x00000228C2BECC00 handle=0xE301DD resolved=0x00000229E2AB8000 **MATCH**
+[hud-find] SUCCESS hudWeapon=0x00000228C2BECC00 after 1 nodes
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+N1SSAN_STATUS|1|2026-11-08T15:52:43Z|9320|armory-obsidian-3.0|READY|reason=runtime_worker_heartbeat
+[status-write] begin state=READY path=C:\Users\mirac\AppData\Local\n1ssan\status\cs2-9320.status
+[status-write] success state=READY error=0
+
+=== SNAPSHOT ===
+[snap] fsnCount=220391 lastStage=12 stage5Count=16314
+[snap] stage histogram:
+[snap]   stage  0: 36649 frames
+[snap]   stage  1: 16392 frames
+[snap]   stage  2: 16392 frames
+[snap]   stage  3: 16388 frames
+[snap]   stage  4: 1 frames
+[snap]   stage  5: 16314 frames
+[snap]   stage  6: 16314 frames
+[snap]   stage  7: 16314 frames
+[snap]   stage  8: 16314 frames
+[snap]   stage 10: 16314 frames
+[snap]   stage 11: 19719 frames
+[snap]   stage 12: 33280 frames
+[snap] dwLocalPlayerController @ 0x00007FFEE59F2548 -> 0x00000228C2B71A00 
+[snap] dwLocalPlayerPawn       @ 0x00007FFEE5BE91E0 -> 0x000002295E2B0400 
+[snap] pawn: vtable=0x00007FFEE8E73740 inClient=0 health=553
+[snap] ctrl: vtable=0x00007FFEE50C1680 inClient=1 m_hPlayerPawn@0x92C = 0x01C681A1 (idx=417)
+[snap] entitySystem @ 0x00007FFEE5BCFBB8 = 0x0000022941478800 highestEntityIndex=213
+[snap] entity resolution: 1/16 of indices 1..16 valid
+[snap] ctrl->pawn handle resolve: 0x01C681A1 -> 0x00000229D2B01800
+[snap] ----------------------------------------
+[apply] tick pawn=0x00000229D2B01800
+[apply] active 0x00000229E2AB8000
+[pw] weapon 0x00000229E2AB8000 def=7
+[armory-apply] in-game live weapon def=7 team=T paintKit=1466 (equipped in game 914A30836F3526FC)
+[hud-find] START weapon=0x00000229E2AB8000 pawn=0x00000229D2B01800
+[hud-find] armsHandle=0xE6CD410F
+[hud-find] arms=0x00000229E333D800
+[hud-find] armsNode=0x00000229E302DC80
+[hud-find] firstChild=0x00000229E376E080
+[hud-find] child[0]=0x00000229E376E080 owner=0x00000228C2BECC00 handle=0xE301DD resolved=0x00000229E2AB8000 **MATCH**
+[hud-find] SUCCESS hudWeapon=0x00000228C2BECC00 after 1 nodes
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x00000229D2B01800
+[apply] active 0x00000229E2AB8000
+[pw] weapon 0x00000229E2AB8000 def=7
+[armory-apply] in-game live weapon def=7 team=T paintKit=1466 (equipped in game 914A30836F3526FC)
+[hud-find] START weapon=0x00000229E2AB8000 pawn=0x00000229D2B01800
+[hud-find] armsHandle=0xE6CD410F
+[hud-find] arms=0x00000229E333D800
+[hud-find] armsNode=0x00000229E302DC80
+[hud-find] firstChild=0x00000229E376E080
+[hud-find] child[0]=0x00000229E376E080 owner=0x00000228C2BECC00 handle=0xE301DD resolved=0x00000229E2AB8000 **MATCH**
+[hud-find] SUCCESS hudWeapon=0x00000228C2BECC00 after 1 nodes
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x00000229D2B01800
+[apply] active 0x00000229E2AB8000
+[pw] weapon 0x00000229E2AB8000 def=7
+[armory-apply] in-game live weapon def=7 team=T paintKit=1466 (equipped in game 914A30836F3526FC)
+[hud-find] START weapon=0x00000229E2AB8000 pawn=0x00000229D2B01800
+[hud-find] armsHandle=0xE6CD410F
+[hud-find] arms=0x00000229E333D800
+[hud-find] armsNode=0x00000229E302DC80
+[hud-find] firstChild=0x00000229E376E080
+[hud-find] child[0]=0x00000229E376E080 owner=0x00000228C2BECC00 handle=0xE301DD resolved=0x00000229E2AB8000 **MATCH**
+[hud-find] SUCCESS hudWeapon=0x00000228C2BECC00 after 1 nodes
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x00000229D2B01800
+[apply] active 0x00000229E2AB8000
+[pw] weapon 0x00000229E2AB8000 def=7
+[armory-apply] in-game live weapon def=7 team=T paintKit=1466 (equipped in game 914A30836F3526FC)
+[hud-find] START weapon=0x00000229E2AB8000 pawn=0x00000229D2B01800
+[hud-find] armsHandle=0xE6CD410F
+[hud-find] arms=0x00000229E333D800
+[hud-find] armsNode=0x00000229E302DC80
+[hud-find] firstChild=0x00000229E376E080
+[hud-find] child[0]=0x00000229E376E080 owner=0x00000228C2BECC00 handle=0xE301DD resolved=0x00000229E2AB8000 **MATCH**
+[hud-find] SUCCESS hudWeapon=0x00000228C2BECC00 after 1 nodes
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x00000229D2B01800
+[apply] active 0x00000229E2AB8000
+[pw] weapon 0x00000229E2AB8000 def=7
+[armory-apply] in-game live weapon def=7 team=T paintKit=1466 (equipped in game 914A30836F3526FC)
+[hud-find] START weapon=0x00000229E2AB8000 pawn=0x00000229D2B01800
+[hud-find] armsHandle=0xE6CD410F
+[hud-find] arms=0x00000229E333D800
+[hud-find] armsNode=0x00000229E302DC80
+[hud-find] firstChild=0x00000229E376E080
+[hud-find] child[0]=0x00000229E376E080 owner=0x00000228C2BECC00 handle=0xE301DD resolved=0x00000229E2AB8000 **MATCH**
+[hud-find] SUCCESS hudWeapon=0x00000228C2BECC00 after 1 nodes
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x00000229D2B01800
+[apply] active 0x00000229E2AB8000
+[pw] weapon 0x00000229E2AB8000 def=7
+[armory-apply] in-game live weapon def=7 team=T paintKit=1466 (equipped in game 914A30836F3526FC)
+[hud-find] START weapon=0x00000229E2AB8000 pawn=0x00000229D2B01800
+[hud-find] armsHandle=0xE6CD410F
+[hud-find] arms=0x00000229E333D800
+[hud-find] armsNode=0x00000229E302DC80
+[hud-find] firstChild=0x00000229E376E080
+[hud-find] child[0]=0x00000229E376E080 owner=0x00000228C2BECC00 handle=0xE301DD resolved=0x00000229E2AB8000 **MATCH**
+[hud-find] SUCCESS hudWeapon=0x00000228C2BECC00 after 1 nodes
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x00000229D2B01800
+[apply] active 0x00000229E2AB8000
+[pw] weapon 0x00000229E2AB8000 def=7
+[armory-apply] in-game live weapon def=7 team=T paintKit=1466 (equipped in game 914A30836F3526FC)
+[hud-find] START weapon=0x00000229E2AB8000 pawn=0x00000229D2B01800
+[hud-find] armsHandle=0xE6CD410F
+[hud-find] arms=0x00000229E333D800
+[hud-find] armsNode=0x00000229E302DC80
+[hud-find] firstChild=0x00000229E376E080
+[hud-find] child[0]=0x00000229E376E080 owner=0x00000228C2BECC00 handle=0xE301DD resolved=0x00000229E2AB8000 **MATCH**
+[hud-find] SUCCESS hudWeapon=0x00000228C2BECC00 after 1 nodes
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x00000229D2B01800
+[apply] active 0x00000229E30FE000
+[pw] weapon 0x00000229E30FE000 def=500
+[armory-apply] in-game live weapon def=500 team=T paintKit=571 (equipped in game 99B4B549581CBBD5)
+[hud-find] START weapon=0x00000229E30FE000 pawn=0x00000229D2B01800
+[hud-find] armsHandle=0xE6CD410F
+[hud-find] arms=0x00000229E333D800
+[hud-find] armsNode=0x00000229E302DC80
+[hud-find] firstChild=0x00000229E376E080
+[hud-find] child[0]=0x00000229E376E080 owner=0x00000228C2BECC00 handle=0xE301DD resolved=0x00000229E2AB8000
+[hud-find] child[1]=0x00000229E3EF7C80 owner=0x0000022A13E42C00 handle=0x5081DB resolved=0x00000229E30FE000 **MATCH**
+[hud-find] SUCCESS hudWeapon=0x0000022A13E42C00 after 2 nodes
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x00000229D2B01800
+[apply] active 0x00000229E30FE000
+[pw] weapon 0x00000229E30FE000 def=500
+[armory-apply] in-game live weapon def=500 team=T paintKit=571 (equipped in game 99B4B549581CBBD5)
+[hud-find] START weapon=0x00000229E30FE000 pawn=0x00000229D2B01800
+[hud-find] armsHandle=0xE6CD410F
+[hud-find] arms=0x00000229E333D800
+[hud-find] armsNode=0x00000229E302DC80
+[hud-find] firstChild=0x00000229E376E080
+[hud-find] child[0]=0x00000229E376E080 owner=0x00000228C2BECC00 handle=0xE301DD resolved=0x00000229E2AB8000
+[hud-find] child[1]=0x00000229E3EF7C80 owner=0x0000022A13E42C00 handle=0x5081DB resolved=0x00000229E30FE000 **MATCH**
+[hud-find] SUCCESS hudWeapon=0x0000022A13E42C00 after 2 nodes
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x00000229D2B01800
+[apply] active 0x00000229E30FE000
+[pw] weapon 0x00000229E30FE000 def=500
+[armory-apply] in-game live weapon def=500 team=T paintKit=571 (equipped in game 99B4B549581CBBD5)
+[hud-find] START weapon=0x00000229E30FE000 pawn=0x00000229D2B01800
+[hud-find] armsHandle=0xE6CD410F
+[hud-find] arms=0x00000229E333D800
+[hud-find] armsNode=0x00000229E302DC80
+[hud-find] firstChild=0x00000229E376E080
+[hud-find] child[0]=0x00000229E376E080 owner=0x00000228C2BECC00 handle=0xE301DD resolved=0x00000229E2AB8000
+[hud-find] child[1]=0x00000229E3EF7C80 owner=0x0000022A13E42C00 handle=0x5081DB resolved=0x00000229E30FE000 **MATCH**
+[hud-find] SUCCESS hudWeapon=0x0000022A13E42C00 after 2 nodes
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x00000229D2B01800
+[apply] active 0x00000229E30FE000
+[pw] weapon 0x00000229E30FE000 def=500
+[armory-apply] in-game live weapon def=500 team=T paintKit=571 (equipped in game 99B4B549581CBBD5)
+[hud-find] START weapon=0x00000229E30FE000 pawn=0x00000229D2B01800
+[hud-find] armsHandle=0xE6CD410F
+[hud-find] arms=0x00000229E333D800
+[hud-find] armsNode=0x00000229E302DC80
+[hud-find] firstChild=0x00000229E376E080
+[hud-find] child[0]=0x00000229E376E080 owner=0x00000228C2BECC00 handle=0xE301DD resolved=0x00000229E2AB8000
+[hud-find] child[1]=0x00000229E3EF7C80 owner=0x0000022A13E42C00 handle=0x5081DB resolved=0x00000229E30FE000 **MATCH**
+[hud-find] SUCCESS hudWeapon=0x0000022A13E42C00 after 2 nodes
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x00000229D2B01800
+[apply] active 0x00000229C8086000
+[pw] weapon 0x00000229C8086000 def=9
+[armory-apply] in-game live weapon def=9 team=T paintKit=756 (equipped in game 9536605177002A96)
+[apply] enter (weapon=0x00000229C8086000 def=9 pk=756)
+[apply] world view pre-write: size=0 data=0x0000000000000000
+[attr-diag] item=00000229C80872E0 size=0 data=0000000000000000 alloc=0
+[attr-entry] 0: def=6 value=756.000 initial=756.000
+[attr-entry] 1: def=7 value=113.000 initial=113.000
+[attr-entry] 2: def=8 value=0.070590 initial=0.070590
+[attr] attachments written (12 attributes): stickers=1 [0 kit=70 wear=0.000 rot=0.0 off=-0.252,0.006 schema=4] charm=kit:9 seed=0 off=8.577,1.372,11.233
+[apply] world post-create: size=15 data=00000229A931E500 alloc=23
+[apply] world view 0x00000229C80872E0 painted (pk=756)
+[hud-find] START weapon=0x00000229C8086000 pawn=0x00000229D2B01800
+[hud-find] armsHandle=0xE6CD410F
+[hud-find] arms=0x00000229E333D800
+[hud-find] armsNode=0x00000229E302DC80
+[hud-find] firstChild=0x0000022A13AD7C80
+[hud-find] child[0]=0x0000022A13AD7C80 owner=0x00000229E2FEAC00 handle=0x1B181DE resolved=0x00000229C8086000 **MATCH**
+[hud-find] SUCCESS hudWeapon=0x00000229E2FEAC00 after 1 nodes
+[apply-cache] rebuilding weapon=00000229C8086000 hud=00000229E2FEAC00 def=9 pk=756
+[hud-name] weapon selection entry refreshed: 00000229C8086000
+[apply-diagnostic] weaponChanged=1 gloveUpdate=0 regenAvailable=1
+[skin-regenerate] calling pRegenerateSkins weaponChanged=1
+[skin-regenerate] returned
+[apply] tick pawn=0x00000229D2B01800
+[apply] active 0x00000229C8086000
+[pw] weapon 0x00000229C8086000 def=9
+[armory-apply] in-game live weapon def=9 team=T paintKit=756 (equipped in game 9536605177002A96)
+[hud-find] START weapon=0x00000229C8086000 pawn=0x00000229D2B01800
+[hud-find] armsHandle=0xE6CD410F
+[hud-find] arms=0x00000229E333D800
+[hud-find] armsNode=0x00000229E302DC80
+[hud-find] firstChild=0x0000022A13AD7C80
+[hud-find] child[0]=0x0000022A13AD7C80 owner=0x00000229E2FEAC00 handle=0x1B181DE resolved=0x00000229C8086000 **MATCH**
+[hud-find] SUCCESS hudWeapon=0x00000229E2FEAC00 after 1 nodes
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x00000229D2B01800
+[apply] active 0x00000229C8086000
+[pw] weapon 0x00000229C8086000 def=9
+[armory-apply] in-game live weapon def=9 team=T paintKit=756 (equipped in game 9536605177002A96)
+[hud-find] START weapon=0x00000229C8086000 pawn=0x00000229D2B01800
+[hud-find] armsHandle=0xE6CD410F
+[hud-find] arms=0x00000229E333D800
+[hud-find] armsNode=0x00000229E302DC80
+[hud-find] firstChild=0x0000022A13AD7C80
+[hud-find] child[0]=0x0000022A13AD7C80 owner=0x00000229E2FEAC00 handle=0x1B181DE resolved=0x00000229C8086000 **MATCH**
+[hud-find] SUCCESS hudWeapon=0x00000229E2FEAC00 after 1 nodes
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x00000229D2B01800
+[apply] active 0x00000229C8086000
+[pw] weapon 0x00000229C8086000 def=9
+[armory-apply] in-game live weapon def=9 team=T paintKit=756 (equipped in game 9536605177002A96)
+[hud-find] START weapon=0x00000229C8086000 pawn=0x00000229D2B01800
+[hud-find] armsHandle=0xE6CD410F
+[hud-find] arms=0x00000229E333D800
+[hud-find] armsNode=0x00000229E302DC80
+[hud-find] firstChild=0x0000022A13AD7C80
+[hud-find] child[0]=0x0000022A13AD7C80 owner=0x00000229E2FEAC00 handle=0x1B181DE resolved=0x00000229C8086000 **MATCH**
+[hud-find] SUCCESS hudWeapon=0x00000229E2FEAC00 after 1 nodes
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x00000229D2B01800
+[apply] active 0x00000229C8086000
+[pw] weapon 0x00000229C8086000 def=9
+[armory-apply] in-game live weapon def=9 team=T paintKit=756 (equipped in game 9536605177002A96)
+[hud-find] START weapon=0x00000229C8086000 pawn=0x00000229D2B01800
+[hud-find] armsHandle=0xE6CD410F
+[hud-find] arms=0x00000229E333D800
+[hud-find] armsNode=0x00000229E302DC80
+[hud-find] firstChild=0x0000022A13AD7C80
+[hud-find] child[0]=0x0000022A13AD7C80 owner=0x00000229E2FEAC00 handle=0x1B181DE resolved=0x00000229C8086000 **MATCH**
+[hud-find] SUCCESS hudWeapon=0x00000229E2FEAC00 after 1 nodes
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x00000229D2B01800
+[apply] active 0x00000229C8086000
+[pw] weapon 0x00000229C8086000 def=9
+[armory-apply] in-game live weapon def=9 team=T paintKit=756 (equipped in game 9536605177002A96)
+[hud-find] START weapon=0x00000229C8086000 pawn=0x00000229D2B01800
+[hud-find] armsHandle=0xE6CD410F
+[hud-find] arms=0x00000229E333D800
+[hud-find] armsNode=0x00000229E302DC80
+[hud-find] firstChild=0x0000022A13AD7C80
+[hud-find] child[0]=0x0000022A13AD7C80 owner=0x00000229E2FEAC00 handle=0x1B181DE resolved=0x00000229C8086000 **MATCH**
+[hud-find] SUCCESS hudWeapon=0x00000229E2FEAC00 after 1 nodes
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x00000229D2B01800
+[apply] active 0x00000229C8086000
+[pw] weapon 0x00000229C8086000 def=9
+[armory-apply] in-game live weapon def=9 team=T paintKit=756 (equipped in game 9536605177002A96)
+[hud-find] START weapon=0x00000229C8086000 pawn=0x00000229D2B01800
+[hud-find] armsHandle=0xE6CD410F
+[hud-find] arms=0x00000229E333D800
+[hud-find] armsNode=0x00000229E302DC80
+[hud-find] firstChild=0x0000022A13AD7C80
+[hud-find] child[0]=0x0000022A13AD7C80 owner=0x00000229E2FEAC00 handle=0x1B181DE resolved=0x00000229C8086000 **MATCH**
+[hud-find] SUCCESS hudWeapon=0x00000229E2FEAC00 after 1 nodes
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x00000229D2B01800
+[apply] active 0x00000229C8086000
+[pw] weapon 0x00000229C8086000 def=9
+[armory-apply] in-game live weapon def=9 team=T paintKit=756 (equipped in game 9536605177002A96)
+[hud-find] START weapon=0x00000229C8086000 pawn=0x00000229D2B01800
+[hud-find] armsHandle=0xE6CD410F
+[hud-find] arms=0x00000229E333D800
+[hud-find] armsNode=0x00000229E302DC80
+[hud-find] firstChild=0x0000022A13AD7C80
+[hud-find] child[0]=0x0000022A13AD7C80 owner=0x00000229E2FEAC00 handle=0x1B181DE resolved=0x00000229C8086000 **MATCH**
+[hud-find] SUCCESS hudWeapon=0x00000229E2FEAC00 after 1 nodes
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x00000229D2B01800
+[apply] active 0x00000229E30FE000
+[pw] weapon 0x00000229E30FE000 def=500
+[armory-apply] in-game live weapon def=500 team=T paintKit=571 (equipped in game 99B4B549581CBBD5)
+[hud-find] START weapon=0x00000229E30FE000 pawn=0x00000229D2B01800
+[hud-find] armsHandle=0xE6CD410F
+[hud-find] arms=0x00000229E333D800
+[hud-find] armsNode=0x00000229E302DC80
+[hud-find] firstChild=0x0000022A13AD7C80
+[hud-find] child[0]=0x0000022A13AD7C80 owner=0x00000229E2FEAC00 handle=0x1B181DE resolved=0x00000229C8086000
+[hud-find] child[1]=0x00000229E3EF7C80 owner=0x0000022A13E42C00 handle=0x5081DB resolved=0x00000229E30FE000 **MATCH**
+[hud-find] SUCCESS hudWeapon=0x0000022A13E42C00 after 2 nodes
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+
+=== SNAPSHOT ===
+[snap] fsnCount=225514 lastStage=7 stage5Count=16632
+[snap] stage histogram:
+[snap]   stage  0: 37781 frames
+[snap]   stage  1: 16710 frames
+[snap]   stage  2: 16710 frames
+[snap]   stage  3: 16705 frames
+[snap]   stage  4: 1 frames
+[snap]   stage  5: 16632 frames
+[snap]   stage  6: 16632 frames
+[snap]   stage  7: 16632 frames
+[snap]   stage  8: 16631 frames
+[snap]   stage 10: 16632 frames
+[snap]   stage 11: 20039 frames
+[snap]   stage 12: 34409 frames
+[snap] dwLocalPlayerController @ 0x00007FFEE59F2548 -> 0x00000228C2B71A00 
+[snap] dwLocalPlayerPawn       @ 0x00007FFEE5BE91E0 -> 0x000002295E2B0400 
+[snap] pawn: vtable=0x00007FFEE8E73740 inClient=0 health=553
+[snap] ctrl: vtable=0x00007FFEE50C1680 inClient=1 m_hPlayerPawn@0x92C = 0x01C681A1 (idx=417)
+[snap] entitySystem @ 0x00007FFEE5BCFBB8 = 0x0000022941478800 highestEntityIndex=214
+[snap] entity resolution: 1/16 of indices 1..16 valid
+[snap] ctrl->pawn handle resolve: 0x01C681A1 -> 0x00000229D2B01800
+[snap] ----------------------------------------
+[apply] tick pawn=0x00000229D2B01800
+[apply] active 0x00000229C8086000
+[pw] weapon 0x00000229C8086000 def=9
+[armory-apply] in-game live weapon def=9 team=T paintKit=756 (equipped in game 9536605177002A96)
+[hud-find] START weapon=0x00000229C8086000 pawn=0x00000229D2B01800
+[hud-find] armsHandle=0xE6CD410F
+[hud-find] arms=0x00000229E333D800
+[hud-find] armsNode=0x00000229E302DC80
+[hud-find] firstChild=0x0000022A13AD7C80
+[hud-find] child[0]=0x0000022A13AD7C80 owner=0x00000229E2FEAC00 handle=0x1B181DE resolved=0x00000229C8086000 **MATCH**
+[hud-find] SUCCESS hudWeapon=0x00000229E2FEAC00 after 1 nodes
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x00000229D2B01800
+[apply] active 0x00000229C8086000
+[pw] weapon 0x00000229C8086000 def=9
+[armory-apply] in-game live weapon def=9 team=T paintKit=756 (equipped in game 9536605177002A96)
+[hud-find] START weapon=0x00000229C8086000 pawn=0x00000229D2B01800
+[hud-find] armsHandle=0xE6CD410F
+[hud-find] arms=0x00000229E333D800
+[hud-find] armsNode=0x00000229E302DC80
+[hud-find] firstChild=0x0000022A13AD7C80
+[hud-find] child[0]=0x0000022A13AD7C80 owner=0x00000229E2FEAC00 handle=0x1B181DE resolved=0x00000229C8086000 **MATCH**
+[hud-find] SUCCESS hudWeapon=0x00000229E2FEAC00 after 1 nodes
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x00000229D2B01800
+[apply] active 0x00000229C8086000
+[pw] weapon 0x00000229C8086000 def=9
+[armory-apply] in-game live weapon def=9 team=T paintKit=756 (equipped in game 9536605177002A96)
+[hud-find] START weapon=0x00000229C8086000 pawn=0x00000229D2B01800
+[hud-find] armsHandle=0xE6CD410F
+[hud-find] arms=0x00000229E333D800
+[hud-find] armsNode=0x00000229E302DC80
+[hud-find] firstChild=0x0000022A13AD7C80
+[hud-find] child[0]=0x0000022A13AD7C80 owner=0x00000229E2FEAC00 handle=0x1B181DE resolved=0x00000229C8086000 **MATCH**
+[hud-find] SUCCESS hudWeapon=0x00000229E2FEAC00 after 1 nodes
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x00000229D2B01800
+[apply] active 0x00000229C8086000
+[pw] weapon 0x00000229C8086000 def=9
+[armory-apply] in-game live weapon def=9 team=T paintKit=756 (equipped in game 9536605177002A96)
+[hud-find] START weapon=0x00000229C8086000 pawn=0x00000229D2B01800
+[hud-find] armsHandle=0xE6CD410F
+[hud-find] arms=0x00000229E333D800
+[hud-find] armsNode=0x00000229E302DC80
+[hud-find] firstChild=0x0000022A13AD7C80
+[hud-find] child[0]=0x0000022A13AD7C80 owner=0x00000229E2FEAC00 handle=0x1B181DE resolved=0x00000229C8086000 **MATCH**
+[hud-find] SUCCESS hudWeapon=0x00000229E2FEAC00 after 1 nodes
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x00000229D2B01800
+[apply] active 0x00000229C8086000
+[pw] weapon 0x00000229C8086000 def=9
+[armory-apply] in-game live weapon def=9 team=T paintKit=756 (equipped in game 9536605177002A96)
+[hud-find] START weapon=0x00000229C8086000 pawn=0x00000229D2B01800
+[hud-find] armsHandle=0xE6CD410F
+[hud-find] arms=0x00000229E333D800
+[hud-find] armsNode=0x00000229E302DC80
+[hud-find] firstChild=0x0000022A13AD7C80
+[hud-find] child[0]=0x0000022A13AD7C80 owner=0x00000229E2FEAC00 handle=0x1B181DE resolved=0x00000229C8086000 **MATCH**
+[hud-find] SUCCESS hudWeapon=0x00000229E2FEAC00 after 1 nodes
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x00000229D2B01800
+[apply] active 0x00000229C8086000
+[pw] weapon 0x00000229C8086000 def=9
+[armory-apply] in-game live weapon def=9 team=T paintKit=756 (equipped in game 9536605177002A96)
+[hud-find] START weapon=0x00000229C8086000 pawn=0x00000229D2B01800
+[hud-find] armsHandle=0xE6CD410F
+[hud-find] arms=0x00000229E333D800
+[hud-find] armsNode=0x00000229E302DC80
+[hud-find] firstChild=0x0000022A13AD7C80
+[hud-find] child[0]=0x0000022A13AD7C80 owner=0x00000229E2FEAC00 handle=0x1B181DE resolved=0x00000229C8086000 **MATCH**
+[hud-find] SUCCESS hudWeapon=0x00000229E2FEAC00 after 1 nodes
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x00000229D2B01800
+[apply] active 0x00000229C8086000
+[pw] weapon 0x00000229C8086000 def=9
+[armory-apply] in-game live weapon def=9 team=T paintKit=756 (equipped in game 9536605177002A96)
+[hud-find] START weapon=0x00000229C8086000 pawn=0x00000229D2B01800
+[hud-find] armsHandle=0xE6CD410F
+[hud-find] arms=0x00000229E333D800
+[hud-find] armsNode=0x00000229E302DC80
+[hud-find] firstChild=0x0000022A13AD7C80
+[hud-find] child[0]=0x0000022A13AD7C80 owner=0x00000229E2FEAC00 handle=0x1B181DE resolved=0x00000229C8086000 **MATCH**
+[hud-find] SUCCESS hudWeapon=0x00000229E2FEAC00 after 1 nodes
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x00000229D2B01800
+[apply] active 0x00000229C8086000
+[pw] weapon 0x00000229C8086000 def=9
+[armory-apply] in-game live weapon def=9 team=T paintKit=756 (equipped in game 9536605177002A96)
+[hud-find] START weapon=0x00000229C8086000 pawn=0x00000229D2B01800
+[hud-find] armsHandle=0xE6CD410F
+[hud-find] arms=0x00000229E333D800
+[hud-find] armsNode=0x00000229E302DC80
+[hud-find] firstChild=0x0000022A13AD7C80
+[hud-find] child[0]=0x0000022A13AD7C80 owner=0x00000229E2FEAC00 handle=0x1B181DE resolved=0x00000229C8086000 **MATCH**
+[hud-find] SUCCESS hudWeapon=0x00000229E2FEAC00 after 1 nodes
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x00000229D2B01800
+[apply] active 0x00000229C8086000
+[pw] weapon 0x00000229C8086000 def=9
+[armory-apply] in-game live weapon def=9 team=T paintKit=756 (equipped in game 9536605177002A96)
+[hud-find] START weapon=0x00000229C8086000 pawn=0x00000229D2B01800
+[hud-find] armsHandle=0xE6CD410F
+[hud-find] arms=0x00000229E333D800
+[hud-find] armsNode=0x00000229E302DC80
+[hud-find] firstChild=0x0000022A13AD7C80
+[hud-find] child[0]=0x0000022A13AD7C80 owner=0x00000229E2FEAC00 handle=0x1B181DE resolved=0x00000229C8086000 **MATCH**
+[hud-find] SUCCESS hudWeapon=0x00000229E2FEAC00 after 1 nodes
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x00000229D2B01800
+[apply] active 0x00000229C8086000
+[pw] weapon 0x00000229C8086000 def=9
+[armory-apply] in-game live weapon def=9 team=T paintKit=756 (equipped in game 9536605177002A96)
+[hud-find] START weapon=0x00000229C8086000 pawn=0x00000229D2B01800
+[hud-find] armsHandle=0xE6CD410F
+[hud-find] arms=0x00000229E333D800
+[hud-find] armsNode=0x00000229E302DC80
+[hud-find] firstChild=0x0000022A13AD7C80
+[hud-find] child[0]=0x0000022A13AD7C80 owner=0x00000229E2FEAC00 handle=0x1B181DE resolved=0x00000229C8086000 **MATCH**
+[hud-find] SUCCESS hudWeapon=0x00000229E2FEAC00 after 1 nodes
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x00000229D2B01800
+[apply] active 0x00000229C8086000
+[pw] weapon 0x00000229C8086000 def=9
+[armory-apply] in-game live weapon def=9 team=T paintKit=756 (equipped in game 9536605177002A96)
+[hud-find] START weapon=0x00000229C8086000 pawn=0x00000229D2B01800
+[hud-find] armsHandle=0xE6CD410F
+[hud-find] arms=0x00000229E333D800
+[hud-find] armsNode=0x00000229E302DC80
+[hud-find] firstChild=0x0000022A13AD7C80
+[hud-find] child[0]=0x0000022A13AD7C80 owner=0x00000229E2FEAC00 handle=0x1B181DE resolved=0x00000229C8086000 **MATCH**
+[hud-find] SUCCESS hudWeapon=0x00000229E2FEAC00 after 1 nodes
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x00000229D2B01800
+[apply] active 0x00000229C8086000
+[pw] weapon 0x00000229C8086000 def=9
+[armory-apply] in-game live weapon def=9 team=T paintKit=756 (equipped in game 9536605177002A96)
+[hud-find] START weapon=0x00000229C8086000 pawn=0x00000229D2B01800
+[hud-find] armsHandle=0xE6CD410F
+[hud-find] arms=0x00000229E333D800
+[hud-find] armsNode=0x00000229E302DC80
+[hud-find] firstChild=0x0000022A13AD7C80
+[hud-find] child[0]=0x0000022A13AD7C80 owner=0x00000229E2FEAC00 handle=0x1B181DE resolved=0x00000229C8086000 **MATCH**
+[hud-find] SUCCESS hudWeapon=0x00000229E2FEAC00 after 1 nodes
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x00000229D2B01800
+[apply] active 0x00000229C8086000
+[pw] weapon 0x00000229C8086000 def=9
+[armory-apply] in-game live weapon def=9 team=T paintKit=756 (equipped in game 9536605177002A96)
+[hud-find] START weapon=0x00000229C8086000 pawn=0x00000229D2B01800
+[hud-find] armsHandle=0xE6CD410F
+[hud-find] arms=0x00000229E333D800
+[hud-find] armsNode=0x00000229E302DC80
+[hud-find] firstChild=0x0000022A13AD7C80
+[hud-find] child[0]=0x0000022A13AD7C80 owner=0x00000229E2FEAC00 handle=0x1B181DE resolved=0x00000229C8086000 **MATCH**
+[hud-find] SUCCESS hudWeapon=0x00000229E2FEAC00 after 1 nodes
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x00000229D2B01800
+[apply] active 0x00000229C8086000
+[pw] weapon 0x00000229C8086000 def=9
+[armory-apply] in-game live weapon def=9 team=T paintKit=756 (equipped in game 9536605177002A96)
+[hud-find] START weapon=0x00000229C8086000 pawn=0x00000229D2B01800
+[hud-find] armsHandle=0xE6CD410F
+[hud-find] arms=0x00000229E333D800
+[hud-find] armsNode=0x00000229E302DC80
+[hud-find] firstChild=0x0000022A13AD7C80
+[hud-find] child[0]=0x0000022A13AD7C80 owner=0x00000229E2FEAC00 handle=0x1B181DE resolved=0x00000229C8086000 **MATCH**
+[hud-find] SUCCESS hudWeapon=0x00000229E2FEAC00 after 1 nodes
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x00000229D2B01800
+[apply] active 0x00000229C8086000
+[pw] weapon 0x00000229C8086000 def=9
+[armory-apply] in-game live weapon def=9 team=T paintKit=756 (equipped in game 9536605177002A96)
+[hud-find] START weapon=0x00000229C8086000 pawn=0x00000229D2B01800
+[hud-find] armsHandle=0xE6CD410F
+[hud-find] arms=0x00000229E333D800
+[hud-find] armsNode=0x00000229E302DC80
+[hud-find] firstChild=0x0000022A13AD7C80
+[hud-find] child[0]=0x0000022A13AD7C80 owner=0x00000229E2FEAC00 handle=0x1B181DE resolved=0x00000229C8086000 **MATCH**
+[hud-find] SUCCESS hudWeapon=0x00000229E2FEAC00 after 1 nodes
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x00000229D2B01800
+[apply] active 0x00000229C8086000
+[pw] weapon 0x00000229C8086000 def=9
+[armory-apply] in-game live weapon def=9 team=T paintKit=756 (equipped in game 9536605177002A96)
+[hud-find] START weapon=0x00000229C8086000 pawn=0x00000229D2B01800
+[hud-find] armsHandle=0xE6CD410F
+[hud-find] arms=0x00000229E333D800
+[hud-find] armsNode=0x00000229E302DC80
+[hud-find] firstChild=0x0000022A13AD7C80
+[hud-find] child[0]=0x0000022A13AD7C80 owner=0x00000229E2FEAC00 handle=0x1B181DE resolved=0x00000229C8086000 **MATCH**
+[hud-find] SUCCESS hudWeapon=0x00000229E2FEAC00 after 1 nodes
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x00000229D2B01800
+[apply] active 0x00000229C8086000
+[pw] weapon 0x00000229C8086000 def=9
+[armory-apply] in-game live weapon def=9 team=T paintKit=756 (equipped in game 9536605177002A96)
+[hud-find] START weapon=0x00000229C8086000 pawn=0x00000229D2B01800
+[hud-find] armsHandle=0xE6CD410F
+[hud-find] arms=0x00000229E333D800
+[hud-find] armsNode=0x00000229E302DC80
+[hud-find] firstChild=0x0000022A13AD7C80
+[hud-find] child[0]=0x0000022A13AD7C80 owner=0x00000229E2FEAC00 handle=0x1B181DE resolved=0x00000229C8086000 **MATCH**
+[hud-find] SUCCESS hudWeapon=0x00000229E2FEAC00 after 1 nodes
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x00000229D2B01800
+[apply] active 0x00000229C8086000
+[pw] weapon 0x00000229C8086000 def=9
+[armory-apply] in-game live weapon def=9 team=T paintKit=756 (equipped in game 9536605177002A96)
+[hud-find] START weapon=0x00000229C8086000 pawn=0x00000229D2B01800
+[hud-find] armsHandle=0xE6CD410F
+[hud-find] arms=0x00000229E333D800
+[hud-find] armsNode=0x00000229E302DC80
+[hud-find] firstChild=0x0000022A13AD7C80
+[hud-find] child[0]=0x0000022A13AD7C80 owner=0x00000229E2FEAC00 handle=0x1B181DE resolved=0x00000229C8086000 **MATCH**
+[hud-find] SUCCESS hudWeapon=0x00000229E2FEAC00 after 1 nodes
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x00000229D2B01800
+[apply] active 0x00000229C8086000
+[pw] weapon 0x00000229C8086000 def=9
+[armory-apply] in-game live weapon def=9 team=T paintKit=756 (equipped in game 9536605177002A96)
+[hud-find] START weapon=0x00000229C8086000 pawn=0x00000229D2B01800
+[hud-find] armsHandle=0xE6CD410F
+[hud-find] arms=0x00000229E333D800
+[hud-find] armsNode=0x00000229E302DC80
+[hud-find] firstChild=0x0000022A13AD7C80
+[hud-find] child[0]=0x0000022A13AD7C80 owner=0x00000229E2FEAC00 handle=0x1B181DE resolved=0x00000229C8086000 **MATCH**
+[hud-find] SUCCESS hudWeapon=0x00000229E2FEAC00 after 1 nodes
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+N1SSAN_STATUS|1|2026-11-08T15:52:53Z|9320|armory-obsidian-3.0|READY|reason=runtime_worker_heartbeat
+[status-write] begin state=READY path=C:\Users\mirac\AppData\Local\n1ssan\status\cs2-9320.status
+[status-write] success state=READY error=0
+
+=== SNAPSHOT ===
+[snap] fsnCount=230671 lastStage=0 stage5Count=16951
+[snap] stage histogram:
+[snap]   stage  0: 38923 frames
+[snap]   stage  1: 17029 frames
+[snap]   stage  2: 17029 frames
+[snap]   stage  3: 17025 frames
+[snap]   stage  4: 1 frames
+[snap]   stage  5: 16951 frames
+[snap]   stage  6: 16951 frames
+[snap]   stage  7: 16951 frames
+[snap]   stage  8: 16951 frames
+[snap]   stage 10: 16951 frames
+[snap]   stage 11: 20359 frames
+[snap]   stage 12: 35550 frames
+[snap] dwLocalPlayerController @ 0x00007FFEE59F2548 -> 0x00000228C2B71A00 
+[snap] dwLocalPlayerPawn       @ 0x00007FFEE5BE91E0 -> 0x000002295E2B0400 
+[snap] pawn: vtable=0x00007FFEE8E73740 inClient=0 health=553
+[snap] ctrl: vtable=0x00007FFEE50C1680 inClient=1 m_hPlayerPawn@0x92C = 0x01C681A1 (idx=417)
+[snap] entitySystem @ 0x00007FFEE5BCFBB8 = 0x0000022941478800 highestEntityIndex=214
+[snap] entity resolution: 1/16 of indices 1..16 valid
+[snap] ctrl->pawn handle resolve: 0x01C681A1 -> 0x00000229D2B01800
+[snap] ----------------------------------------
+[apply] tick pawn=0x00000229D2B01800
+[apply] active 0x00000229C8086000
+[pw] weapon 0x00000229C8086000 def=9
+[armory-apply] in-game live weapon def=9 team=T paintKit=756 (equipped in game 9536605177002A96)
+[hud-find] START weapon=0x00000229C8086000 pawn=0x00000229D2B01800
+[hud-find] armsHandle=0xE6CD410F
+[hud-find] arms=0x00000229E333D800
+[hud-find] armsNode=0x00000229E302DC80
+[hud-find] firstChild=0x0000022A13AD7C80
+[hud-find] child[0]=0x0000022A13AD7C80 owner=0x00000229E2FEAC00 handle=0x1B181DE resolved=0x00000229C8086000 **MATCH**
+[hud-find] SUCCESS hudWeapon=0x00000229E2FEAC00 after 1 nodes
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x00000229D2B01800
+[apply] active 0x00000229C8086000
+[pw] weapon 0x00000229C8086000 def=9
+[armory-apply] in-game live weapon def=9 team=T paintKit=756 (equipped in game 9536605177002A96)
+[hud-find] START weapon=0x00000229C8086000 pawn=0x00000229D2B01800
+[hud-find] armsHandle=0xE6CD410F
+[hud-find] arms=0x00000229E333D800
+[hud-find] armsNode=0x00000229E302DC80
+[hud-find] firstChild=0x0000022A13AD7C80
+[hud-find] child[0]=0x0000022A13AD7C80 owner=0x00000229E2FEAC00 handle=0x1B181DE resolved=0x00000229C8086000 **MATCH**
+[hud-find] SUCCESS hudWeapon=0x00000229E2FEAC00 after 1 nodes
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x00000229D2B01800
+[apply] active 0x00000229E30FE000
+[pw] weapon 0x00000229E30FE000 def=500
+[armory-apply] in-game live weapon def=500 team=T paintKit=571 (equipped in game 99B4B549581CBBD5)
+[hud-find] START weapon=0x00000229E30FE000 pawn=0x00000229D2B01800
+[hud-find] armsHandle=0xE6CD410F
+[hud-find] arms=0x00000229E333D800
+[hud-find] armsNode=0x00000229E302DC80
+[hud-find] firstChild=0x0000022A13AD7C80
+[hud-find] child[0]=0x0000022A13AD7C80 owner=0x00000229E2FEAC00 handle=0x1B181DE resolved=0x00000229C8086000
+[hud-find] child[1]=0x00000229E3EF7C80 owner=0x0000022A13E42C00 handle=0x5081DB resolved=0x00000229E30FE000 **MATCH**
+[hud-find] SUCCESS hudWeapon=0x0000022A13E42C00 after 2 nodes
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x00000229D2B01800
+[apply] active 0x00000229E30FE000
+[pw] weapon 0x00000229E30FE000 def=500
+[armory-apply] in-game live weapon def=500 team=T paintKit=571 (equipped in game 99B4B549581CBBD5)
+[hud-find] START weapon=0x00000229E30FE000 pawn=0x00000229D2B01800
+[hud-find] armsHandle=0xE6CD410F
+[hud-find] arms=0x00000229E333D800
+[hud-find] armsNode=0x00000229E302DC80
+[hud-find] firstChild=0x0000022A13AD7C80
+[hud-find] child[0]=0x0000022A13AD7C80 owner=0x00000229E2FEAC00 handle=0x1B181DE resolved=0x00000229C8086000
+[hud-find] child[1]=0x00000229E3EF7C80 owner=0x0000022A13E42C00 handle=0x5081DB resolved=0x00000229E30FE000 **MATCH**
+[hud-find] SUCCESS hudWeapon=0x0000022A13E42C00 after 2 nodes
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x00000229D2B01800
+[apply] active 0x00000229E36B0000
+[pw] weapon 0x00000229E36B0000 def=4
+[armory-apply] in-game live weapon def=4 team=T paintKit=1208 (equipped in game 9AD2A303DFC2661B)
+[hud-find] START weapon=0x00000229E36B0000 pawn=0x00000229D2B01800
+[hud-find] armsHandle=0xE6CD410F
+[hud-find] arms=0x00000229E333D800
+[hud-find] armsNode=0x00000229E302DC80
+[hud-find] firstChild=0x0000022A13AD7C80
+[hud-find] child[0]=0x0000022A13AD7C80 owner=0x00000229E2FEAC00 handle=0x1B181DE resolved=0x00000229C8086000
+[hud-find] child[1]=0x00000229E3EF7C80 owner=0x0000022A13E42C00 handle=0x5081DB resolved=0x00000229E30FE000
+[hud-find] child[4]=0x00000229E376C880 owner=0x00000229E3749000 handle=0x1B81DC resolved=0x00000229E36B0000 **MATCH**
+[hud-find] SUCCESS hudWeapon=0x00000229E3749000 after 5 nodes
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x00000229D2B01800
+[apply] active 0x00000229E36B0000
+[pw] weapon 0x00000229E36B0000 def=4
+[armory-apply] in-game live weapon def=4 team=T paintKit=1208 (equipped in game 9AD2A303DFC2661B)
+[hud-find] START weapon=0x00000229E36B0000 pawn=0x00000229D2B01800
+[hud-find] armsHandle=0xE6CD410F
+[hud-find] arms=0x00000229E333D800
+[hud-find] armsNode=0x00000229E302DC80
+[hud-find] firstChild=0x0000022A13AD7C80
+[hud-find] child[0]=0x0000022A13AD7C80 owner=0x00000229E2FEAC00 handle=0x1B181DE resolved=0x00000229C8086000
+[hud-find] child[1]=0x00000229E3EF7C80 owner=0x0000022A13E42C00 handle=0x5081DB resolved=0x00000229E30FE000
+[hud-find] child[4]=0x00000229E376C880 owner=0x00000229E3749000 handle=0x1B81DC resolved=0x00000229E36B0000 **MATCH**
+[hud-find] SUCCESS hudWeapon=0x00000229E3749000 after 5 nodes
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x00000229D2B01800
+[apply] active 0x00000229E36B0000
+[pw] weapon 0x00000229E36B0000 def=4
+[armory-apply] in-game live weapon def=4 team=T paintKit=1208 (equipped in game 9AD2A303DFC2661B)
+[hud-find] START weapon=0x00000229E36B0000 pawn=0x00000229D2B01800
+[hud-find] armsHandle=0xE6CD410F
+[hud-find] arms=0x00000229E333D800
+[hud-find] armsNode=0x00000229E302DC80
+[hud-find] firstChild=0x0000022A13AD7C80
+[hud-find] child[0]=0x0000022A13AD7C80 owner=0x00000229E2FEAC00 handle=0x1B181DE resolved=0x00000229C8086000
+[hud-find] child[1]=0x00000229E3EF7C80 owner=0x0000022A13E42C00 handle=0x5081DB resolved=0x00000229E30FE000
+[hud-find] child[4]=0x00000229E376C880 owner=0x00000229E3749000 handle=0x1B81DC resolved=0x00000229E36B0000 **MATCH**
+[hud-find] SUCCESS hudWeapon=0x00000229E3749000 after 5 nodes
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x00000229D2B01800
+[apply] active 0x00000229E36B0000
+[pw] weapon 0x00000229E36B0000 def=4
+[armory-apply] in-game live weapon def=4 team=T paintKit=1208 (equipped in game 9AD2A303DFC2661B)
+[hud-find] START weapon=0x00000229E36B0000 pawn=0x00000229D2B01800
+[hud-find] armsHandle=0xE6CD410F
+[hud-find] arms=0x00000229E333D800
+[hud-find] armsNode=0x00000229E302DC80
+[hud-find] firstChild=0x0000022A13AD7C80
+[hud-find] child[0]=0x0000022A13AD7C80 owner=0x00000229E2FEAC00 handle=0x1B181DE resolved=0x00000229C8086000
+[hud-find] child[1]=0x00000229E3EF7C80 owner=0x0000022A13E42C00 handle=0x5081DB resolved=0x00000229E30FE000
+[hud-find] child[4]=0x00000229E376C880 owner=0x00000229E3749000 handle=0x1B81DC resolved=0x00000229E36B0000 **MATCH**
+[hud-find] SUCCESS hudWeapon=0x00000229E3749000 after 5 nodes
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x00000229D2B01800
+[apply] active 0x00000229E36B0000
+[pw] weapon 0x00000229E36B0000 def=4
+[armory-apply] in-game live weapon def=4 team=T paintKit=1208 (equipped in game 9AD2A303DFC2661B)
+[hud-find] START weapon=0x00000229E36B0000 pawn=0x00000229D2B01800
+[hud-find] armsHandle=0xE6CD410F
+[hud-find] arms=0x00000229E333D800
+[hud-find] armsNode=0x00000229E302DC80
+[hud-find] firstChild=0x0000022A13AD7C80
+[hud-find] child[0]=0x0000022A13AD7C80 owner=0x00000229E2FEAC00 handle=0x1B181DE resolved=0x00000229C8086000
+[hud-find] child[1]=0x00000229E3EF7C80 owner=0x0000022A13E42C00 handle=0x5081DB resolved=0x00000229E30FE000
+[hud-find] child[4]=0x00000229E376C880 owner=0x00000229E3749000 handle=0x1B81DC resolved=0x00000229E36B0000 **MATCH**
+[hud-find] SUCCESS hudWeapon=0x00000229E3749000 after 5 nodes
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x00000229D2B01800
+[apply] active 0x00000229E36B0000
+[pw] weapon 0x00000229E36B0000 def=4
+[armory-apply] in-game live weapon def=4 team=T paintKit=1208 (equipped in game 9AD2A303DFC2661B)
+[hud-find] START weapon=0x00000229E36B0000 pawn=0x00000229D2B01800
+[hud-find] armsHandle=0xE6CD410F
+[hud-find] arms=0x00000229E333D800
+[hud-find] armsNode=0x00000229E302DC80
+[hud-find] firstChild=0x0000022A13AD7C80
+[hud-find] child[0]=0x0000022A13AD7C80 owner=0x00000229E2FEAC00 handle=0x1B181DE resolved=0x00000229C8086000
+[hud-find] child[1]=0x00000229E3EF7C80 owner=0x0000022A13E42C00 handle=0x5081DB resolved=0x00000229E30FE000
+[hud-find] child[4]=0x00000229E376C880 owner=0x00000229E3749000 handle=0x1B81DC resolved=0x00000229E36B0000 **MATCH**
+[hud-find] SUCCESS hudWeapon=0x00000229E3749000 after 5 nodes
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x00000229D2B01800
+[apply] active 0x00000229E36B0000
+[pw] weapon 0x00000229E36B0000 def=4
+[armory-apply] in-game live weapon def=4 team=T paintKit=1208 (equipped in game 9AD2A303DFC2661B)
+[hud-find] START weapon=0x00000229E36B0000 pawn=0x00000229D2B01800
+[hud-find] armsHandle=0xE6CD410F
+[hud-find] arms=0x00000229E333D800
+[hud-find] armsNode=0x00000229E302DC80
+[hud-find] firstChild=0x0000022A13AD7C80
+[hud-find] child[0]=0x0000022A13AD7C80 owner=0x00000229E2FEAC00 handle=0x1B181DE resolved=0x00000229C8086000
+[hud-find] child[1]=0x00000229E3EF7C80 owner=0x0000022A13E42C00 handle=0x5081DB resolved=0x00000229E30FE000
+[hud-find] child[4]=0x00000229E376C880 owner=0x00000229E3749000 handle=0x1B81DC resolved=0x00000229E36B0000 **MATCH**
+[hud-find] SUCCESS hudWeapon=0x00000229E3749000 after 5 nodes
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x00000229D2B01800
+[apply] active 0x00000229E30FE000
+[pw] weapon 0x00000229E30FE000 def=500
+[armory-apply] in-game live weapon def=500 team=T paintKit=571 (equipped in game 99B4B549581CBBD5)
+[hud-find] START weapon=0x00000229E30FE000 pawn=0x00000229D2B01800
+[hud-find] armsHandle=0xE6CD410F
+[hud-find] arms=0x00000229E333D800
+[hud-find] armsNode=0x00000229E302DC80
+[hud-find] firstChild=0x0000022A13AD7C80
+[hud-find] child[0]=0x0000022A13AD7C80 owner=0x00000229E2FEAC00 handle=0x1B181DE resolved=0x00000229C8086000
+[hud-find] child[1]=0x00000229E3EF7C80 owner=0x0000022A13E42C00 handle=0x5081DB resolved=0x00000229E30FE000 **MATCH**
+[hud-find] SUCCESS hudWeapon=0x0000022A13E42C00 after 2 nodes
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x00000229D2B01800
+[apply] active 0x00000229E30FE000
+[pw] weapon 0x00000229E30FE000 def=500
+[armory-apply] in-game live weapon def=500 team=T paintKit=571 (equipped in game 99B4B549581CBBD5)
+[hud-find] START weapon=0x00000229E30FE000 pawn=0x00000229D2B01800
+[hud-find] armsHandle=0xE6CD410F
+[hud-find] arms=0x00000229E333D800
+[hud-find] armsNode=0x00000229E302DC80
+[hud-find] firstChild=0x0000022A13AD7C80
+[hud-find] child[0]=0x0000022A13AD7C80 owner=0x00000229E2FEAC00 handle=0x1B181DE resolved=0x00000229C8086000
+[hud-find] child[1]=0x00000229E3EF7C80 owner=0x0000022A13E42C00 handle=0x5081DB resolved=0x00000229E30FE000 **MATCH**
+[hud-find] SUCCESS hudWeapon=0x0000022A13E42C00 after 2 nodes
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x00000229D2B01800
+[apply] active 0x00000229E30FE000
+[pw] weapon 0x00000229E30FE000 def=500
+[armory-apply] in-game live weapon def=500 team=T paintKit=571 (equipped in game 99B4B549581CBBD5)
+[hud-find] START weapon=0x00000229E30FE000 pawn=0x00000229D2B01800
+[hud-find] armsHandle=0xE6CD410F
+[hud-find] arms=0x00000229E333D800
+[hud-find] armsNode=0x00000229E302DC80
+[hud-find] firstChild=0x0000022A13AD7C80
+[hud-find] child[0]=0x0000022A13AD7C80 owner=0x00000229E2FEAC00 handle=0x1B181DE resolved=0x00000229C8086000
+[hud-find] child[1]=0x00000229E3EF7C80 owner=0x0000022A13E42C00 handle=0x5081DB resolved=0x00000229E30FE000 **MATCH**
+[hud-find] SUCCESS hudWeapon=0x0000022A13E42C00 after 2 nodes
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x00000229D2B01800
+[apply] active 0x00000229E30FE000
+[pw] weapon 0x00000229E30FE000 def=500
+[armory-apply] in-game live weapon def=500 team=T paintKit=571 (equipped in game 99B4B549581CBBD5)
+[hud-find] START weapon=0x00000229E30FE000 pawn=0x00000229D2B01800
+[hud-find] armsHandle=0xE6CD410F
+[hud-find] arms=0x00000229E333D800
+[hud-find] armsNode=0x00000229E302DC80
+[hud-find] firstChild=0x0000022A13AD7C80
+[hud-find] child[0]=0x0000022A13AD7C80 owner=0x00000229E2FEAC00 handle=0x1B181DE resolved=0x00000229C8086000
+[hud-find] child[1]=0x00000229E3EF7C80 owner=0x0000022A13E42C00 handle=0x5081DB resolved=0x00000229E30FE000 **MATCH**
+[hud-find] SUCCESS hudWeapon=0x0000022A13E42C00 after 2 nodes
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x00000229D2B01800
+[apply] active 0x00000229E30FE000
+[pw] weapon 0x00000229E30FE000 def=500
+[armory-apply] in-game live weapon def=500 team=T paintKit=571 (equipped in game 99B4B549581CBBD5)
+[hud-find] START weapon=0x00000229E30FE000 pawn=0x00000229D2B01800
+[hud-find] armsHandle=0xE6CD410F
+[hud-find] arms=0x00000229E333D800
+[hud-find] armsNode=0x00000229E302DC80
+[hud-find] firstChild=0x0000022A13AD7C80
+[hud-find] child[0]=0x0000022A13AD7C80 owner=0x00000229E2FEAC00 handle=0x1B181DE resolved=0x00000229C8086000
+[hud-find] child[1]=0x00000229E3EF7C80 owner=0x0000022A13E42C00 handle=0x5081DB resolved=0x00000229E30FE000 **MATCH**
+[hud-find] SUCCESS hudWeapon=0x0000022A13E42C00 after 2 nodes
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x00000229D2B01800
+[apply] active 0x00000229E30FE000
+[pw] weapon 0x00000229E30FE000 def=500
+[armory-apply] in-game live weapon def=500 team=T paintKit=571 (equipped in game 99B4B549581CBBD5)
+[hud-find] START weapon=0x00000229E30FE000 pawn=0x00000229D2B01800
+[hud-find] armsHandle=0xE6CD410F
+[hud-find] arms=0x00000229E333D800
+[hud-find] armsNode=0x00000229E302DC80
+[hud-find] firstChild=0x0000022A13AD7C80
+[hud-find] child[0]=0x0000022A13AD7C80 owner=0x00000229E2FEAC00 handle=0x1B181DE resolved=0x00000229C8086000
+[hud-find] child[1]=0x00000229E3EF7C80 owner=0x0000022A13E42C00 handle=0x5081DB resolved=0x00000229E30FE000 **MATCH**
+[hud-find] SUCCESS hudWeapon=0x0000022A13E42C00 after 2 nodes
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x00000229D2B01800
+[apply] active 0x00000229E30FE000
+[pw] weapon 0x00000229E30FE000 def=500
+[armory-apply] in-game live weapon def=500 team=T paintKit=571 (equipped in game 99B4B549581CBBD5)
+[hud-find] START weapon=0x00000229E30FE000 pawn=0x00000229D2B01800
+[hud-find] armsHandle=0xE6CD410F
+[hud-find] arms=0x00000229E333D800
+[hud-find] armsNode=0x00000229E302DC80
+[hud-find] firstChild=0x0000022A13AD7C80
+[hud-find] child[0]=0x0000022A13AD7C80 owner=0x00000229E2FEAC00 handle=0x1B181DE resolved=0x00000229C8086000
+[hud-find] child[1]=0x00000229E3EF7C80 owner=0x0000022A13E42C00 handle=0x5081DB resolved=0x00000229E30FE000 **MATCH**
+[hud-find] SUCCESS hudWeapon=0x0000022A13E42C00 after 2 nodes
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x00000229D2B01800
+[apply] active 0x00000229E30FE000
+[pw] weapon 0x00000229E30FE000 def=500
+[armory-apply] in-game live weapon def=500 team=T paintKit=571 (equipped in game 99B4B549581CBBD5)
+[hud-find] START weapon=0x00000229E30FE000 pawn=0x00000229D2B01800
+[hud-find] armsHandle=0xE6CD410F
+[hud-find] arms=0x00000229E333D800
+[hud-find] armsNode=0x00000229E302DC80
+[hud-find] firstChild=0x0000022A13AD7C80
+[hud-find] child[0]=0x0000022A13AD7C80 owner=0x00000229E2FEAC00 handle=0x1B181DE resolved=0x00000229C8086000
+[hud-find] child[1]=0x00000229E3EF7C80 owner=0x0000022A13E42C00 handle=0x5081DB resolved=0x00000229E30FE000 **MATCH**
+[hud-find] SUCCESS hudWeapon=0x0000022A13E42C00 after 2 nodes
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+
+=== SNAPSHOT ===
+[snap] fsnCount=236018 lastStage=7 stage5Count=17270
+[snap] stage histogram:
+[snap]   stage  0: 40162 frames
+[snap]   stage  1: 17348 frames
+[snap]   stage  2: 17348 frames
+[snap]   stage  3: 17343 frames
+[snap]   stage  4: 1 frames
+[snap]   stage  5: 17270 frames
+[snap]   stage  6: 17270 frames
+[snap]   stage  7: 17270 frames
+[snap]   stage  8: 17269 frames
+[snap]   stage 10: 17270 frames
+[snap]   stage 11: 20680 frames
+[snap]   stage 12: 36787 frames
+[snap] dwLocalPlayerController @ 0x00007FFEE59F2548 -> 0x00000228C2B71A00 
+[snap] dwLocalPlayerPawn       @ 0x00007FFEE5BE91E0 -> 0x000002295E2B0400 
+[snap] pawn: vtable=0x00007FFEE8E73740 inClient=0 health=553
+[snap] ctrl: vtable=0x00007FFEE50C1680 inClient=1 m_hPlayerPawn@0x92C = 0x01C681A1 (idx=417)
+[snap] entitySystem @ 0x00007FFEE5BCFBB8 = 0x0000022941478800 highestEntityIndex=214
+[snap] entity resolution: 1/16 of indices 1..16 valid
+[snap] ctrl->pawn handle resolve: 0x01C681A1 -> 0x00000229D2B01800
+[snap] ----------------------------------------
+[apply] tick pawn=0x00000229D2B01800
+[apply] active 0x00000229E30FE000
+[pw] weapon 0x00000229E30FE000 def=500
+[armory-apply] in-game live weapon def=500 team=T paintKit=571 (equipped in game 99B4B549581CBBD5)
+[hud-find] START weapon=0x00000229E30FE000 pawn=0x00000229D2B01800
+[hud-find] armsHandle=0xE6CD410F
+[hud-find] arms=0x00000229E333D800
+[hud-find] armsNode=0x00000229E302DC80
+[hud-find] firstChild=0x0000022A13AD7C80
+[hud-find] child[0]=0x0000022A13AD7C80 owner=0x00000229E2FEAC00 handle=0x1B181DE resolved=0x00000229C8086000
+[hud-find] child[1]=0x00000229E3EF7C80 owner=0x0000022A13E42C00 handle=0x5081DB resolved=0x00000229E30FE000 **MATCH**
+[hud-find] SUCCESS hudWeapon=0x0000022A13E42C00 after 2 nodes
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x00000229D2B01800
+[apply] active 0x00000229E30FE000
+[pw] weapon 0x00000229E30FE000 def=500
+[armory-apply] in-game live weapon def=500 team=T paintKit=571 (equipped in game 99B4B549581CBBD5)
+[hud-find] START weapon=0x00000229E30FE000 pawn=0x00000229D2B01800
+[hud-find] armsHandle=0xE6CD410F
+[hud-find] arms=0x00000229E333D800
+[hud-find] armsNode=0x00000229E302DC80
+[hud-find] firstChild=0x0000022A13AD7C80
+[hud-find] child[0]=0x0000022A13AD7C80 owner=0x00000229E2FEAC00 handle=0x1B181DE resolved=0x00000229C8086000
+[hud-find] child[1]=0x00000229E3EF7C80 owner=0x0000022A13E42C00 handle=0x5081DB resolved=0x00000229E30FE000 **MATCH**
+[hud-find] SUCCESS hudWeapon=0x0000022A13E42C00 after 2 nodes
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x00000229D2B01800
+[apply] active 0x00000229E30FE000
+[pw] weapon 0x00000229E30FE000 def=500
+[armory-apply] in-game live weapon def=500 team=T paintKit=571 (equipped in game 99B4B549581CBBD5)
+[hud-find] START weapon=0x00000229E30FE000 pawn=0x00000229D2B01800
+[hud-find] armsHandle=0xE6CD410F
+[hud-find] arms=0x00000229E333D800
+[hud-find] armsNode=0x00000229E302DC80
+[hud-find] firstChild=0x0000022A13AD7C80
+[hud-find] child[0]=0x0000022A13AD7C80 owner=0x00000229E2FEAC00 handle=0x1B181DE resolved=0x00000229C8086000
+[hud-find] child[1]=0x00000229E3EF7C80 owner=0x0000022A13E42C00 handle=0x5081DB resolved=0x00000229E30FE000 **MATCH**
+[hud-find] SUCCESS hudWeapon=0x0000022A13E42C00 after 2 nodes
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x00000229D2B01800
+[apply] active 0x00000229E30FE000
+[pw] weapon 0x00000229E30FE000 def=500
+[armory-apply] in-game live weapon def=500 team=T paintKit=571 (equipped in game 99B4B549581CBBD5)
+[hud-find] START weapon=0x00000229E30FE000 pawn=0x00000229D2B01800
+[hud-find] armsHandle=0xE6CD410F
+[hud-find] arms=0x00000229E333D800
+[hud-find] armsNode=0x00000229E302DC80
+[hud-find] firstChild=0x0000022A13AD7C80
+[hud-find] child[0]=0x0000022A13AD7C80 owner=0x00000229E2FEAC00 handle=0x1B181DE resolved=0x00000229C8086000
+[hud-find] child[1]=0x00000229E3EF7C80 owner=0x0000022A13E42C00 handle=0x5081DB resolved=0x00000229E30FE000 **MATCH**
+[hud-find] SUCCESS hudWeapon=0x0000022A13E42C00 after 2 nodes
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x00000229D2B01800
+[apply] active 0x00000229E30FE000
+[pw] weapon 0x00000229E30FE000 def=500
+[armory-apply] in-game live weapon def=500 team=T paintKit=571 (equipped in game 99B4B549581CBBD5)
+[hud-find] START weapon=0x00000229E30FE000 pawn=0x00000229D2B01800
+[hud-find] armsHandle=0xE6CD410F
+[hud-find] arms=0x00000229E333D800
+[hud-find] armsNode=0x00000229E302DC80
+[hud-find] firstChild=0x0000022A13AD7C80
+[hud-find] child[0]=0x0000022A13AD7C80 owner=0x00000229E2FEAC00 handle=0x1B181DE resolved=0x00000229C8086000
+[hud-find] child[1]=0x00000229E3EF7C80 owner=0x0000022A13E42C00 handle=0x5081DB resolved=0x00000229E30FE000 **MATCH**
+[hud-find] SUCCESS hudWeapon=0x0000022A13E42C00 after 2 nodes
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x00000229D2B01800
+[apply] active 0x00000229E30FE000
+[pw] weapon 0x00000229E30FE000 def=500
+[armory-apply] in-game live weapon def=500 team=T paintKit=571 (equipped in game 99B4B549581CBBD5)
+[hud-find] START weapon=0x00000229E30FE000 pawn=0x00000229D2B01800
+[hud-find] armsHandle=0xE6CD410F
+[hud-find] arms=0x00000229E333D800
+[hud-find] armsNode=0x00000229E302DC80
+[hud-find] firstChild=0x0000022A13AD7C80
+[hud-find] child[0]=0x0000022A13AD7C80 owner=0x00000229E2FEAC00 handle=0x1B181DE resolved=0x00000229C8086000
+[hud-find] child[1]=0x00000229E3EF7C80 owner=0x0000022A13E42C00 handle=0x5081DB resolved=0x00000229E30FE000 **MATCH**
+[hud-find] SUCCESS hudWeapon=0x0000022A13E42C00 after 2 nodes
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
+[apply] tick pawn=0x00000229D2B01800
+[apply] active 0x00000229E30FE000
+[pw] weapon 0x00000229E30FE000 def=500
+[armory-apply] in-game live weapon def=500 team=T paintKit=571 (equipped in game 99B4B549581CBBD5)
+[hud-find] START weapon=0x00000229E30FE000 pawn=0x00000229D2B01800
+[hud-find] armsHandle=0xE6CD410F
+[hud-find] arms=0x00000229E333D800
+[hud-find] armsNode=0x00000229E302DC80
+[hud-find] firstChild=0x0000022A13AD7C80
+[hud-find] child[0]=0x0000022A13AD7C80 owner=0x00000229E2FEAC00 handle=0x1B181DE resolved=0x00000229C8086000
+[hud-find] child[1]=0x00000229E3EF7C80 owner=0x0000022A13E42C00 handle=0x5081DB resolved=0x00000229E30FE000 **MATCH**
+[hud-find] SUCCESS hudWeapon=0x0000022A13E42C00 after 2 nodes
+[apply-diagnostic] weaponChanged=0 gloveUpdate=0 regenAvailable=1
