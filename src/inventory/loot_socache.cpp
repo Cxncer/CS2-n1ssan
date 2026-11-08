@@ -557,7 +557,11 @@ namespace LootSOCache
             }
         }
 
-        if (req.keychain > 0)
+        // When the canonical attachment set contains a charm, let
+        // Attachments::Write below be its only writer. The legacy fields are
+        // retained as a fallback for older inventory documents that do not
+        // carry the structured charm attachment.
+        if (req.keychain > 0 && !req.attachments.charm.present)
         {
             const float keychainId = FloatFromBits(static_cast<uint32_t>(req.keychain));
             const float keychainSeed = FloatFromBits(static_cast<uint32_t>(req.keychainSeed));
