@@ -28,6 +28,8 @@ namespace
 {
     using GetItemIdFn = const char* (__fastcall*)(void* api, const char* team, const char* slot);
     using SlotWithDefinitionFn = const char* (__fastcall*)(void* api, const char* team, int definition);
+    using CanEquipItemInSlotFn = bool (__fastcall*)(void* api, const char* team, const char* itemId, const char* slot);
+    using EquipItemInSlotFn = bool (__fastcall*)(void* api, const char* team, const char* itemId, const char* slot);
 
     // The loadout changes only from the Loadout screen, so a short cache keeps
     // weapon dispatch from calling into panorama once per weapon per frame.
@@ -53,6 +55,8 @@ namespace
     ClientIndex g_index;
     GetItemIdFn g_getItemId = nullptr;
     SlotWithDefinitionFn g_slotWithDefinition = nullptr;
+    CanEquipItemInSlotFn g_canEquipItemInSlot = nullptr;
+    EquipItemInSlotFn g_equipItemInSlot = nullptr;
     bool g_resolved = false;
     char g_error[160]{};
     std::unordered_map<std::string, CachedId> g_slotCache;
@@ -217,6 +221,34 @@ namespace
         }
     }
 
+    bool CallCanEquipItemInSlot(const char* team, const char* itemId, const char* slot)
+    {
+        if (!g_canEquipItemInSlot || !team || !itemId || !slot)
+            return false;
+        __try
+        {
+            return g_canEquipItemInSlot(nullptr, team, itemId, slot);
+        }
+        __except (EXCEPTION_EXECUTE_HANDLER)
+        {
+            return false;
+        }
+    }
+
+    bool CallEquipItemInSlot(const char* team, const char* itemId, const char* slot)
+    {
+        if (!g_equipItemInSlot || !team || !itemId || !slot)
+            return false;
+        __try
+        {
+            return g_equipItemInSlot(nullptr, team, itemId, slot);
+        }
+        __except (EXCEPTION_EXECUTE_HANDLER)
+        {
+            return false;
+        }
+    }
+
     bool CallSlotWithDefinition(const char* team, std::uint16_t definition, std::string& slot)
     {
         slot.clear();
@@ -263,6 +295,10 @@ namespace LoadoutApi
         g_getItemId = reinterpret_cast<GetItemIdFn>(ApiFunctionLocked("GetItemID"));
         g_slotWithDefinition = reinterpret_cast<SlotWithDefinitionFn>(
             ApiFunctionLocked("GetSlotEquippedWithDefIndex"));
+        g_canEquipItemInSlot = reinterpret_cast<CanEquipItemInSlotFn>(
+            ApiFunctionLocked("CanEquipItemInSlot"));
+        g_equipItemInSlot = reinterpret_cast<EquipItemInSlotFn>(
+            ApiFunctionLocked("EquipItemInSlot"));
 
         if (!g_getItemId || !g_slotWithDefinition)
         {
@@ -279,6 +315,18 @@ namespace LoadoutApi
         Log("[loadout-api] resolved GetItemID=%p GetSlotEquippedWithDefIndex=%p",
             reinterpret_cast<void*>(g_getItemId),
             reinterpret_cast<void*>(g_slotWithDefinition));
+        if (g_canEquipItemInSlot && g_equipItemInSlot)
+        {
+            Log("[loadout-api] resolved CanEquipItemInSlot=%p EquipItemInSlot=%p",
+                reinterpret_cast<void*>(g_canEquipItemInSlot),
+                reinterpret_cast<void*>(g_equipItemInSlot));
+        }
+        else
+        {
+            Log("[loadout-api] native equip unavailable (CanEquipItemInSlot=%p EquipItemInSlot=%p)",
+                reinterpret_cast<void*>(g_canEquipItemInSlot),
+                reinterpret_cast<void*>(g_equipItemInSlot));
+        }
         return true;
     }
 
@@ -331,6 +379,35 @@ namespace LoadoutApi
         }
 
         return id;
+    }
+
+    bool CanEquipItemInSlot(const char* team, std::uint64_t itemId, const char* slot)
+    {
+        if (!team || !*team || !itemId || !slot || !*slot || !Initialize())
+            return false;
+        if (!g_canEquipItemInSlot)
+            return false;
+        const std::string itemIdText = std::to_string(itemId);
+        return CallCanEquipItemInSlot(team, itemIdText.c_str(), slot);
+    }
+
+    bool EquipItemInSlot(const char* team, std::uint64_t itemId, const char* slot)
+    {
+        if (!team || !*team || !itemId || !slot || !*slot || !Initialize())
+            return false;
+        if (!g_equipItemInSlot || !g_canEquipItemInSlot)
+            return false;
+        const std::string itemIdText = std::to_string(itemId);
+        if (!CallCanEquipItemInSlot(team, itemIdText.c_str(), slot))
+            return false;
+        const bool equipped = CallEquipItemInSlot(team, itemIdText.c_str(), slot);
+        if (equipped)
+        {
+            std::lock_guard<std::mutex> lock(g_mutex);
+            g_slotCache.clear();
+            g_definitionCache.clear();
+        }
+        return equipped;
     }
 
     std::uint64_t EquippedItemIdForDefinition(const char* team, std::uint16_t definition)

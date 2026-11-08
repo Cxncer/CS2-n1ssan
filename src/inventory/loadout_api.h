@@ -6,7 +6,8 @@
 // the LoadoutAPI panorama natives registered by client.dll expose it:
 //   GetSlotEquippedWithDefIndex(team, definition) -> slot name ("rifle1", ...)
 //   GetItemID(team, slot)                         -> equipped item id, decimal
-// Both ignore their first argument (the API object) and run on the game thread.
+//   EquipItemInSlot(team, itemId, slot)            -> changes the native loadout
+// All ignore their first argument (the API object) and run on the game thread.
 
 #pragma once
 
@@ -34,4 +35,9 @@ namespace LoadoutApi
     // Game thread. Item id the player equipped for a definition, asking CS2 for
     // the slot it belongs to (weapons, knives). 0 when unknown.
     std::uint64_t EquippedItemIdForDefinition(const char* team, std::uint16_t definition);
+
+    // Game thread. Uses CS2's own CanEquipItemInSlot check before calling its
+    // native EquipItemInSlot(team, itemId, slot). Returns false if CS2 rejects it.
+    bool CanEquipItemInSlot(const char* team, std::uint64_t itemId, const char* slot);
+    bool EquipItemInSlot(const char* team, std::uint64_t itemId, const char* slot);
 }
