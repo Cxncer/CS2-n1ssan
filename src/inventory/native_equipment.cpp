@@ -15,6 +15,7 @@
 #include <cstdint>
 #include <cstring>
 #include <fstream>
+#include <initializer_list>
 #include <sstream>
 #include <string>
 #include <unordered_map>
