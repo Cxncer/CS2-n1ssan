@@ -19,6 +19,7 @@
 #include "sdk/handles.h"
 #include "skin/dispatch.h"
 #include "skin/gloves.h"
+#include "skin/agents.h"
 #include "config/offsets.h"
 #include "config/auto_offsets.h"
 #include "diagnostics/log.h"
@@ -28,6 +29,9 @@
 #include "hooks/knife_animation.h"
 #include "inventory/plan_a.h"
 #include "inventory/armory_inventory.h"
+#include "inventory/native_equipment.h"
+#include "inventory/attachments.h"
+#include "inventory/native_apply.h"
 #include "inventory/runtime_mode.h"
 #include "skin/apply.h"
 #include "sdk/scene_node.h"
@@ -363,6 +367,10 @@ static void __fastcall FsnDetour(void* pClient, int stage)
 
             if (GloveAppliedThisTick())
                 g_gloveUpdatePending = true;
+
+            // Armory agents share the spawn/team transition with gloves: the
+            // model is only re-applied when the pawn, team or spawn changes.
+            Agents::Run(glovePawn);
         }
     }
 
@@ -410,7 +418,26 @@ static void __fastcall FsnDetour(void* pClient, int stage)
     if (stage != 6) return;
 
     const RuntimeMode runtimeMode = RuntimeModeState::Current();
-    const bool loadoutMode = runtimeMode != RuntimeMode::Armory;
+    const bool loadoutMode = runtimeMode == RuntimeMode::Loadout;
+
+    // Armory uses a separate generated-ID namespace. On first entry (including
+    // an Armory-first launch), remove only stale PlanA Loadout entries. Retry
+    // on subsequent frames if SOCache cleanup cannot complete safely.
+    static RuntimeMode lastStableMode = RuntimeMode::Unknown;
+    if (runtimeMode == RuntimeMode::Armory && lastStableMode != RuntimeMode::Armory)
+    {
+        if (PlanA::RemoveAllLoadoutItems())
+            lastStableMode = RuntimeMode::Armory;
+    }
+    else if (runtimeMode == RuntimeMode::Loadout &&
+             lastStableMode != RuntimeMode::Loadout &&
+             !g_targets.empty())
+    {
+        // The worker has completed Loadout parsing and compatibility checks.
+        // Create its managed items now, on the game thread.
+        PlanA::ReconcileAllItems();
+        lastStableMode = RuntimeMode::Loadout;
+    }
 
     uintptr_t observedPawn = MatchdetectGetPawn();
     if (observedPawn > 0x10000)
@@ -537,17 +564,59 @@ static void __fastcall FsnDetour(void* pClient, int stage)
         }
     }
 
-    // Armory inventory is only written while Armory is the selected runtime
-    // source and the player is outside an active match.
-    if (!inMatch && runtimeMode == RuntimeMode::Armory)
-        ArmoryInventory::AdoptPending();
+    // Observe native charm entities against the currently active weapon.
+    // Resolve the weapon from the pawn's weapon services so global charm
+    // entities belonging to other players/weapons are not mistaken as dupes.
+    if (runtimeMode == RuntimeMode::Armory)
+    {
+        static uint64_t lastCharmScanMs = 0;
+        if (now - lastCharmScanMs >= 5000)
+        {
+            lastCharmScanMs = now;
 
-    // In Armory mode the Loadout dataset is ignored entirely, so equipped
-    // skins in the game are never overridden by n1ssan-data.json.
-    if (!loadoutMode)
+            uintptr_t activeWeapon = 0;
+            uintptr_t weaponServices = 0;
+            uint32_t activeWeaponHandle = 0;
+
+            if (pawn > 0x10000 &&
+                SafeReadQword(pawn + g_off.PAWN_WeaponServices, weaponServices) &&
+                weaponServices > 0x10000 &&
+                SafeReadU32(weaponServices + g_off.WS_ActiveWeapon, activeWeaponHandle) &&
+                HandleValid(activeWeaponHandle))
+            {
+                activeWeapon = GetEntityByHandle(activeWeaponHandle);
+            }
+
+            Log("[charm-entity] active weapon handle=0x%08X entity=%p",
+                activeWeaponHandle, (void*)activeWeapon);
+            LogWorldKeychainEntities(activeWeapon);
+        }
+    }
+
+    // Armory inventory writes and attachment observation remain restricted to
+    // the non-match window. CS2's native inventory UI is authoritative for
+    // applying stickers and charms; the Bridge persists the observed result.
+    if (!inMatch && runtimeMode == RuntimeMode::Armory)
+    {
+        ArmoryInventory::AdoptPending();
+        NativeEquipment::Tick();
+        Attachments::ObserveAndPersist();
+        // The UseTool hook needs client.dll's Panorama script API; retry here
+        // when start-up ran before the client had registered it.
+        NativeApply::Tick();
+    }
+
+    // Keep the sources isolated while allowing Armory's currently equipped
+    // native inventory item to pass through the same entity apply pipeline.
+    if (runtimeMode != RuntimeMode::Loadout &&
+        runtimeMode != RuntimeMode::Armory)
         return;
 
-    if (!g_enabled || g_targets.empty())
+    if (loadoutMode && (!g_enabled || g_targets.empty()))
+        return;
+
+    if (runtimeMode == RuntimeMode::Armory &&
+        !ArmoryInventory::HasItems())
         return;
 
     if (g_matchState == MatchState::IDLE)

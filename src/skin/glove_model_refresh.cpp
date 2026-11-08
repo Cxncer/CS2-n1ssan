@@ -1005,6 +1005,16 @@ namespace GloveModelRefresh
         g_request.store(1, std::memory_order_release);
     }
 
+    bool ApplyAgentModel(void* pawn, const char* modelName)
+    {
+        if (!pawn || !modelName || !*modelName)
+            return false;
+
+        InitializeFunctions();
+
+        return SetAgentModel(pawn, modelName);
+    }
+
     void OnRenderEnd(void* pawn)
     {
         InitializeFunctions();

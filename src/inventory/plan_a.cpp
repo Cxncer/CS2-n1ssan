@@ -8,6 +8,7 @@
 
 #include <windows.h>
 #include <cstdint>
+#include <vector>
 
 namespace
 {
@@ -103,6 +104,13 @@ namespace PlanA
             Log("[plan-a] LootSchema init failed: %s", LootSchema::LastError());
             return false;
         }
+        // Resolve the shared-object cache helper even in neutral mode. Armory
+        // enumeration must not depend on Loadout's WaitForInventory path.
+        if (!LootSOCache::Initialize())
+        {
+            Log("[plan-a] SOCache initialization failed");
+            return false;
+        }
         g_initialized = true;
         if (injectLoadout)
         {
@@ -128,5 +136,33 @@ namespace PlanA
     {
         if (!g_initialized) return;
         InjectAll();
+    }
+
+    bool RemoveAllLoadoutItems()
+    {
+        if (!g_initialized)
+            return true;
+
+        std::vector<uint64_t> ids;
+        if (!LootSOCache::GetIdsByPrefix(
+                FAKE_ID_PREFIX, 0xF000000000000000ull, ids))
+        {
+            Log("[plan-a] Loadout cleanup deferred: SOCache enumeration failed");
+            return false;
+        }
+
+        int removed = 0;
+        int failed = 0;
+        for (uint64_t id : ids)
+        {
+            if (LootSOCache::Remove(id))
+                ++removed;
+            else
+                ++failed;
+        }
+
+        Log("[plan-a] Loadout cleanup: found=%zu removed=%d failed=%d",
+            ids.size(), removed, failed);
+        return failed == 0;
     }
 }
