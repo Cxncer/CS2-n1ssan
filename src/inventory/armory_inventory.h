@@ -18,9 +18,6 @@ namespace ArmoryInventory
     {
         // Nothing safe to apply.
         None,
-        // The player equipped this exact owned instance in CS2's Loadout
-        // screen, so the in-game selection decides what is worn.
-        EquippedInGame,
         // Only the exact native CS2 Loadout selection can resolve an item.
         EquippedInGame
     };

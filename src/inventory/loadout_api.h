@@ -16,9 +16,9 @@
 
 namespace LoadoutApi
 {
-    // Resolves the two natives (any thread, at most once while client.dll is
-    // loaded). False when the registration table or a native is missing, so
-    // callers can fall back to the equipment document.
+    // Resolves the native registrations (any thread, at most once while
+    // client.dll is loaded). False when the registration table or required
+    // read natives are missing.
     bool Initialize();
     bool Ready();
     const char* LastError();
