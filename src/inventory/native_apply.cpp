@@ -795,17 +795,39 @@ namespace NativeApply
             // replace what the weapon already carries.
             Attachments::Set current;
             const bool completeSnapshot = LootSOCache::ReadAttachments(job.targetId, current);
+            bool profileCharmKnown = completeSnapshot;
             if (!completeSnapshot)
             {
-                // Lootline reads occupied sticker slots through CS2's own item-view getters.
-                // Unknown charm data is left untouched by the targeted attachment write.
+                // CS2's ItemView getters expose sticker slots, but not the charm.
+                // Recover the charm from this exact managed Armory item so a
+                // sticker apply can persist a complete profile snapshot without
+                // ever replacing the unreadable live charm with "none".
                 if (!Attachments::ReadStickerSlotsViaItemView(job.targetId, current))
                 {
                     Log("[use-tool] sticker %d: %016llX could not be read by SOCache or CS2 ItemView - not applying",
                         job.kit, static_cast<unsigned long long>(job.targetId));
                     return false;
                 }
-                Log("[use-tool] sticker target read through CS2 ItemView fallback; preserving unobserved attributes");
+
+                std::vector<ArmoryInventory::ManagedItem> managedItems;
+                if (ArmoryInventory::SnapshotManagedItems(managedItems))
+                {
+                    const auto managed = std::find_if(
+                        managedItems.begin(), managedItems.end(),
+                        [&job](const ArmoryInventory::ManagedItem& item)
+                        {
+                            return item.id == job.targetId;
+                        });
+
+                    if (managed != managedItems.end())
+                    {
+                        current.charm = managed->attachments.charm;
+                        profileCharmKnown = true;
+                    }
+                }
+
+                Log("[use-tool] sticker target ItemView fallback; profile charm %s",
+                    profileCharmKnown ? "recovered for exact item" : "unavailable");
             }
 
             Attachments::Set next = current;
@@ -857,11 +879,14 @@ namespace NativeApply
                     static_cast<unsigned long long>(job.toolId), toolRemoved ? "SUCCESS" : "FAILED");
                 if (toolRemoved) RememberConsumed(job.toolId);
 
-                // Do not publish a partial attachment snapshot as complete. The
-                // normal observer will persist it once the full SOCache read works.
-                if (completeSnapshot)
+                // Persist only when every attachment family is known: either
+                // from the live SOCache snapshot or from the exact managed profile
+                // item merged with the ItemView sticker slots.
+                if (profileCharmKnown)
                     Attachments::RecordApplied(
                         job.targetId, next, job.toolInstanceId, false, slot, toolRemoved);
+                else
+                    Log("[use-tool] sticker apply persisted later: charm state was not recoverable");
             }
 
             const bool notified = written &&
