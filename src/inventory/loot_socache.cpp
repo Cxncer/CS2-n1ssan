@@ -546,7 +546,10 @@ namespace LootSOCache
             if (!LootSchema::SetAttributeInt(item, ATTR_KILL_EATER_TYPE, 0)) { DestroyUncachedItem(item); return CreateResult::Failed; }
         }
 
-        if (req.stickerKit > 0)
+        // When the canonical attachment set contains sticker slot 0, let
+        // Attachments::Write below be its only writer. Keep the legacy field
+        // as a fallback for older inventory documents without structured data.
+        if (req.stickerKit > 0 && !req.attachments.stickers[0].present)
         {
             const float stickerId = FloatFromBits(static_cast<uint32_t>(req.stickerKit));
             if (!LootSchema::SetAttributeFloatByName(item, "sticker slot 0 id", stickerId))
