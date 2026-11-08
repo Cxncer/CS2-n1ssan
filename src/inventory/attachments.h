@@ -76,6 +76,8 @@ namespace Attachments
     // item held before: slots it used and `set` no longer does are cleared with
     // id 0 so the game drops them.
     bool Write(void* econItem, const Set& set, const Set* previous);
+    // Updates sticker attributes only; charm and unrelated attributes are untouched.
+    bool WriteStickerSlots(void* econItem, const Set& set, const Set* previous);
 
     // One-line description for diagnostics.
     void Describe(const Set& set, char* out, std::size_t size);
