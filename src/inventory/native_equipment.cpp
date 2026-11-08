@@ -275,11 +275,20 @@ namespace
         const std::string temporaryPath = g_filePath + ".tmp";
         {
             std::ofstream file(temporaryPath, std::ios::binary | std::ios::trunc);
-            if (!file) return false;
+            if (!file)
+            {
+                DeleteFileA(temporaryPath.c_str());
+                return false;
+            }
             const std::string contents = json.str();
             file.write(contents.data(), static_cast<std::streamsize>(contents.size()));
             file.flush();
-            if (!file.good()) return false;
+            if (!file.good())
+            {
+                file.close();
+                DeleteFileA(temporaryPath.c_str());
+                return false;
+            }
         }
 
         if (!MoveFileExA(
@@ -515,7 +524,11 @@ namespace NativeEquipment
         if (current != g_profiles.end() && SameAssignments(snapshot, current->second))
             return;
 
+        const bool hadPrevious = current != g_profiles.end();
+        std::vector<Assignment> previous;
+        if (hadPrevious) previous = current->second;
         g_profiles[profileId] = snapshot;
+
         if (PersistProfiles())
         {
             Log("[native-equipment] saved %zu native assignments for profile %s (revision=%d)",
@@ -523,7 +536,9 @@ namespace NativeEquipment
         }
         else
         {
-            Log("[native-equipment] failed to persist native equipment for profile %s",
+            if (hadPrevious) g_profiles[profileId] = std::move(previous);
+            else g_profiles.erase(profileId);
+            Log("[native-equipment] failed to persist native equipment for profile %s; will retry",
                 profileId.c_str());
         }
     }
