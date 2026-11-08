@@ -563,17 +563,32 @@ static void __fastcall FsnDetour(void* pClient, int stage)
         }
     }
 
-    // Observe native charm entities in both the inventory screen and active
-    // gameplay. World keychain_module entities may only become visible after a
-    // weapon is equipped, so restricting this diagnostic to the menu misses
-    // the exact state in which duplicate rendering is observed.
+    // Observe native charm entities against the currently active weapon.
+    // Resolve the weapon from the pawn's weapon services so global charm
+    // entities belonging to other players/weapons are not mistaken as dupes.
     if (runtimeMode == RuntimeMode::Armory)
     {
         static uint64_t lastCharmScanMs = 0;
         if (now - lastCharmScanMs >= 5000)
         {
             lastCharmScanMs = now;
-            LogWorldKeychainEntities();
+
+            uintptr_t activeWeapon = 0;
+            uintptr_t weaponServices = 0;
+            uint32_t activeWeaponHandle = 0;
+
+            if (pawn > 0x10000 &&
+                SafeReadQword(pawn + g_off.PAWN_WeaponServices, weaponServices) &&
+                weaponServices > 0x10000 &&
+                SafeReadU32(weaponServices + g_off.WS_ActiveWeapon, activeWeaponHandle) &&
+                HandleValid(activeWeaponHandle))
+            {
+                activeWeapon = GetEntityByHandle(activeWeaponHandle);
+            }
+
+            Log("[charm-entity] active weapon handle=0x%08X entity=%p",
+                activeWeaponHandle, (void*)activeWeapon);
+            LogWorldKeychainEntities(activeWeapon);
         }
     }
 
