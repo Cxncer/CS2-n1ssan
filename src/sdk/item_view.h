@@ -1,10 +1,12 @@
 // n1ssan-dll / src/sdk/item_view.h
 // C_EconItemView + CAttributeList access.
-// Attribute layouts are Loot-faithful — see econ_item_attribute_manager.cpp.
+// Attribute layouts are Loot-faithful ï¿½ see econ_item_attribute_manager.cpp.
 
 #pragma once
 #include <cstdint>
 #include <string>
+
+namespace Attachments { struct Set; }
 
 // A single entry in CAttributeList::m_Attributes (CUtlVector<CEconItemAttribute>).
 // Layout matches Loot's EconItemAttribute_t exactly.
@@ -47,9 +49,11 @@ AttributeVector_t* GetNetworkedVector(uintptr_t item);
 // Clear the item's m_AttributeList (frees the underlying data with MemFree).
 void EconAttr_Remove(uintptr_t item);
 
-// Populate a fresh m_AttributeList with paint/seed/wear/stattrak attributes.
+// Populate a fresh m_AttributeList with paint/seed/wear/stattrak attributes and,
+// when given, the stickers / charm the item carries.
 // Refuses if the list is already populated (call EconAttr_Remove first).
-void EconAttr_Create(uintptr_t item, int paintKit, float wear, int seed, int statTrak);
+void EconAttr_Create(uintptr_t item, int paintKit, float wear, int seed, int statTrak,
+                     const Attachments::Set* attachments = nullptr);
 
 // Get the weapon's C_EconItemView* (weapon + EE_AttrManager + AC_Item).
 uintptr_t GetWeaponItem(uintptr_t weaponEnt);

@@ -8,6 +8,7 @@
 
 #include <windows.h>
 #include <cstdint>
+#include <vector>
 
 namespace
 {
@@ -88,24 +89,40 @@ namespace PlanA
         return FAKE_ID_PREFIX | (uint64_t)defIndex;
     }
 
-    void Start()
+    bool Start(bool injectLoadout)
     {
-        if (g_started) return;
+        if (g_started) return g_initialized;
         g_started = true;
 
         if (!ResolveEconSystem())
         {
-            Log("[plan-a] CEconItemSystem* not resolved — abort");
-            return;
+            Log("[plan-a] CEconItemSystem* not resolved Â— abort");
+            return false;
         }
         if (!LootSchema::Init())
         {
             Log("[plan-a] LootSchema init failed: %s", LootSchema::LastError());
-            return;
+            return false;
+        }
+        // Resolve the shared-object cache helper even in neutral mode. Armory
+        // enumeration must not depend on Loadout's WaitForInventory path.
+        if (!LootSOCache::Initialize())
+        {
+            Log("[plan-a] SOCache initialization failed");
+            return false;
         }
         g_initialized = true;
-        Log("[plan-a] ready, will inject on first stage-6");
-        InjectAll();
+        if (injectLoadout)
+        {
+            Log("[plan-a] ready, injecting Loadout items");
+            InjectAll();
+        }
+        else
+        {
+            Log("[plan-a] shared inventory runtime ready; Loadout injection disabled");
+        }
+
+        return true;
     }
 
     void EnsureAllItems()
@@ -113,5 +130,39 @@ namespace PlanA
         if (!g_initialized) return;
         if (LootSOCache::HasItem(FakeIdForDef(4))) return;
         InjectAll();
+    }
+
+    void ReconcileAllItems()
+    {
+        if (!g_initialized) return;
+        InjectAll();
+    }
+
+    bool RemoveAllLoadoutItems()
+    {
+        if (!g_initialized)
+            return true;
+
+        std::vector<uint64_t> ids;
+        if (!LootSOCache::GetIdsByPrefix(
+                FAKE_ID_PREFIX, 0xF000000000000000ull, ids))
+        {
+            Log("[plan-a] Loadout cleanup deferred: SOCache enumeration failed");
+            return false;
+        }
+
+        int removed = 0;
+        int failed = 0;
+        for (uint64_t id : ids)
+        {
+            if (LootSOCache::Remove(id))
+                ++removed;
+            else
+                ++failed;
+        }
+
+        Log("[plan-a] Loadout cleanup: found=%zu removed=%d failed=%d",
+            ids.size(), removed, failed);
+        return failed == 0;
     }
 }

@@ -1,4 +1,4 @@
-﻿// n1ssan-dll / src/hooks/frame_stage.cpp
+// n1ssan-dll / src/hooks/frame_stage.cpp
 // Verbatim n1ssan-matchdetect v1.1 logic + match state machine + skin apply.
 //
 // Matchdetect parts kept IDENTICAL:
@@ -19,6 +19,7 @@
 #include "sdk/handles.h"
 #include "skin/dispatch.h"
 #include "skin/gloves.h"
+#include "skin/agents.h"
 #include "config/offsets.h"
 #include "config/auto_offsets.h"
 #include "diagnostics/log.h"
@@ -27,6 +28,11 @@
 #include "memory/scanner.h"
 #include "hooks/knife_animation.h"
 #include "inventory/plan_a.h"
+#include "inventory/armory_inventory.h"
+#include "inventory/native_equipment.h"
+#include "inventory/attachments.h"
+#include "inventory/native_apply.h"
+#include "inventory/runtime_mode.h"
 #include "skin/apply.h"
 #include "sdk/scene_node.h"
 #include "skin/glove_model_refresh.h"
@@ -43,6 +49,8 @@ static constexpr uintptr_t GES_OFF_HIGHEST_ENTITY = 0x2120;
 static constexpr uintptr_t GES_OFF_CHUNK_TABLE = 0x10;
 static constexpr uintptr_t GES_OFF_CHUNK_STRIDE = 0x70;
 static constexpr uint32_t  CTRL_OFF_PLAYERPAWN = 0x92C;
+static constexpr uintptr_t CTRL_OFF_CONNECTED = 0x6F4;   // PlayerConnectedState: 0 = Connected
+static constexpr uintptr_t CTRL_OFF_PAWN_ALIVE = 0x934;  // CCSPlayerController::m_bPawnIsAlive
 static constexpr uintptr_t PAWN_OFF_HEALTH = 0x34C;
 static constexpr int       VT_SOURCE2CLIENT_FSN = 36;
 static constexpr uint64_t SKIN_APPLY_INTERVAL_MS = 250;
@@ -63,6 +71,7 @@ static bool g_gloveUpdatePending = false;
 enum class MatchState { IDLE, IN_MATCH };
 static MatchState g_matchState = MatchState::IDLE;
 static uint64_t   g_lastDetectLogMs = 0;
+static uint64_t   g_lastInMatchMs = 0;
 static uint64_t   g_lastApplyMs = 0;
 static uintptr_t g_lastModelCachePawn = 0;
 
@@ -228,6 +237,58 @@ static uintptr_t MatchdetectGetPawn()
     return 0;
 }
 
+// ---- network connection state (engine2!NetworkGameClient) ----
+// A pawn can outlive a match and the main menu itself runs a background map, so
+// the pawn heuristic alone can stay latched in "in match". The network client
+// reports SIGNONSTATE_FULL (6) only for a real session; the menu's background
+// map carries its own flag.
+static constexpr uintptr_t RVA_NETWORK_GAME_CLIENT = 0x9B88C0;
+static constexpr uintptr_t RVA_NETWORK_BACKGROUND_MAP = 0x2C143F;
+static constexpr uintptr_t NET_OFF_SIGNON_STATE = 0x230;
+static constexpr uintptr_t NET_OFF_MAX_CLIENTS = 0x240;
+
+struct NetworkState
+{
+    bool available = false;
+    int32_t signOn = -1;
+    int32_t maxClients = 0;
+    bool backgroundMap = false;
+};
+
+static NetworkState ReadNetworkState()
+{
+    NetworkState state;
+
+    ModuleInfo engine = GetModule("engine2.dll");
+    if (!engine.valid()) return state;
+
+    uintptr_t client = 0;
+    if (!SafeReadQword(engine.base + RVA_NETWORK_GAME_CLIENT, client) || client < 0x10000)
+        return state;
+
+    int32_t signOn = 0;
+    int32_t maxClients = 0;
+
+    if (!SafeReadI32(client + NET_OFF_SIGNON_STATE, signOn) ||
+        !SafeReadI32(client + NET_OFF_MAX_CLIENTS, maxClients))
+    {
+        return state;
+    }
+
+    if (signOn < 0 || signOn > 6 || maxClients < 0 || maxClients > 64)
+        return state;
+
+    uint8_t background = 0;
+    const bool backgroundOk =
+        SafeReadU8(engine.base + RVA_NETWORK_BACKGROUND_MAP, background) && background <= 1;
+
+    state.available = true;
+    state.signOn = signOn;
+    state.maxClients = maxClients;
+    state.backgroundMap = backgroundOk && background == 1;
+    return state;
+}
+
 static void ObserveGloveState(uintptr_t pawn)
 {
     if (!pawn) return;
@@ -306,6 +367,10 @@ static void __fastcall FsnDetour(void* pClient, int stage)
 
             if (GloveAppliedThisTick())
                 g_gloveUpdatePending = true;
+
+            // Armory agents share the spawn/team transition with gloves: the
+            // model is only re-applied when the pawn, team or spawn changes.
+            Agents::Run(glovePawn);
         }
     }
 
@@ -351,7 +416,28 @@ static void __fastcall FsnDetour(void* pClient, int stage)
         KnifeAnimation::FrameStage(stage);
 
     if (stage != 6) return;
-    if (!g_enabled || g_targets.empty()) return;
+
+    const RuntimeMode runtimeMode = RuntimeModeState::Current();
+    const bool loadoutMode = runtimeMode == RuntimeMode::Loadout;
+
+    // Armory uses a separate generated-ID namespace. On first entry (including
+    // an Armory-first launch), remove only stale PlanA Loadout entries. Retry
+    // on subsequent frames if SOCache cleanup cannot complete safely.
+    static RuntimeMode lastStableMode = RuntimeMode::Unknown;
+    if (runtimeMode == RuntimeMode::Armory && lastStableMode != RuntimeMode::Armory)
+    {
+        if (PlanA::RemoveAllLoadoutItems())
+            lastStableMode = RuntimeMode::Armory;
+    }
+    else if (runtimeMode == RuntimeMode::Loadout &&
+             lastStableMode != RuntimeMode::Loadout &&
+             !g_targets.empty())
+    {
+        // The worker has completed Loadout parsing and compatibility checks.
+        // Create its managed items now, on the game thread.
+        PlanA::ReconcileAllItems();
+        lastStableMode = RuntimeMode::Loadout;
+    }
 
     uintptr_t observedPawn = MatchdetectGetPawn();
     if (observedPawn > 0x10000)
@@ -362,7 +448,65 @@ static void __fastcall FsnDetour(void* pClient, int stage)
     int32_t hp = 0;
     if (pawn) SafeReadI32(pawn + PAWN_OFF_HEALTH, hp);
 
-    bool inMatch = (pawn > 0x10000 && hp > 0);
+    const NetworkState network = ReadNetworkState();
+
+    // The local controller exists at the menu too and can still resolve a stale
+    // pawn. Its connection state is the authoritative "still in a server" flag:
+    // PlayerConnectedState::Connected == 0.
+    uintptr_t controller = 0;
+    SafeReadQword(CtrlGlobalAddr(GetClientModule()), controller);
+
+    int32_t connectedState = -1;
+    bool connectedKnown = false;
+    uint8_t pawnIsAlive = 0;
+    bool pawnAliveKnown = false;
+
+    if (controller >= 0x10000)
+    {
+        connectedKnown = SafeReadI32(controller + CTRL_OFF_CONNECTED, connectedState);
+        pawnAliveKnown = SafeReadU8(controller + CTRL_OFF_PAWN_ALIVE, pawnIsAlive);
+    }
+
+    const bool connectedToServer = !connectedKnown || connectedState == 0;
+
+    static bool g_loggedNetworkState = false;
+    if (!g_loggedNetworkState)
+    {
+        g_loggedNetworkState = true;
+
+        Log("[match] network signOn=%d maxClients=%d backgroundMap=%d connected=%d alive=%d",
+            network.signOn, network.maxClients, network.backgroundMap ? 1 : 0,
+            connectedKnown ? connectedState : -999,
+            pawnAliveKnown ? (int)pawnIsAlive : -1);
+
+        if (!network.available)
+            Log("[match] network state unavailable; using pawn heuristic");
+    }
+
+    bool inMatch;
+
+    if (network.available)
+    {
+        // SIGNONSTATE_FULL on a real map is an active match. The main menu's
+        // background map also reports full sign-on but sets the background flag.
+        inMatch = network.signOn == 6 && !network.backgroundMap;
+    }
+    else
+    {
+        inMatch = (pawn > 0x10000 && hp > 0);
+    }
+
+    if (!connectedToServer)
+        inMatch = false;
+
+    // The main-menu background scene keeps a controller connected to a local
+    // background map. Its pawn (when one resolves at all) is not alive; a real
+    // match always has a live pawn at the moment a loadout is sent.
+    if (pawnAliveKnown && pawnIsAlive == 0)
+        inMatch = false;
+
+    if (inMatch)
+        g_lastInMatchMs = now;
 
     // A new pawn means its weapon/HUD entities may be different.
     if (inMatch)
@@ -389,23 +533,108 @@ static void __fastcall FsnDetour(void* pClient, int stage)
     {
         g_matchState = MatchState::IN_MATCH;
         g_lastApplyMs = 0;
-        Log("[match] FOUND pawn=0x%p hp=%d", (void*)pawn, hp);
+        Log("[match] FOUND pawn=0x%p hp=%d signOn=%d bg=%d connected=%d",
+            (void*)pawn, hp, network.signOn, network.backgroundMap ? 1 : 0,
+            connectedKnown ? connectedState : -999);
     }
-    else if (!inMatch && g_matchState == MatchState::IN_MATCH)
+    else if (!inMatch && g_matchState == MatchState::IN_MATCH &&
+             now - g_lastInMatchMs >= 2000)
     {
         g_matchState = MatchState::IDLE;
         Log("[match] LOST pawn=0x%p hp=%d", (void*)pawn, hp);
     }
+
+    // ---- runtime loadout adoption (profile switching without reinjection) ----
+    if (HasStagedLoadout() && loadoutMode)
+    {
+        if (g_matchState == MatchState::IN_MATCH)
+        {
+            static uint64_t lastLoadoutDeferMs = 0;
+            if (now - lastLoadoutDeferMs >= 10000)
+            {
+                lastLoadoutDeferMs = now;
+                Log("[loadout] runtime change deferred: active match (signOn=%d bg=%d connected=%d)",
+                    network.signOn, network.backgroundMap ? 1 : 0,
+                    connectedKnown ? connectedState : -999);
+            }
+        }
+        else if (AdoptStagedLoadout())
+        {
+            PlanA::ReconcileAllItems();
+        }
+    }
+
+    // Observe native charm entities against the currently active weapon.
+    // Resolve the weapon from the pawn's weapon services so global charm
+    // entities belonging to other players/weapons are not mistaken as dupes.
+    if (runtimeMode == RuntimeMode::Armory)
+    {
+        static uint64_t lastCharmScanMs = 0;
+        if (now - lastCharmScanMs >= 5000)
+        {
+            lastCharmScanMs = now;
+
+            uintptr_t activeWeapon = 0;
+            uintptr_t weaponServices = 0;
+            uint32_t activeWeaponHandle = 0;
+
+            if (pawn > 0x10000 &&
+                SafeReadQword(pawn + g_off.PAWN_WeaponServices, weaponServices) &&
+                weaponServices > 0x10000 &&
+                SafeReadU32(weaponServices + g_off.WS_ActiveWeapon, activeWeaponHandle) &&
+                HandleValid(activeWeaponHandle))
+            {
+                activeWeapon = GetEntityByHandle(activeWeaponHandle);
+            }
+
+            Log("[charm-entity] active weapon handle=0x%08X entity=%p",
+                activeWeaponHandle, (void*)activeWeapon);
+            LogWorldKeychainEntities(activeWeapon);
+        }
+    }
+
+    // Armory inventory writes and attachment observation remain restricted to
+    // the non-match window. CS2's native inventory UI is authoritative for
+    // applying stickers and charms; the Bridge persists the observed result.
+    if (!inMatch && runtimeMode == RuntimeMode::Armory)
+    {
+        ArmoryInventory::AdoptPending();
+        NativeEquipment::Tick();
+        Attachments::ObserveAndPersist();
+        // The UseTool hook needs client.dll's Panorama script API; retry here
+        // when start-up ran before the client had registered it.
+        NativeApply::Tick();
+    }
+
+    // Keep the sources isolated while allowing Armory's currently equipped
+    // native inventory item to pass through the same entity apply pipeline.
+    if (runtimeMode != RuntimeMode::Loadout &&
+        runtimeMode != RuntimeMode::Armory)
+        return;
+
+    if (loadoutMode && (!g_enabled || g_targets.empty()))
+        return;
+
+    if (runtimeMode == RuntimeMode::Armory &&
+        !ArmoryInventory::HasItems())
+        return;
 
     if (g_matchState == MatchState::IDLE)
     {
         if (now - g_lastDetectLogMs >= 10000)
         {
             g_lastDetectLogMs = now;
-            Log("[detect] pawn=0x%p hp=%d", (void*)pawn, hp);
+            Log("[detect] pawn=0x%p hp=%d signOn=%d bg=%d",
+                (void*)pawn, hp, network.signOn, network.backgroundMap ? 1 : 0);
         }
         return;
     }
+
+    // The state machine keeps IN_MATCH for a short grace period after the
+    // network reports the session ended; do not run the apply pass on a pawn
+    // that may already be gone.
+    if (!inMatch)
+        return;
 
     // ---- IN_MATCH: Phase C apply cadence ----
     if (g_lastApplyMs != 0 &&
