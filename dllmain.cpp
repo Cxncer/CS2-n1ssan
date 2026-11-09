@@ -272,7 +272,6 @@ BOOL APIENTRY DllMain(HMODULE hModule, DWORD reason, LPVOID)
     else if (reason == DLL_PROCESS_DETACH)
     {
         if (g_hMinHook) FreeLibrary(g_hMinHook);
-        FreeConsole();
     }
     return TRUE;
 }
