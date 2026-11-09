@@ -46,7 +46,7 @@ This preflight confirms live definition and generated-material compatibility. It
 ## Validation workflow
 
 1. Build the DLL and run it in CS2.
-2. Check `n1ssalogs.md` for the `[schema-snapshot]` summary, including compatibility scan totals.
+2. Check `n1ssanlogs.md` for the `[schema-snapshot]` summary, including compatibility scan totals.
 3. Copy `n1ssan-cs2-schema.json` into the web-bridge repository at `src/armory/n1ssan-cs2-schema.json`.
 4. Run `npm run armory:validate-schema` in the web-bridge repository.
 

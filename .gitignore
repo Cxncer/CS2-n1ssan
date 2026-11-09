@@ -24,7 +24,7 @@ mono_crash.*
 x64/*
 !x64/Release/
 x64/Release/*
-!x64/Release/n1ssalogs.md
+!x64/Release/n1ssanlogs.md
 x86/
 [Ww][Ii][Nn]32/
 [Aa][Rr][Mm]/
