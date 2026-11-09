@@ -1,5 +1,5 @@
 // n1ssan-dll / src/diagnostics/log.cpp
-// Console + append-only diagnostic log and atomic machine-readable status snapshot.
+// Append-only file logger and atomic machine-readable status snapshot.
 
 #include "diagnostics/log.h"
 
@@ -156,19 +156,11 @@ namespace
 
 void LogInit(const std::string& dllPath)
 {
-    if (!AllocConsole()) {}
-    freopen_s(reinterpret_cast<FILE**>(stdin), "CONIN$", "r", stdin);
-    freopen_s(reinterpret_cast<FILE**>(stdout), "CONOUT$", "w", stdout);
-    freopen_s(reinterpret_cast<FILE**>(stderr), "CONOUT$", "w", stderr);
-    SetConsoleTitleA("Operation Armory x Obsidian Build 3.0");
-    setvbuf(stdout, nullptr, _IONBF, 0);
-    printf("[n1ssan] console attached\n");
-
     char dir[MAX_PATH]{};
     strcpy_s(dir, dllPath.c_str());
     char* slash = strrchr(dir, '\\');
     if (slash) *(slash + 1) = 0;
-    sprintf_s(g_logPath, "%sn1ssalogs.md", dir);
+    sprintf_s(g_logPath, "%sn1ssanlogs.md", dir);
 
     // Preserve previous sessions; each new DLL session appends to the log.
     g_logFile = _fsopen(g_logPath, "a", _SH_DENYNO);
@@ -176,7 +168,7 @@ void LogInit(const std::string& dllPath)
     {
         char tmp[MAX_PATH]{};
         GetTempPathA(MAX_PATH, tmp);
-        sprintf_s(g_logPath, "%sn1ssalogs.md", tmp);
+        sprintf_s(g_logPath, "%sn1ssanlogs.md", tmp);
         g_logFile = _fsopen(g_logPath, "a", _SH_DENYNO);
     }
 
