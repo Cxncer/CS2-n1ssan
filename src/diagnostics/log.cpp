@@ -173,8 +173,6 @@ void LogInit(const std::string& dllPath)
     }
 
     InitializeStatusPath();
-    printf("[n1ssan] log: %s\n", g_logPath);
-    if (g_statusPath[0]) printf("[n1ssan] status: %s\n", g_statusPath);
 
     if (g_logFile)
     {
@@ -191,7 +189,6 @@ void Log(const char* fmt, ...)
     va_start(ap, fmt);
     vsnprintf_s(buf, sizeof(buf), _TRUNCATE, fmt, ap);
     va_end(ap);
-    printf("%s\n", buf);
     if (g_logFile) { fputs(buf, g_logFile); fputc('\n', g_logFile); fflush(g_logFile); }
 }
 
