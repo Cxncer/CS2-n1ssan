@@ -14,7 +14,7 @@ Each snapshot is one UTF-8 line:
 
 `N1SSAN_STATUS|1|<UTC ISO-8601 timestamp>|<PID>|<build-id>|<state>|reason=<reason>`
 
-Fields containing pipes or line breaks are sanitized to underscores. The snapshot is replaced atomically so readers never consume a partially written record. The adjacent `n1ssalogs.md` remains an append-only human-readable diagnostic log.
+Fields containing pipes or line breaks are sanitized to underscores. The snapshot is replaced atomically so readers never consume a partially written record. The adjacent `n1ssanlogs.md` remains an append-only human-readable diagnostic log.
 
 ## States
 
