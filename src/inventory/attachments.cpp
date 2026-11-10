@@ -7,6 +7,7 @@
 #include "inventory/loot_patterns.h"
 #include "memory/scanner.h"
 #include "sdk/item_view.h"
+#include "config/offsets.h"
 
 #include <Windows.h>
 
@@ -881,6 +882,20 @@ namespace Attachments
         }
 
         return ok;
+    }
+
+    bool WriteItemView(std::uintptr_t itemView, const Set& set, const Set* previous)
+    {
+        if (!itemView || !g_off.EIV_AttributeList || !g_off.EIV_NetworkedAttrs)
+            return false;
+
+        // CS2 consumes both lists. Keep the normal list and networked dynamic
+        // list in sync, preserving unrelated attributes through SetOrAdd.
+        void* regular = reinterpret_cast<void*>(itemView + g_off.EIV_AttributeList);
+        void* networked = reinterpret_cast<void*>(itemView + g_off.EIV_NetworkedAttrs);
+        const bool regularOk = Write(regular, set, previous);
+        const bool networkedOk = Write(networked, set, previous);
+        return regularOk && networkedOk;
     }
 
     void Describe(const Set& set, char* out, std::size_t size)
