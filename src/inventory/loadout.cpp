@@ -480,6 +480,39 @@ bool ResolveBridgeDirectory(std::string& bridgeDirectory)
         return false;
     }
 
+    // The Launcher starts the Bridge as a child process, but CS2 is an
+    // already-running process and does not inherit the Bridge's environment.
+    // Packaged mode therefore cannot rely on N1SSAN_DATA_DIR being visible
+    // inside the injected DLL. The Bridge creates runtime-mode.json in this
+    // shared LocalAppData directory before injection; use that as the
+    // authoritative packaged-runtime handshake location.
+    char localAppData[MAX_PATH]{};
+    const DWORD localAppDataLength = GetEnvironmentVariableA(
+        "LOCALAPPDATA", localAppData, MAX_PATH);
+    if (localAppDataLength > 0 && localAppDataLength < MAX_PATH)
+    {
+        std::string localRuntimeDirectory = localAppData;
+        while (!localRuntimeDirectory.empty() &&
+            (localRuntimeDirectory.back() == '\\\\' ||
+             localRuntimeDirectory.back() == '/'))
+            localRuntimeDirectory.pop_back();
+        localRuntimeDirectory += "\\\\n1ssan";
+
+        std::string candidateDirectory = localRuntimeDirectory;
+        if (EnsureRuntimeDirectory(candidateDirectory) &&
+            IsRegularFile(candidateDirectory + "runtime-mode.json"))
+        {
+            bridgeDirectory = candidateDirectory;
+            Log("[bridge] using packaged runtime directory from LOCALAPPDATA: %s",
+                bridgeDirectory.c_str());
+            return true;
+        }
+    }
+    else if (localAppDataLength >= MAX_PATH)
+    {
+        Log("[bridge] LOCALAPPDATA exceeds MAX_PATH; continuing Bridge discovery");
+    }
+
     HMODULE dllModule = nullptr;
     if (!GetModuleHandleExA(
         GET_MODULE_HANDLE_EX_FLAG_FROM_ADDRESS |
