@@ -572,12 +572,6 @@ namespace
 
         EconAttr_Create(v, t.paintKit, t.wear, t.resolvedSeed, wantStatTrak, attachments);
 
-        // CS2 reads both CAttributeLists. The raw vector build above fills the
-        // ordinary list; populate the networked list through the engine setter.
-        if (!EconAttr_SyncNetworked(v, t.paintKit, t.wear, t.resolvedSeed,
-                wantStatTrak, attachments))
-            Log("[attr-networked] initial sync incomplete for view=%p", (void*)v);
-
         // Diagnostic: check whether attributes were created
         AttributeVector_t* post = GetAttributeVector(v);
         Log("[apply] %s post-create: size=%d data=%p alloc=%d",
@@ -673,6 +667,18 @@ bool ApplyWeaponSkin(uintptr_t weaponEnt, uintptr_t pawn, const TargetSkin& t,
             wantStatTrak,
             "world",
             attachments);
+    }
+
+    // The model cache is per live weapon. On its first build (and after an
+    // attachment-triggered invalidation), ensure paint and attachments are present
+    // in the networked CAttributeList as well as the ordinary list. This also runs
+    // when the ordinary ItemView vector was game-populated and our raw write skipped.
+    if (!alreadyPainted || g_weaponModelCache.find(weaponEnt) == g_weaponModelCache.end())
+    {
+        if (!EconAttr_SyncNetworked(view, t.paintKit, t.wear, t.resolvedSeed,
+                wantStatTrak, attachments))
+            Log("[attr-networked] sync incomplete for weapon=%p view=%p",
+                (void*)weaponEnt, (void*)view);
     }
 
     // Attachments can change independently of paint identity. Also retry them
