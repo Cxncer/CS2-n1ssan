@@ -572,6 +572,12 @@ namespace
 
         EconAttr_Create(v, t.paintKit, t.wear, t.resolvedSeed, wantStatTrak, attachments);
 
+        // CS2 reads both CAttributeLists. The raw vector build above fills the
+        // ordinary list; populate the networked list through the engine setter.
+        if (!EconAttr_SyncNetworked(v, t.paintKit, t.wear, t.resolvedSeed,
+                wantStatTrak, attachments))
+            Log("[attr-networked] initial sync incomplete for view=%p", (void*)v);
+
         // Diagnostic: check whether attributes were created
         AttributeVector_t* post = GetAttributeVector(v);
         Log("[apply] %s post-create: size=%d data=%p alloc=%d",
@@ -682,7 +688,7 @@ bool ApplyWeaponSkin(uintptr_t weaponEnt, uintptr_t pawn, const TargetSkin& t,
 
         if (!readable || current != *attachments)
         {
-            if (Attachments::Write(reinterpret_cast<void*>(view), *attachments,
+            if (Attachments::WriteItemView(view, *attachments,
                     readable ? &current : nullptr))
             {
                 char text[192]{};
