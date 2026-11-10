@@ -162,14 +162,15 @@ void LogInit(const std::string& dllPath)
     if (slash) *(slash + 1) = 0;
     sprintf_s(g_logPath, "%sn1ssanlogs.md", dir);
 
-    // Preserve previous sessions; each new DLL session appends to the log.
-    g_logFile = _fsopen(g_logPath, "a", _SH_DENYNO);
+    // Start a clean diagnostic file for every DLL injection session.
+    // The log contains only this session; previous-session output is intentionally replaced.
+    g_logFile = _fsopen(g_logPath, "w", _SH_DENYNO);
     if (!g_logFile)
     {
         char tmp[MAX_PATH]{};
         GetTempPathA(MAX_PATH, tmp);
         sprintf_s(g_logPath, "%sn1ssanlogs.md", tmp);
-        g_logFile = _fsopen(g_logPath, "a", _SH_DENYNO);
+        g_logFile = _fsopen(g_logPath, "w", _SH_DENYNO);
     }
 
     InitializeStatusPath();
