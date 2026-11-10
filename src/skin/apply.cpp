@@ -669,10 +669,12 @@ bool ApplyWeaponSkin(uintptr_t weaponEnt, uintptr_t pawn, const TargetSkin& t,
             attachments);
     }
 
-    // Stickers and the charm can change without the paint identity changing, so
-    // they are brought in line separately. A fresh view write already carries
-    // them; a view the game owns is left alone, as everywhere else here.
-    if (attachments && !attachments->Empty() && alreadyPainted)
+    // Attachments can change independently of paint identity. Also retry them
+    // when the first paint write was refused because CS2 had already populated
+    // the ItemView: that refusal must not silently skip the attachments too.
+    // A successful fresh view write already includes them, so avoid a duplicate
+    // schema write in that case.
+    if (attachments && !attachments->Empty() && (alreadyPainted || !viewWritten))
     {
         Attachments::Set current;
         const bool readable =
