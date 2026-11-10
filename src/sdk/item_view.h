@@ -55,6 +55,10 @@ void EconAttr_Remove(uintptr_t item);
 void EconAttr_Create(uintptr_t item, int paintKit, float wear, int seed, int statTrak,
                      const Attachments::Set* attachments = nullptr);
 
+// Populate the networked dynamic-attribute list using CS2's CAttributeList setter.
+bool EconAttr_SyncNetworked(uintptr_t item, int paintKit, float wear, int seed,
+                            int statTrak, const Attachments::Set* attachments);
+
 // Get the weapon's C_EconItemView* (weapon + EE_AttrManager + AC_Item).
 uintptr_t GetWeaponItem(uintptr_t weaponEnt);
 
