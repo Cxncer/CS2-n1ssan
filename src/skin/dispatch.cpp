@@ -139,7 +139,8 @@ bool ProcessWeapon(uintptr_t weaponEnt, uintptr_t pawn)
             const bool knifeChanged =
                 KnifeApply(weaponEnt, view, equipped.defIndex);
             const bool skinChanged =
-                ApplyWeaponSkin(weaponEnt, pawn, equipped);
+                ApplyWeaponSkin(weaponEnt, pawn, equipped,
+                    attachments.Empty() ? nullptr : &attachments);
             return knifeChanged || skinChanged;
         }
 

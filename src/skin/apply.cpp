@@ -669,10 +669,24 @@ bool ApplyWeaponSkin(uintptr_t weaponEnt, uintptr_t pawn, const TargetSkin& t,
             attachments);
     }
 
-    // Stickers and the charm can change without the paint identity changing, so
-    // they are brought in line separately. A fresh view write already carries
-    // them; a view the game owns is left alone, as everywhere else here.
-    if (attachments && !attachments->Empty() && alreadyPainted)
+    // The model cache is per live weapon. On its first build (and after an
+    // attachment-triggered invalidation), ensure paint and attachments are present
+    // in the networked CAttributeList as well as the ordinary list. This also runs
+    // when the ordinary ItemView vector was game-populated and our raw write skipped.
+    if (!alreadyPainted || g_weaponModelCache.find(weaponEnt) == g_weaponModelCache.end())
+    {
+        if (!EconAttr_SyncNetworked(view, t.paintKit, t.wear, t.resolvedSeed,
+                wantStatTrak, attachments))
+            Log("[attr-networked] sync incomplete for weapon=%p view=%p",
+                (void*)weaponEnt, (void*)view);
+    }
+
+    // Attachments can change independently of paint identity. Also retry them
+    // when the first paint write was refused because CS2 had already populated
+    // the ItemView: that refusal must not silently skip the attachments too.
+    // A successful fresh view write already includes them, so avoid a duplicate
+    // schema write in that case.
+    if (attachments && !attachments->Empty() && (alreadyPainted || !viewWritten))
     {
         Attachments::Set current;
         const bool readable =
@@ -680,7 +694,7 @@ bool ApplyWeaponSkin(uintptr_t weaponEnt, uintptr_t pawn, const TargetSkin& t,
 
         if (!readable || current != *attachments)
         {
-            if (Attachments::Write(reinterpret_cast<void*>(view), *attachments,
+            if (Attachments::WriteItemView(view, *attachments,
                     readable ? &current : nullptr))
             {
                 char text[192]{};

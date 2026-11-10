@@ -7,6 +7,7 @@
 #include "config/offsets.h"
 #include "diagnostics/log.h"
 #include "inventory/attachments.h"
+#include "inventory/loot_schema.h"
 
 #include <bit>
 #include <cstring>
@@ -143,6 +144,44 @@ void EconAttr_Create(uintptr_t item, int paintKit, float wear, int seed, int sta
         Attachments::Describe(*attachments, text, sizeof(text));
         Log("[attr] attachments written (%zu attributes): %s", total - i, text);
     }
+}
+
+bool EconAttr_SyncNetworked(uintptr_t item, int paintKit, float wear, int seed,
+                            int statTrak, const Attachments::Set* attachments)
+{
+    if (!item || !g_off.EIV_NetworkedAttrs)
+        return false;
+
+    // SetOrAddAttributeValueByName is a CAttributeList method: pass the
+    // embedded list handle, not the enclosing CEconItemView.
+    void* list = reinterpret_cast<void*>(item + g_off.EIV_NetworkedAttrs);
+    bool ok = true;
+
+    if (paintKit > 0)
+    {
+        ok = LootSchema::SetAttributeFloatByName(
+            list, "set item texture prefab", static_cast<float>(paintKit)) && ok;
+        ok = LootSchema::SetAttributeFloatByName(
+            list, "set item texture seed", static_cast<float>(seed >= 0 ? seed : 0)) && ok;
+        ok = LootSchema::SetAttributeFloatByName(
+            list, "set item texture wear", wear >= 0.0f ? wear : 0.01f) && ok;
+    }
+
+    if (statTrak >= 0)
+    {
+        const float killEater = std::bit_cast<float>(static_cast<int32_t>(statTrak));
+        const float scoreType = std::bit_cast<float>(static_cast<int32_t>(0));
+        ok = LootSchema::SetAttributeFloatByName(list, "kill eater", killEater) && ok;
+        ok = LootSchema::SetAttributeFloatByName(list, "kill eater score type", scoreType) && ok;
+    }
+
+    if (attachments && !attachments->Empty())
+        ok = Attachments::Write(list, *attachments, nullptr) && ok;
+
+    Log("[attr-networked] item=%p paint=%d stattrak=%d attachments=%d result=%d",
+        reinterpret_cast<void*>(item), paintKit, statTrak,
+        attachments && !attachments->Empty() ? 1 : 0, ok ? 1 : 0);
+    return ok;
 }
 
 uintptr_t GetWeaponItem(uintptr_t weaponEnt)

@@ -76,6 +76,8 @@ namespace Attachments
     // item held before: slots it used and `set` no longer does are cleared with
     // id 0 so the game drops them.
     bool Write(void* econItem, const Set& set, const Set* previous);
+    // Writes to both embedded CAttributeLists of a live CEconItemView.
+    bool WriteItemView(std::uintptr_t itemView, const Set& set, const Set* previous);
     // Updates sticker attributes only; charm and unrelated attributes are untouched.
     bool WriteStickerSlots(void* econItem, const Set& set, const Set* previous);
 
