@@ -349,6 +349,32 @@ static bool IsBridgeRoot(const std::string& path)
         IsRegularFile(path + "bridge\\server.ts");
 }
 
+static bool EnsureRuntimeDirectory(std::string& directory)
+{
+    if (directory.empty())
+        return false;
+
+    if (directory.back() != '\\' && directory.back() != '/')
+        directory.push_back('\\');
+
+    if (!CreateDirectoryA(directory.c_str(), nullptr) &&
+        GetLastError() != ERROR_ALREADY_EXISTS)
+    {
+        Log("[bridge] could not create runtime data directory (error=%lu)", GetLastError());
+        return false;
+    }
+
+    const DWORD attributes = GetFileAttributesA(directory.c_str());
+    if (attributes == INVALID_FILE_ATTRIBUTES ||
+        !(attributes & FILE_ATTRIBUTE_DIRECTORY))
+    {
+        Log("[bridge] runtime data path is not a directory: %s", directory.c_str());
+        return false;
+    }
+
+    return true;
+}
+
 bool ResolveBridgeDirectory(std::string& bridgeDirectory)
 {
     char configuredBridgeDir[MAX_PATH]{};
@@ -390,9 +416,41 @@ bool ResolveBridgeDirectory(std::string& bridgeDirectory)
         return false;
     }
 
-    // A configured data file may be the only path supplied by an older
-    // launcher. In Armory mode we still derive its containing Bridge root
-    // without opening or validating the Loadout JSON itself.
+    // Packaged installs keep shared runtime state outside the installation.
+    // Prefer the launcher's explicit data directory so mode requests and DLL
+    // acknowledgements use the same location as the Bridge.
+    char configuredDataDir[MAX_PATH]{};
+    const DWORD dataDirLength = GetEnvironmentVariableA(
+        "N1SSAN_DATA_DIR", configuredDataDir, MAX_PATH);
+    if (dataDirLength > 0 && dataDirLength < MAX_PATH)
+    {
+        char absoluteDataDir[MAX_PATH]{};
+        const DWORD absoluteLength = GetFullPathNameA(
+            configuredDataDir, MAX_PATH, absoluteDataDir, nullptr);
+        if (absoluteLength == 0 || absoluteLength >= MAX_PATH)
+        {
+            Log("[bridge] FATAL: N1SSAN_DATA_DIR could not be resolved (error=%lu)",
+                GetLastError());
+            return false;
+        }
+
+        bridgeDirectory = absoluteDataDir;
+        if (!EnsureRuntimeDirectory(bridgeDirectory))
+            return false;
+
+        Log("[bridge] using configured runtime data directory: %s",
+            bridgeDirectory.c_str());
+        return true;
+    }
+    if (dataDirLength >= MAX_PATH)
+    {
+        Log("[bridge] FATAL: N1SSAN_DATA_DIR exceeds MAX_PATH");
+        return false;
+    }
+
+    // Older launchers may provide only the persistent data-file path. Its
+    // parent is the runtime state directory, not necessarily a Bridge source
+    // tree (packaged installations store it under LocalAppData).
     char configuredDataFile[MAX_PATH]{};
     const DWORD dataLength = GetEnvironmentVariableA(
         "N1SSAN_DATA_FILE", configuredDataFile, MAX_PATH);
@@ -401,20 +459,21 @@ bool ResolveBridgeDirectory(std::string& bridgeDirectory)
         char absoluteDataFile[MAX_PATH]{};
         const DWORD absoluteLength = GetFullPathNameA(
             configuredDataFile, MAX_PATH, absoluteDataFile, nullptr);
-
-        if (absoluteLength > 0 && absoluteLength < MAX_PATH)
+        if (absoluteLength == 0 || absoluteLength >= MAX_PATH)
         {
-            const std::string candidate = DirectoryOf(absoluteDataFile);
-            if (IsBridgeRoot(candidate))
-            {
-                bridgeDirectory = candidate;
-                Log("[bridge] resolved from configured data-file directory: %s",
-                    bridgeDirectory.c_str());
-                return true;
-            }
+            Log("[bridge] FATAL: N1SSAN_DATA_FILE could not be resolved (error=%lu)",
+                GetLastError());
+            return false;
         }
-    }
 
+        bridgeDirectory = DirectoryOf(absoluteDataFile);
+        if (!EnsureRuntimeDirectory(bridgeDirectory))
+            return false;
+
+        Log("[bridge] resolved runtime data directory from configured data file: %s",
+            bridgeDirectory.c_str());
+        return true;
+    }
     if (dataLength >= MAX_PATH)
     {
         Log("[bridge] FATAL: N1SSAN_DATA_FILE exceeds MAX_PATH");
