@@ -32,11 +32,6 @@ bool        g_enabled = true;
 std::string g_loadoutSource;
 std::string g_bridgeDirectory;
 
-static std::string DirectoryOf(const std::string& path)
-{
-    const size_t slash = path.find_last_of("\\\\/");
-    return slash == std::string::npos ? std::string() : path.substr(0, slash + 1);
-}
 
 // ---- Weapon def-index table ----
 
@@ -336,17 +331,17 @@ static bool LoadJSON(const char* path, std::vector<LoadoutItem>& out, bool& enab
     return true;
 }
 
+static std::string DirectoryOf(const std::string& path)
+{
+    const size_t slash = path.find_last_of("\\\\/");
+    return slash == std::string::npos ? std::string() : path.substr(0, slash + 1);
+}
+
 static bool IsRegularFile(const std::string& path)
 {
     WIN32_FILE_ATTRIBUTE_DATA info{};
     return GetFileAttributesExA(path.c_str(), GetFileExInfoStandard, &info) &&
         !(info.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY);
-}
-
-static bool IsBridgeRoot(const std::string& path)
-{
-    return IsRegularFile(path + "package.json") &&
-        IsRegularFile(path + "bridge\\server.ts");
 }
 
 static bool EnsureRuntimeDirectory(std::string& directory)
@@ -377,236 +372,40 @@ static bool EnsureRuntimeDirectory(std::string& directory)
 
 bool ResolveBridgeDirectory(std::string& bridgeDirectory)
 {
-    char configuredBridgeDir[MAX_PATH]{};
-    const DWORD bridgeLength = GetEnvironmentVariableA(
-        "N1SSAN_BRIDGE_DIR", configuredBridgeDir, MAX_PATH);
-
-    if (bridgeLength > 0 && bridgeLength < MAX_PATH)
-    {
-        char absoluteBridgeDir[MAX_PATH]{};
-        const DWORD absoluteLength = GetFullPathNameA(
-            configuredBridgeDir, MAX_PATH, absoluteBridgeDir, nullptr);
-
-        if (absoluteLength == 0 || absoluteLength >= MAX_PATH)
-        {
-            Log("[bridge] FATAL: N1SSAN_BRIDGE_DIR could not be resolved (error=%lu)",
-                GetLastError());
-            return false;
-        }
-
-        bridgeDirectory = absoluteBridgeDir;
-        if (!bridgeDirectory.empty() &&
-            bridgeDirectory.back() != '\\' &&
-            bridgeDirectory.back() != '/')
-            bridgeDirectory.push_back('\\');
-
-        if (!IsBridgeRoot(bridgeDirectory))
-        {
-            Log("[bridge] FATAL: configured Bridge directory is invalid: %s",
-                bridgeDirectory.c_str());
-            return false;
-        }
-
-        return true;
-    }
-
-    if (bridgeLength >= MAX_PATH)
-    {
-        Log("[bridge] FATAL: N1SSAN_BRIDGE_DIR exceeds MAX_PATH");
-        return false;
-    }
-
-    // Packaged installs keep shared runtime state outside the installation.
-    // Prefer the launcher's explicit data directory so mode requests and DLL
-    // acknowledgements use the same location as the Bridge.
-    char configuredDataDir[MAX_PATH]{};
-    const DWORD dataDirLength = GetEnvironmentVariableA(
-        "N1SSAN_DATA_DIR", configuredDataDir, MAX_PATH);
-    if (dataDirLength > 0 && dataDirLength < MAX_PATH)
-    {
-        char absoluteDataDir[MAX_PATH]{};
-        const DWORD absoluteLength = GetFullPathNameA(
-            configuredDataDir, MAX_PATH, absoluteDataDir, nullptr);
-        if (absoluteLength == 0 || absoluteLength >= MAX_PATH)
-        {
-            Log("[bridge] FATAL: N1SSAN_DATA_DIR could not be resolved (error=%lu)",
-                GetLastError());
-            return false;
-        }
-
-        bridgeDirectory = absoluteDataDir;
-        if (!EnsureRuntimeDirectory(bridgeDirectory))
-            return false;
-
-        Log("[bridge] using configured runtime data directory: %s",
-            bridgeDirectory.c_str());
-        return true;
-    }
-    if (dataDirLength >= MAX_PATH)
-    {
-        Log("[bridge] FATAL: N1SSAN_DATA_DIR exceeds MAX_PATH");
-        return false;
-    }
-
-    // Older launchers may provide only the persistent data-file path. Its
-    // parent is the runtime state directory, not necessarily a Bridge source
-    // tree (packaged installations store it under LocalAppData).
-    char configuredDataFile[MAX_PATH]{};
-    const DWORD dataLength = GetEnvironmentVariableA(
-        "N1SSAN_DATA_FILE", configuredDataFile, MAX_PATH);
-    if (dataLength > 0 && dataLength < MAX_PATH)
-    {
-        char absoluteDataFile[MAX_PATH]{};
-        const DWORD absoluteLength = GetFullPathNameA(
-            configuredDataFile, MAX_PATH, absoluteDataFile, nullptr);
-        if (absoluteLength == 0 || absoluteLength >= MAX_PATH)
-        {
-            Log("[bridge] FATAL: N1SSAN_DATA_FILE could not be resolved (error=%lu)",
-                GetLastError());
-            return false;
-        }
-
-        bridgeDirectory = DirectoryOf(absoluteDataFile);
-        if (!EnsureRuntimeDirectory(bridgeDirectory))
-            return false;
-
-        Log("[bridge] resolved runtime data directory from configured data file: %s",
-            bridgeDirectory.c_str());
-        return true;
-    }
-    if (dataLength >= MAX_PATH)
-    {
-        Log("[bridge] FATAL: N1SSAN_DATA_FILE exceeds MAX_PATH");
-        return false;
-    }
-
-    // The Launcher starts the Bridge as a child process, but CS2 is an
-    // already-running process and does not inherit the Bridge's environment.
-    // Packaged mode therefore cannot rely on N1SSAN_DATA_DIR being visible
-    // inside the injected DLL. The Bridge creates runtime-mode.json in this
-    // shared LocalAppData directory before injection; use that as the
-    // authoritative packaged-runtime handshake location.
+    // Persistent profiles and runtime documents have exactly one location.
+    // The injected CS2 process resolves it independently; it cannot inherit
+    // environment variables from the Launcher's Bridge child process.
     char localAppData[MAX_PATH]{};
-    const DWORD localAppDataLength = GetEnvironmentVariableA(
-        "LOCALAPPDATA", localAppData, MAX_PATH);
-    if (localAppDataLength > 0 && localAppDataLength < MAX_PATH)
+    const DWORD length = GetEnvironmentVariableA("LOCALAPPDATA", localAppData, MAX_PATH);
+    if (length == 0 || length >= MAX_PATH)
     {
-        std::string localRuntimeDirectory = localAppData;
-        while (!localRuntimeDirectory.empty() &&
-            (localRuntimeDirectory.back() == '\\' ||
-             localRuntimeDirectory.back() == '/'))
-            localRuntimeDirectory.pop_back();
-        localRuntimeDirectory += "\\n1ssan";
-
-        std::string candidateDirectory = localRuntimeDirectory;
-        if (EnsureRuntimeDirectory(candidateDirectory) &&
-            IsRegularFile(candidateDirectory + "runtime-mode.json"))
-        {
-            bridgeDirectory = candidateDirectory;
-            Log("[bridge] using packaged runtime directory from LOCALAPPDATA: %s",
-                bridgeDirectory.c_str());
-            return true;
-        }
-    }
-    else if (localAppDataLength >= MAX_PATH)
-    {
-        Log("[bridge] LOCALAPPDATA exceeds MAX_PATH; continuing Bridge discovery");
-    }
-
-    HMODULE dllModule = nullptr;
-    if (!GetModuleHandleExA(
-        GET_MODULE_HANDLE_EX_FLAG_FROM_ADDRESS |
-        GET_MODULE_HANDLE_EX_FLAG_UNCHANGED_REFCOUNT,
-        reinterpret_cast<LPCSTR>(&ResolveBridgeDirectory),
-        &dllModule))
-    {
-        Log("[bridge] FATAL: could not resolve DLL module (error=%lu)", GetLastError());
+        Log("[config] FATAL: LOCALAPPDATA is unavailable or exceeds MAX_PATH");
         return false;
     }
 
-    char dllPath[MAX_PATH]{};
-    const DWORD pathLength = GetModuleFileNameA(dllModule, dllPath, MAX_PATH);
-    if (pathLength == 0 || pathLength >= MAX_PATH)
-    {
-        Log("[bridge] FATAL: could not read DLL path (error=%lu)", GetLastError());
+    std::string root = localAppData;
+    while (!root.empty() && (root.back() == '\\' || root.back() == '/'))
+        root.pop_back();
+    root += "\\n1ssan";
+
+    if (!EnsureRuntimeDirectory(root))
         return false;
-    }
 
-    char* slash = strrchr(dllPath, '\\');
-    char* forwardSlash = strrchr(dllPath, '/');
-    if (!slash || (forwardSlash && forwardSlash > slash))
-        slash = forwardSlash;
-
-    if (!slash)
-    {
-        Log("[bridge] FATAL: DLL path has no directory: %s", dllPath);
+    bridgeDirectory = root + "configs";
+    if (!EnsureRuntimeDirectory(bridgeDirectory))
         return false;
-    }
 
-    *(slash + 1) = 0;
-    std::string searchDirectory = dllPath;
-
-    while (!searchDirectory.empty())
-    {
-        std::string candidate = searchDirectory + "n1ssan-web-bridge\\";
-        if (IsBridgeRoot(candidate))
-        {
-            bridgeDirectory = candidate;
-            Log("[bridge] discovered Bridge directory: %s", bridgeDirectory.c_str());
-            return true;
-        }
-
-        while (!searchDirectory.empty() &&
-            (searchDirectory.back() == '\\' || searchDirectory.back() == '/'))
-            searchDirectory.pop_back();
-
-        const std::size_t parentSeparator = searchDirectory.find_last_of("\\/");
-        if (parentSeparator == std::string::npos)
-            break;
-
-        searchDirectory.resize(parentSeparator + 1);
-    }
-
-    Log("[bridge] FATAL: could not locate n1ssan-web-bridge from DLL directory");
-    return false;
+    Log("[config] canonical configuration directory: %s", bridgeDirectory.c_str());
+    return true;
 }
 
 static bool ResolveLoadoutPath(std::string& loadoutPath)
 {
-    char configuredDataFile[MAX_PATH]{};
-    const DWORD configuredLength = GetEnvironmentVariableA(
-        "N1SSAN_DATA_FILE", configuredDataFile, MAX_PATH);
-
-    if (configuredLength > 0 && configuredLength < MAX_PATH)
-    {
-        char absolutePath[MAX_PATH]{};
-        const DWORD absoluteLength = GetFullPathNameA(
-            configuredDataFile, MAX_PATH, absolutePath, nullptr);
-
-        if (absoluteLength == 0 || absoluteLength >= MAX_PATH)
-        {
-            Log("[loadout] FATAL: N1SSAN_DATA_FILE could not be resolved (error=%lu)",
-                GetLastError());
-            return false;
-        }
-
-        loadoutPath = absolutePath;
-        g_bridgeDirectory = DirectoryOf(loadoutPath);
-        Log("[loadout] configured data path: %s", loadoutPath.c_str());
-        return IsRegularFile(loadoutPath);
-    }
-
-    if (configuredLength >= MAX_PATH)
-    {
-        Log("[loadout] FATAL: N1SSAN_DATA_FILE exceeds MAX_PATH");
-        return false;
-    }
-
     if (!ResolveBridgeDirectory(g_bridgeDirectory))
         return false;
 
     loadoutPath = g_bridgeDirectory + "n1ssan-data.json";
-    Log("[loadout] Bridge data path: %s", loadoutPath.c_str());
+    Log("[loadout] canonical data path: %s", loadoutPath.c_str());
     return IsRegularFile(loadoutPath);
 }
 
