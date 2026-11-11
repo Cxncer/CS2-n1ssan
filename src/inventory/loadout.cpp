@@ -391,7 +391,7 @@ bool ResolveBridgeDirectory(std::string& bridgeDirectory)
     if (!EnsureRuntimeDirectory(root))
         return false;
 
-    bridgeDirectory = root + "\\configs";
+    bridgeDirectory = root + "configs";
     if (!EnsureRuntimeDirectory(bridgeDirectory))
         return false;
 
