@@ -385,23 +385,28 @@ namespace
 
     bool CallBuildModernSkin(uintptr_t item, uintptr_t entity, const char* which)
     {
-        if (!pBuildModernSkin || !item || !entity)
+        if (!item || !entity)
             return false;
 
-        __try
+        // BuildModernSkin expects the resolved CModel*, not the weapon/HUD
+        // entity. Passing the entity directly can make the engine dereference
+        // an unrelated object as a model during the live-match transition.
+        const uintptr_t model = GetModelPtr(entity);
+        if (model < 0x10000)
         {
-            pBuildModernSkin(
-                reinterpret_cast<void*>(item),
-                reinterpret_cast<void*>(entity),
-                0, 2048, 0, 0, nullptr);
-
-            return true;
-        }
-        __except (1)
-        {
-            Log("[apply] %s BuildModernSkin THREW", which);
+            Log("[apply] %s model pointer unavailable entity=%p",
+                which, (void*)entity);
             return false;
         }
+
+        if (!BuildModernSkin(item, model))
+        {
+            Log("[apply] %s BuildModernSkin failed item=%p model=%p entity=%p",
+                which, (void*)item, (void*)model, (void*)entity);
+            return false;
+        }
+
+        return true;
     }
 
     void CallInvalidateDesc(uintptr_t view)
