@@ -156,33 +156,69 @@ namespace
 
 void LogInit(const std::string& dllPath)
 {
-    char dir[MAX_PATH]{};
-    strcpy_s(dir, dllPath.c_str());
-    char* slash = strrchr(dir, '\\');
-    if (slash) *(slash + 1) = 0;
-    sprintf_s(g_logPath, "%sn1ssanlogs.md", dir);
+    g_logPath[0] = '\0';
 
-    // Start a clean diagnostic file for every DLL injection session.
-    // The log contains only this session; previous-session output is intentionally replaced.
+    // The session log must live beside the injected DLL. Never create a
+    // second session log in TEMP if the canonical location is unavailable.
+    if (dllPath.empty() || dllPath.size() >= MAX_PATH)
+    {
+        printf("[n1ssan] ERROR: invalid DLL path; session log was not created.\n");
+        InitializeStatusPath();
+        if (g_statusPath[0]) printf("[n1ssan] status: %s\n", g_statusPath);
+        return;
+    }
+
+    char dir[MAX_PATH]{};
+    if (strcpy_s(dir, dllPath.c_str()) != 0)
+    {
+        printf("[n1ssan] ERROR: DLL directory path could not be copied; session log was not created.\n");
+        InitializeStatusPath();
+        if (g_statusPath[0]) printf("[n1ssan] status: %s\n", g_statusPath);
+        return;
+    }
+
+    char* slash = strrchr(dir, '\\');
+    if (!slash)
+    {
+        printf("[n1ssan] ERROR: DLL directory could not be resolved; session log was not created.\n");
+        InitializeStatusPath();
+        if (g_statusPath[0]) printf("[n1ssan] status: %s\n", g_statusPath);
+        return;
+    }
+    *(slash + 1) = '\0';
+
+    if (sprintf_s(g_logPath, "%sn1ssanlogs.md", dir) <= 0)
+    {
+        g_logPath[0] = '\0';
+        printf("[n1ssan] ERROR: canonical session log path is too long.\n");
+        InitializeStatusPath();
+        if (g_statusPath[0]) printf("[n1ssan] status: %s\n", g_statusPath);
+        return;
+    }
+
+    // "w" intentionally replaces the previous session on every injection.
     g_logFile = _fsopen(g_logPath, "w", _SH_DENYNO);
     if (!g_logFile)
     {
-        char tmp[MAX_PATH]{};
-        GetTempPathA(MAX_PATH, tmp);
-        sprintf_s(g_logPath, "%sn1ssanlogs.md", tmp);
-        g_logFile = _fsopen(g_logPath, "w", _SH_DENYNO);
+        printf("[n1ssan] ERROR: cannot open canonical session log: %s\n", g_logPath);
+        g_logPath[0] = '\0';
+        InitializeStatusPath();
+        if (g_statusPath[0]) printf("[n1ssan] status: %s\n", g_statusPath);
+        return;
     }
 
     InitializeStatusPath();
     printf("[n1ssan] log: %s\n", g_logPath);
     if (g_statusPath[0]) printf("[n1ssan] status: %s\n", g_statusPath);
 
-    if (g_logFile)
-    {
-        Log("");
-        Log("# n1ssan diagnostic session");
-        Log("[build] %s", kBuildId);
-    }
+    SYSTEMTIME sessionUtc{};
+    GetSystemTime(&sessionUtc);
+
+    Log("# n1ssan diagnostic session");
+    Log("Session started (UTC): %04u-%02u-%02uT%02u:%02u:%02uZ",
+        sessionUtc.wYear, sessionUtc.wMonth, sessionUtc.wDay,
+        sessionUtc.wHour, sessionUtc.wMinute, sessionUtc.wSecond);
+    Log("[build] %s", kBuildId);
 }
 
 void Log(const char* fmt, ...)
