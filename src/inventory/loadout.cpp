@@ -32,11 +32,6 @@ bool        g_enabled = true;
 std::string g_loadoutSource;
 std::string g_bridgeDirectory;
 
-static std::string DirectoryOf(const std::string& path)
-{
-    const size_t slash = path.find_last_of("\\\\/");
-    return slash == std::string::npos ? std::string() : path.substr(0, slash + 1);
-}
 
 // ---- Weapon def-index table ----
 
@@ -341,12 +336,6 @@ static bool IsRegularFile(const std::string& path)
     WIN32_FILE_ATTRIBUTE_DATA info{};
     return GetFileAttributesExA(path.c_str(), GetFileExInfoStandard, &info) &&
         !(info.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY);
-}
-
-static bool IsBridgeRoot(const std::string& path)
-{
-    return IsRegularFile(path + "package.json") &&
-        IsRegularFile(path + "bridge\\server.ts");
 }
 
 static bool EnsureRuntimeDirectory(std::string& directory)
