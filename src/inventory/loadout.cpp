@@ -389,14 +389,14 @@ bool ResolveBridgeDirectory(std::string& bridgeDirectory)
     }
 
     std::string root = localAppData;
-    while (!root.empty() && (root.back() == '\\\\' || root.back() == '/'))
+    while (!root.empty() && (root.back() == '\\' || root.back() == '/'))
         root.pop_back();
-    root += "\\\\n1ssan";
+    root += "\\n1ssan";
 
     if (!EnsureRuntimeDirectory(root))
         return false;
 
-    bridgeDirectory = root + "\\\\configs";
+    bridgeDirectory = root + "\\configs";
     if (!EnsureRuntimeDirectory(bridgeDirectory))
         return false;
 
