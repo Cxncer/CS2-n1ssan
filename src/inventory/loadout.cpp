@@ -331,6 +331,12 @@ static bool LoadJSON(const char* path, std::vector<LoadoutItem>& out, bool& enab
     return true;
 }
 
+static std::string DirectoryOf(const std::string& path)
+{
+    const size_t slash = path.find_last_of("\\\\/");
+    return slash == std::string::npos ? std::string() : path.substr(0, slash + 1);
+}
+
 static bool IsRegularFile(const std::string& path)
 {
     WIN32_FILE_ATTRIBUTE_DATA info{};
