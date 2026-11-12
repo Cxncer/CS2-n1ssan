@@ -214,10 +214,29 @@ void LogInit(const std::string& dllPath)
     SYSTEMTIME sessionUtc{};
     GetSystemTime(&sessionUtc);
 
+    // The session stamp is read in Cambodia time (UTC+7, no daylight saving).
+    // FILETIME ticks are 100ns, so an hour is 36,000,000,000 ticks.
+    SYSTEMTIME sessionLocal = sessionUtc;
+    FILETIME utcFileTime{};
+
+    if (SystemTimeToFileTime(&sessionUtc, &utcFileTime))
+    {
+        ULARGE_INTEGER ticks{};
+        ticks.LowPart = utcFileTime.dwLowDateTime;
+        ticks.HighPart = utcFileTime.dwHighDateTime;
+        ticks.QuadPart += 7ULL * 36000000000ULL;
+
+        utcFileTime.dwLowDateTime = ticks.LowPart;
+        utcFileTime.dwHighDateTime = ticks.HighPart;
+
+        if (!FileTimeToSystemTime(&utcFileTime, &sessionLocal))
+            sessionLocal = sessionUtc;
+    }
+
     Log("# n1ssan diagnostic session");
-    Log("Session started (UTC): %04u-%02u-%02uT%02u:%02u:%02uZ",
-        sessionUtc.wYear, sessionUtc.wMonth, sessionUtc.wDay,
-        sessionUtc.wHour, sessionUtc.wMinute, sessionUtc.wSecond);
+    Log("Session started (Cambodia, UTC+7): %04u-%02u-%02u %02u:%02u:%02u",
+        sessionLocal.wYear, sessionLocal.wMonth, sessionLocal.wDay,
+        sessionLocal.wHour, sessionLocal.wMinute, sessionLocal.wSecond);
     Log("[build] %s", kBuildId);
 }
 
