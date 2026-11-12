@@ -6,13 +6,14 @@
 #include "config/offsets.h"
 #include "config/auto_offsets.h"
 #include "diagnostics/log.h"
+#include "inventory/engine_schema_diagnostic.h"
 #include "memory/scanner.h"
 #include "skin/gloves.h"
 
 #include <windows.h>
 #include <cstdint>
 
-// Legacy globals — absolute VAs, read by sdk/entities.cpp and sdk/functions.cpp
+// Legacy globals ï¿½ absolute VAs, read by sdk/entities.cpp and sdk/functions.cpp
 uintptr_t RVA_ENTITY_LIST = 0;
 uintptr_t RVA_LOCALPLAYERCONTROLLER = 0;
 uintptr_t RVA_LOCALPLAYERPAWN = 0;
@@ -33,6 +34,30 @@ void ResolveOffsets()
     g_off.EIV_AttributeList = FB_EIV_AttributeList;
     g_off.EIV_NetworkedAttrs = FB_EIV_NetworkedAttrs;
     g_off.EIV_CustomName = FB_EIV_CustomName;
+
+    // The name tag text lives in C_EconItemView::m_szCustomName. The constant is
+    // only a fallback: writing an empty name at a stale offset left the real name
+    // on the item, and CS2 then drew a tag with the weapon's own name on skins
+    // that have no custom name in the Armory at all.
+    {
+        uintptr_t schemaOffset = 0;
+        if (ResolveEngineSchemaField("C_EconItemView", "m_szCustomName", schemaOffset) && schemaOffset)
+        {
+            if (schemaOffset != g_off.EIV_CustomName)
+            {
+                Log("[off] EIV_CustomName schema override: 0x%llX -> 0x%llX",
+                    static_cast<unsigned long long>(g_off.EIV_CustomName),
+                    static_cast<unsigned long long>(schemaOffset));
+            }
+
+            g_off.EIV_CustomName = schemaOffset;
+        }
+        else
+        {
+            Log("[off] EIV_CustomName schema field not found; keeping 0x%llX",
+                static_cast<unsigned long long>(g_off.EIV_CustomName));
+        }
+    }
 
     g_off.AC_Item = FB_AC_Item;
 
@@ -70,6 +95,37 @@ void ResolveOffsets()
     g_off.CTRL_SteamID = FB_CTRL_SteamID;
     g_off.CTRL_hPawn = FB_CTRL_hPawn;
 
+    // ---- Schema override for fields CS2 shifts between updates ----
+    // The 12 Nov 2026 update moved m_hHudModelArms away from 0x1DA8: the read
+    // returned 0, FindHudWeapon bailed out on an invalid arms handle on every
+    // tick, and first-person skins stopped applying (the world model was still
+    // painted). The schema system still resolves the field by name, so it wins
+    // over the constant whenever it disagrees.
+    {
+        uintptr_t schemaOffset = 0;
+        const char* pawnClasses[] = { "C_CSPlayerPawn", "CCSPlayerPawn" };
+
+        for (const char* className : pawnClasses)
+        {
+            if (!ResolveEngineSchemaField(className, "m_hHudModelArms", schemaOffset) ||
+                schemaOffset == 0 || schemaOffset >= 0x4000)
+            {
+                continue;
+            }
+
+            if (schemaOffset != g_off.PAWN_hHudModelArms)
+            {
+                Log("[off] PAWN_hHudModelArms schema override: 0x%llX -> 0x%llX (%s)",
+                    static_cast<unsigned long long>(g_off.PAWN_hHudModelArms),
+                    static_cast<unsigned long long>(schemaOffset),
+                    className);
+            }
+
+            g_off.PAWN_hHudModelArms = schemaOffset;
+            break;
+        }
+    }
+
     Log("[off] field offsets populated");
 
     // ---- Global pointer offsets: try runtime scan first ----
@@ -82,7 +138,7 @@ void ResolveOffsets()
     }
     else
     {
-        Log("[off] client.dll not loaded — auto-offset skipped");
+        Log("[off] client.dll not loaded ï¿½ auto-offset skipped");
     }
 
     // ---- Mirror to legacy RVA_* as absolute VAs (with fallback to hardcoded RVA + base) ----

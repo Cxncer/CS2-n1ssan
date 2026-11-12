@@ -39,7 +39,8 @@ namespace
         int         paintKit = 0;
         int         seed = 0;
         float       wear = 0.001f;
-        int         statTrak = -1; // -1 none, 0 enabled with 0 kills
+                int statTrak = -1; // -1 none, otherwise the saved kill count (0 = none yet)
+        std::string customName; // nametag, empty when none
         int         stickerKit = 0;
         int         keychain = 0;
         int         keychainSeed = 0;
@@ -136,7 +137,20 @@ namespace
         if (k == std::string::npos) return false;
         const size_t colon = object.find(':', k + needle.size());
         if (colon == std::string::npos) return false;
-        const size_t quote = object.find('"', colon + 1);
+
+        // "customName": null must not read the next key's name. The old code took
+        // the first quote after the colon, which for null is the opening quote of
+        // the following field - every unnamed skin got that field's name ("kind")
+        // as its custom name and the game drew a nametag with it.
+        size_t cursor = colon + 1;
+        while (cursor < object.size() &&
+               (object[cursor] == ' ' || object[cursor] == '\t' ||
+                object[cursor] == '\r' || object[cursor] == '\n'))
+            ++cursor;
+
+        if (object.compare(cursor, 4, "null") == 0) return false;
+
+        const size_t quote = object.find('"', cursor);
         if (quote == std::string::npos) return false;
 
         std::string value;
@@ -333,6 +347,16 @@ namespace
             if (ExtractBool(object, "statTrak", statTrak))
                 item.statTrak = statTrak ? 0 : -1;
 
+            // Saved kills travel with the instance so the in-game counter
+            // continues from where it stopped when the same skin is reloaded.
+            double kills = 0;
+            if (item.statTrak >= 0 && ExtractNumber(object, "statTrakKills", kills) && kills > 0)
+                item.statTrak = static_cast<int>(kills);
+
+            std::string customName;
+            if (ExtractString(object, "customName", customName))
+                item.customName = customName;
+
             item.id = StableIdFor(item);
             out.push_back(std::move(item));
         }
@@ -512,7 +536,10 @@ namespace
         target.resolvedSeed = item.seed;
         target.wear = item.wear;
         target.statTrak = item.statTrak >= 0;
+        target.statTrakKills = item.statTrak > 0 ? item.statTrak : 0;
         target.defIndex = item.definition;
+        target.instanceId = item.instanceId;
+        target.customName = item.customName;
 
         if (attachments)
             *attachments = item.attachments;
@@ -948,7 +975,10 @@ namespace ArmoryInventory
             target.resolvedSeed = item.seed;
             target.wear = item.wear;
             target.statTrak = item.statTrak >= 0;
+            target.statTrakKills = item.statTrak > 0 ? item.statTrak : 0;
             target.defIndex = item.definition;
+            target.instanceId = item.instanceId;
+            target.customName = item.customName;
             return true;
         }
         return false;

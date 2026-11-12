@@ -11,6 +11,9 @@
 #include "config/auto_offsets.h"
 #include "inventory/loot_schema.h"
 #include "inventory/attachments.h"
+#include "inventory/charm.h"
+#include "inventory/stattrak_kills.h"
+#include "inventory/runtime_mode.h"
 #include "memory/scanner.h"
 #include "inventory/engine_schema_diagnostic.h"
 
@@ -605,20 +608,40 @@ namespace
         if (!SafeReadI32(view + g_off.EIV_EntityQuality, curQuality))   return false;
 
         const int wantQuality = IsKnifeDefinition(t.defIndex) ? 3 : (t.statTrak ? 9 : 0);
-        const int wantStatTrak = t.statTrak ? 0 : -1;
+
+        // StatTrak is identity (present or not), never the saved count: the game
+        // increments the counter while the skin is equipped, so comparing counts
+        // would rewrite the view every tick and drop the live count back to the
+        // saved one.
+        const bool statTrakMatches = (curStatTrak >= 0) == t.statTrak;
         const bool wearMatch = std::fabsf(curWear - t.wear) < 0.001f;
+
+        // Only a saved count that is ahead of the live one needs a rewrite (the
+        // instance gained kills elsewhere). A live count above the saved one is
+        // the game's own progress and must never be reset.
+        const bool killsAhead = t.statTrak && t.statTrakKills > curStatTrak;
 
         return curPK == t.paintKit &&
             curSeed == t.resolvedSeed &&
             wearMatch &&
-            curStatTrak == wantStatTrak &&
+            statTrakMatches &&
+            !killsAhead &&
             curQuality == wantQuality;
     }
+}
+
+namespace
+{
+    // Custom name last handed to CS2's nametag helper, per weapon. A repeated
+    // apply must not re-create the tag module; only a name change does.
+    std::unordered_map<uintptr_t, std::string> g_nameTagCache;
 }
 
 void InvalidateWeaponModelCache()
 {
     g_weaponModelCache.clear();
+    g_nameTagCache.clear();
+    Charm::ForgetAll();
 
     Log("[apply-cache] weapon model cache invalidated");
 }
@@ -640,10 +663,23 @@ bool ApplyWeaponSkin(uintptr_t weaponEnt, uintptr_t pawn, const TargetSkin& t,
     if (!view)
         return false;
 
+    // The charm must be written here: CS2 renders it from these attributes, and
+    // without them it only exists in the inventory UI. The duplicate seen in
+    // game is a second keychain entity created by the world-model build; it is
+    // removed after the rebuild below (see RemoveWorldKeychainEntities).
     const int wantQuality =
         IsKnifeDefinition(t.defIndex) ? 3 : (t.statTrak ? 9 : 0);
 
-    const int wantStatTrak = t.statTrak ? 0 : -1;
+    // Kills continue from the saved instance: EconAttr_Create writes this into
+    // "kill eater", and the game increments it from there.
+    const int wantStatTrak =
+        t.statTrak ? (t.statTrakKills > 0 ? t.statTrakKills : 0) : -1;
+
+    // The charm is written once, inside the view write below, and never cleared:
+    // the keychain setters fault on this client after a model build (the 07:52
+    // session lost every charm that way), so the attribute stays and Charm::Upkeep
+    // removes the extra entities and rebuilds the HUD addon instead.
+    const Attachments::Set* buildAttachments = attachments;
 
     const bool alreadyPainted =
         IsAlreadyApplied(weaponEnt, view, t);
@@ -666,35 +702,31 @@ bool ApplyWeaponSkin(uintptr_t weaponEnt, uintptr_t pawn, const TargetSkin& t,
             wantQuality,
             wantStatTrak,
             "world",
-            attachments);
+            buildAttachments);
     }
 
-    // The model cache is per live weapon. On its first build (and after an
-    // attachment-triggered invalidation), ensure paint and attachments are present
-    // in the networked CAttributeList as well as the ordinary list. This also runs
-    // when the ordinary ItemView vector was game-populated and our raw write skipped.
-    if (!alreadyPainted || g_weaponModelCache.find(weaponEnt) == g_weaponModelCache.end())
-    {
-        if (!EconAttr_SyncNetworked(view, t.paintKit, t.wear, t.resolvedSeed,
-                wantStatTrak, attachments))
-            Log("[attr-networked] sync incomplete for weapon=%p view=%p",
-                (void*)weaponEnt, (void*)view);
-    }
+    // The networked CAttributeList sync that used to run here is deliberately
+    // gone. Every attribute it set raised through CS2's schema setter (the log
+    // showed twelve "CallSetAttribute: threw" per apply), and the ordinary
+    // attribute list - written above and below - is the one CS2 reads for the
+    // weapon material. The exception storm also left BuildModernSkin and
+    // RegenerateSkins faulting on the very tick a match starts, which is the
+    // client crash.
 
     // Attachments can change independently of paint identity. Also retry them
     // when the first paint write was refused because CS2 had already populated
     // the ItemView: that refusal must not silently skip the attachments too.
     // A successful fresh view write already includes them, so avoid a duplicate
     // schema write in that case.
-    if (attachments && !attachments->Empty() && (alreadyPainted || !viewWritten))
+    if (buildAttachments && !buildAttachments->Empty() && (alreadyPainted || !viewWritten))
     {
         Attachments::Set current;
         const bool readable =
             Attachments::Read(reinterpret_cast<void*>(view), current);
 
-        if (!readable || current != *attachments)
+        if (!readable || current != *buildAttachments)
         {
-            if (Attachments::WriteItemView(view, *attachments,
+            if (Attachments::WriteItemView(view, *buildAttachments,
                     readable ? &current : nullptr))
             {
                 char text[192]{};
@@ -849,6 +881,74 @@ bool ApplyWeaponSkin(uintptr_t weaponEnt, uintptr_t pawn, const TargetSkin& t,
         }
     }
 
+    // Name tag: the custom name lives on the item view, and CS2's own helper
+    // hangs (or removes) the gun's "nametag" module from it. Done after the
+    // material, as Lootline does, and only when the name changed so a repeated
+    // apply does not rebuild the module every tick.
+    {
+        // Lootline calls its nametag helper after every apply and lets CS2 decide:
+        // same name = nothing, another name = replace, no name = take the tag off.
+        // This reads the name straight off the item view, so a stale tag left by
+        // an older build (or a real item name) is cleared, not kept.
+        std::string viewName;
+        bool nameReadable = false;
+
+        if (g_off.EIV_CustomName)
+        {
+            const char* raw = reinterpret_cast<const char*>(view + g_off.EIV_CustomName);
+
+            if (raw)
+            {
+                for (size_t i = 0; i < 160; ++i)
+                {
+                    if (raw[i] == '\0')
+                    {
+                        nameReadable = true;
+                        break;
+                    }
+
+                    viewName.push_back(raw[i]);
+                }
+            }
+        }
+
+        if (!nameReadable || viewName != t.customName)
+        {
+            SetCustomName(view, t.customName);
+            ClearNameCache(view, "nametag");
+
+            const bool tagged = AddNametag(weaponEnt, view);
+            Log("[nametag] weapon=%p was=\"%s\" name=\"%s\" applied=%d",
+                (void*)weaponEnt, viewName.c_str(), t.customName.c_str(),
+                tagged ? 1 : 0);
+        }
+
+        if (!t.customName.empty())
+            g_nameTagCache[weaponEnt] = t.customName;
+        else
+            g_nameTagCache.erase(weaponEnt);
+    }
+
+    // Charm: Lootline's upkeep. CS2 builds the charm from the item's keychain
+    // attribute (written with the view above); the world model build also hangs a
+    // rigid copy on the gun, so every charm entity is taken off the gun and the
+    // first-person addon is rebuilt from the attribute - once, not every tick.
+    Charm::Upkeep(weaponEnt, hudWeapon, attachments);
+
+    // StatTrak: the counter the game keeps lives on the weapon, not on the saved
+    // instance. Hand it back to the Armory instance so loading the same skin
+    // continues where it stopped.
+    if (t.statTrak && !t.instanceId.empty())
+    {
+        int liveKills = 0;
+
+        if (SafeReadI32(weaponEnt + g_off.EE_FallbackStatTrak, liveKills) &&
+            liveKills > t.statTrakKills)
+        {
+            StatTrakKills::Record(t.instanceId, liveKills);
+        }
+    }
+
     const bool identityChanged =
         !alreadyPainted || nameChanged;
 
@@ -885,6 +985,11 @@ void ApplyDefault(uintptr_t weaponEnt)
     SetCustomName(view, "");
     SafeWriteU32(view + 0x5A0, 0);
     SafeWriteU32(view + 0x5A4, 0);
+
+    // Remove the gun's name tag with CS2's own helper, then forget the cached
+    // name so a later apply of the same name writes it again.
+    g_nameTagCache.erase(weaponEnt);
+    AddNametag(weaponEnt, view);
 
     ClearNameCache(view, "default");
 }

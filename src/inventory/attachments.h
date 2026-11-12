@@ -74,12 +74,23 @@ namespace Attachments
     // Writes `set` onto an item through the schema's attribute setters, which
     // append or update by definition. `previous`, when given, is the state the
     // item held before: slots it used and `set` no longer does are cleared with
-    // id 0 so the game drops them.
-    bool Write(void* econItem, const Set& set, const Set* previous);
-    // Writes to both embedded CAttributeLists of a live CEconItemView.
+    // id 0 so the game drops them. `includeCharm` is false when the target list
+    // is a second copy of the same item's attributes: CS2 creates one keychain
+    // entity per list that carries the charm, and the id must live in one list.
+    bool Write(void* econItem, const Set& set, const Set* previous, bool includeCharm = true);
+    // Writes to both embedded CAttributeLists of a live CEconItemView. Stickers
+    // are mirrored into both; the charm is written once only.
     bool WriteItemView(std::uintptr_t itemView, const Set& set, const Set* previous);
     // Updates sticker attributes only; charm and unrelated attributes are untouched.
     bool WriteStickerSlots(void* econItem, const Set& set, const Set* previous);
+
+    // Updates the charm attributes only, on one attribute list. The one-charm
+    // pass needs this: CS2 faults the schema setters when the whole set is
+    // rewritten on a view it has already built, but a charm-only write on the
+    // list is the same call the normal path already makes successfully. A charm
+    // with `present == false` clears the keychain id (id 0) and nothing else.
+    bool WriteCharm(void* econItem, const Charm& charm);
+
 
     // One-line description for diagnostics.
     void Describe(const Set& set, char* out, std::size_t size);

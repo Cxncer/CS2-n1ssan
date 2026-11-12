@@ -807,7 +807,46 @@ namespace Attachments
         return ok;
     }
 
-    bool Write(void* econItem, const Set& set, const Set* previous)
+    bool WriteCharm(void* econItem, const Charm& charm)
+    {
+        if (!econItem) return false;
+        if (!Initialize()) return false;
+
+        bool ok = true;
+        char name[48]{};
+
+        CharmName(name, sizeof(name), "id");
+        ok = SetIntByName(econItem, name, charm.present ? charm.kit : 0) && ok;
+
+        if (!charm.present)
+            return ok;
+
+        CharmName(name, sizeof(name), "offset x");
+        ok = SetFloatByName(econItem, name, charm.x) && ok;
+        CharmName(name, sizeof(name), "offset y");
+        ok = SetFloatByName(econItem, name, charm.y) && ok;
+        CharmName(name, sizeof(name), "offset z");
+        ok = SetFloatByName(econItem, name, charm.z) && ok;
+        CharmName(name, sizeof(name), "seed");
+        ok = SetIntByName(econItem, name, charm.seed) && ok;
+
+        if (charm.hasSticker)
+        {
+            CharmName(name, sizeof(name), "sticker");
+            if (NameOk(name))
+                ok = SetIntByName(econItem, name, charm.sticker) && ok;
+        }
+        if (charm.hasHighlight)
+        {
+            CharmName(name, sizeof(name), "highlight");
+            if (NameOk(name))
+                ok = SetIntByName(econItem, name, charm.highlight) && ok;
+        }
+
+        return ok;
+    }
+
+    bool Write(void* econItem, const Set& set, const Set* previous, bool includeCharm)
     {
         if (!econItem) return false;
         if (!Initialize()) return false;
@@ -850,7 +889,7 @@ namespace Attachments
 
         const Charm& charm = set.charm;
         const bool wasCharm = previous && previous->charm.present;
-        if (charm.present || wasCharm)
+        if (includeCharm && (charm.present || wasCharm))
         {
             CharmName(name, sizeof(name), "id");
             ok = SetIntByName(econItem, name, charm.present ? charm.kit : 0) && ok;
@@ -889,12 +928,15 @@ namespace Attachments
         if (!itemView || !g_off.EIV_AttributeList || !g_off.EIV_NetworkedAttrs)
             return false;
 
-        // CS2 consumes both lists. Keep the normal list and networked dynamic
-        // list in sync, preserving unrelated attributes through SetOrAdd.
+        // Stickers are kept in both lists. The charm is not: CS2 builds a
+        // keychain entity from every attribute list that carries "keychain slot
+        // 0 id", so writing it to both leaves a second, non-simulated charm
+        // hanging rigidly on the weapon. Lootline keeps the charm in the
+        // ordinary list only, and so do we.
         void* regular = reinterpret_cast<void*>(itemView + g_off.EIV_AttributeList);
         void* networked = reinterpret_cast<void*>(itemView + g_off.EIV_NetworkedAttrs);
-        const bool regularOk = Write(regular, set, previous);
-        const bool networkedOk = Write(networked, set, previous);
+        const bool regularOk = Write(regular, set, previous, true);
+        const bool networkedOk = Write(networked, set, previous, false);
         return regularOk && networkedOk;
     }
 

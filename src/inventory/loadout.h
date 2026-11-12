@@ -15,6 +15,14 @@ struct TargetSkin
     float       wear = 0.5f;
     bool        legacyModel = false;
     bool        statTrak = false;
+    // Kills saved on the Armory instance. Written into the item's "kill eater"
+    // attribute so the in-game counter continues from where it stopped.
+    int         statTrakKills = 0;
+    // Armory instance this target came from (empty in Loadout mode). Used to
+    // hand the live StatTrak count back to that instance.
+    std::string instanceId;
+    // Custom name tag applied to the weapon (empty = none).
+    std::string customName;
     std::string skinName;
     std::string weaponName;
     std::string team;

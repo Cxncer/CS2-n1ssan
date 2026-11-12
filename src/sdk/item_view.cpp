@@ -146,6 +146,11 @@ void EconAttr_Create(uintptr_t item, int paintKit, float wear, int seed, int sta
     }
 }
 
+// Not called from the apply path: on the current client every attribute setter
+// on the networked CAttributeList faults ("CallSetAttribute: threw"), and the
+// ordinary CAttributeList the apply path writes is what CS2 reads for the
+// weapon material. Kept for the networked-attribute work; do not wire it back
+// into ApplyWeaponSkin without first proving the setters succeed.
 bool EconAttr_SyncNetworked(uintptr_t item, int paintKit, float wear, int seed,
                             int statTrak, const Attachments::Set* attachments)
 {
@@ -175,8 +180,11 @@ bool EconAttr_SyncNetworked(uintptr_t item, int paintKit, float wear, int seed,
         ok = LootSchema::SetAttributeFloatByName(list, "kill eater score type", scoreType) && ok;
     }
 
+    // Stickers only. The ordinary attribute list already carries the charm, and
+    // a second "keychain slot 0 id" here makes CS2 spawn a second charm entity
+    // that does not follow the weapon's physics.
     if (attachments && !attachments->Empty())
-        ok = Attachments::Write(list, *attachments, nullptr) && ok;
+        ok = Attachments::Write(list, *attachments, nullptr, false) && ok;
 
     Log("[attr-networked] item=%p paint=%d stattrak=%d attachments=%d result=%d",
         reinterpret_cast<void*>(item), paintKit, statTrak,

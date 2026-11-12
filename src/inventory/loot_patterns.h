@@ -22,6 +22,25 @@ namespace LootPatterns
     // event dispatch silently drops events sent from any other thread, so the
     // customization notification only counts from here.
     inline constexpr const char* UiEngineRunFrame = "48 89 5C 24 ? 48 89 6C 24 ? 56 57 41 54 41 56 41 57 48 81 EC ? ? ? ? 45 33 F6 48 8B F1 44 89 B1 ? ? ? ? 0F 31";
+    // CS2's C_KeychainModule remover (Lootline: RemoveKeychainModule). Takes the
+    // charm entity itself; used to drop the rigid world charm a weapon keeps
+    // beside the simulated first-person addon.
+    inline constexpr const char* RemoveKeychainModule = "48 83 EC 28 48 85 C9 74 ? 48 8B 51 10 8B 42 30 0F BA E0 0B 73 ? C1 E8 06";
+    // CS2's own keychain entity creator (Lootline: AddKeyChainEntity). Takes the
+    // weapon, builds a keychain_module from the item's keychain attributes and
+    // returns false when it could not. This is the entity that simulates:
+    // removing it alone leaves a charm that cannot swing.
+    inline constexpr const char* AddKeyChainEntity = "44 88 44 24 ? 48 89 54 24 ? 48 89 4C 24 ? 55 53 56 57 41 54 41 55 41 56 41 57 48 8D AC 24";
+    // CS2's name tag helper (Lootline: AddNametagEntity). Takes the gun and its
+    // item view, reads the item's custom name and hangs, replaces or removes the
+    // nametag module on the gun's "nametag" attachment.
+    inline constexpr const char* AddNametagEntity = "40 55 53 56 48 8D AC 24 ? ? ? ? 48 81 EC ? ? ? ? 48 8B DA 48 8B F1 48 85 C9";
+    // The HUD weapon's addon dictionary lookup and its addon remover. Rebuilding
+    // the "keychain" addon this way is what makes CS2 create the charm exactly
+    // once, from the attribute, on the first-person model (Lootline's
+    // RebuildHudKeychainAddon).
+    inline constexpr const char* FindHudKeychainAddon = "48 89 5C 24 18 57 41 56 41 57 48 83 EC 20 49 8B F9 45 8B F0 45 33 C9 4C 8B FA 48 8B D9 E8";
+    inline constexpr const char* RemoveHudKeychainAddon = "48 83 EC 28 48 85 C9 0F 84 ? ? ? ? 48 8B 51 10 8B 42 30 0F BA E0 0B 73 07 C1 E8";
     // The Game Coordinator reply handler that builds CS2's "item customization"
     // event. Every field of the event is read from the instructions after it - see
     // native_apply.cpp (ResolveNotifier).
