@@ -80,7 +80,23 @@ static DWORD WINAPI RuntimeModeActivationThread(LPVOID)
     for (;;)
     {
         const RuntimeMode requested = RuntimeModeState::Requested();
-        if (requested == RuntimeMode::Unknown || requested == lastAttempted)
+
+        // Withdrawn selection: stop feeding the game-thread hooks from any
+        // source until the user applies a profile again.
+        if (requested == RuntimeMode::Unknown)
+        {
+            if (RuntimeModeState::Current() != RuntimeMode::Unknown)
+            {
+                RuntimeModeState::SetCurrent(RuntimeMode::Unknown);
+                Log("[runtime-mode] selection withdrawn; runtime is inactive");
+            }
+
+            lastAttempted = RuntimeMode::Unknown;
+            Sleep(250);
+            continue;
+        }
+
+        if (requested == lastAttempted)
         {
             Sleep(250);
             continue;
@@ -255,11 +271,25 @@ static DWORD WINAPI InjectThread(LPVOID)
     return 0;
 }
 
+// Held for the lifetime of the process. A second n1ssan-dll copy would install
+// a second FrameStageNotify hook and a second SOCache writer in the same game,
+// which duplicates inventory items and crashes the client when a match starts.
+static HANDLE g_instanceMutex = nullptr;
+
 BOOL APIENTRY DllMain(HMODULE hModule, DWORD reason, LPVOID)
 {
     if (reason == DLL_PROCESS_ATTACH)
     {
         DisableThreadLibraryCalls(hModule);
+
+        char mutexName[MAX_PATH]{};
+        sprintf_s(mutexName, "Local\\n1ssan-dll-%lu", GetCurrentProcessId());
+        g_instanceMutex = CreateMutexA(nullptr, TRUE, mutexName);
+        if (g_instanceMutex && GetLastError() == ERROR_ALREADY_EXISTS)
+        {
+            OutputDebugStringA("[n1ssan] another n1ssan-dll copy is already loaded; this one stays inert\n");
+            return TRUE;
+        }
 
         char dllPath[MAX_PATH]{};
         GetModuleFileNameA(hModule, dllPath, MAX_PATH);
