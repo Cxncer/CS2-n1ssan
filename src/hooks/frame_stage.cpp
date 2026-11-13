@@ -644,6 +644,7 @@ static void __fastcall FsnDetour(void* pClient, int stage)
     }
 
     g_lastApplyMs = now;
+    ClearApplyBuildFault();
     Log("[apply] tick pawn=0x%p", (void*)pawn);
 
     // ---- m_pWeaponServices ----
@@ -738,7 +739,13 @@ static void __fastcall FsnDetour(void* pClient, int stage)
 
     // Match Lootline: the shared regenerate pass is driven by weapon/knife
     // identity changes. Glove rebuilding is handled by its own engine flag.
-    if (didUpdate && pRegenerateSkins)
+    if (didUpdate && pRegenerateSkins && ApplyBuildFaulted())
+    {
+        // A material build faulted on this pass. Handing the half-built item to
+        // RegenerateSkins is what faulted the client, so wait for a clean pass.
+        Log("[skin-regenerate] skipped: weapon material build faulted");
+    }
+    else if (didUpdate && pRegenerateSkins)
     {
         Log("[skin-regenerate] calling pRegenerateSkins weaponChanged=%d",
             (int)didUpdate);

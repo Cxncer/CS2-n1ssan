@@ -27,6 +27,7 @@ namespace
 
     // Lootline: KEYCHAIN_CHECK_MS 1000, KEYCHAIN_MAX_REPAIRS 20.
     constexpr uint64_t CHECK_MS = 1000;
+    constexpr uint64_t DEFERRED_CHECK_MS = 250;
     constexpr int MAX_REPAIRS = 20;
 }
 
@@ -60,6 +61,8 @@ void Charm::Upkeep(uintptr_t weapon, uintptr_t hudWeapon, const Attachments::Set
     const bool missing = wanted > 0 && hanging == 0;
     const bool selectionChanged = state.lastWanted != wanted;
 
+    bool deferred = false;
+
     if ((duplicated || missing || selectionChanged) && state.repairs < MAX_REPAIRS)
     {
         const int removed = RemoveWorldKeychainEntities(weapon);
@@ -77,12 +80,33 @@ void Charm::Upkeep(uintptr_t weapon, uintptr_t hudWeapon, const Attachments::Set
         Log("[charm] gun=%p hud=%p wanted=%d hanging=%d removed=%d keychainEntity=%d hudHanging=%d hudRemoved=%d hudCall=%d repair=%d",
             (void*)weapon, (void*)hudWeapon, wanted, hanging, removed, added ? 1 : 0,
             hudHanging, hudRemoved, rebuilt ? 1 : 0, state.repairs);
+
+        // A charm that should be there but whose HUD weapon could not be resolved
+        // (FindHudWeapon returns 0 while CS2 is still building the viewmodel) is
+        // exactly the double charm the player sees on AWP/M4A4: the world keychain
+        // entity plus the static charm the keychain addon still owns. That pass did
+        // not fix anything, so keep it pending and retry instead of recording the
+        // gun as repaired.
+        deferred = wanted > 0 && !hudWeapon;
+
+        if (deferred)
+        {
+            // Retry sooner than the normal cadence: the HUD weapon only has to
+            // survive a viewmodel rebuild, and the repair budget is finite.
+            state.nextCheckMs = now + DEFERRED_CHECK_MS;
+
+            Log("[charm] gun=%p repair deferred: HUD weapon not resolved (attempt %d/%d)",
+                (void*)weapon, state.repairs, MAX_REPAIRS);
+        }
     }
     else if (state.repairs >= MAX_REPAIRS && state.lastHanging != hanging)
     {
         Log("[charm] gun=%p wanted=%d hanging=%d repairs exhausted",
             (void*)weapon, wanted, hanging);
     }
+
+    if (deferred)
+        return;
 
     state.lastWanted = wanted;
     state.lastHanging = hanging;

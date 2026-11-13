@@ -135,6 +135,55 @@ static DWORD WINAPI RuntimeModeActivationThread(LPVOID)
     return 0;
 }
 
+// ---- Signature health (Stormwatch) ----
+
+// Counts the engine signatures the runtime actually resolved. A missing
+// signature is reported by name so an outdated build is visible in the status
+// record instead of only failing later, mid-apply.
+static char g_signatureHealth[40] = "signatures=0/0";
+
+static void LogSignatureHealth()
+{
+    struct Signature
+    {
+        const char* name;
+        const void*  address;
+    };
+
+    const Signature signatures[] = {
+        { "BuildModernSkin",           reinterpret_cast<const void*>(pBuildModernSkin) },
+        { "SetMeshGroupMask",          reinterpret_cast<const void*>(pSetMeshGroupMask) },
+        { "RegenerateSkins",           reinterpret_cast<const void*>(pRegenerateSkins) },
+        { "ReleaseCompositeMaterials", reinterpret_cast<const void*>(pReleaseCompositeMaterials) },
+        { "GloveCreatePaintKit",       reinterpret_cast<const void*>(pGloveCreatePaintKit) },
+        { "GloveSetBodyGroup",         reinterpret_cast<const void*>(pGloveSetBodyGroup) },
+        { "AgentSetModel",             reinterpret_cast<const void*>(pAgentSetModel) },
+        { "KnifeUpdateSubclass",       reinterpret_cast<const void*>(pKnifeUpdateSubclass) },
+        { "MemAlloc",                  reinterpret_cast<const void*>(pMemAlloc) },
+        { "MemFree",                   reinterpret_cast<const void*>(pMemFree) },
+        { "InvalidateDescription",     reinterpret_cast<const void*>(pInvalidateDescription) },
+    };
+
+    const int total = static_cast<int>(sizeof(signatures) / sizeof(signatures[0]));
+    int resolved = 0;
+
+    for (const Signature& signature : signatures)
+    {
+        if (signature.address)
+        {
+            ++resolved;
+            continue;
+        }
+
+        Log("[health] signature missing: %s", signature.name);
+    }
+
+    sprintf_s(g_signatureHealth, sizeof(g_signatureHealth),
+        "signatures=%d/%d", resolved, total);
+
+    Log("[health] %s", g_signatureHealth);
+}
+
 // ---- Initialization worker ----
 
 static DWORD WINAPI InjectThread(LPVOID)
@@ -142,12 +191,12 @@ static DWORD WINAPI InjectThread(LPVOID)
     // Keep filesystem and console initialization out of DllMain/loader lock.
     LogInit(g_dllPath);
     Log("[build] Operation Armory x Obsidian Build 3.0 | %s %s", __DATE__, __TIME__);
-    LogStatus("INITIALIZING", "worker_started");
+    LogStatus("INITIALIZING", "worker_started", "E_NONE");
 
     if (!LoadMinHook())
     {
         Log("[fatal] MinHook load failed");
-        LogStatus("FAILED", "minhook_load_failed");
+        LogStatus("FAILED", "minhook_load_failed", "E_MINHOOK_LOAD");
         return 0;
     }
 
@@ -159,7 +208,7 @@ static DWORD WINAPI InjectThread(LPVOID)
     if (!GetModuleHandleA("client.dll"))
     {
         Log("[fatal] client.dll not found");
-        LogStatus("FAILED", "client_module_unavailable");
+        LogStatus("FAILED", "client_module_unavailable", "E_CLIENT_MODULE");
         return 0;
     }
 
@@ -171,7 +220,7 @@ static DWORD WINAPI InjectThread(LPVOID)
     if (!ResolveBridgeDirectory(bridgeDirectory))
     {
         Log("[fatal] Bridge directory unavailable");
-        LogStatus("FAILED", "bridge_directory_unavailable");
+        LogStatus("FAILED", "bridge_directory_unavailable", "E_BRIDGE_DIRECTORY");
         return 0;
     }
 
@@ -194,9 +243,12 @@ static DWORD WINAPI InjectThread(LPVOID)
     if (!ResolveFunctions())
     {
         Log("[fatal] function resolution failed");
-        LogStatus("FAILED", "function_resolution_failed");
+        LogSignatureHealth();
+        LogStatus("FAILED", "function_resolution_failed", "E_FUNCTION_RESOLUTION");
         return 0;
     }
+
+    LogSignatureHealth();
 
     const bool glovePaintKitReady = GlovePaintKitSchema::Initialize();
     const bool gloveSchemaReady = GlovesSchema::Initialize("client.dll");
@@ -216,7 +268,7 @@ static DWORD WINAPI InjectThread(LPVOID)
     if (!PlanA::Start(loadoutMode))
     {
         Log("[fatal] shared inventory runtime initialization failed");
-        LogStatus("FAILED", "inventory_runtime_initialization_failed");
+        LogStatus("FAILED", "inventory_runtime_initialization_failed", "E_INVENTORY_RUNTIME");
         return 0;
     }
 
@@ -240,7 +292,7 @@ static DWORD WINAPI InjectThread(LPVOID)
     if (!InstallFSNHook())
     {
         Log("[fatal] FSN hook not installed");
-        LogStatus("FAILED", "fsn_hook_installation_failed");
+        LogStatus("FAILED", "fsn_hook_installation_failed", "E_FSN_HOOK");
         return 0;
     }
 
@@ -248,23 +300,30 @@ static DWORD WINAPI InjectThread(LPVOID)
     if (!modeThread)
     {
         Log("[fatal] runtime-mode activation worker could not be created");
-        LogStatus("FAILED", "runtime_mode_worker_unavailable");
+        LogStatus("FAILED", "runtime_mode_worker_unavailable", "E_MODE_WORKER");
         return 0;
     }
     CloseHandle(modeThread);
 
-    LogStatus("CHECKS_PASSED", "required_initialization_checks_passed");
+    LogStatus("CHECKS_PASSED", "required_initialization_checks_passed", "E_NONE");
     Log("[diagnostic] runtime=unknown targets=%zu; awaiting DOMINATE selection",
         g_targets.size());
 
     const char* runtimeState = optionalFeaturesDegraded ? "DEGRADED" : "READY";
-    const char* runtimeReason = optionalFeaturesDegraded
-        ? "optional_glove_schema_unavailable"
-        : "runtime_worker_heartbeat";
+    const char* runtimeCode = optionalFeaturesDegraded
+        ? "W_OPTIONAL_FEATURE_UNAVAILABLE"
+        : "E_NONE";
+
+    // The heartbeat reason carries the signature health so consumers report an
+    // outdated build alongside the state instead of a bare "ready".
+    char runtimeReason[160]{};
+    sprintf_s(runtimeReason, sizeof(runtimeReason), "%s %s",
+        optionalFeaturesDegraded ? "optional_glove_schema_unavailable" : "runtime_worker_heartbeat",
+        g_signatureHealth);
 
     while (true)
     {
-        LogStatus(runtimeState, runtimeReason);
+        LogStatus(runtimeState, runtimeReason, runtimeCode);
         Sleep(10000);
     }
 

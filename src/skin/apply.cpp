@@ -635,12 +635,54 @@ namespace
     // Custom name last handed to CS2's nametag helper, per weapon. A repeated
     // apply must not re-create the tag module; only a name change does.
     std::unordered_map<uintptr_t, std::string> g_nameTagCache;
+
+    // Weapons whose item view belongs to CS2 (it already carried attributes) and
+    // must not be written again, keyed to the view they were ignored on.
+    std::unordered_map<uintptr_t, uintptr_t> g_ignoredViews;
+
+    // Last first-person weapon that resolved for a gun. CS2 rebuilds the
+    // viewmodel after every skin regeneration, so FindHudWeapon legitimately
+    // returns 0 for a frame or two; without a fallback the one-charm pass defers
+    // its HUD work and the static charm stays on the gun.
+    std::unordered_map<uintptr_t, uintptr_t> g_lastHudWeapon;
+
+    // Only trust a remembered HUD weapon while its owner handle still resolves
+    // back to the same world weapon; a respawn or weapon switch frees it.
+    bool HudWeaponStillOwned(uintptr_t hudWeapon, uintptr_t weaponEnt)
+    {
+        if (!hudWeapon || !weaponEnt)
+            return false;
+
+        const uint32_t ownerHandle =
+            static_cast<uint32_t>(ReadHandle(hudWeapon, g_off.BE_hOwnerEntity));
+
+        if (!HandleValid(ownerHandle))
+            return false;
+
+        return GetEntityByHandle(ownerHandle) == weaponEnt;
+    }
+
+    // Set when an apply pass could not build a weapon's material, so the caller
+    // does not hand the half-built item to RegenerateSkins.
+    bool g_buildFaulted = false;
+}
+
+bool ApplyBuildFaulted()
+{
+    return g_buildFaulted;
+}
+
+void ClearApplyBuildFault()
+{
+    g_buildFaulted = false;
 }
 
 void InvalidateWeaponModelCache()
 {
     g_weaponModelCache.clear();
     g_nameTagCache.clear();
+    g_ignoredViews.clear();
+    g_lastHudWeapon.clear();
     Charm::ForgetAll();
 
     Log("[apply-cache] weapon model cache invalidated");
@@ -684,26 +726,47 @@ bool ApplyWeaponSkin(uintptr_t weaponEnt, uintptr_t pawn, const TargetSkin& t,
     const bool alreadyPainted =
         IsAlreadyApplied(weaponEnt, view, t);
 
-    bool viewWritten = false;
+    // A view CS2 already populated is the game's own item, not ours. Writing
+    // into it makes CS2's schema setters throw on every attribute
+    // ("CallSetAttribute: threw"), leaves a second keychain entity behind (the
+    // double charm on AWP/M4A4) and then makes BuildModernSkin and
+    // RegenerateSkins fault on the same tick, which is the client crash. Leave
+    // that item to the game, and remember the decision so an ignored weapon does
+    // not retry - or log - on every apply tick.
+    if (!alreadyPainted && g_ignoredViews[weaponEnt] == view)
+        return false;
 
     if (!alreadyPainted)
     {
         Log("[apply] enter (weapon=0x%p def=%u pk=%d)",
             (void*)weaponEnt, t.defIndex, t.paintKit);
 
+        if (!WriteViewSafely(
+                view,
+                t,
+                wantQuality,
+                wantStatTrak,
+                "world",
+                buildAttachments))
+        {
+            g_ignoredViews[weaponEnt] = view;
+
+            Log("[apply] def=%u view=0x%p is CS2-owned; leaving the game's item untouched",
+                t.defIndex, (void*)view);
+
+            return false;
+        }
+
+        // The fallback fields are what this apply pass compares against on the
+        // next tick. Only record them once the view is ours: on a game-owned
+        // item they would relabel a weapon whose material was never written.
         SafeWriteI32(weaponEnt + g_off.EE_FallbackPK, t.paintKit);
         SafeWriteI32(weaponEnt + g_off.EE_FallbackSeed, t.resolvedSeed);
         SafeWriteFloat(weaponEnt + g_off.EE_FallbackWear, t.wear);
         SafeWriteI32(weaponEnt + g_off.EE_FallbackStatTrak, wantStatTrak);
-
-        viewWritten = WriteViewSafely(
-            view,
-            t,
-            wantQuality,
-            wantStatTrak,
-            "world",
-            buildAttachments);
     }
+
+    const bool viewWritten = !alreadyPainted;
 
     // The networked CAttributeList sync that used to run here is deliberately
     // gone. Every attribute it set raised through CS2's schema setter (the log
@@ -718,7 +781,7 @@ bool ApplyWeaponSkin(uintptr_t weaponEnt, uintptr_t pawn, const TargetSkin& t,
     // the ItemView: that refusal must not silently skip the attachments too.
     // A successful fresh view write already includes them, so avoid a duplicate
     // schema write in that case.
-    if (buildAttachments && !buildAttachments->Empty() && (alreadyPainted || !viewWritten))
+    if (buildAttachments && !buildAttachments->Empty() && alreadyPainted)
     {
         Attachments::Set current;
         const bool readable =
@@ -784,8 +847,28 @@ bool ApplyWeaponSkin(uintptr_t weaponEnt, uintptr_t pawn, const TargetSkin& t,
 
     const uint64_t mask = GetMeshMask(t.paintKit);
 
-    const uintptr_t hudWeapon =
-        FindHudWeapon(weaponEnt, pawn);
+    uintptr_t hudWeapon = FindHudWeapon(weaponEnt, pawn);
+
+    if (hudWeapon)
+    {
+        g_lastHudWeapon[weaponEnt] = hudWeapon;
+    }
+    else
+    {
+        auto cachedHud = g_lastHudWeapon.find(weaponEnt);
+
+        if (cachedHud != g_lastHudWeapon.end() &&
+            HudWeaponStillOwned(cachedHud->second, weaponEnt))
+        {
+            hudWeapon = cachedHud->second;
+            Log("[hud-find] using remembered hud=%p for weapon=%p",
+                (void*)hudWeapon, (void*)weaponEnt);
+        }
+        else if (cachedHud != g_lastHudWeapon.end())
+        {
+            g_lastHudWeapon.erase(cachedHud);
+        }
+    }
 
     auto cacheIt = g_weaponModelCache.find(weaponEnt);
 
@@ -854,6 +937,11 @@ bool ApplyWeaponSkin(uintptr_t weaponEnt, uintptr_t pawn, const TargetSkin& t,
             hudBuilt =
                 CallBuildModernSkin(view, hudWeapon, "hud");
         }
+
+        // A build that faulted leaves the gun's material half-built; regenerating
+        // skins on top of that is what the crash log showed faulting, so the pass
+        // reports it instead of caching the state.
+        g_buildFaulted = g_buildFaulted || !worldBuilt || !hudModelReady;
 
         // Only cache a completed rebuild. If a required function
         // is unavailable or throws, retry on the next apply tick.

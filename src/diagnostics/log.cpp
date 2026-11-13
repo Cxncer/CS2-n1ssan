@@ -251,23 +251,25 @@ void Log(const char* fmt, ...)
     if (g_logFile) { fputs(buf, g_logFile); fputc('\n', g_logFile); fflush(g_logFile); }
 }
 
-void LogStatus(const char* state, const char* reason)
+void LogStatus(const char* state, const char* reason, const char* code)
 {
     SYSTEMTIME utc{};
     GetSystemTime(&utc);
 
     char safeState[64]{};
     char safeReason[512]{};
+    char safeCode[64]{};
     char record[768]{};
 
     SanitizeStatusField(state, safeState, sizeof(safeState));
     SanitizeStatusField(reason, safeReason, sizeof(safeReason));
+    SanitizeStatusField(code ? code : "E_NONE", safeCode, sizeof(safeCode));
 
     sprintf_s(record, sizeof(record),
-        "N1SSAN_STATUS|1|%04u-%02u-%02uT%02u:%02u:%02uZ|%lu|%s|%s|reason=%s",
+        "N1SSAN_STATUS|2|%04u-%02u-%02uT%02u:%02u:%02uZ|%lu|%s|%s|reason=%s|code=%s",
         utc.wYear, utc.wMonth, utc.wDay, utc.wHour, utc.wMinute, utc.wSecond,
         static_cast<unsigned long>(GetCurrentProcessId()),
-        kBuildId, safeState, safeReason);
+        kBuildId, safeState, safeReason, safeCode);
 
     Log("%s", record);
     Log("[status-write] begin state=%s path=%s", safeState,
