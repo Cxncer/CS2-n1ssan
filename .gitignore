@@ -364,3 +364,5 @@ MigrationBackup/
 
 # Fody - auto-generated XML schema
 FodyWeavers.xsd
+# Native session log (overwritten on every injection)
+x64/Release/n1ssanlogs.md
