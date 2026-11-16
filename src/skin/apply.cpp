@@ -60,6 +60,13 @@ namespace
     {
         modelName.clear();
 
+        static std::unordered_map<uint16_t, std::string> s_knifeModelCache;
+        auto it = s_knifeModelCache.find(definitionIndex);
+        if (it != s_knifeModelCache.end()) {
+            modelName = it->second;
+            return !modelName.empty();
+        }
+
         if (!g_esResolved)
             return false;
 
@@ -105,7 +112,11 @@ namespace
             if (!SafeReadQword(definition + 0x148, modelNamePtr))
                 return false;
 
-            return ReadSchemaString(modelNamePtr, modelName);
+            if (ReadSchemaString(modelNamePtr, modelName)) {
+                s_knifeModelCache[definitionIndex] = modelName;
+                return true;
+            }
+            return false;
         }
 
         return false;
@@ -254,6 +265,13 @@ namespace
     {
         usesOldModel = false;
 
+        static std::unordered_map<int, bool> s_paintKitOldModelCache;
+        auto it = s_paintKitOldModelCache.find(paintKitId);
+        if (it != s_paintKitOldModelCache.end()) {
+            usesOldModel = it->second;
+            return true;
+        }
+
         if (paintKitId <= 0 || !g_esResolved)
             return false;
 
@@ -308,6 +326,7 @@ namespace
                 return false;
 
             usesOldModel = oldModel != 0;
+            s_paintKitOldModelCache[paintKitId] = usesOldModel;
             return true;
         }
 

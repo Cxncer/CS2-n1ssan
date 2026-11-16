@@ -76,6 +76,7 @@ static uint64_t   g_lastDetectLogMs = 0;
 static uint64_t   g_lastInMatchMs = 0;
 static uint64_t   g_lastApplyMs = 0;
 static uintptr_t g_lastModelCachePawn = 0;
+static float     g_lastModelCacheSpawnTime = -1.0f;
 
 // ---- global-address helpers: prefer AutoOffsets, fall back to RVA ----
 static uintptr_t CtrlGlobalAddr(const ModuleInfo& client)
@@ -411,10 +412,10 @@ static void __fastcall FsnDetour(void* pClient, int stage)
     if (stage >= 0 && stage < 16) InterlockedIncrement(&g_stageHistogram[stage]);
     if (stage == 5) InterlockedIncrement(&g_stage5Count);
 
-    // Snapshot every 5s (matchdetect cadence)
+    // Snapshot: only run diagnostic dumps when N1SSAN_DEBUG=1 is set to prevent periodic stutter
     static uint64_t g_lastSnapMs = 0;
     uint64_t now = NowMs();
-    if (now - g_lastSnapMs >= 5000)
+    if (DebugLogEnabled() && now - g_lastSnapMs >= 15000)
     {
         g_lastSnapMs = now;
         Log("");
@@ -518,22 +519,29 @@ static void __fastcall FsnDetour(void* pClient, int stage)
     if (inMatch)
         g_lastInMatchMs = now;
 
-    // A new pawn means its weapon/HUD entities may be different.
+    // A new pawn or fresh round spawn means weapon/HUD entities must be refreshed immediately.
+    float currentSpawnTime = 0.0f;
+    bool spawnTimeKnown = (pawn > 0x10000) && SafeReadFloat(pawn + g_off.PAWN_SpawnTime, currentSpawnTime);
+    const bool pawnOrSpawnChanged = (g_lastModelCachePawn != pawn) || (spawnTimeKnown && currentSpawnTime != g_lastModelCacheSpawnTime);
+
     if (inMatch)
     {
-        if (g_lastModelCachePawn != pawn)
+        if (pawnOrSpawnChanged)
         {
             InvalidateWeaponModelCache();
             g_lastModelCachePawn = pawn;
+            if (spawnTimeKnown) g_lastModelCacheSpawnTime = currentSpawnTime;
+            g_lastApplyMs = 0; // Force immediate skin application on round start/respawn without 250ms delay!
 
-            Log("[apply-cache] pawn changed: %p",
-                (void*)pawn);
+            Log("[apply-cache] pawn or spawn reset: pawn=%p spawnTime=%.2f",
+                (void*)pawn, currentSpawnTime);
         }
     }
     else if (g_lastModelCachePawn != 0)
     {
         InvalidateWeaponModelCache();
         g_lastModelCachePawn = 0;
+        g_lastModelCacheSpawnTime = -1.0f;
 
         Log("[apply-cache] left active match pawn");
     }
@@ -619,15 +627,14 @@ static void __fastcall FsnDetour(void* pClient, int stage)
         // in the UI and cost a fraction of it.
         static uint64_t lastArmoryPassMs = 0;
 
-        if (now - lastArmoryPassMs >= 250)
+        if (now - lastArmoryPassMs >= 1000)
         {
             lastArmoryPassMs = now;
 
-            ArmoryInventory::AdoptPending();
+            if (ArmoryInventory::HasPending())
+                ArmoryInventory::AdoptPending();
             NativeEquipment::Tick();
             Attachments::ObserveAndPersist();
-            // The UseTool hook needs client.dll's Panorama script API; retry here
-            // when start-up ran before the client had registered it.
             NativeApply::Tick();
         }
     }
