@@ -31,6 +31,7 @@ namespace ArmoryInventory
         int             stickerKit = 0;
         int             keychain = 0;
         int             keychainSeed = 0;
+        int             keychainSticker = 0;   // a Slab's sealed sticker
         float           wear = 0.001f;
         Attachments::Set attachments;   // attachments already applied to this item
     };
@@ -64,7 +65,10 @@ namespace ArmoryInventory
         bool knife,
         TargetSkin& target,
         std::string& detail,
-        Attachments::Set* attachments = nullptr);
+        Attachments::Set* attachments = nullptr,
+        // The client-inventory id of the native item the player wears in this
+        // slot, when the match came from CS2's own Loadout selection.
+        uint64_t* liveItemId = nullptr);
 
     // Resolve the exact owned instance worn in a non-weapon slot ("gloves",
     // "agent", "zeus") through CS2's native Loadout selection only.

@@ -775,6 +775,7 @@ namespace NativeApply
             uint64_t targetId = 0;
             int      kit = 0;
             int      seed = 0;
+            int      slabSticker = 0;   // a Sticker Slab's sealed sticker, 0 = none
             int      position = -1;   // the popup's slot: where the sticker is drawn from
             char     toolInstanceId[128]{};
             bool     placed = false;
@@ -927,9 +928,11 @@ namespace NativeApply
             charm.z = job.placed ? job.z : 0.0f;
 
             // Lootline writes these fields on every charm apply; zero clears any old
-            // Sticker Slab sticker or highlight clip when a charm is replaced.
+            // Sticker Slab sticker or highlight clip when a charm is replaced. A slab
+            // is drawn from the sticker sealed inside it, so its own sticker has to
+            // be written here - writing 0 leaves the slab an empty frame on the gun.
             charm.hasSticker = true;
-            charm.sticker = 0;
+            charm.sticker = job.slabSticker > 0 ? job.slabSticker : 0;
             charm.hasHighlight = true;
             charm.highlight = 0;
 
@@ -1074,12 +1077,17 @@ namespace NativeApply
 
                 job.kit = tool->keychain;
                 job.seed = tool->keychainSeed;
+                job.slabSticker = tool->keychainSticker;
 
                 PlacementValues placement;
                 job.placed = ReadKeychainPlacement(placement);
                 job.x = placement.offsetX;
                 job.y = placement.offsetY;
                 job.z = placement.offsetZ;
+
+                if (job.slabSticker > 0)
+                    Log("[use-tool] slab charm %d seals sticker %d",
+                        job.kit, job.slabSticker);
 
                 Log("[use-tool] charm %d on %016llX: %s - applying",
                     job.kit, static_cast<unsigned long long>(targetId),

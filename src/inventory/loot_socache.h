@@ -20,6 +20,8 @@ namespace LootSOCache
         int      stickerKit = 0;
         int      keychain = 0;
         int      keychainSeed = 0;
+        // A Sticker Slab's sealed sticker; 0 for every other charm.
+        int      keychainSticker = 0;
         // Stickers and charm on a weapon. Empty for every other item.
         Attachments::Set attachments;
     };
@@ -31,9 +33,8 @@ namespace LootSOCache
     // The item object (C_EconItemView) behind a managed id, or null.
     void* Find(uint64_t id);
     bool ReadAttachments(uint64_t id, Attachments::Set& out);
+    // Rewrites the sticker slots and charm of an item that stays in the cache.
     bool SyncAttachments(uint64_t id, const Attachments::Set& attachments);
-    // Announces a managed item as updated to the inventory's shared-object
-    // listeners, the way a Game Coordinator item update does.
     bool NotifyUpdated(uint64_t id);
     // Detaches a managed item from the local inventory. `destruct` frees the
     // object too; a caller that just handed the object to a UI that may still

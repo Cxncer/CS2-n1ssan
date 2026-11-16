@@ -1,6 +1,7 @@
 #include "inventory/loot_socache.h"
 #include "inventory/loot_schema.h"
 #include "inventory/loot_patterns.h"
+#include "config/offsets.h"
 #include "diagnostics/log.h"
 #include "memory/access.h"
 #include "memory/scanner.h"
@@ -324,6 +325,20 @@ namespace LootSOCache
         return false;
     }
 
+    // What a sticker or charm item really carries, read through the same code the
+    // Armory uses for weapon attachments. A blank card in CS2's inventory has
+    // always matched "kit 0" here.
+    void LogAttachmentIdentity(void* item, uint16_t definition, int stickerKit,
+                               int keychain)
+    {
+        Attachments::Set set;
+        const bool readable = Attachments::Read(item, set);
+
+        Log("[socache] item def=%u requested kit=%d charm=%d readable=%d saw kit=%d charm=%d",
+            definition, stickerKit, keychain, readable ? 1 : 0,
+            set.stickers[0].kit, set.charm.kit);
+    }
+
     bool HasItem(uint64_t id)
     {
         void* tc = ItemTypeCache(LocalInventory());
@@ -369,9 +384,11 @@ namespace LootSOCache
         if (known && current == attachments)
             return true;
 
-        // `current` is only trusted for clearing slots when the read completed;
-        // an inconclusive read must not erase what the item already carries.
-        return Attachments::Write(item, attachments, known ? &current : nullptr);
+        // The Armory set is authoritative for this item: a slot it does not fill
+        // is cleared, so a fake skin never keeps the real item's stickers or
+        // charm. `clearMissing` also covers the inconclusive-read case, where
+        // `current` alone would leave the real attachments behind.
+        return Attachments::Write(item, attachments, known ? &current : nullptr, true, true);
     }
 
     bool NotifyUpdated(uint64_t id)
@@ -546,10 +563,10 @@ namespace LootSOCache
             if (!LootSchema::SetAttributeInt(item, ATTR_KILL_EATER_TYPE, 0)) { DestroyUncachedItem(item); return CreateResult::Failed; }
         }
 
-        // When the canonical attachment set contains sticker slot 0, let
-        // Attachments::Write below be its only writer. Keep the legacy field
-        // as a fallback for older inventory documents without structured data.
-        if (req.stickerKit > 0 && !req.attachments.stickers[0].present)
+        // The identity a sticker item needs before CS2 will name or draw it.
+        // Written on every path, including items the cache already holds, because
+        // an item created by an older build keeps whatever it was given back then.
+        if (req.stickerKit > 0)
         {
             const float stickerId = FloatFromBits(static_cast<uint32_t>(req.stickerKit));
             if (!LootSchema::SetAttributeFloatByName(item, "sticker slot 0 id", stickerId))
@@ -560,11 +577,9 @@ namespace LootSOCache
             }
         }
 
-        // When the canonical attachment set contains a charm, let
-        // Attachments::Write below be its only writer. The legacy fields are
-        // retained as a fallback for older inventory documents that do not
-        // carry the structured charm attachment.
-        if (req.keychain > 0 && !req.attachments.charm.present)
+        // Same for the charm: the pair of attributes is what makes the keychain
+        // resolve on the card.
+        if (req.keychain > 0)
         {
             const float keychainId = FloatFromBits(static_cast<uint32_t>(req.keychain));
             const float keychainSeed = FloatFromBits(static_cast<uint32_t>(req.keychainSeed));
@@ -576,6 +591,22 @@ namespace LootSOCache
                     req.keychain, req.keychainSeed);
                 DestroyUncachedItem(item);
                 return CreateResult::Failed;
+            }
+
+            // A Sticker Slab is a case around one sticker: CS2 draws the slab
+            // from the sticker sealed inside it, so without this attribute the
+            // card is blank and the charm never shows on a weapon.
+            if (req.keychainSticker > 0)
+            {
+                const float sealed =
+                    FloatFromBits(static_cast<uint32_t>(req.keychainSticker));
+
+                if (!LootSchema::SetAttributeFloatByName(
+                        item, "keychain slot 0 sticker", sealed))
+                {
+                    Log("[socache] slab sealed sticker not written id=%d (keychain=%d)",
+                        req.keychainSticker, req.keychain);
+                }
             }
         }
 
@@ -590,6 +621,10 @@ namespace LootSOCache
             Log("[socache] attachments not written for def=%u: %s",
                 req.definition, text);
         }
+
+        if (req.definition == 1209 || req.definition == 1355)
+            LogAttachmentIdentity(item, req.definition, req.stickerKit,
+                                  req.keychain);
 
         __try
         {

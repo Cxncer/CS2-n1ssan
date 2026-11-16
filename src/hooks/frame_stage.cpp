@@ -19,6 +19,7 @@
 #include "sdk/handles.h"
 #include "skin/dispatch.h"
 #include "skin/gloves.h"
+#include "skin/stattrak_counter.h"
 #include "skin/agents.h"
 #include "config/offsets.h"
 #include "config/auto_offsets.h"
@@ -27,6 +28,7 @@
 #include "memory/access.h"
 #include "memory/scanner.h"
 #include "hooks/knife_animation.h"
+#include "hooks/lineup.h"
 #include "inventory/plan_a.h"
 #include "inventory/armory_inventory.h"
 #include "inventory/native_equipment.h"
@@ -320,7 +322,7 @@ static void ObserveGloveState(uintptr_t pawn)
         initialized != lastInit ||
         idHigh != lastIdHigh)
     {
-        Log("[glove-observe] pawn=%p reapply=%u changed=%u "
+        DebugLog("[glove-observe] pawn=%p reapply=%u changed=%u "
             "def=%u init=%u idHigh=0x%X",
             (void*)pawn, flag, changed, def, initialized, idHigh);
 
@@ -371,8 +373,16 @@ static void __fastcall FsnDetour(void* pClient, int stage)
             // Armory agents share the spawn/team transition with gloves: the
             // model is only re-applied when the pawn, team or spawn changes.
             Agents::Run(glovePawn);
+            // StatTrak progress: the counter only ever moved for items the game
+            // server owns, so an Armory item gets its kills from here.
+            StatTrakCounter::Tick(glovePawn);
         }
     }
+
+    // A lineup character's gloves are rebuilt by us (its own update never runs
+    // the glove routine) - also on the screens outside a match.
+    if (stage == 7)
+        Lineup::FrameTick();
 
     // Preserve exactly one original FrameStageNotify call.
     if (g_origFsn)
@@ -541,6 +551,7 @@ static void __fastcall FsnDetour(void* pClient, int stage)
              now - g_lastInMatchMs >= 2000)
     {
         g_matchState = MatchState::IDLE;
+        StatTrakCounter::Reset();
         Log("[match] LOST pawn=0x%p hp=%d", (void*)pawn, hp);
     }
 
@@ -569,8 +580,11 @@ static void __fastcall FsnDetour(void* pClient, int stage)
     // entities belonging to other players/weapons are not mistaken as dupes.
     if (runtimeMode == RuntimeMode::Armory)
     {
-        static uint64_t lastCharmScanMs = 0;
-        if (now - lastCharmScanMs >= 5000)
+        // Observation only, and it walks every entity slot in the game:
+        // roughly thirty-two thousand reads every five seconds, which showed
+        // up as a stutter. Kept behind N1SSAN_DEBUG instead of the frame path.
+        static uint64_t lastCharmScanMs = 0;
+        if (DebugLogEnabled() && now - lastCharmScanMs >= 5000)
         {
             lastCharmScanMs = now;
 
@@ -587,7 +601,7 @@ static void __fastcall FsnDetour(void* pClient, int stage)
                 activeWeapon = GetEntityByHandle(activeWeaponHandle);
             }
 
-            Log("[charm-entity] active weapon handle=0x%08X entity=%p",
+            DebugLog("[charm-entity] active weapon handle=0x%08X entity=%p",
                 activeWeaponHandle, (void*)activeWeapon);
             LogWorldKeychainEntities(activeWeapon);
         }
@@ -598,12 +612,24 @@ static void __fastcall FsnDetour(void* pClient, int stage)
     // applying stickers and charms; the Bridge persists the observed result.
     if (!inMatch && runtimeMode == RuntimeMode::Armory)
     {
-        ArmoryInventory::AdoptPending();
-        NativeEquipment::Tick();
-        Attachments::ObserveAndPersist();
-        // The UseTool hook needs client.dll's Panorama script API; retry here
-        // when start-up ran before the client had registered it.
-        NativeApply::Tick();
+        // This block runs on every frame the game calls us, and it reads every
+        // managed item and its view. The inventory screen opened on a background
+        // map therefore paid for that read sixty times a second, which is the
+        // stutter in the inventory. Four passes a second are indistinguishable
+        // in the UI and cost a fraction of it.
+        static uint64_t lastArmoryPassMs = 0;
+
+        if (now - lastArmoryPassMs >= 250)
+        {
+            lastArmoryPassMs = now;
+
+            ArmoryInventory::AdoptPending();
+            NativeEquipment::Tick();
+            Attachments::ObserveAndPersist();
+            // The UseTool hook needs client.dll's Panorama script API; retry here
+            // when start-up ran before the client had registered it.
+            NativeApply::Tick();
+        }
     }
 
     // Keep the sources isolated while allowing Armory's currently equipped
@@ -630,10 +656,18 @@ static void __fastcall FsnDetour(void* pClient, int stage)
         return;
     }
 
+    // A dead pawn is normal at every round end and through the match-end
+    // screen, and those screens still render the weapons. While the match is
+    // still considered active, keep the apply pass running so the entities and
+    // their models keep the fake skins instead of reverting to the real ones.
+    const bool deadButStillInMatch =
+        !inMatch && g_matchState == MatchState::IN_MATCH &&
+        pawnAliveKnown && pawnIsAlive == 0 && pawn > 0x10000;
+
     // The state machine keeps IN_MATCH for a short grace period after the
     // network reports the session ended; do not run the apply pass on a pawn
     // that may already be gone.
-    if (!inMatch)
+    if (!inMatch && !deadButStillInMatch)
         return;
 
     // ---- IN_MATCH: Phase C apply cadence ----
@@ -645,7 +679,7 @@ static void __fastcall FsnDetour(void* pClient, int stage)
 
     g_lastApplyMs = now;
     ClearApplyBuildFault();
-    Log("[apply] tick pawn=0x%p", (void*)pawn);
+    DebugLog("[apply] tick pawn=0x%p", (void*)pawn);
 
     // ---- m_pWeaponServices ----
     uintptr_t ws = 0;
@@ -663,7 +697,7 @@ static void __fastcall FsnDetour(void* pClient, int stage)
     static bool g_loggedWeapons = false;
     if (!g_loggedWeapons) {
         g_loggedWeapons = true;
-        Log("[apply] wData=0x%p count=%d", (void*)wData, wCount);
+        DebugLog("[apply] wData=0x%p count=%d", (void*)wData, wCount);
     }
 
     // ---- m_hActiveWeapon — CHandle at +0x60 ----
@@ -673,7 +707,7 @@ static void __fastcall FsnDetour(void* pClient, int stage)
     static bool g_loggedActive = false;
     if (!g_loggedActive) {
         g_loggedActive = true;
-        Log("[apply] activeHandle=0x%08X", activeHandle);
+        DebugLog("[apply] activeHandle=0x%08X", activeHandle);
     }
 
     // Preserve the existing weapon and knife processing pass.
@@ -685,7 +719,7 @@ static void __fastcall FsnDetour(void* pClient, int stage)
 
         if (active)
         {
-            Log("[apply] active 0x%p", (void*)active);
+            DebugLog("[apply] active 0x%p", (void*)active);
 
             __try
             {
@@ -717,7 +751,7 @@ static void __fastcall FsnDetour(void* pClient, int stage)
             if (!weapon)
                 continue;
 
-            Log("[apply] owned 0x%p (h=0x%08X)",
+            DebugLog("[apply] owned 0x%p (h=0x%08X)",
                 (void*)weapon, h);
 
             __try
@@ -732,7 +766,7 @@ static void __fastcall FsnDetour(void* pClient, int stage)
         }
     }
 
-    Log("[apply-diagnostic] weaponChanged=%d gloveUpdate=%d regenAvailable=%d",
+    DebugLog("[apply-diagnostic] weaponChanged=%d gloveUpdate=%d regenAvailable=%d",
         (int)didUpdate,
         (int)gloveUpdate,
         (int)(pRegenerateSkins != nullptr));

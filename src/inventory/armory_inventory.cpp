@@ -44,6 +44,7 @@ namespace
         int         stickerKit = 0;
         int         keychain = 0;
         int         keychainSeed = 0;
+        int         keychainSticker = 0;   // a Slab's sealed sticker
         // Sticker and charm state carried by the projection. Deliberately not
         // part of StableIdFor: an attachment change must not recreate the item,
         // because the in-game Loadout keeps referring to its id.
@@ -126,6 +127,7 @@ namespace
         HashBytes(hash, &item.stickerKit, sizeof(item.stickerKit));
         HashBytes(hash, &item.keychain, sizeof(item.keychain));
         HashBytes(hash, &item.keychainSeed, sizeof(item.keychainSeed));
+        HashBytes(hash, &item.keychainSticker, sizeof(item.keychainSticker));
 
         return 0x9000000000000000ull | (hash & 0x0FFFFFFFFFFFFFFFull);
     }
@@ -340,6 +342,7 @@ namespace
             if (ExtractNumber(object, "stickerKit", number)) item.stickerKit = static_cast<int>(number);
             if (ExtractNumber(object, "keychain", number)) item.keychain = static_cast<int>(number);
             if (ExtractNumber(object, "keychainSeed", number)) item.keychainSeed = static_cast<int>(number);
+            if (ExtractNumber(object, "keychainSticker", number)) item.keychainSticker = static_cast<int>(number);
 
             ParseAttachments(object, item);
 
@@ -507,6 +510,7 @@ namespace
             a.stickerKit == b.stickerKit &&
             a.keychain == b.keychain &&
             a.keychainSeed == b.keychainSeed &&
+            a.keychainSticker == b.keychainSticker &&
             a.attachments == b.attachments;
     }
 
@@ -803,9 +807,30 @@ namespace ArmoryInventory
         {
             desiredIds.push_back(item.id);
 
-            // An unchanged profile re-read resolves to the same stable ID.
-            // Keep that SOCache object in place so CS2's native Loadout
-            // reference remains valid instead of replacing it every poll.
+            // A weapon has to keep its SOCache object, because CS2's native
+            // Loadout points at it, so it is retained and only its attributes are
+            // synced. A sticker or charm is only ever referenced by the gun it is
+            // attached to, and CS2 draws its card once, when the item arrives:
+            // patching the kit onto an item the cache already held leaves the card
+            // blank (the inventory then showed every sticker and charm empty). So
+            // those two are replaced instead, which hands CS2 a fresh item carrying
+            // its kit from the start - the same result as removing one in the
+            // Armory and adding it again.
+            if (LootSOCache::HasItem(item.id) &&
+                (item.definition == 1209 || item.definition == 1355))
+            {
+                if (LootSOCache::Remove(item.id))
+                {
+                    Log("[armory-inventory] recreated sticker/charm id=%016llX def=%u",
+                        static_cast<unsigned long long>(item.id), item.definition);
+                }
+                else
+                {
+                    Log("[armory-inventory] could not recreate sticker/charm id=%016llX def=%u",
+                        static_cast<unsigned long long>(item.id), item.definition);
+                }
+            }
+
             if (LootSOCache::HasItem(item.id))
             {
                 Log("[armory-inventory] retained item id=%016llX def=%u",
@@ -845,6 +870,7 @@ namespace ArmoryInventory
             request.stickerKit = item.stickerKit;
             request.keychain = item.keychain;
             request.keychainSeed = item.keychainSeed;
+            request.keychainSticker = item.keychainSticker;
             request.attachments = item.attachments;
 
             switch (LootSOCache::Create(request))
@@ -940,6 +966,7 @@ namespace ArmoryInventory
             managed.stickerKit = item.stickerKit;
             managed.keychain = item.keychain;
             managed.keychainSeed = item.keychainSeed;
+            managed.keychainSticker = item.keychainSticker;
             managed.wear = item.wear;
             managed.attachments = item.attachments;
             out.push_back(std::move(managed));
@@ -993,11 +1020,13 @@ namespace ArmoryInventory
         bool knife,
         TargetSkin& target,
         std::string& detail,
-        Attachments::Set* attachments)
+        Attachments::Set* attachments,
+        uint64_t* liveItemId)
     {
         target = TargetSkin{};
         detail.clear();
         if (attachments) *attachments = Attachments::Set{};
+        if (liveItemId) *liveItemId = 0;
 
         if (!definition)
         {
@@ -1045,6 +1074,8 @@ namespace ArmoryInventory
             detail = "native item definition does not match the live weapon";
             return ArmoryMatch::None;
         }
+
+        if (liveItemId) *liveItemId = equippedId;
 
         FillTarget(*item, target, attachments);
         char why[128]{};

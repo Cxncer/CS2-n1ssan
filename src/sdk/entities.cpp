@@ -217,13 +217,13 @@ void LogWorldKeychainEntities(uintptr_t weapon)
         const bool belongsToWeapon = ownedByWeapon || parentedToWeapon;
         if (belongsToWeapon) ++onWeapon;
 
-        Log("[charm-entity] world index=%u handle=0x%08X entity=%p owner=0x%08X ownerMatch=%d parentMatch=%d belongs=%d",
+        DebugLog("[charm-entity] world index=%u handle=0x%08X entity=%p owner=0x%08X ownerMatch=%d parentMatch=%d belongs=%d",
             index, entityHandle, (void*)entity, ownerHandle,
             ownedByWeapon ? 1 : 0, parentedToWeapon ? 1 : 0,
             belongsToWeapon ? 1 : 0);
     }
 
-    Log("[charm-entity] world scan complete weapon=%p weaponNode=%p highestNetworked=%u maxIndex=%u valid=%u globalFound=%u ownerMatches=%u parentMatches=%u onWeapon=%u ownerOffset=0x%llX parentOffset=0x%llX",
+    DebugLog("[charm-entity] world scan complete weapon=%p weaponNode=%p highestNetworked=%u maxIndex=%u valid=%u globalFound=%u ownerMatches=%u parentMatches=%u onWeapon=%u ownerOffset=0x%llX parentOffset=0x%llX",
         (void*)weapon, (void*)weaponSceneNode, highestNetworked,
         MAX_ENTITY_INDEX, validEntities, found, ownerMatches,
         parentMatches, onWeapon,
@@ -563,7 +563,7 @@ bool HudKeychainRebuildAvailable()
              ScanPattern(client, LootPatterns::RemoveHudKeychainAddon)) ? 1 : 0;
 
         if (!cached)
-            Log("[charm-pass] HUD keychain addon signatures not found; writing the charm directly");
+            DebugLog("[charm-pass] HUD keychain addon signatures not found; writing the charm directly");
     }
 
     return cached == 1;
@@ -600,14 +600,14 @@ bool RebuildHudKeychainAddon(uintptr_t weapon, uintptr_t hudWeapon, bool request
     }
     __except (EXCEPTION_EXECUTE_HANDLER)
     {
-        Log("[charm-pass] HUD addon lookup threw hud=%p", (void*)hudWeapon);
+        DebugLog("[charm-pass] HUD addon lookup threw hud=%p", (void*)hudWeapon);
         return false;
     }
 
-    Log("[charm-pass] HUD addon lookup hud=%p index=0x%08X", (void*)hudWeapon, addonIndex);
+    DebugLog("[charm-pass] HUD addon lookup hud=%p index=0x%08X", (void*)hudWeapon, addonIndex);
 
     if (addonIndex == INVALID_HANDLE)
-        Log("[charm-pass] no keychain addon entry on hud=%p", (void*)hudWeapon);
+        DebugLog("[charm-pass] no keychain addon entry on hud=%p", (void*)hudWeapon);
 
     if (addonIndex != INVALID_HANDLE)
     {
@@ -627,7 +627,7 @@ bool RebuildHudKeychainAddon(uintptr_t weapon, uintptr_t hudWeapon, bool request
 
             uint32_t handle = 0;
 
-            Log("[charm-pass] HUD addon slot entries=%p capacity=%u handleAddress=%p",
+            DebugLog("[charm-pass] HUD addon slot entries=%p capacity=%u handleAddress=%p",
                 (void*)entries, capacity, (void*)handleAddress);
 
             if (SafeReadU32(handleAddress, handle) && HandleValid(handle))
@@ -639,11 +639,11 @@ bool RebuildHudKeychainAddon(uintptr_t weapon, uintptr_t hudWeapon, bool request
                     __try
                     {
                         reinterpret_cast<RemoveAddonFn>(removeAddonAddress)(addon);
-                        Log("[charm-pass] removed HUD keychain addon entity=%p", (void*)addon);
+                        DebugLog("[charm-pass] removed HUD keychain addon entity=%p", (void*)addon);
                     }
                     __except (EXCEPTION_EXECUTE_HANDLER)
                     {
-                        Log("[charm-pass] HUD addon removal threw entity=%p", (void*)addon);
+                        DebugLog("[charm-pass] HUD addon removal threw entity=%p", (void*)addon);
                     }
                 }
             }

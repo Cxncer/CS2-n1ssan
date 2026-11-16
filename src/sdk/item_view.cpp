@@ -83,11 +83,11 @@ void EconAttr_Create(uintptr_t item, int paintKit, float wear, int seed, int sta
     AttributeVector_t* v = GetAttributeVector(item);
     if (!v) return;
 
-    Log("[attr-diag] item=%p size=%d data=%p alloc=%d",
+    DebugLog("[attr-diag] item=%p size=%d data=%p alloc=%d",
         (void*)item, v->size, (void*)v->data, v->allocationCount);
 
     if (v->size != 0 || v->data != 0) {
-        Log("[attr-diag] REFUSED: vector not empty");
+        DebugLog("[attr-diag] REFUSED: vector not empty");
         return;
     }
 
@@ -116,11 +116,11 @@ void EconAttr_Create(uintptr_t item, int paintKit, float wear, int seed, int sta
         SetFloatAttr(attrs[i++], ATTR_SEED, (float)(seed >= 0 ? seed : 0));
         SetFloatAttr(attrs[i++], ATTR_WEAR, wear >= 0.0f ? wear : 0.01f);
     }
-    Log("[attr-entry] 0: def=%u value=%.3f initial=%.3f",
+    DebugLog("[attr-entry] 0: def=%u value=%.3f initial=%.3f",
         attrs[0].defIndex, attrs[0].value, attrs[0].initialValue);
-    Log("[attr-entry] 1: def=%u value=%.3f initial=%.3f",
+    DebugLog("[attr-entry] 1: def=%u value=%.3f initial=%.3f",
         attrs[1].defIndex, attrs[1].value, attrs[1].initialValue);
-    Log("[attr-entry] 2: def=%u value=%.6f initial=%.6f",
+    DebugLog("[attr-entry] 2: def=%u value=%.6f initial=%.6f",
         attrs[2].defIndex, attrs[2].value, attrs[2].initialValue);
 
     if (hasST)

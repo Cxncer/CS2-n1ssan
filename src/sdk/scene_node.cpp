@@ -85,52 +85,52 @@ bool BuildModernSkin(uintptr_t item, uintptr_t model)
 
 uintptr_t FindHudWeapon(uintptr_t weapon, uintptr_t pawn)
 {
-    Log("[hud-find] START weapon=0x%p pawn=0x%p",
+    DebugLog("[hud-find] START weapon=0x%p pawn=0x%p",
         (void*)weapon, (void*)pawn);
 
     if (!weapon || !pawn) {
-        Log("[hud-find] FAIL: null weapon or pawn");
+        DebugLog("[hud-find] FAIL: null weapon or pawn");
         return 0;
     }
 
     uint32_t armsHandle = 0;
     if (!SafeReadU32(pawn + g_off.PAWN_hHudModelArms, armsHandle)) {
-        Log("[hud-find] FAIL: cannot read arms handle at +0x%llX",
+        DebugLog("[hud-find] FAIL: cannot read arms handle at +0x%llX",
             (unsigned long long)g_off.PAWN_hHudModelArms);
         return 0;
     }
 
-    Log("[hud-find] armsHandle=0x%X", armsHandle);
+    DebugLog("[hud-find] armsHandle=0x%X", armsHandle);
 
     if (!HandleValid(armsHandle)) {
-        Log("[hud-find] FAIL: invalid arms handle");
+        DebugLog("[hud-find] FAIL: invalid arms handle");
         return 0;
     }
 
     uintptr_t arms = GetEntityByHandle(armsHandle);
-    Log("[hud-find] arms=0x%p", (void*)arms);
+    DebugLog("[hud-find] arms=0x%p", (void*)arms);
 
     if (!arms) {
-        Log("[hud-find] FAIL: handle did not resolve");
+        DebugLog("[hud-find] FAIL: handle did not resolve");
         return 0;
     }
 
     uintptr_t armsNode = 0;
     if (!SafeReadQword(arms + g_off.BE_GameSceneNode, armsNode)
         || armsNode < 0x10000) {
-        Log("[hud-find] FAIL: invalid arms scene node");
+        DebugLog("[hud-find] FAIL: invalid arms scene node");
         return 0;
     }
 
-    Log("[hud-find] armsNode=0x%p", (void*)armsNode);
+    DebugLog("[hud-find] armsNode=0x%p", (void*)armsNode);
 
     uintptr_t child = 0;
     if (!SafeReadQword(armsNode + g_off.GSN_Child, child)) {
-        Log("[hud-find] FAIL: cannot read first child");
+        DebugLog("[hud-find] FAIL: cannot read first child");
         return 0;
     }
 
-    Log("[hud-find] firstChild=0x%p", (void*)child);
+    DebugLog("[hud-find] firstChild=0x%p", (void*)child);
 
     int walked = 0;
 
@@ -148,14 +148,14 @@ uintptr_t FindHudWeapon(uintptr_t weapon, uintptr_t pawn)
             {
                 uintptr_t resolved = GetEntityByHandle(childOwnerHandle);
 
-                Log("[hud-find] child[%d]=0x%p owner=0x%p "
+                DebugLog("[hud-find] child[%d]=0x%p owner=0x%p "
                     "handle=0x%X resolved=0x%p%s",
                     walked, (void*)child, (void*)childOwner,
                     childOwnerHandle, (void*)resolved,
                     resolved == weapon ? " **MATCH**" : "");
 
                 if (resolved == weapon) {
-                    Log("[hud-find] SUCCESS hudWeapon=0x%p after %d nodes",
+                    DebugLog("[hud-find] SUCCESS hudWeapon=0x%p after %d nodes",
                         (void*)childOwner, walked + 1);
                     return childOwner;
                 }
@@ -164,7 +164,7 @@ uintptr_t FindHudWeapon(uintptr_t weapon, uintptr_t pawn)
 
         uintptr_t next = 0;
         if (!SafeReadQword(child + g_off.GSN_NextSibling, next)) {
-            Log("[hud-find] STOP: cannot read next sibling at node %d",
+            DebugLog("[hud-find] STOP: cannot read next sibling at node %d",
                 walked);
             break;
         }
@@ -173,7 +173,7 @@ uintptr_t FindHudWeapon(uintptr_t weapon, uintptr_t pawn)
         ++walked;
     }
 
-    Log("[hud-find] NO MATCH walked=%d finalChild=0x%p",
+    DebugLog("[hud-find] NO MATCH walked=%d finalChild=0x%p",
         walked, (void*)child);
 
     return 0;

@@ -15,10 +15,10 @@
 #include "diagnostics/log.h"
 
 #include <string>
+#include <unordered_map>
 
 namespace
-{
-    // Lootline's IsOwnWeapon equivalent. Armory must not repaint an enemy's
+{    // Lootline's IsOwnWeapon equivalent. Armory must not repaint an enemy's
     // dropped weapon merely because it appears in the local weapon handle list.
     // If schema/account ownership data is unavailable, preserve the existing
     // fail-open behavior rather than suppressing the player's own cosmetics.
@@ -59,22 +59,22 @@ bool ProcessWeapon(uintptr_t weaponEnt, uintptr_t pawn)
     static bool g_dumpedView = false;
     if (!g_dumpedView) {
         g_dumpedView = true;
-        Log("[pw] weapon=0x%p view=0x%p", (void*)weaponEnt, (void*)view);
+        DebugLog("[pw] weapon=0x%p view=0x%p", (void*)weaponEnt, (void*)view);
         for (uintptr_t off = 0; off < 0x40; off += 4) {
             uint32_t v = 0;
             if (SafeReadU32(view + off, v))
-                Log("[pw]   view+0x%02X = 0x%08X", (uint32_t)off, v);
+                DebugLog("[pw]   view+0x%02X = 0x%08X", (uint32_t)off, v);
         }
     }
 
     static bool g_dumpedWeapon = false;
     if (!g_dumpedWeapon) {
         g_dumpedWeapon = true;
-        Log("[pw] weapon+0x1290..0x12F0:");
+        DebugLog("[pw] weapon+0x1290..0x12F0:");
         for (uintptr_t off = 0x1290; off < 0x12F0; off += 8) {
             uintptr_t v = 0;
             if (SafeReadQword(weaponEnt + off, v))
-                Log("[pw]   +0x%03X = 0x%016llX", (uint32_t)off, (unsigned long long)v);
+                DebugLog("[pw]   +0x%03X = 0x%016llX", (uint32_t)off, (unsigned long long)v);
         }
     }
 
@@ -82,7 +82,7 @@ bool ProcessWeapon(uintptr_t weaponEnt, uintptr_t pawn)
     if (!SafeReadU16(view + g_off.EIV_ItemDefIndex, def) || def == 0)
         return false;
 
-    Log("[pw] weapon 0x%p def=%u", (void*)weaponEnt, def);
+    DebugLog("[pw] weapon 0x%p def=%u", (void*)weaponEnt, def);
 
     static bool g_probedTeam = false;
     if (!g_probedTeam) {
@@ -169,7 +169,7 @@ bool ProcessWeapon(uintptr_t weaponEnt, uintptr_t pawn)
         }
         if (kfound)
         {
-            Log("[pw] knife: applying %s (pk=%d target def=%u)",
+            DebugLog("[pw] knife: applying %s (pk=%d target def=%u)",
                 kt.skinName.c_str(), kt.paintKit, kt.defIndex);
 
             const bool knifeChanged =
@@ -181,7 +181,7 @@ bool ProcessWeapon(uintptr_t weaponEnt, uintptr_t pawn)
             return knifeChanged || skinChanged;
         }
 
-        Log("[pw] knife: no target for team '%s'", teamStr);
+        DebugLog("[pw] knife: no target for team '%s'", teamStr);
         return false;
     }
 
@@ -190,19 +190,19 @@ bool ProcessWeapon(uintptr_t weaponEnt, uintptr_t pawn)
     bool found = false;
 
     auto it = g_targets.find(TargetKey(def, teamStr));
-    if (it != g_targets.end()) { t = it->second; found = true; Log("[pw] matched team '%s'", teamStr); }
+    if (it != g_targets.end()) { t = it->second; found = true; DebugLog("[pw] matched team '%s'", teamStr); }
     else {
         auto itAny = g_targets.find(TargetKey(def, ""));
-        if (itAny != g_targets.end()) { t = itAny->second; found = true; Log("[pw] matched any-team"); }
+        if (itAny != g_targets.end()) { t = itAny->second; found = true; DebugLog("[pw] matched any-team"); }
     }
 
     if (!found)
     {
-        Log("[pw] NO TARGET def=%u team=%s", def, teamStr);
+        DebugLog("[pw] NO TARGET def=%u team=%s", def, teamStr);
         return false;
     }
 
-    Log("[pw] applying %s (pk=%d def=%u)",
+    DebugLog("[pw] applying %s (pk=%d def=%u)",
         t.skinName.c_str(), t.paintKit, t.defIndex);
 
     return ApplyWeaponSkin(weaponEnt, pawn, t);

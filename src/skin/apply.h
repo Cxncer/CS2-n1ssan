@@ -19,6 +19,18 @@ bool ApplyWeaponSkin(uintptr_t weaponEnt, uintptr_t pawn, const TargetSkin& t,
 // Reset a weapon to its default state (no paint, no attributes, no name).
 void ApplyDefault(uintptr_t weaponEnt);
 
+// Writes the skin identity (paint, wear, seed, StatTrak, stickers / charm) onto
+// an item view the game is about to read - the weapon item of your own lineup
+// character on the team select / intro / end of match screens, where no weapon
+// entities exist. Replaces attributes the game owns, so it is only for items
+// the server rebuilds anyway. `definition` replaces the item's definition when
+// non-zero (an agent item, for instance); `quality` -1 derives it from the
+// target, `wearNudge` offsets the wear (0 = keep it).
+bool DressItemView(uintptr_t view, const TargetSkin& t,
+                   uint16_t definition = 0, int quality = -1,
+                   const Attachments::Set* attachments = nullptr,
+                   float wearNudge = 0.0f);
+
 // ---- Knife ----
 
 bool     IsKnifeDefinition(uint16_t d);

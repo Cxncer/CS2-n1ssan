@@ -846,7 +846,8 @@ namespace Attachments
         return ok;
     }
 
-    bool Write(void* econItem, const Set& set, const Set* previous, bool includeCharm)
+    bool Write(void* econItem, const Set& set, const Set* previous, bool includeCharm,
+               bool clearMissing)
     {
         if (!econItem) return false;
         if (!Initialize()) return false;
@@ -858,7 +859,7 @@ namespace Attachments
         {
             const StickerSlot& sticker = set.stickers[slot];
             const bool wasPresent = previous && previous->stickers[slot].present;
-            if (!sticker.present && !wasPresent) continue;
+            if (!sticker.present && !wasPresent && !clearMissing) continue;
 
             StickerName(name, sizeof(name), slot, "id");
             ok = SetIntByName(econItem, name, sticker.present ? sticker.kit : 0) && ok;
@@ -889,7 +890,7 @@ namespace Attachments
 
         const Charm& charm = set.charm;
         const bool wasCharm = previous && previous->charm.present;
-        if (includeCharm && (charm.present || wasCharm))
+        if (includeCharm && (charm.present || wasCharm || clearMissing))
         {
             CharmName(name, sizeof(name), "id");
             ok = SetIntByName(econItem, name, charm.present ? charm.kit : 0) && ok;
@@ -923,7 +924,8 @@ namespace Attachments
         return ok;
     }
 
-    bool WriteItemView(std::uintptr_t itemView, const Set& set, const Set* previous)
+    bool WriteItemView(std::uintptr_t itemView, const Set& set, const Set* previous,
+                       bool clearMissing)
     {
         if (!itemView || !g_off.EIV_AttributeList || !g_off.EIV_NetworkedAttrs)
             return false;
@@ -935,8 +937,8 @@ namespace Attachments
         // ordinary list only, and so do we.
         void* regular = reinterpret_cast<void*>(itemView + g_off.EIV_AttributeList);
         void* networked = reinterpret_cast<void*>(itemView + g_off.EIV_NetworkedAttrs);
-        const bool regularOk = Write(regular, set, previous, true);
-        const bool networkedOk = Write(networked, set, previous, false);
+        const bool regularOk = Write(regular, set, previous, true, clearMissing);
+        const bool networkedOk = Write(networked, set, previous, false, clearMissing);
         return regularOk && networkedOk;
     }
 

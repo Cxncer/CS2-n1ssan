@@ -18,6 +18,7 @@
 #include "inventory/engine_schema_diagnostic.h"
 
 #include <windows.h>
+#include <bit>
 #include <cmath>
 #include <string>
 #include <unordered_map>
@@ -593,6 +594,70 @@ namespace
         return true;
     }
 
+    // The counter CS2 draws is the item's "kill eater" attribute, and only the
+    // game can raise it. Read it straight off the view instead of trusting the
+    // fallback field, which the game never touches: that field is what kept the
+    // counter at zero.
+    int LiveKillEater(uintptr_t view)
+    {
+        AttributeVector_t* vector = GetAttributeVector(view);
+
+        if (!vector || vector->size <= 0 || vector->size > 512 || !vector->data)
+            return -1;
+
+        auto* attributes = reinterpret_cast<EconItemAttribute_t*>(vector->data);
+
+        // The attribute is an integer bit-cast into a float: a plain cast would
+        // read the bits as 1e-45 and report zero kills forever.
+        for (int i = 0; i < vector->size; ++i)
+            if (attributes[i].defIndex == ATTR_KILL_EATER)
+                return std::bit_cast<int32_t>(attributes[i].value);
+
+        return -1;
+    }
+
+
+    // One-shot dump of what the counter looks like on a weapon, so a report of
+    // "no counting" or a doubled badge can be read off the log instead of guessed
+    // at. Called once per weapon and view.
+    void LogStatTrakState(uintptr_t weaponEnt, uintptr_t view)
+    {
+        int32_t quality = -1;
+        int32_t fallbackStatTrak = -1;
+        SafeReadI32(view + g_off.EIV_EntityQuality, quality);
+        SafeReadI32(weaponEnt + g_off.EE_FallbackStatTrak, fallbackStatTrak);
+
+        int eaters = 0;
+        int value = -1;
+        std::string dump;
+
+        if (AttributeVector_t* vector = GetAttributeVector(view))
+        {
+            if (vector->size > 0 && vector->size < 512 && vector->data)
+            {
+                auto* attributes = reinterpret_cast<EconItemAttribute_t*>(vector->data);
+                char entry[48]{};
+
+                for (int i = 0; i < vector->size; ++i)
+                {
+                    if (attributes[i].defIndex == ATTR_KILL_EATER)
+                    {
+                        ++eaters;
+                        if (value < 0)
+                            value = std::bit_cast<int32_t>(attributes[i].value);
+                    }
+
+                    std::snprintf(entry, sizeof(entry), "%u ", attributes[i].defIndex);
+                    dump += entry;
+                }
+            }
+        }
+
+        Log("[stattrak-diag] weapon=%p view=%p quality=%d fallbackST=%d killEaters=%d value=%d attrs=[%s]",
+            (void*)weaponEnt, (void*)view, quality, fallbackStatTrak,
+            eaters, value, dump.c_str());
+    }
+
     bool IsAlreadyApplied(uintptr_t weaponEnt, uintptr_t view, const TargetSkin& t)
     {
         int     curPK = 0;
@@ -606,6 +671,20 @@ namespace
         if (!SafeReadFloat(weaponEnt + g_off.EE_FallbackWear, curWear)) return false;
         if (!SafeReadI32(weaponEnt + g_off.EE_FallbackStatTrak, curStatTrak)) return false;
         if (!SafeReadI32(view + g_off.EIV_EntityQuality, curQuality))   return false;
+
+        // CS2 rebuilds an item view from scratch on a weapon switch and around
+        // some round transitions. The fallback fields live on the weapon entity
+        // and survive that, so a painted weapon whose view came back empty was
+        // treated as already painted and the gun showed the default skin until
+        // it was sold and bought again. An empty attribute list is exactly the
+        // state the write path can safely repaint; a view CS2 has populated is
+        // left alone above.
+        {
+            AttributeVector_t* vector = GetAttributeVector(view);
+
+            if (!vector || vector->size <= 0 || vector->size > 512 || !vector->data)
+                return false;
+        }
 
         const int wantQuality = IsKnifeDefinition(t.defIndex) ? 3 : (t.statTrak ? 9 : 0);
 
@@ -639,6 +718,92 @@ namespace
     // Weapons whose item view belongs to CS2 (it already carried attributes) and
     // must not be written again, keyed to the view they were ignored on.
     std::unordered_map<uintptr_t, uintptr_t> g_ignoredViews;
+
+    // Views whose real stickers/charm were already cleared once. CS2's attribute
+    // vector there cannot be rebuilt, but sticker ids are ordinary schema
+    // attributes, so a single regular-list write removes them.
+    std::unordered_map<uintptr_t, uintptr_t> g_foreignCleared;
+
+    // Views whose networked sticker / charm ids were already zeroed.
+    std::unordered_map<uintptr_t, uintptr_t> g_networkedCleared;
+
+    // The player's real item carries its own attributes in the networked list:
+    // its stickers, its charm, its name - and its own "kill eater", which is why
+    // a fake StatTrak weapon showed the real item's StatTrak badge on top of
+    // ours. Every setter on that list faults on this client (the
+    // "CallSetAttribute: threw" storm), so nothing is set there. The vector is
+    // emptied instead, the way Lootline does it: no setter, no allocation, and
+    // CS2 then reads only the ordinary list this apply pass writes.
+    void ClearNetworkedAttachmentsInPlace(uintptr_t weaponEnt, uintptr_t view)
+    {
+        if (g_networkedCleared[weaponEnt] == view)
+            return;
+
+        g_networkedCleared[weaponEnt] = view;
+
+        constexpr uint16_t STICKER_ID_FIRST = 113;   // "sticker slot 0 id"
+        constexpr uint16_t STICKER_STRIDE   = 4;     // id, wear, scale, rotation
+        constexpr int      STICKER_SLOTS    = 6;
+        constexpr uint16_t CHARM_ID         = 299;   // "keychain slot 0 id"
+        constexpr uint16_t CHARM_STICKER    = 321;   // a Slab's sealed sticker
+        constexpr int      MAX_ATTRIBUTES   = 512;
+
+        int entries = 0;
+        int cleared = 0;
+
+        __try
+        {
+            AttributeVector_t* vector = GetNetworkedVector(view);
+
+            if (!vector || vector->size <= 0 || vector->size > MAX_ATTRIBUTES ||
+                !vector->data)
+                return;
+
+            entries = vector->size;
+
+            // Everything the real item carried stops showing through the fake
+            // one, its own StatTrak counter included.
+            vector->size = 0;
+            cleared = entries;
+        }
+        __except (EXCEPTION_EXECUTE_HANDLER)
+        {
+            Log("[attach-foreign] networked clear faulted weapon=%p view=%p",
+                (void*)weaponEnt, (void*)view);
+            return;
+        }
+
+        if (cleared > 0)
+            Log("[attach-foreign] networked cleared %d of %d attributes weapon=%p",
+                cleared, entries, (void*)weaponEnt);
+    }
+
+    // Removes the real item's stickers and charm from a view CS2 populated, so a
+    // fake skin shows clean (or with the Armory's own attachments) instead of
+    // inheriting the equipped item's. Only the ordinary attribute list is
+    // written: the networked list's setters fault on this client.
+    void ClearForeignAttachments(uintptr_t weaponEnt, uintptr_t view,
+                                 const Attachments::Set* attachments)
+    {
+        auto known = g_foreignCleared.find(weaponEnt);
+        if (known != g_foreignCleared.end() && known->second == view)
+            return;
+
+        g_foreignCleared[weaponEnt] = view;
+
+        static const Attachments::Set kNone{};
+        const Attachments::Set& desired = attachments ? *attachments : kNone;
+        void* list = reinterpret_cast<void*>(view + g_off.EIV_AttributeList);
+        const bool ok = Attachments::Write(list, desired, nullptr, true, true);
+
+        char text[192]{};
+        Attachments::Describe(desired, text, sizeof(text));
+        Log("[attach-foreign] weapon=%p view=%p cleared=%d %s",
+            (void*)weaponEnt, (void*)view, ok ? 1 : 0, text);
+
+        if (ok)
+            g_weaponModelCache.erase(weaponEnt);
+    }
 
     // Last first-person weapon that resolved for a gun. CS2 rebuilds the
     // viewmodel after every skin regeneration, so FindHudWeapon legitimately
@@ -682,6 +847,8 @@ void InvalidateWeaponModelCache()
     g_weaponModelCache.clear();
     g_nameTagCache.clear();
     g_ignoredViews.clear();
+    g_foreignCleared.clear();
+    g_networkedCleared.clear();
     g_lastHudWeapon.clear();
     Charm::ForgetAll();
 
@@ -714,14 +881,28 @@ bool ApplyWeaponSkin(uintptr_t weaponEnt, uintptr_t pawn, const TargetSkin& t,
 
     // Kills continue from the saved instance: EconAttr_Create writes this into
     // "kill eater", and the game increments it from there.
-    const int wantStatTrak =
-        t.statTrak ? (t.statTrakKills > 0 ? t.statTrakKills : 0) : -1;
+    // Never lose progress: a view that already counted more kills than the saved
+    // instance keeps its number when the skin is written again.
+    const int liveKills = t.statTrak ? LiveKillEater(view) : -1;
+    const int savedKills = t.statTrak ? (t.statTrakKills > 0 ? t.statTrakKills : 0) : 0;
+    const int wantStatTrak = t.statTrak ? (liveKills > savedKills ? liveKills : savedKills) : -1;
 
     // The charm is written once, inside the view write below, and never cleared:
     // the keychain setters fault on this client after a model build (the 07:52
     // session lost every charm that way), so the attribute stays and Charm::Upkeep
     // removes the extra entities and rebuilds the HUD addon instead.
     const Attachments::Set* buildAttachments = attachments;
+
+    // One dump per weapon and view, only for StatTrak items.
+    {
+        static std::unordered_map<uintptr_t, uintptr_t> g_lastStatTrakDiag;
+
+        if (t.statTrak && g_lastStatTrakDiag[weaponEnt] != view)
+        {
+            g_lastStatTrakDiag[weaponEnt] = view;
+            LogStatTrakState(weaponEnt, view);
+        }
+    }
 
     const bool alreadyPainted =
         IsAlreadyApplied(weaponEnt, view, t);
@@ -734,7 +915,10 @@ bool ApplyWeaponSkin(uintptr_t weaponEnt, uintptr_t pawn, const TargetSkin& t,
     // that item to the game, and remember the decision so an ignored weapon does
     // not retry - or log - on every apply tick.
     if (!alreadyPainted && g_ignoredViews[weaponEnt] == view)
+    {
+        ClearForeignAttachments(weaponEnt, view, buildAttachments);
         return false;
+    }
 
     if (!alreadyPainted)
     {
@@ -766,7 +950,16 @@ bool ApplyWeaponSkin(uintptr_t weaponEnt, uintptr_t pawn, const TargetSkin& t,
         SafeWriteI32(weaponEnt + g_off.EE_FallbackStatTrak, wantStatTrak);
     }
 
+    ClearNetworkedAttachmentsInPlace(weaponEnt, view);
+
     const bool viewWritten = !alreadyPainted;
+
+    // CS2 can rebuild an item view in place, so the cached model state still
+    // looks current while the paint was just written into it again. Dropping
+    // the cache entry makes this pass rebuild the model instead of leaving the
+    // gun on the default one until it is re-bought.
+    if (viewWritten)
+        g_weaponModelCache.erase(weaponEnt);
 
     // The networked CAttributeList sync that used to run here is deliberately
     // gone. Every attribute it set raised through CS2's schema setter (the log
@@ -776,24 +969,28 @@ bool ApplyWeaponSkin(uintptr_t weaponEnt, uintptr_t pawn, const TargetSkin& t,
     // RegenerateSkins faulting on the very tick a match starts, which is the
     // client crash.
 
-    // Attachments can change independently of paint identity. Also retry them
-    // when the first paint write was refused because CS2 had already populated
-    // the ItemView: that refusal must not silently skip the attachments too.
-    // A successful fresh view write already includes them, so avoid a duplicate
-    // schema write in that case.
-    if (buildAttachments && !buildAttachments->Empty() && alreadyPainted)
+    // Attachments belong to the fake skin, not to the real item it replaces. A
+    // real M4A1-S carrying four stickers used to keep them on the injected Blue
+    // Phosphor; the Armory set is therefore authoritative and every slot it does
+    // not fill is cleared (clearMissing), including the charm. The write still
+    // only happens when the view actually differs, so it is not a per-tick cost.
+    static const Attachments::Set kNoAttachments{};
+    const Attachments::Set& desired =
+        buildAttachments ? *buildAttachments : kNoAttachments;
+
+    if (alreadyPainted)
     {
         Attachments::Set current;
         const bool readable =
             Attachments::Read(reinterpret_cast<void*>(view), current);
 
-        if (!readable || current != *buildAttachments)
+        if (!readable || current != desired)
         {
-            if (Attachments::WriteItemView(view, *buildAttachments,
-                    readable ? &current : nullptr))
+            if (Attachments::WriteItemView(view, desired,
+                    readable ? &current : nullptr, true))
             {
                 char text[192]{};
-                Attachments::Describe(*attachments, text, sizeof(text));
+                Attachments::Describe(desired, text, sizeof(text));
                 Log("[attach-view] updated weapon=%p: %s", (void*)weaponEnt, text);
 
                 // The model was built without these stickers.
@@ -861,7 +1058,7 @@ bool ApplyWeaponSkin(uintptr_t weaponEnt, uintptr_t pawn, const TargetSkin& t,
             HudWeaponStillOwned(cachedHud->second, weaponEnt))
         {
             hudWeapon = cachedHud->second;
-            Log("[hud-find] using remembered hud=%p for weapon=%p",
+            DebugLog("[hud-find] using remembered hud=%p for weapon=%p",
                 (void*)hudWeapon, (void*)weaponEnt);
         }
         else if (cachedHud != g_lastHudWeapon.end())
@@ -1028,12 +1225,21 @@ bool ApplyWeaponSkin(uintptr_t weaponEnt, uintptr_t pawn, const TargetSkin& t,
     // continues where it stopped.
     if (t.statTrak && !t.instanceId.empty())
     {
-        int liveKills = 0;
+        // The fallback field is only a fallback: the game never raises it, so the
+        // view's own "kill eater" attribute is the number to trust.
+        int recorded = 0;
+        SafeReadI32(weaponEnt + g_off.EE_FallbackStatTrak, recorded);
 
-        if (SafeReadI32(weaponEnt + g_off.EE_FallbackStatTrak, liveKills) &&
-            liveKills > t.statTrakKills)
+        const int viewKills = LiveKillEater(view);
+
+        if (viewKills > recorded)
+            recorded = viewKills;
+
+        if (recorded > t.statTrakKills)
         {
-            StatTrakKills::Record(t.instanceId, liveKills);
+            StatTrakKills::Record(t.instanceId, recorded);
+            Log("[stattrak] recorded kills=%d instance=%s", recorded,
+                t.instanceId.c_str());
         }
     }
 
@@ -1233,5 +1439,56 @@ bool KnifeApply(uintptr_t weaponEnt, uintptr_t view, uint16_t targetDef)
     if (!updateSucceeded)
         return false;
 
+    return true;
+}
+
+// ---- Lineup ----
+// Writes a fake item identity + paint onto an item view the game is about to
+// read: the weapon item of your own lineup character (team select, team intro,
+// wingman intro, end of match). Unlike the in-match path this replaces
+// attributes the game owns - the position's items are server-built and recopied
+// on every rebuild, so nothing of ours has to survive in them.
+// `wearNudge` offsets the wear so the material manager doesn't dedupe our skin
+// onto a material built for an item that is never drawn (0 = keep the wear).
+bool DressItemView(uintptr_t view, const TargetSkin& t,
+                   uint16_t definition, int quality,
+                   const Attachments::Set* attachments, float wearNudge)
+{
+    if (!view || (definition == 0 && t.paintKit <= 0))
+        return false;
+
+    if (definition != 0 &&
+        !SafeWriteU16(view + g_off.EIV_ItemDefIndex, definition))
+        return false;
+
+    float wear = t.wear;
+    if (wearNudge > 0.0f)
+        wear = wear + wearNudge <= 1.0f ? wear + wearNudge : wear - wearNudge;
+
+    const int wantQuality = quality >= 0
+        ? quality
+        : IsKnifeDefinition(t.defIndex) ? 3 : (t.statTrak ? 9 : 0);
+    const int wantStatTrak =
+        t.statTrak ? (t.statTrakKills > 0 ? t.statTrakKills : 0) : -1;
+
+    EconAttr_Remove(view);
+
+    if (!SafeWriteU32(view + g_off.EIV_ItemIDHigh, 0xFFFFFFFFu) ||
+        !SafeWriteI32(view + g_off.EIV_EntityQuality, wantQuality) ||
+        !SafeWriteU8(view + g_off.EIV_DisallowSOC, 0) ||
+        !SafeWriteU8(view + g_off.EIV_RestoreCustom, 1) ||
+        !SafeWriteU8(view + g_off.EIV_Initialized, 1))
+        return false;
+
+    if (t.paintKit > 0)
+    {
+        EconAttr_Create(view, t.paintKit, wear, t.resolvedSeed, wantStatTrak, attachments);
+
+        AttributeVector_t* vec = GetAttributeVector(view);
+        if (!vec || vec->size <= 0)
+            return false;
+    }
+
+    SetCustomName(view, t.customName);
     return true;
 }

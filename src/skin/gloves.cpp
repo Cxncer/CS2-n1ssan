@@ -26,6 +26,7 @@ namespace
     constexpr int CLEAR_FRAMES = 2;
     constexpr std::uint64_t OWN_FLAG_FRAMES = 3;
     constexpr std::uint64_t FOLLOW_UP_DELAYS_MS[] = { 400, 1200, 3000 };
+    constexpr std::uint64_t VERIFY_INTERVAL_MS = 1000;
 
     bool g_appliedCustomGloves = false;
     bool g_appliedThisTick = false;
@@ -45,6 +46,7 @@ namespace
     float g_followUpSpawnTime = -1.0f;
     std::uint64_t g_spawnSeenAt = 0;
     std::size_t g_followUpIndex = 0;
+    std::uint64_t g_lastVerifyMs = 0;
 
     std::uint16_t DefaultDefinition(std::uint8_t team)
     {
@@ -62,6 +64,32 @@ namespace
     {
         return slot == "glove" || slot == "gloves";
     }
+
+    // True when the glove view no longer carries the paint kit it was given. CS2
+    // can drop those attributes while the definition, the item id and its own
+    // reapply flag all still look right (round restart, respawn, the stage-6 model
+    // refresh), so none of the reset checks notice and the gloves render default.
+    // Three loads, so a slow heartbeat is enough to catch it.
+    bool PaintKitMissing(std::uintptr_t item, int paintKit)
+    {
+        AttributeVector_t* vector = GetAttributeVector(item);
+
+        if (!vector || vector->size <= 0 || vector->size > 512 || !vector->data)
+            return true;
+
+        auto* attributes = reinterpret_cast<EconItemAttribute_t*>(vector->data);
+
+        for (int i = 0; i < vector->size; ++i)
+        {
+            if (attributes[i].defIndex != ATTR_PAINT)
+                continue;
+
+            return static_cast<int>(attributes[i].value) != paintKit;
+        }
+
+        return true;
+    }
+
 
     bool FlagForRebuild(std::uintptr_t pawn)
     {
@@ -94,9 +122,36 @@ namespace
             return false;
         }
 
+        // A kit whose name isn't in the game's paint kit map keeps whatever name
+        // the generated record carried, and the material for it never resolves
+        // (the glove model then waits forever - black beads). Logged once a kit.
+        static int lastReportedKit = -1;
+
         if (result)
-            GlovePaintKitSchema::RepairGeneratedName(
+        {
+            const char* expected = GlovePaintKitSchema::GetName(paintKit);
+            const bool repaired = GlovePaintKitSchema::RepairGeneratedName(
                 static_cast<GlovePaintKitRecord*>(result), paintKit);
+
+            if (paintKit != lastReportedKit)
+            {
+                lastReportedKit = paintKit;
+
+                const char* generated =
+                    static_cast<GlovePaintKitRecord*>(result)->m_Name;
+
+                Log("[gloves] paint kit %d: schema name %s (%s), generated \"%s\"",
+                    paintKit, expected ? expected : "MISSING",
+                    repaired ? "applied" : "not applied",
+                    generated ? generated : "");
+            }
+        }
+        else if (paintKit != lastReportedKit)
+        {
+            lastReportedKit = paintKit;
+            Log("[gloves] paint kit %d: no record generated", paintKit);
+        }
+
         return result != nullptr;
     }
 
@@ -363,6 +418,23 @@ void RunGloves(std::uintptr_t pawn)
         return;
     }
 
+    // Heartbeat: while the custom gloves are selected, look once a second at the
+    // view's paint kit. A missing kit means CS2 rebuilt the view behind us, which
+    // is the "gloves went default mid-round" case, and it needs another apply.
+    if (customSelection && paintKit > 0 && g_updateFrames <= 0 &&
+        now - g_lastVerifyMs >= VERIFY_INTERVAL_MS)
+    {
+        g_lastVerifyMs = now;
+
+        if (PaintKitMissing(item, paintKit))
+        {
+            Log("[glove-runtime] paint kit gone; re-applying def=%u paint=%d",
+                definition, paintKit);
+            g_updateFrames = APPLY_FRAMES;
+        }
+    }
+
+
     if (g_updateFrames <= 0)
         return;
 
@@ -404,9 +476,48 @@ void ResetGloves()
     g_followUpSpawnTime = -1.0f;
     g_spawnSeenAt = 0;
     g_followUpIndex = 0;
+    g_lastVerifyMs = 0;
 }
 
 bool GloveAppliedThisTick()
 {
     return g_appliedThisTick;
+}
+
+// A lineup character's glove item: the same identity the in-match path writes,
+// without the pawn half (body group, rebuild flag) - there is no pawn on those
+// screens, and the character is built from this item.
+bool DressGloveItemView(std::uintptr_t item, std::uint16_t definition,
+                        int paintKit, int seed, float wear,
+                        std::uint32_t accountId)
+{
+    if (!item || !definition)
+        return false;
+
+    if (paintKit > 0 && !pGloveCreatePaintKit)
+        return false;
+
+    if (!SafeWriteU16(item + g_off.EIV_ItemDefIndex, definition) ||
+        !SafeWriteI32(item + g_off.EIV_EntityQuality, 3))
+        return false;
+
+    GloveAttributeManager::Remove(item);
+
+    if (paintKit > 0)
+    {
+        if (!GloveAttributeManager::Create(item, paintKit, wear, seed))
+            return false;
+
+        ConstructPaintKit(item);
+    }
+
+    // The gloves don't even change model without an owner: the changer's own
+    // write carries the local account id.
+    if (accountId)
+        SafeWriteU32(item + g_off.EIV_AccountID, accountId);
+
+    return SafeWriteU32(item + g_off.EIV_ItemIDHigh, 0xFFFFFFFFu) &&
+           SafeWriteU8(item + g_off.EIV_Initialized, 1) &&
+           SafeWriteU8(item + g_off.EIV_DisallowSOC, 0) &&
+           SafeWriteU8(item + g_off.EIV_RestoreCustom, 1);
 }

@@ -165,6 +165,7 @@
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">false</ExcludedFromBuild>
     </ClCompile>
     <ClCompile Include="src\hooks\knife_animation.cpp" />
+    <ClCompile Include="src\hooks\lineup.cpp" />
     <ClCompile Include="src\inventory\engine_schema_diagnostic.cpp" />
     <ClCompile Include="src\inventory\loadout.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>
@@ -176,6 +177,7 @@
     <ClCompile Include="src\inventory\attachments.cpp" />
     <ClCompile Include="src\inventory\charm.cpp" />
     <ClCompile Include="src\inventory\stattrak_kills.cpp" />
+    <ClCompile Include="src\inventory\auto_accept.cpp" />
     <ClCompile Include="src\inventory\native_apply.cpp" />
     <ClCompile Include="src\inventory\native_equipment.cpp" />
     <ClCompile Include="src\inventory\hde64.c" />
@@ -218,6 +220,7 @@
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">false</ExcludedFromBuild>
     </ClCompile>
+    <ClCompile Include="src\skin\stattrak_counter.cpp" />
     <ClCompile Include="src\inventory\loadout_api.cpp" />
     <ClCompile Include="src\skin\agents.cpp" />
     <ClCompile Include="src\skin\glove_model_refresh.cpp" />
@@ -234,6 +237,7 @@
     <ClInclude Include="src\diagnostics\log.h" />
     <ClInclude Include="src\hooks\frame_stage.h" />
     <ClInclude Include="src\hooks\knife_animation.h" />
+    <ClInclude Include="src\hooks\lineup.h" />
     <ClInclude Include="src\hooks\minhook_dynamic.h" />
     <ClInclude Include="src\hooks\weapon_graph.h" />
     <ClInclude Include="src\inventory\engine_schema_diagnostic.h" />

@@ -77,10 +77,15 @@ namespace Attachments
     // id 0 so the game drops them. `includeCharm` is false when the target list
     // is a second copy of the same item's attributes: CS2 creates one keychain
     // entity per list that carries the charm, and the id must live in one list.
-    bool Write(void* econItem, const Set& set, const Set* previous, bool includeCharm = true);
+    // `clearMissing` writes an empty (0) id into every slot the set does not
+    // carry. The fake skin must not inherit the real item's stickers or charm,
+    // so the apply path passes true once per view.
+    bool Write(void* econItem, const Set& set, const Set* previous,
+               bool includeCharm = true, bool clearMissing = false);
     // Writes to both embedded CAttributeLists of a live CEconItemView. Stickers
     // are mirrored into both; the charm is written once only.
-    bool WriteItemView(std::uintptr_t itemView, const Set& set, const Set* previous);
+    bool WriteItemView(std::uintptr_t itemView, const Set& set, const Set* previous,
+                       bool clearMissing = false);
     // Updates sticker attributes only; charm and unrelated attributes are untouched.
     bool WriteStickerSlots(void* econItem, const Set& set, const Set* previous);
 

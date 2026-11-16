@@ -13,6 +13,7 @@
 #include "sdk/functions.h"
 #include "hooks/frame_stage.h"
 #include "hooks/knife_animation.h"
+#include "hooks/lineup.h"
 #include "inventory/schema_probe.h"
 #include "inventory/plan_a.h"
 #include "hooks/minhook_dynamic.h"
@@ -21,6 +22,7 @@
 #include "inventory/armory_inventory.h"
 #include "inventory/loadout_api.h"
 #include "inventory/native_apply.h"
+#include "inventory/auto_accept.h"
 #include "inventory/runtime_mode.h"
 #include "skin/glove_paintkit_schema.h"
 #include "skin/glove_schema.h"
@@ -275,6 +277,13 @@ static DWORD WINAPI InjectThread(LPVOID)
     // CS2's own inventory applies the Armory's stickers and charms; this is the
     // hook that lets it finish for items Valve doesn't know.
     NativeApply::Initialize();
+
+    // Accept a found match for the player when the Armory toggle is on.
+    AutoAccept::Initialize();
+
+    // The team select / intro / end of match characters are built from their
+    // position's items, not from weapon entities: dress ours as they are built.
+    Lineup::Initialize();
 
     // Both data sources can be watched while inactive. FrameStageNotify only
     // adopts the source that has been explicitly activated below.

@@ -282,6 +282,44 @@ void LogStatus(const char* state, const char* reason, const char* code)
         static_cast<unsigned long>(writeError));
 }
 
+
+namespace
+{
+    // Read once: the environment cannot change under a running game.
+    bool ReadDebugFlag()
+    {
+        char value[16]{};
+        const DWORD length =
+            GetEnvironmentVariableA("N1SSAN_DEBUG", value, sizeof(value));
+
+        if (length == 0 || length >= sizeof(value))
+            return false;
+
+        return value[0] == '1' || value[0] == 'y' || value[0] == 'Y' ||
+               value[0] == 't' || value[0] == 'T';
+    }
+}
+
+bool DebugLogEnabled()
+{
+    static const bool enabled = ReadDebugFlag();
+    return enabled;
+}
+
+void DebugLog(const char* fmt, ...)
+{
+    if (!DebugLogEnabled() || !fmt)
+        return;
+
+    char buffer[1024]{};
+    va_list args;
+    va_start(args, fmt);
+    vsnprintf(buffer, sizeof(buffer), fmt, args);
+    va_end(args);
+
+    Log("%s", buffer);
+}
+
 uint64_t NowMs()
 {
     using namespace std::chrono;
