@@ -1226,10 +1226,21 @@ namespace Lineup
         static std::uintptr_t strikePawn = 0;
         static int strikes = 0;
 
+        // Upkeep passes in a row where the model exists but has built nothing
+        // and asks for nothing, and how many rebuilds that has earned on this
+        // pawn. See the waiting <= 0 branch below.
+        constexpr int IDLE_LIMIT = 6;
+        constexpr int IDLE_REBUILDS = 2;
+
+        static int idlePasses = 0;
+        static int idleRebuilds = 0;
+
         if (pawn != strikePawn)
         {
             strikePawn = pawn;
             strikes = 0;
+            idlePasses = 0;
+            idleRebuilds = 0;
         }
 
         const std::uintptr_t model = GloveModelEntity(pawn, routine.helper);
@@ -1258,22 +1269,46 @@ namespace Lineup
         if (finished > 0)
         {
             strikes = 0;
+            idlePasses = 0;
+            idleRebuilds = 0;
             std::snprintf(detail, size, "painted (finished=%d waiting=%d)",
                 finished, waiting);
             return 0;
         }
 
-        // No finished material and no request at all: this model is simply not
-        // being drawn right now (third person, off screen, not spawned this
-        // frame), and that reading is normal. Rebuilding on it alone would keep
-        // rebuilding healthy gloves - leave it alone.
+        // No finished material and no request at all: one reading of that is
+        // normal - the gloves are third person, off screen or not spawned this
+        // frame - and rebuilding on it alone is what kept rebuilding healthy
+        // gloves. A run of those readings is not normal: the hands are on screen
+        // and the model never asks for its paint again, which is the CT side
+        // going bare from round 3 and staying that way. Six upkeep passes (about
+        // nine seconds) is the signal, and the rebuild is spent sparingly: two
+        // per pawn, handed back as soon as a model paints.
         if (waiting <= 0)
         {
             strikes = 0;
+
+            if (++idlePasses < IDLE_LIMIT || idleRebuilds >= IDLE_REBUILDS)
+            {
+                std::snprintf(detail, size,
+                    "no paint request finished=%d waiting=%d - left alone (pass %d of %d)",
+                    finished, waiting, idlePasses, IDLE_LIMIT);
+                return 0;
+            }
+
+            idlePasses = 0;
+            ++idleRebuilds;
+
+            SafeWriteU8(pawn + g_off.PAWN_NeedReapplyGloves, 1);
+
+            const bool ran = RunGloveRoutine(pawn, routine.helper);
+
             std::snprintf(detail, size,
-                "no paint request finished=%d waiting=%d - left alone",
-                finished, waiting);
-            return 0;
+                "never painted finished=%d waiting=%d after %d passes - model rebuild %s (%d of %d)",
+                finished, waiting, IDLE_LIMIT, ran ? "run" : "faulted",
+                idleRebuilds, IDLE_REBUILDS);
+
+            return ran ? 1 : -1;
         }
 
         // A request is there and has not finished, so it is the stuck one. Free

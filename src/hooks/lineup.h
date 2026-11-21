@@ -37,10 +37,13 @@ namespace Lineup
     // nothing else notices and the gloves draw plain for a while - the "CT
     // gloves don't render" report. This looks at the model itself and heals it.
     //
-    // Only a model that is missing, or one that still has an unfinished paint
-    // request after several passes, is rebuilt. A model with no finished
-    // materials and no request is just not being drawn (third person, off
-    // screen), which is normal - it is left alone.
+    // Rebuilt: a model that is missing; one that still has an unfinished paint
+    // request after several passes; and one that has built nothing and asked
+    // for nothing for six upkeep passes in a row (about nine seconds), which is
+    // the gloves being on screen and never painting again - the CT side going
+    // bare from round 3. One reading of that is just the gloves not being drawn
+    // (third person, off screen) and is still left alone, and the sustained
+    // rebuild is capped at two per pawn until a model paints again.
     //
     // Returns 0 when nothing had to be done (painted, or not drawn yet), 1 when
     // the game's own glove routine was run to rebuild the model, 2 when a stuck
