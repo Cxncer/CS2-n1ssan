@@ -37,12 +37,16 @@ namespace Charm
     //    addon is confirmed live;
     //  - a gun that should carry none has every keychain entity and the addon
     //    removed.
-    // A missing addon is asked for once per viewmodel; when it still does not
-    // appear after a few passes, one fallback hands the charm back to CS2 to
-    // rebuild from the item attribute, and after that it is left alone.
+    // The addon is built from the item view's "keychain slot 0 id" and outlives
+    // the apply that changes that id, so a weapon bought with a real charm kept
+    // showing it while the fake skin rendered. The addon is therefore handed
+    // back to CS2 once per wanted kit, which rebuilds the animated charm from
+    // the Armory charm. A missing addon is asked for once per viewmodel; when it
+    // still does not appear after a few passes the gun keeps its rigid copy and
+    // stops, and a new viewmodel or model rebuild gives it another chance.
     // The [charm] log reports the addon state (0 unavailable or given up, 1
-    // live, 2 rebuild requested, 3 removed, 4 rebuilt by CS2) beside both
-    // entity counts, which is what settles which entity is the animated charm.
+    // live, 2 rebuild requested, 3 removed) beside both entity counts, which is
+    // what settles which entity is the animated charm.
     // modelRebuilt says the viewmodel was just rebuilt this pass, which is when
     // CS2 hangs the rigid copies again and the only reliable moment to tell the
     // upkeep that a build happened.
