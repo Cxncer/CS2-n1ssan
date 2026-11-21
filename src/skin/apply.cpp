@@ -1418,11 +1418,11 @@ bool ApplyWeaponSkin(uintptr_t weaponEnt, uintptr_t pawn, const TargetSkin& t,
             g_nameTagCache.erase(weaponEnt);
     }
 
-    // Charm: Lootline's upkeep. CS2 builds the charm from the item's keychain
-    // attribute (written with the view above). The build also hangs a static
-    // "keychain" addon on the viewmodel, which is the second charm beside the
-    // one that swings, so the addon is removed after every build and the
-    // simulated charm is left alone.
+    // Charm: Lootline's upkeep. CS2 builds the first-person charm from the
+    // item's keychain attribute (written with the view above) as a simulated
+    // "keychain" addon on the viewmodel. The rigid keychain_module copies the
+    // world build hangs are what gets removed, so exactly one charm is left and
+    // it is the one that reacts to movement.
     Charm::Upkeep(weaponEnt, hudWeapon, attachments, modelBuiltThisPass);
 
     // StatTrak: the counter the game keeps lives on the weapon, not on the saved

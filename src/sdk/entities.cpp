@@ -688,3 +688,80 @@ bool RebuildHudKeychainAddon(uintptr_t weapon, uintptr_t hudWeapon, bool request
 
     return true;
 }
+
+// The first-person charm that reacts to movement is the viewmodel's own
+// "keychain" addon, not a keychain_module: CS2 simulates the addon against the
+// weapon and it is what the player sees swing. v3.1 removed it and the rigid
+// world-model module was left on screen, frozen. This keeps the addon and only
+// asks CS2 to build it when it is missing.
+int EnsureHudKeychainAddon(uintptr_t weapon, uintptr_t hudWeapon)
+{
+    if (!weapon || !hudWeapon)
+        return 0;
+
+    ModuleInfo client = GetClientModule();
+    if (!client.valid())
+        return 0;
+
+    static uintptr_t findAddonAddress = 0;
+    static bool looked = false;
+
+    if (!looked)
+    {
+        looked = true;
+        findAddonAddress = ScanPattern(client, LootPatterns::FindHudKeychainAddon);
+
+        if (!findAddonAddress)
+            Log("[charm] FindHudKeychainAddon signature not found");
+    }
+
+    if (!findAddonAddress)
+        return 0;
+
+    using FindAddonFn = uint32_t(__fastcall*)(void*, const char*, uint32_t, bool*);
+
+    const uintptr_t dictionary = hudWeapon + HUD_ADDONS_OFFSET;
+    uint32_t addonIndex = INVALID_HANDLE;
+
+    __try
+    {
+        addonIndex = reinterpret_cast<FindAddonFn>(findAddonAddress)(
+            reinterpret_cast<void*>(dictionary), "keychain",
+            KEYCHAIN_ADDON_HASH, nullptr);
+    }
+    __except (EXCEPTION_EXECUTE_HANDLER)
+    {
+        Log("[charm] HUD addon lookup threw hud=%p", (void*)hudWeapon);
+        return 0;
+    }
+
+    // A live entry means the charm is already there: touching it again would
+    // rebuild a second addon, which is the double charm.
+    if (addonIndex != INVALID_HANDLE)
+    {
+        uint32_t allocationFlags = 0;
+        uintptr_t entries = 0;
+
+        SafeReadU32(dictionary + 4, allocationFlags);
+        SafeReadQword(dictionary + 8, entries);
+
+        const uint32_t capacity = allocationFlags & 0x7FFFFFFFu;
+
+        if (entries && addonIndex < capacity)
+        {
+            uint32_t handle = 0;
+            const uintptr_t handleAddress =
+                entries + (size_t)addonIndex * HUD_ADDON_ENTRY_SIZE +
+                HUD_ADDON_HANDLE_OFFSET;
+
+            if (SafeReadU32(handleAddress, handle) && HandleValid(handle) &&
+                GetEntityByHandle(handle))
+            {
+                return 1;
+            }
+        }
+    }
+
+    SafeWriteU8(hudWeapon + HUD_KEYCHAIN_STATE_OFFSET, 0xFF);
+    return 2;
+}

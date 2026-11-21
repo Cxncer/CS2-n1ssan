@@ -109,28 +109,23 @@ void Charm::Upkeep(uintptr_t weapon, uintptr_t hudWeapon, const Attachments::Set
 
     const int hanging = CountWorldKeychainEntities(weapon);
 
-    // One keychain module on the gun is the charm that swings: it is simulated,
-    // and it is left alone. Anything beyond that is a rigid copy hung by a
-    // model build from the same attribute. Removing the one module as well is
-    // what made the charm vanish and come back as a static one.
+    // The charm the player sees swing is the viewmodel's own "keychain" addon:
+    // CS2 builds it from the item's keychain attribute and simulates it against
+    // the gun's movement. A keychain_module entity is the world model's charm, a
+    // rigid prop that is drawn with the viewmodel too - that is the static twin.
+    // So the addon stays and the modules go, on the gun and on the viewmodel.
     const int expected = wanted > 0 ? 1 : 0;
     const bool worldSurplus = hanging > expected;
 
-    // The HUD keychain modules are only counted when no charm is wanted, where
-    // every one of them has to go. A keychain module on the HUD weapon is the
-    // simulated charm, not the static copy: the static copy is the keychain
-    // addon, which is not an entity of this class and therefore cannot be
-    // counted - it is removed around the addon handle instead.
-    const int hudHanging = (wanted == 0 && hudWeapon)
-        ? CountWorldKeychainEntities(hudWeapon)
-        : -1;
+    const int hudHanging = hudWeapon ? CountWorldKeychainEntities(hudWeapon) : 0;
 
     const bool selectionChanged = state.lastWanted != wanted;
     const bool hudWork = state.pendingHud || hudRebuilt || modelRebuilt;
 
     const bool repairWanted =
         worldSurplus ||
-        (wanted == 0 && (hanging > 0 || hudHanging > 0)) ||
+        hudHanging > 0 ||
+        (wanted == 0 && hanging > 0) ||
         selectionChanged ||
         hudWork;
 
@@ -191,25 +186,31 @@ void Charm::Upkeep(uintptr_t weapon, uintptr_t hudWeapon, const Attachments::Set
         state.pendingHud = false;
     }
 
-    // With no charm wanted, every module on the viewmodel goes too.
+    // The rigid world-model charms on the viewmodel are the static twin, with
+    // or without a charm of its own: they always go.
     const int hudRemoved =
-        (wanted == 0 && hudHanging > 0) ? RemoveHudKeychainEntities(hudWeapon) : 0;
+        (hudHanging > 0) ? RemoveHudKeychainEntities(hudWeapon) : 0;
 
-    // The static charm: the "keychain" addon CS2 hangs on the viewmodel. It is
-    // removed together with its dictionary entry, and the 0xFF rebuild request
-    // is deliberately not written - that is what asked CS2 for a second charm.
-    // The keychain module beside it is untouched, so the charm that swings
-    // stays on the gun.
-    const bool addonCleared =
-        hudWeapon ? RebuildHudKeychainAddon(weapon, hudWeapon, false) : false;
+    // The addon is kept: it is the charm that reacts to movement, and removing
+    // it (v3.1) left the rigid module on screen with nothing to swing from.
+    // CS2's 0xFF rebuild is only asked for when the viewmodel has no addon at
+    // all, which is what builds the charm again after a weapon switch.
+    // 0 = unavailable, 1 = kept, 2 = rebuild requested, 3 = removed.
+    int addon = 0;
+    if (hudWeapon)
+    {
+        addon = wanted > 0
+            ? EnsureHudKeychainAddon(weapon, hudWeapon)
+            : (RebuildHudKeychainAddon(weapon, hudWeapon, false) ? 3 : 0);
+    }
 
     state.pendingHud = false;
     state.deferredAttempts = 0;
     ++state.repairs;
 
-    Log("[charm] gun=%p hud=%p wanted=%d hanging=%d removed=%d added=%d hudHanging=%d hudRemoved=%d addonCleared=%d repair=%d",
+    Log("[charm] gun=%p hud=%p wanted=%d hanging=%d removed=%d added=%d hudHanging=%d hudRemoved=%d addon=%d repair=%d",
         (void*)weapon, (void*)hudWeapon, wanted, hanging, removed, added ? 1 : 0,
-        hudHanging, hudRemoved, addonCleared ? 1 : 0, state.repairs);
+        hudHanging, hudRemoved, addon, state.repairs);
 
     // Said once per gun and selection, so a count of zero is explained instead of
     // looking like the upkeep simply is not running.

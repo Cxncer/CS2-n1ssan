@@ -31,9 +31,10 @@ namespace Charm
     int DesiredKit(const Attachments::Set* set);
 
     // Lootline's per-gun upkeep, at most once a second:
-    //  - a gun that should carry a charm keeps exactly one simulated keychain
-    //    entity and has the HUD keychain addon (the static copy drawn on the
-    //    viewmodel) removed, without asking CS2 to rebuild it;
+    //  - a gun that should carry a charm keeps the viewmodel's keychain addon
+    //    (the charm CS2 simulates, the one that swings with the gun) and has
+    //    the rigid keychain_module copies removed, on the gun and on the
+    //    viewmodel alike;
     //  - a gun that should carry none has every keychain entity and the addon
     //    removed.
     // modelRebuilt says the viewmodel was just rebuilt this pass, which is when

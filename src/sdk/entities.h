@@ -33,6 +33,15 @@ bool HudKeychainRebuildAvailable();
 // simulated keychain entity, which is the charm that should remain.
 bool RebuildHudKeychainAddon(uintptr_t weapon, uintptr_t hudWeapon, bool requestRebuild = true);
 
+// Keeps the viewmodel's own "keychain" addon - the charm CS2 simulates, the one
+// that moves with the gun - and leaves it untouched. When the viewmodel has no
+// addon (after a switch, or because CS2 dropped it) this writes CS2's 0xFF
+// rebuild state once, which makes it build the addon from the item's keychain
+// attribute again.
+// Returns 1 when the addon was already there, 2 when a rebuild was requested,
+// 0 when the signature is missing.
+int EnsureHudKeychainAddon(uintptr_t weapon, uintptr_t hudWeapon);
+
 // How many world keychain_module entities hang on this weapon (owned by it or
 // parented under its scene node). Read-only; the scan is shared with the remover.
 int CountWorldKeychainEntities(uintptr_t weapon);
