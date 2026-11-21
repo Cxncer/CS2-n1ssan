@@ -1186,10 +1186,22 @@ namespace Attachments
             // game time to finish rebuilding the item before giving up.
             if (retry->second.attempts >= 5)
             {
-                char text[256]{};
-                Describe(current, text, sizeof(text));
-                Log("[attach] item %016llX still missing its attachments after retries: %s",
-                    static_cast<unsigned long long>(retry->first), text);
+                // One line per item per half minute: every managed item whose
+                // view CS2 rebuilt lands here, once a round, and each line is
+                // flushed to disk from the game thread.
+                static std::unordered_map<std::uint64_t, ULONGLONG> g_lastFailureLogMs;
+                const ULONGLONG failureNow = GetTickCount64();
+
+                if (g_lastFailureLogMs[retry->first] == 0 ||
+                    failureNow - g_lastFailureLogMs[retry->first] >= 30000)
+                {
+                    g_lastFailureLogMs[retry->first] = failureNow;
+
+                    char text[256]{};
+                    Describe(current, text, sizeof(text));
+                    Log("[attach] item %016llX still missing its attachments after retries: %s",
+                        static_cast<unsigned long long>(retry->first), text);
+                }
                 ArmoryStatus::NoteAttachReadbackFailure();
                 retry = g_readbackRetries.erase(retry);
                 continue;
@@ -1222,10 +1234,19 @@ namespace Attachments
                 g_lastKnown[managed.id] = current;
                 if (current != managed.attachments)
                 {
-                    char text[256]{};
-                    Describe(current, text, sizeof(text));
-                    Log("[attach] item %016llX did not read back its saved attachments: %s; retrying",
-                        static_cast<unsigned long long>(managed.id), text);
+                    static std::unordered_map<std::uint64_t, ULONGLONG> g_lastReadbackLogMs;
+                    const ULONGLONG readbackNow = GetTickCount64();
+
+                    if (g_lastReadbackLogMs[managed.id] == 0 ||
+                        readbackNow - g_lastReadbackLogMs[managed.id] >= 30000)
+                    {
+                        g_lastReadbackLogMs[managed.id] = readbackNow;
+
+                        char text[256]{};
+                        Describe(current, text, sizeof(text));
+                        Log("[attach] item %016llX did not read back its saved attachments: %s; retrying",
+                            static_cast<unsigned long long>(managed.id), text);
+                    }
 
                     ReadbackRetry retry;
                     retry.attempts = 0;

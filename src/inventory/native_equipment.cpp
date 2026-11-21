@@ -28,7 +28,15 @@ namespace
 {
     // A slot CS2 refuses this many times is left to the game so the rest of
     // the restore can finish (see Restore below).
-    constexpr int MAX_EQUIP_ATTEMPTS = 8;
+    // Three attempts is enough for the game to finish rebuilding the inventory
+    // between them; the eighth only ever repeated a refusal it had already
+    // earned. Each attempt is a panorama native on the game thread.
+    constexpr int MAX_EQUIP_ATTEMPTS = 3;
+
+    // A refused slot costs a native call and a flushed log line. A thirty-slot
+    // loadout used to fire every one of them inside one tick - that is the
+    // half-second freeze and the "30 failed retries" wall in the log.
+    constexpr int EQUIP_CALLS_PER_TICK = 4;
 
     struct Assignment
     {
@@ -447,6 +455,7 @@ namespace
         int equipped = 0;
         int skipped = 0;
         int failed = 0;
+        int equipCalls = 0;
 
         for (size_t i = 0; i < g_restoreAssignments.size(); ++i)
         {
@@ -485,6 +494,16 @@ namespace
                 continue;
             }
 
+            if (equipCalls >= EQUIP_CALLS_PER_TICK)
+            {
+                // Left for the next tick, 500 ms away: the restore stays open
+                // but no single frame pays for the whole loadout.
+                allCompleted = false;
+                continue;
+            }
+
+            ++equipCalls;
+
             if (LoadoutApi::EquipItemInSlot(team, item->id, assignment.slot.c_str()))
             {
                 g_restoreCompleted[i] = true;
@@ -500,10 +519,16 @@ namespace
 
                 const int attempts = ++g_restoreAttempts[i];
 
-                Log("[native-equipment] could not equip %s/%s instance=%s id=%016llX (attempt %d)",
-                    assignment.team.c_str(), assignment.slot.c_str(),
-                    assignment.instanceId.c_str(),
-                    static_cast<unsigned long long>(item->id), attempts);
+                // First refusal and the give-up below are the two moments that
+                // matter; the retries in between were a flushed line each.
+                if (attempts == 1)
+                {
+                    Log("[native-equipment] could not equip %s/%s instance=%s id=%016llX (first of %d)",
+                        assignment.team.c_str(), assignment.slot.c_str(),
+                        assignment.instanceId.c_str(),
+                        static_cast<unsigned long long>(item->id),
+                        MAX_EQUIP_ATTEMPTS);
+                }
 
                 // One slot that CS2 keeps refusing must not hold the whole
                 // restore open until the deadline: every other slot gets its

@@ -1045,19 +1045,52 @@ static void __fastcall FsnDetour(void* pClient, int stage)
     }
     else if (didUpdate && pRegenerateSkins)
     {
-        Log("[skin-regenerate] calling pRegenerateSkins weaponChanged=%d",
-            (int)didUpdate);
+        // The shared regenerate is the expensive half of a pass: it walks every
+        // econ entity in the level and rebuilds its material. It was measured at
+        // 85 ms for two weapons and 1562 ms for three, and the pass called it
+        // whenever one weapon's view had been rewritten - inside an eager window
+        // that is every 150 ms, so a round start paid it over and over and the
+        // frame budget it was supposed to protect was gone.
+        //
+        // The weapon's own material is built per weapon above (world and HUD),
+        // so one call a second is enough for the item names and descriptions it
+        // refreshes. The throttle line is written once per ten seconds, not per
+        // skipped pass.
+        constexpr uint64_t REGEN_MIN_INTERVAL_MS = 1000;
+        static uint64_t lastRegenMs = 0;
 
-        __try
+        const bool throttled =
+            lastRegenMs != 0 && now - lastRegenMs < REGEN_MIN_INTERVAL_MS;
+
+        if (throttled)
         {
-            pRegenerateSkins();
+            static uint64_t lastThrottleLogMs = 0;
 
-            Log("[skin-regenerate] returned");
-
+            if (now - lastThrottleLogMs >= 10000)
+            {
+                lastThrottleLogMs = now;
+                Log("[skin-regenerate] throttled: last run %llu ms ago",
+                    static_cast<unsigned long long>(now - lastRegenMs));
+            }
         }
-        __except (1)
+        else
         {
-            Log("[skin-regenerate] exception");
+            lastRegenMs = now;
+
+            Log("[skin-regenerate] calling pRegenerateSkins weaponChanged=%d",
+                (int)didUpdate);
+
+            __try
+            {
+                pRegenerateSkins();
+
+                Log("[skin-regenerate] returned");
+
+            }
+            __except (1)
+            {
+                Log("[skin-regenerate] exception");
+            }
         }
     }
 
