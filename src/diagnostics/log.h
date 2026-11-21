@@ -38,3 +38,9 @@ const char* BuildId();
 // Directory that holds the per-session status files, without a trailing
 // separator. Empty when no writable status directory was found.
 const char* StatusDirectoryPath();
+
+// Names an unhandled exception before the process goes down: the code, the
+// faulting module and its offset, and what the runtime was doing. Written with
+// raw Win32 so it does not depend on the allocator, stdio or a lock a crashed
+// thread may still hold, and the exception is handed back to Windows unchanged.
+void LogInstallCrashTrap();

@@ -379,3 +379,78 @@ const char* CurrentActivity()
     const char* label = g_activity.load(std::memory_order_relaxed);
     return label ? label : "idle";
 }
+
+// ---- unhandled-exception breadcrumb ----
+//
+// A crash that ends the session leaves the log mid-sentence and says nothing
+// about why, and Windows recorded no faulting module for this client. This
+// writes one line with the exception code, the faulting module and its offset,
+// and what the runtime was doing at that moment, then lets Windows handle the
+// exception exactly as it would have. Evidence only, no behaviour change.
+namespace
+{
+    LPTOP_LEVEL_EXCEPTION_FILTER g_previousCrashFilter = nullptr;
+
+    void AppendCrashLine(const char* text)
+    {
+        if (!g_logPath[0] || !text)
+            return;
+
+        HANDLE file = CreateFileA(g_logPath, FILE_APPEND_DATA,
+            FILE_SHARE_READ | FILE_SHARE_WRITE, nullptr, OPEN_EXISTING,
+            FILE_ATTRIBUTE_NORMAL, nullptr);
+
+        if (file == INVALID_HANDLE_VALUE)
+            return;
+
+        DWORD written = 0;
+        WriteFile(file, text, static_cast<DWORD>(strlen(text)), &written, nullptr);
+        CloseHandle(file);
+    }
+
+    LONG WINAPI CrashFilter(EXCEPTION_POINTERS* info)
+    {
+        const DWORD code = (info && info->ExceptionRecord)
+            ? info->ExceptionRecord->ExceptionCode
+            : 0;
+
+        void* address = (info && info->ExceptionRecord)
+            ? info->ExceptionRecord->ExceptionAddress
+            : nullptr;
+
+        char moduleName[MAX_PATH]{};
+        HMODULE module = nullptr;
+        unsigned long long offset = 0;
+
+        if (address && GetModuleHandleExA(
+                GET_MODULE_HANDLE_EX_FLAG_FROM_ADDRESS |
+                GET_MODULE_HANDLE_EX_FLAG_UNCHANGED_REFCOUNT,
+                static_cast<LPCSTR>(address), &module) && module)
+        {
+            GetModuleFileNameA(module, moduleName, MAX_PATH);
+            offset = static_cast<unsigned long long>(
+                reinterpret_cast<uintptr_t>(address) -
+                reinterpret_cast<uintptr_t>(module));
+        }
+
+        char line[512]{};
+        sprintf_s(line, sizeof(line),
+            "\n[crash] exception 0x%08lX at %p (%s+0x%llX) during %s\n",
+            static_cast<unsigned long>(code), address,
+            moduleName[0] ? moduleName : "unknown module", offset,
+            CurrentActivity());
+
+        AppendCrashLine(line);
+
+        if (g_previousCrashFilter && g_previousCrashFilter != &CrashFilter)
+            return g_previousCrashFilter(info);
+
+        return EXCEPTION_CONTINUE_SEARCH;
+    }
+}
+
+void LogInstallCrashTrap()
+{
+    if (!g_previousCrashFilter)
+        g_previousCrashFilter = SetUnhandledExceptionFilter(&CrashFilter);
+}

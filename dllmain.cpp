@@ -194,6 +194,10 @@ static DWORD WINAPI InjectThread(LPVOID)
     // Keep filesystem and console initialization out of DllMain/loader lock.
     LogInit(g_dllPath);
     Log("[build] Operation Armory x Obsidian Build 3.0 | %s %s", __DATE__, __TIME__);
+
+    // Before anything else runs: a crash from here on names its own cause in
+    // the session log instead of just stopping the file.
+    LogInstallCrashTrap();
     LogStatus("INITIALIZING", "worker_started", "E_NONE");
 
     if (!LoadMinHook())
