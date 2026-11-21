@@ -112,7 +112,28 @@ namespace
         bool own = true;
         const char* decidedBy = "no ownership data - assumed ours";
 
-        if (ownerKnown)
+        // The item's account outranks whoever is holding it.
+        //
+        // A gun picked up off the floor is held by the local pawn, but its item
+        // view still carries the account CS2 stamped on it when that player's
+        // item was created. The 21 Nov log has exactly that: account=1855171047
+        // and account=1396430402 logged as "own (held by the local pawn)", and
+        // those guns came back painted with the local skin the moment they were
+        // picked up. Holding a gun is not owning its item, so a real account
+        // that is not the local one decides before the owner handle does. The
+        // small values CS2 leaves on server-made items (0 and 1) are not
+        // accounts, so they keep the old behaviour instead of suppressing the
+        // player's own cosmetics.
+        const bool itemFromAnotherAccount =
+            viewAccountKnown && localAccountId &&
+            viewAccountId != localAccountId && viewAccountId >= 0x1000;
+
+        if (itemFromAnotherAccount)
+        {
+            own = false;
+            decidedBy = "item belongs to another account";
+        }
+        else if (ownerKnown)
         {
             own = ownerEntity == pawn;
             decidedBy = own ? "held by the local pawn" : "held by another pawn";
