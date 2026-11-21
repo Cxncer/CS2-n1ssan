@@ -37,9 +37,14 @@ namespace Lineup
     // nothing else notices and the gloves draw plain for a while - the "CT
     // gloves don't render" report. This looks at the model itself and heals it.
     //
-    // Returns 0 when the model is painted (or nothing had to be done), 1 when
-    // the game's own glove routine was run to rebuild the model, 2 when a
-    // waiting paint request was freed and the owner kicked, and -1 when the
-    // state could not be read. `detail` receives the counts for the log.
+    // Only a model that is missing, or one that still has an unfinished paint
+    // request after several passes, is rebuilt. A model with no finished
+    // materials and no request is just not being drawn (third person, off
+    // screen), which is normal - it is left alone.
+    //
+    // Returns 0 when nothing had to be done (painted, or not drawn yet), 1 when
+    // the game's own glove routine was run to rebuild the model, 2 when a stuck
+    // paint request was freed and the owner kicked, and -1 when the state could
+    // not be read. `detail` receives the counts for the log.
     int EnsureGloveModel(std::uintptr_t pawn, char* detail, std::size_t size);
 }

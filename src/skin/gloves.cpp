@@ -543,20 +543,23 @@ void RunGloves(std::uintptr_t pawn)
         const int modelState = Lineup::EnsureGloveModel(pawn, upkeepDetail,
             sizeof(upkeepDetail));
 
-        // One line per change of answer, not per upkeep: this runs every 1.5 s.
+        // Only an action is logged, one line per change of answer. Healthy
+        // gloves (state 0, whatever the material counts read) must never write
+        // a line, and this runs every 1.5 s: a session without a [glove-model]
+        // line is a session where the rebuild never fired.
         static int lastModelState = -2;
         static char lastModelDetail[112]{};
 
-        if (modelState != lastModelState ||
-            std::strcmp(upkeepDetail, lastModelDetail) != 0)
+        if (modelState != 0 &&
+            (modelState != lastModelState ||
+             std::strcmp(upkeepDetail, lastModelDetail) != 0))
         {
             lastModelState = modelState;
             std::snprintf(lastModelDetail, sizeof(lastModelDetail), "%s",
                 upkeepDetail);
 
             Log("[glove-model] %s (state %d) team=%s",
-                upkeepDetail[0] ? upkeepDetail : "painted", modelState,
-                team == 2 ? "T" : "CT");
+                upkeepDetail, modelState, team == 2 ? "T" : "CT");
         }
     }
 

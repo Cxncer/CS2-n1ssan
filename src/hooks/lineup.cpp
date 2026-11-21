@@ -1221,9 +1221,8 @@ namespace Lineup
             return -1;
         }
 
-        // One plain reading is left alone: a model that was just rebuilt is
-        // allowed to finish. Repeats mean it will not ask for its paint by
-        // itself, and only the game's own routine brings it back.
+        // A request that stays stuck over a few upkeep passes is not going to
+        // build by itself; only the game's own routine brings the model back.
         static std::uintptr_t strikePawn = 0;
         static int strikes = 0;
 
@@ -1259,22 +1258,36 @@ namespace Lineup
         if (finished > 0)
         {
             strikes = 0;
+            std::snprintf(detail, size, "painted (finished=%d waiting=%d)",
+                finished, waiting);
             return 0;
         }
 
-        // Nothing finished: the model draws plain. Free a shared request so the
-        // manager polls it and kick the owner, then give that a moment.
+        // No finished material and no request at all: this model is simply not
+        // being drawn right now (third person, off screen, not spawned this
+        // frame), and that reading is normal. Rebuilding on it alone would keep
+        // rebuilding healthy gloves - leave it alone.
+        if (waiting <= 0)
+        {
+            strikes = 0;
+            std::snprintf(detail, size,
+                "no paint request finished=%d waiting=%d - left alone",
+                finished, waiting);
+            return 0;
+        }
+
+        // A request is there and has not finished, so it is the stuck one. Free
+        // it so the manager polls it and kick the owner, then give it a moment
+        // before rebuilding the model itself.
         const char* freed = UnshareRequests(model);
         TouchModel(model);
 
-        // A pending request gets more time to build; with no request at all
-        // there is nothing to wait for.
-        const int limit = (waiting > 0) ? 3 : 2;
+        constexpr int STUCK_LIMIT = 3;
 
-        if (++strikes < limit)
+        if (++strikes < STUCK_LIMIT)
         {
             std::snprintf(detail, size,
-                "unpainted finished=%d waiting=%d %s - request kicked",
+                "stuck request finished=%d waiting=%d %s - request kicked",
                 finished, waiting, freed);
             return 2;
         }
@@ -1285,7 +1298,7 @@ namespace Lineup
         const bool ran = RunGloveRoutine(pawn, routine.helper);
 
         std::snprintf(detail, size,
-            "unpainted finished=%d waiting=%d %s - model rebuild %s",
+            "stuck request finished=%d waiting=%d %s - model rebuild %s",
             finished, waiting, freed, ran ? "run" : "faulted");
 
         return ran ? 1 : -1;
