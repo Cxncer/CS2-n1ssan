@@ -76,6 +76,13 @@ static constexpr uint64_t APPLY_DEAD_QUIET_MS = 400;
 static constexpr uint64_t DEATH_SETTLE_MS = 5000;
 static uint64_t g_deathSettleUntilMs = 0;
 
+// A death only counts as a match death while the player was in a match this
+// recently. Without this window the guard armed at the main menu too, where the
+// pawn is never alive, so it stayed on for as long as the menu was open and the
+// Armory's staged items were never adopted: no item was ever created, so nothing
+// could be equipped and no skin was applied anywhere.
+static constexpr uint64_t MATCH_DEATH_WINDOW_MS = 30000;
+
 // A match accepted, a map loaded or a round started: every equipped weapon is
 // written during this window, before the player could ask for it by switching.
 static constexpr uint64_t EAGER_WINDOW_MS = 4000;
@@ -547,8 +554,13 @@ static void __fastcall FsnDetour(void* pClient, int stage)
     const bool connectedToServer = !connectedKnown || connectedState == 0;
 
     // Arm the death window here, ahead of the inventory pass: the frame the kill
-    // lands is already a teardown frame.
-    if (pawnAliveKnown && pawnIsAlive == 0)
+    // lands is already a teardown frame. Only a death inside a match counts; the
+    // menu has no live pawn either and must not hold the guard on.
+    const bool matchDeath =
+        pawnAliveKnown && pawnIsAlive == 0 &&
+        now - g_lastInMatchMs <= MATCH_DEATH_WINDOW_MS;
+
+    if (matchDeath)
         g_deathSettleUntilMs = now + DEATH_SETTLE_MS;
 
     static bool g_loggedNetworkState = false;
