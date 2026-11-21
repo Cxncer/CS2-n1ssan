@@ -215,14 +215,21 @@ void Charm::Upkeep(uintptr_t weapon, uintptr_t hudWeapon, const Attachments::Set
     state.deferredAttempts = 0;
     ++state.repairs;
 
+    // "hanging" above is the state before this pass, so a gun that was fixed by
+    // the call just made would still read zero. The entity is counted again
+    // here: "after" is what is on the gun now, and it is the field that says
+    // whether the simulated charm is really there.
+    const int after = added > 0 ? CountWorldKeychainEntities(weapon) : -1;
+
     Log("[charm] gun=%p hud=%p wanted=%d hanging=%d removed=%d charmEntity=%d "
-        "hudHanging=%d hudRemoved=%d addonCall=%d repair=%d",
-        (void*)weapon, (void*)hudWeapon, wanted, hanging, removed, added,
+        "after=%d hudHanging=%d hudRemoved=%d addonCall=%d repair=%d",
+        (void*)weapon, (void*)hudWeapon, wanted, hanging, removed, added, after,
         hudHanging, hudRemoved, addonCall ? 1 : 0, state.repairs);
 
     // Said once per gun and selection, so a count of zero is explained instead of
-    // looking like the upkeep simply is not running.
-    if (wanted > 0 && hanging == 0 && !state.loggedUndetectable)
+    // looking like the upkeep simply is not running. Only when the call did not
+    // run or did not create anything: a fresh entity was never a failure.
+    if (wanted > 0 && hanging == 0 && added == 0 && !state.loggedUndetectable)
     {
         state.loggedUndetectable = true;
         Log("[charm] gun=%p carries no keychain; CS2 did not create the simulated "
