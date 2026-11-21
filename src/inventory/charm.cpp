@@ -1,7 +1,8 @@
 // n1ssan-dll / src/inventory/charm.cpp
 // Lootline's charm upkeep, ported. See charm.h for why no attribute is written
 // here: CS2 owns "keychain slot 0 id" and builds the charm from it; this only
-// removes a second charm entity the game left hanging beside that one.
+// makes sure the charm on screen is the one CS2 simulates, and that the rigid
+// copies the builds hang are gone.
 
 #include "inventory/charm.h"
 #include "inventory/attachments.h"
@@ -17,16 +18,24 @@ namespace
     struct GunState
     {
         uint64_t nextCheckMs = 0;
-        uint64_t reportAtMs = 0;
         uint64_t quietUntilMs = 0;
         int      repairs = 0;
         int      lastWanted = -1;
         int      lastHanging = -1;
-        int      addedFor = -1;          // kit a keychain entity was requested for
         int      deferredAttempts = 0;   // passes spent unable to resolve the HUD
         uintptr_t lastHud = 0;           // last resolved viewmodel weapon
         bool     pendingHud = false;     // a repair still needs the HUD weapon
         bool     loggedUndetectable = false;
+
+        // The viewmodel "keychain" addon, which is the charm CS2 simulates. One
+        // request per viewmodel and at most one fallback rebuild, so its 0xFF
+        // rebuild state is never rewritten pass after pass.
+        uintptr_t addonHud = 0;          // viewmodel the fields below belong to
+        bool      addonAsked = false;    // CS2 was asked to build it
+        bool      addonFallback = false; // the one fallback rebuild has been used
+        bool      addonGaveUp = false;   // nothing more can be done; leave it be
+        bool      addonPending = false;  // last pass saw it asked for, not there
+        int       addonMisses = 0;       // passes waited for that addon
     };
 
     std::unordered_map<uintptr_t, GunState> g_guns;
@@ -36,6 +45,10 @@ namespace
     constexpr uint64_t DEFERRED_CHECK_MS = 250;
     constexpr int MAX_REPAIRS = 20;
     constexpr int MAX_DEFERRED_ATTEMPTS = 20;
+
+    // Settled checks spent waiting for a requested addon rebuild to show up
+    // before the fallback repair runs (a few seconds).
+    constexpr int ADDON_PENDING_PASSES = 3;
 
     // A gun that wants no charm and carries none needs no entity walk at all.
     // The walk is thousands of reads, and it used to run for every weapon on
@@ -48,6 +61,73 @@ namespace
     // second either: the only things that change it are a new selection and a new
     // viewmodel, and both are noticed without the scan.
     constexpr uint64_t SETTLED_CHECK_MS = 3000;
+
+    // The animated charm is the viewmodel's own "keychain" addon; this is what
+    // the addon= field of the [charm] log reports.
+    enum AddonState
+    {
+        ADDON_UNKNOWN = 0,   // no viewmodel, no signature, or given up
+        ADDON_LIVE    = 1,   // it is there: the rigid copies may go
+        ADDON_PENDING = 2,   // one rebuild was asked for, not there yet
+        ADDON_ABSENT  = 3,   // no charm wanted: it was removed
+        ADDON_REBUILT = 4,   // fallback: CS2 was told to build it again
+    };
+
+    AddonState ResolveAddon(GunState& state, uintptr_t weapon, uintptr_t hudWeapon,
+                            int wanted)
+    {
+        if (!hudWeapon)
+            return ADDON_UNKNOWN;
+
+        if (wanted == 0)
+            return RebuildHudKeychainAddon(weapon, hudWeapon, false) ? ADDON_ABSENT
+                                                                    : ADDON_UNKNOWN;
+
+        if (state.addonGaveUp)
+            return ADDON_UNKNOWN;
+
+        // A different viewmodel has a different addon dictionary: start over.
+        if (state.addonHud != hudWeapon)
+        {
+            state.addonHud = hudWeapon;
+            state.addonAsked = false;
+            state.addonFallback = false;
+            state.addonMisses = 0;
+        }
+
+        // Exactly one request per viewmodel. Every later pass only reads the
+        // state back, so a rebuild CS2 is already running is never restarted.
+        if (!state.addonAsked)
+        {
+            state.addonAsked = true;
+
+            const int asked = EnsureHudKeychainAddon(weapon, hudWeapon);
+
+            if (asked == 1)
+                return ADDON_LIVE;
+
+            state.addonMisses = 1;
+            return asked == 2 ? ADDON_PENDING : ADDON_UNKNOWN;
+        }
+
+        if (EnsureHudKeychainAddon(weapon, hudWeapon, false) == 1)
+            return ADDON_LIVE;
+
+        if (++state.addonMisses <= ADDON_PENDING_PASSES)
+            return ADDON_PENDING;
+
+        // The requested addon never appeared. One fallback only: hand the charm
+        // back to CS2, which clears the addon and rebuilds it from the item's
+        // keychain attribute - the single-charm repair that predates the addon.
+        if (state.addonFallback || !RebuildHudKeychainAddon(weapon, hudWeapon, true))
+        {
+            state.addonGaveUp = true;
+            return ADDON_UNKNOWN;
+        }
+
+        state.addonFallback = true;
+        return ADDON_REBUILT;
+    }
 }
 
 int Charm::DesiredKit(const Attachments::Set* set)
@@ -89,16 +169,21 @@ void Charm::Upkeep(uintptr_t weapon, uintptr_t hudWeapon, const Attachments::Set
         state.pendingHud = false;
         state.deferredAttempts = 0;
         state.loggedUndetectable = false;
+
+        state.addonAsked = false;
+        state.addonFallback = false;
+        state.addonGaveUp = false;
+        state.addonPending = false;
+        state.addonMisses = 0;
     }
 
-    // A rebuilt viewmodel is a new HUD weapon carrying a freshly built keychain
-    // addon, and the addon is one of the two charms the player sees.
+    // A rebuilt viewmodel is a new HUD weapon carrying its own keychain addon.
     const bool hudRebuilt = hudWeapon && state.lastHud && hudWeapon != state.lastHud;
 
     if (hudWeapon)
         state.lastHud = hudWeapon;
 
-    // A build is what hangs the static addon again, so it also reopens the
+    // A build is what hangs the rigid copies again, so it also reopens the
     // repair budget: a model can be rebuilt several times per gun.
     if (modelRebuilt)
     {
@@ -108,24 +193,23 @@ void Charm::Upkeep(uintptr_t weapon, uintptr_t hudWeapon, const Attachments::Set
     }
 
     const int hanging = CountWorldKeychainEntities(weapon);
-
-    // The charm the player sees swing is the viewmodel's own "keychain" addon:
-    // CS2 builds it from the item's keychain attribute and simulates it against
-    // the gun's movement. A keychain_module entity is the world model's charm, a
-    // rigid prop that is drawn with the viewmodel too - that is the static twin.
-    // So the addon stays and the modules go, on the gun and on the viewmodel.
-    const int expected = wanted > 0 ? 1 : 0;
-    const bool worldSurplus = hanging > expected;
-
     const int hudHanging = hudWeapon ? CountWorldKeychainEntities(hudWeapon) : 0;
+
+    // Every keychain_module is a rigid copy: CS2's simulated charm is the
+    // viewmodel addon, so a module on the gun or on the viewmodel is surplus.
+    const bool worldSurplus = hanging > 0;
 
     const bool selectionChanged = state.lastWanted != wanted;
     const bool hudWork = state.pendingHud || hudRebuilt || modelRebuilt;
 
+    // Once the addon is given up on, no pass can do anything about the HUD
+    // copies, so the walk is not repeated for them.
+    const bool hudActionable = wanted == 0 || !state.addonGaveUp;
+
     const bool repairWanted =
         worldSurplus ||
-        hudHanging > 0 ||
-        (wanted == 0 && hanging > 0) ||
+        (hudHanging > 0 && hudActionable) ||
+        state.addonPending ||
         selectionChanged ||
         hudWork;
 
@@ -150,22 +234,9 @@ void Charm::Upkeep(uintptr_t weapon, uintptr_t hudWeapon, const Attachments::Set
     }
 
     int removed = 0;
-    bool added = false;
 
     if (worldSurplus)
-    {
-        // Every module comes off together, then one simulated charm is asked
-        // for again: CS2 has no "remove just the copies" call, and leaving the
-        // gun with none made the game re-hang a rigid one on the next build.
         removed = RemoveWorldKeychainEntities(weapon);
-
-        if (wanted > 0)
-            added = AddKeychainEntity(weapon);
-    }
-    else if (wanted == 0 && hanging > 0)
-    {
-        removed = RemoveWorldKeychainEntities(weapon);
-    }
 
     // The HUD weapon is unresolvable while CS2 is still building the viewmodel.
     // Nothing about the addon can be settled without it, and the attempt does
@@ -186,37 +257,28 @@ void Charm::Upkeep(uintptr_t weapon, uintptr_t hudWeapon, const Attachments::Set
         state.pendingHud = false;
     }
 
-    // The viewmodel's own "keychain" addon is the charm that reacts to
-    // movement, so its state is resolved FIRST, and the rigid copies are only
-    // taken off once it is confirmed live. v3.1 removed the addon and was left
-    // with a frozen world model; removing the copies on the assumption that the
-    // addon would replace them could leave the gun with no charm at all.
-    // 0 = unavailable, 1 = live addon, 2 = rebuild requested, 3 = removed.
-    int addon = 0;
-    if (hudWeapon)
-    {
-        addon = wanted > 0
-            ? EnsureHudKeychainAddon(weapon, hudWeapon)
-            : (RebuildHudKeychainAddon(weapon, hudWeapon, false) ? 3 : 0);
-    }
+    // The addon is resolved FIRST: nothing rigid comes off the viewmodel until
+    // the animated charm is confirmed live, or has just been handed back to CS2
+    // to rebuild. Removing the copies on the assumption that the addon will
+    // follow is what could leave a gun with no charm at all.
+    const AddonState addonState = ResolveAddon(state, weapon, hudWeapon, wanted);
 
-    // The rigid keychain_module copies on the viewmodel are the static twin.
-    // They go only when the animated addon is confirmed live (addon == 1) or
-    // when no charm is wanted at all. While a rebuild is still pending
-    // (addon == 2) they stay, so the gun keeps a charm on screen.
+    state.addonPending = addonState == ADDON_PENDING;
+
     int hudRemoved = 0;
 
     if (hudHanging > 0)
     {
-        if (wanted == 0 || addon == 1)
+        if (addonState == ADDON_LIVE || addonState == ADDON_ABSENT ||
+            addonState == ADDON_REBUILT)
         {
             hudRemoved = RemoveHudKeychainEntities(hudWeapon);
         }
         else
         {
-            Log("[charm] gun=%p hud=%p addon=%d (not confirmed live) - keeping %d "
-                "HUD keychain module%s; they stay until the animated addon exists",
-                (void*)weapon, (void*)hudWeapon, addon, hudHanging,
+            Log("[charm] gun=%p hud=%p addon=%d - keeping %d HUD keychain module%s "
+                "until the animated addon is confirmed",
+                (void*)weapon, (void*)hudWeapon, (int)addonState, hudHanging,
                 hudHanging == 1 ? "" : "s");
         }
     }
@@ -227,14 +289,14 @@ void Charm::Upkeep(uintptr_t weapon, uintptr_t hudWeapon, const Attachments::Set
     state.deferredAttempts = 0;
     ++state.repairs;
 
-    // addon: 0 = unavailable, 1 = live (animated charm kept), 2 = rebuild
-    // requested (HUD modules kept), 3 = removed (no charm wanted).
-    // hudLeft is what remains on the viewmodel after this pass, so a run of
-    // addon=1 with hudLeft=0 is the settled one-charm state.
-    Log("[charm] gun=%p hud=%p wanted=%d addon=%d hanging=%d removed=%d added=%d "
+    // addon: 0 unavailable or given up, 1 live (animated charm kept), 2 rebuild
+    // requested (copies kept until it lands), 3 removed (none wanted), 4 rebuilt
+    // by CS2. hudLeft is what is still on the viewmodel after this pass, so the
+    // settled one-charm state reads addon=1 with hudLeft=0.
+    Log("[charm] gun=%p hud=%p wanted=%d addon=%d hanging=%d removed=%d "
         "hudHanging=%d hudRemoved=%d hudLeft=%d repair=%d",
-        (void*)weapon, (void*)hudWeapon, wanted, addon, hanging, removed,
-        added ? 1 : 0, hudHanging, hudRemoved, hudLeft, state.repairs);
+        (void*)weapon, (void*)hudWeapon, wanted, (int)addonState, hanging, removed,
+        hudHanging, hudRemoved, hudLeft, state.repairs);
 
     // Said once per gun and selection, so a count of zero is explained instead of
     // looking like the upkeep simply is not running.
@@ -250,6 +312,7 @@ void Charm::Upkeep(uintptr_t weapon, uintptr_t hudWeapon, const Attachments::Set
     state.lastWanted = wanted;
     state.lastHanging = hanging;
 }
+
 void Charm::Forget(uintptr_t weapon)
 {
     if (!weapon)

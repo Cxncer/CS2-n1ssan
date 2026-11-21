@@ -466,54 +466,6 @@ int CountWorldKeychainEntities(uintptr_t weapon)
     return count;
 }
 
-// Lootline's C_CSWeaponBase::AddKeyChainEntity: CS2 builds the gun's keychain
-// entity from the item's keychain attribute. This is the simulated charm; the
-// HUD addon alone hangs rigidly on the viewmodel.
-bool AddKeychainEntity(uintptr_t weapon)
-{
-    if (!weapon)
-        return false;
-
-    ModuleInfo client = GetClientModule();
-    if (!client.valid())
-        return false;
-
-    static uintptr_t address = 0;
-    static bool looked = false;
-
-    if (!looked)
-    {
-        looked = true;
-        address = ScanPattern(client, LootPatterns::AddKeyChainEntity);
-
-        if (!address)
-            Log("[charm] AddKeyChainEntity signature not found");
-    }
-
-    if (!address)
-        return false;
-
-    // CS2's signature is AddKeyChainEntity(weapon, item, bool) - the item is the
-    // weapon's own econ view, and passing nothing in its place made the call a
-    // no-op.
-    uintptr_t item = GetWeaponItem(weapon);
-
-    if (!item)
-        return false;
-
-    using AddKeyChainFn = bool(__fastcall*)(uintptr_t, uintptr_t, bool);
-
-    __try
-    {
-        return reinterpret_cast<AddKeyChainFn>(address)(weapon, item, false);
-    }
-    __except (EXCEPTION_EXECUTE_HANDLER)
-    {
-        Log("[charm] AddKeyChainEntity threw weapon=%p", (void*)weapon);
-        return false;
-    }
-}
-
 // Lootline's AddNametagEntity: CS2 itself reads the item view's custom name and
 // hangs, replaces or removes the gun's "nametag" module from it.
 bool AddNametag(uintptr_t weapon, uintptr_t itemView)
@@ -564,27 +516,6 @@ namespace
     constexpr size_t HUD_KEYCHAIN_STATE_OFFSET = HUD_ADDONS_OFFSET + 0x10 + 0x20;
     constexpr uint32_t KEYCHAIN_ADDON_HASH = 0x0AA5272A;   // native hash of "keychain"
     constexpr uint32_t INVALID_HANDLE = 0xFFFFFFFFu;
-}
-
-bool HudKeychainRebuildAvailable()
-{
-    ModuleInfo client = GetClientModule();
-    if (!client.valid())
-        return false;
-
-    static int cached = -1;
-
-    if (cached < 0)
-    {
-        cached =
-            (ScanPattern(client, LootPatterns::FindHudKeychainAddon) &&
-             ScanPattern(client, LootPatterns::RemoveHudKeychainAddon)) ? 1 : 0;
-
-        if (!cached)
-            DebugLog("[charm-pass] HUD keychain addon signatures not found; writing the charm directly");
-    }
-
-    return cached == 1;
 }
 
 bool RebuildHudKeychainAddon(uintptr_t weapon, uintptr_t hudWeapon, bool requestRebuild)
@@ -693,8 +624,9 @@ bool RebuildHudKeychainAddon(uintptr_t weapon, uintptr_t hudWeapon, bool request
 // "keychain" addon, not a keychain_module: CS2 simulates the addon against the
 // weapon and it is what the player sees swing. v3.1 removed it and the rigid
 // world-model module was left on screen, frozen. This keeps the addon and only
-// asks CS2 to build it when it is missing.
-int EnsureHudKeychainAddon(uintptr_t weapon, uintptr_t hudWeapon)
+// asks CS2 to build it when it is missing; requestRebuild = false just reports
+// the state (1 live, 0 absent) without touching it.
+int EnsureHudKeychainAddon(uintptr_t weapon, uintptr_t hudWeapon, bool requestRebuild)
 {
     if (!weapon || !hudWeapon)
         return 0;
@@ -761,6 +693,10 @@ int EnsureHudKeychainAddon(uintptr_t weapon, uintptr_t hudWeapon)
             }
         }
     }
+
+    // Report-only callers must not restart a rebuild CS2 is already running.
+    if (!requestRebuild)
+        return 0;
 
     SafeWriteU8(hudWeapon + HUD_KEYCHAIN_STATE_OFFSET, 0xFF);
     return 2;

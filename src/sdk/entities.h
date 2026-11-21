@@ -20,11 +20,6 @@ void LogWorldKeychainEntities(uintptr_t weapon);
 // HUD weapon, not one of these, so this drops the rigid duplicate only.
 int RemoveWorldKeychainEntities(uintptr_t weapon);
 
-// True when CS2's HUD addon lookup/removal signatures resolved, i.e. the
-// one-charm pass (clear the keychain id for the build, restore it afterwards,
-// rebuild the HUD addon) can run.
-bool HudKeychainRebuildAvailable();
-
 // Lootline's RebuildHudKeychainAddon: removes the HUD weapon's "keychain" addon
 // entity, clears its dictionary slot and flags the addon state so CS2 rebuilds
 // it from the item's keychain attribute - one charm instead of two.
@@ -39,8 +34,10 @@ bool RebuildHudKeychainAddon(uintptr_t weapon, uintptr_t hudWeapon, bool request
 // rebuild state once, which makes it build the addon from the item's keychain
 // attribute again.
 // Returns 1 when the addon was already there, 2 when a rebuild was requested,
-// 0 when the signature is missing.
-int EnsureHudKeychainAddon(uintptr_t weapon, uintptr_t hudWeapon);
+// 0 when it is absent or the signature is missing. requestRebuild = false only
+// reports the state, which is how a later pass checks it without restarting a
+// rebuild CS2 is already running.
+int EnsureHudKeychainAddon(uintptr_t weapon, uintptr_t hudWeapon, bool requestRebuild = true);
 
 // How many world keychain_module entities hang on this weapon (owned by it or
 // parented under its scene node). Read-only; the scan is shared with the remover.
@@ -49,12 +46,6 @@ int CountWorldKeychainEntities(uintptr_t weapon);
 // Charm entities hanging on the first-person weapon (the static copies owned by
 // its keychain addon).
 int RemoveHudKeychainEntities(uintptr_t hudWeapon);
-
-// Lootline's C_CSWeaponBase::AddKeyChainEntity call: lets CS2 create the gun's
-// keychain_module from the item's keychain attribute. That entity is the one
-// that simulates - a gun whose charm was only left to the HUD addon has a charm
-// that never moves.
-bool AddKeychainEntity(uintptr_t weapon);
 
 // CS2's own name tag helper: reads the item view's custom name and hangs,
 // replaces or removes the nametag module on the gun (Lootline's
