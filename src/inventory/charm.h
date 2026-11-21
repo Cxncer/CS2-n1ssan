@@ -34,9 +34,13 @@ namespace Charm
     //  - a gun that should carry a charm keeps the viewmodel's keychain addon
     //    (the charm CS2 simulates, the one that swings with the gun) and has
     //    the rigid keychain_module copies removed, on the gun and on the
-    //    viewmodel alike;
+    //    viewmodel alike - but the viewmodel's copies only once that addon is
+    //    confirmed live, so a failed rebuild can never leave a gun charmless;
     //  - a gun that should carry none has every keychain entity and the addon
     //    removed.
+    // The log line reports the addon state (0 unavailable, 1 live, 2 rebuild
+    // requested, 3 removed) beside both entity counts, which is what settles
+    // which of them is the animated charm.
     // modelRebuilt says the viewmodel was just rebuilt this pass, which is when
     // CS2 hangs the static addon again and the only reliable moment to tell the
     // upkeep that the static charm is back.
