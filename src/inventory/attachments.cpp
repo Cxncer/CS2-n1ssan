@@ -857,6 +857,45 @@ namespace Attachments
         return ok;
     }
 
+    int SetCharmIdInPlace(void* itemView, int kit)
+    {
+        if (!itemView) return 0;
+
+        AttributeVector_t* vector =
+            GetAttributeVector(reinterpret_cast<uintptr_t>(itemView));
+
+        if (!vector) return 0;
+        if (vector->size <= 0 || vector->size > MAX_ATTRIBUTES) return 0;
+        if (!vector->data || vector->data < 0x10000u) return 0;
+
+        const float raw = BitsFromInt(kit);
+        int changed = 0;
+
+        // One float in an entry that already exists. No setter, no allocation:
+        // CS2's schema setters fault on a live view, and a fault there is what
+        // crashed the game while a weapon model was being built.
+        __try
+        {
+            auto* attributes =
+                reinterpret_cast<EconItemAttribute_t*>(vector->data);
+
+            for (int i = 0; i < vector->size; ++i)
+            {
+                if (attributes[i].defIndex != ATTR_CHARM_ID) continue;
+
+                attributes[i].value = raw;
+                attributes[i].initialValue = raw;
+                ++changed;
+            }
+        }
+        __except (EXCEPTION_EXECUTE_HANDLER)
+        {
+            return 0;
+        }
+
+        return changed;
+    }
+
     bool Write(void* econItem, const Set& set, const Set* previous, bool includeCharm,
                bool clearMissing)
     {

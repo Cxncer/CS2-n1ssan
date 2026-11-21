@@ -1216,22 +1216,22 @@ bool ApplyWeaponSkin(uintptr_t weaponEnt, uintptr_t pawn, const TargetSkin& t,
         // Both builds read "keychain slot 0 id" from the same item view, and each
         // one hangs a keychain of its own: the world build a rigid one on the gun,
         // the HUD build the first-person charm. In first person both are drawn,
-        // which is the double charm the player sees. The attribute is therefore
-        // taken off the view for the world build and put back before the HUD
-        // build, so exactly one charm is ever created. This is a charm-only write
-        // on the ordinary attribute list - the same call the normal path already
-        // makes successfully on this client.
-        void* viewAttributes = g_off.EIV_AttributeList
-            ? reinterpret_cast<void*>(view + g_off.EIV_AttributeList)
-            : nullptr;
-
-        const bool charmShelled = viewAttributes && desired.charm.present;
+        // which is the double charm the player sees. The id is therefore zeroed
+        // for the world build and put back before the HUD build, so exactly one
+        // charm is ever created.
+        //
+        // The edit goes straight into the attribute vector, never through
+        // Attachments::WriteCharm: every schema setter faults on a live view on
+        // this client ("CallSetAttribute: threw"), and that storm during a match
+        // start is what crashed the game. Writing the value of an entry that is
+        // already in the vector cannot throw, and a view with no charm entry is
+        // left alone.
+        const bool charmShelled = desired.charm.present;
+        int charmShelledCount = 0;
 
         if (charmShelled)
-        {
-            Attachments::Charm none{};
-            Attachments::WriteCharm(viewAttributes, none);
-        }
+            charmShelledCount = Attachments::SetCharmIdInPlace(
+                reinterpret_cast<void*>(view), 0);
 
         SetMeshGroup(weaponEnt, mask);
 
@@ -1240,10 +1240,11 @@ bool ApplyWeaponSkin(uintptr_t weaponEnt, uintptr_t pawn, const TargetSkin& t,
 
         if (charmShelled)
         {
-            Attachments::WriteCharm(viewAttributes, desired.charm);
+            const int restored = Attachments::SetCharmIdInPlace(
+                reinterpret_cast<void*>(view), desired.charm.kit);
 
-            Log("[charm-build] weapon=%p kit=%d restored after the world build",
-                (void*)weaponEnt, desired.charm.kit);
+            Log("[charm-build] weapon=%p kit=%d shelled=%d restored=%d after the world build",
+                (void*)weaponEnt, desired.charm.kit, charmShelledCount, restored);
         }
 
         bool hudBuilt = (hudWeapon == 0);

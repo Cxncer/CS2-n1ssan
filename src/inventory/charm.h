@@ -12,11 +12,12 @@
 // the one it had already built from the item attribute.
 //
 // This port deliberately does the same and nothing more: it never rewrites the
-// keychain attributes after a model build. On this client those setters fault
-// ("CallSetAttribute: threw") and skin regeneration then dies on the view, which
-// is what crashed the earlier attempt and what made charms vanish when the
-// restore failed. The attribute is written once, at view creation, by
-// Attachments::Write, exactly as before.
+// keychain attributes through CS2's schema setters. On this client those setters
+// fault ("CallSetAttribute: threw") and skin regeneration then dies on the view,
+// which crashed the earlier attempt - and crashed a match start when the
+// one-charm pass tried them again. The attribute is created once, at view
+// creation, by Attachments::Write; the one-charm pass only edits that existing
+// entry's value in place (Attachments::SetCharmIdInPlace).
 
 #pragma once
 

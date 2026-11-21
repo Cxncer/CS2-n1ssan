@@ -89,12 +89,22 @@ namespace Attachments
     // Updates sticker attributes only; charm and unrelated attributes are untouched.
     bool WriteStickerSlots(void* econItem, const Set& set, const Set* previous);
 
-    // Updates the charm attributes only, on one attribute list. The one-charm
-    // pass needs this: CS2 faults the schema setters when the whole set is
-    // rewritten on a view it has already built, but a charm-only write on the
-    // list is the same call the normal path already makes successfully. A charm
-    // with `present == false` clears the keychain id (id 0) and nothing else.
+    // Updates the charm attributes only, on one attribute list. A charm with
+    // `present == false` clears the keychain id (id 0) and nothing else.
+    //
+    // Do not use this on a live weapon view mid-match: every schema setter
+    // faults on this client ("CallSetAttribute: threw"), and that fault storm
+    // during a model build is what crashed the game at match start. Use
+    // SetCharmIdInPlace for that.
     bool WriteCharm(void* econItem, const Charm& charm);
+
+    // Rewrites "keychain slot 0 id" on the ordinary attribute list of a live
+    // CEconItemView, straight into the vector entry that already carries it: no
+    // schema setter, no allocation, no exception. Returns how many entries were
+    // changed (0 when the view carries no charm attribute). This is the one-charm
+    // pass's mechanism - the world model build sees id 0, the first-person build
+    // sees the real kit. Pass the CEconItemView, not its CAttributeList.
+    int SetCharmIdInPlace(void* itemView, int kit);
 
 
     // One-line description for diagnostics.
