@@ -452,16 +452,39 @@ namespace
     // than a projected instance only when that answer changes.
     void NoteForeignEquipped(int team, const char* what, uint64_t itemId)
     {
-        static int lastTeam = 0;
-        static std::string lastWhat;
-        static uint64_t lastItemId = 0;
+        // Per slot, not one global "last". Two slots answering differently every
+        // frame flipped a single filter back and forth, so both lines were written
+        // on every frame - and Log() flushes the file on each call, which stalls
+        // the frame that runs this. A slot now speaks only when its own answer
+        // changes.
+        struct Slot
+        {
+            int         team = 0;
+            std::string what;
+            uint64_t    itemId = 0;
+        };
 
-        if (team == lastTeam && lastWhat == what && itemId == lastItemId)
-            return;
+        static std::vector<Slot> seen;
 
-        lastTeam = team;
-        lastWhat = what;
-        lastItemId = itemId;
+        const std::string key = what ? std::string(what) : std::string();
+
+        bool known = false;
+
+        for (Slot& slot : seen)
+        {
+            if (slot.team != team || slot.what != key)
+                continue;
+
+            if (slot.itemId == itemId)
+                return;
+
+            slot.itemId = itemId;
+            known = true;
+            break;
+        }
+
+        if (!known)
+            seen.push_back(Slot{team, key, itemId});
 
         Log("[armory-loadout] team=%s %s holds item %llu, which is not a projected instance",
             TeamApiName(team) ? TeamApiName(team) : "?", what,

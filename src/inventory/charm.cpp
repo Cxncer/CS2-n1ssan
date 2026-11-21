@@ -48,6 +48,21 @@ namespace
     // second either: the only things that change it are a new selection and a new
     // viewmodel, and both are noticed without the scan.
     constexpr uint64_t SETTLED_CHECK_MS = 3000;
+
+    // A repair is native work: CS2 builds a keychain entity and the entity list is
+    // walked for every one of them. A round-start sweep would do that for every
+    // equipped weapon at once, which is the freeze on spawn, so the budget spreads
+    // it over a few seconds and the deferred guns retry on their next check.
+    constexpr int REPAIR_BUDGET = 6;
+    constexpr uint64_t REPAIR_WINDOW_MS = 1000;
+
+    int      g_repairsInWindow = 0;
+    uint64_t g_repairWindowStartMs = 0;
+
+    // True while the pawn is dead: its weapons, their keychain entities and the
+    // viewmodel are being torn down, and native calls on them are what the client
+    // did not survive. Nothing is touched until the respawn pass resumes.
+    bool g_paused = false;
 }
 
 int Charm::DesiredKit(const Attachments::Set* set)
@@ -59,6 +74,9 @@ void Charm::Upkeep(uintptr_t weapon, uintptr_t hudWeapon, const Attachments::Set
                    bool modelRebuilt)
 {
     if (!weapon)
+        return;
+
+    if (g_paused)
         return;
 
     const uint64_t now = GetTickCount64();
@@ -129,6 +147,20 @@ void Charm::Upkeep(uintptr_t weapon, uintptr_t hudWeapon, const Attachments::Set
         state.lastHanging = hanging;
         return;
     }
+
+    if (now - g_repairWindowStartMs >= REPAIR_WINDOW_MS)
+    {
+        g_repairWindowStartMs = now;
+        g_repairsInWindow = 0;
+    }
+
+    if (g_repairsInWindow >= REPAIR_BUDGET)
+    {
+        state.nextCheckMs = now + 150;
+        return;
+    }
+
+    ++g_repairsInWindow;
 
     if (state.repairs >= MAX_REPAIRS)
     {
@@ -252,6 +284,19 @@ void Charm::Forget(uintptr_t weapon)
 
 void Charm::ForgetAll()
 {
+    g_guns.clear();
+}
+
+void Charm::SetPaused(bool paused)
+{
+    if (paused == g_paused)
+        return;
+
+    g_paused = paused;
+
+    // Everything booked so far describes entities of the life that just ended, so
+    // the first live pass after the respawn starts every gun over instead of
+    // trusting counts taken before the teardown.
     g_guns.clear();
 }
 

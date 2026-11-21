@@ -1440,9 +1440,13 @@ bool ApplyWeaponSkin(uintptr_t weaponEnt, uintptr_t pawn, const TargetSkin& t,
         if (viewKills > recorded)
             recorded = viewKills;
 
-        if (recorded > t.statTrakKills)
+        // Only the call that stores a new number logs. The staged target keeps its
+        // old count until the Bridge refreshes it, so this comparison stayed true
+        // on every pass - and the line was flushed to disk each time, which is a
+        // hitch on every apply tick.
+        if (recorded > t.statTrakKills &&
+            StatTrakKills::Record(t.instanceId, recorded))
         {
-            StatTrakKills::Record(t.instanceId, recorded);
             Log("[stattrak] recorded kills=%d instance=%s", recorded,
                 t.instanceId.c_str());
         }

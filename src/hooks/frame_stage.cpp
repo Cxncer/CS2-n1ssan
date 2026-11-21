@@ -35,6 +35,7 @@
 #include "inventory/auto_accept.h"
 #include "inventory/native_equipment.h"
 #include "inventory/attachments.h"
+#include "inventory/charm.h"
 #include "inventory/native_apply.h"
 #include "inventory/runtime_mode.h"
 #include "skin/apply.h"
@@ -773,6 +774,13 @@ static void __fastcall FsnDetour(void* pClient, int stage)
     const bool deadButStillInMatch =
         !inMatch && g_matchState == MatchState::IN_MATCH &&
         pawnAliveKnown && pawnIsAlive == 0 && pawn > 0x10000;
+
+    // Death tears the pawn's weapons, their keychain entities and the viewmodel
+    // down. Charm upkeep calls CS2's own entity creator and remover, and doing
+    // that on entities that are being destroyed is what the client did not
+    // survive. While the pawn is dead the charm is left exactly as it is; the
+    // first live pass after the respawn starts every gun over.
+    Charm::SetPaused(deadButStillInMatch || !inMatch);
 
     // The state machine keeps IN_MATCH for a short grace period after the
     // network reports the session ended; do not run the apply pass on a pawn

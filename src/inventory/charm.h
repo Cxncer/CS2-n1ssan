@@ -54,6 +54,12 @@ namespace Charm
     void Forget(uintptr_t weapon);
     void ForgetAll();
 
+    // Stop all charm work while the pawn is dead. Death destroys the weapons, the
+    // viewmodel and the keychain entities, and calling CS2's creator or remover on
+    // entities that are being destroyed crashed the client. Resuming forgets every
+    // gun's state, so the respawn pass repairs from scratch.
+    void SetPaused(bool paused);
+
     // Log the charm state of a gun: wanted kit, kit the item carries, how many
     // charm entities hang on it. Read-only (Lootline's ReportCharm).
     void Report(uintptr_t weapon, uintptr_t hudWeapon, const Attachments::Set* set);

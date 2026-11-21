@@ -77,17 +77,17 @@ std::string StatTrakKills::Path()
     return ArmoryInventory::BridgeDirectory() + "\\armory-stattrak-kills.json";
 }
 
-void StatTrakKills::Record(const std::string& instanceId, int kills)
+bool StatTrakKills::Record(const std::string& instanceId, int kills)
 {
     if (instanceId.empty() || kills <= 0)
-        return;
+        return false;
 
     std::lock_guard<std::mutex> lock(g_mutex);
 
     const auto it = g_kills.find(instanceId);
 
     if (it != g_kills.end() && it->second >= kills)
-        return;
+        return false;
 
     g_kills[instanceId] = kills;
 
@@ -117,4 +117,6 @@ void StatTrakKills::Record(const std::string& instanceId, int kills)
     {
         Log("[stattrak] cannot write %s", Path().c_str());
     }
+
+    return true;
 }

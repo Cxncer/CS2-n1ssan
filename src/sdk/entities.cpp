@@ -262,12 +262,23 @@ static int RemoveKeychainsOn(uintptr_t weapon)
     if (!client.valid())
         return 0;
 
-    const uintptr_t removeNow = ScanPattern(client, LootPatterns::RemoveKeychainModule);
-    if (!removeNow)
+    // Resolved once. ScanPattern walks the whole client module, and this ran on
+    // every removal for every weapon - that is the freeze when a round starts and
+    // each gun's charm is repaired in the same sweep.
+    static uintptr_t removeNow = 0;
+    static bool looked = false;
+
+    if (!looked)
     {
-        Log("[charm-clean] RemoveKeychainModule signature not found");
-        return 0;
+        looked = true;
+        removeNow = ScanPattern(client, LootPatterns::RemoveKeychainModule);
+
+        if (!removeNow)
+            Log("[charm-clean] RemoveKeychainModule signature not found");
     }
+
+    if (!removeNow)
+        return 0;
 
     using RemoveNowFn = void(__fastcall*)(void*);
 

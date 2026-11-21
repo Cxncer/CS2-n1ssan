@@ -12,7 +12,8 @@ namespace StatTrakKills
 {
     // Record the live count for one Armory instance. Writes only when the value
     // is new for that instance, so the apply tick does not rewrite the file.
-    void Record(const std::string& instanceId, int kills);
+    // Returns true only when it stored a new number.
+    bool Record(const std::string& instanceId, int kills);
 
     // Path of the file the Bridge reads (same directory as the attachment
     // detection file).
