@@ -68,6 +68,14 @@ static constexpr uint64_t SKIN_APPLY_INTERVAL_MS = 250;
 static constexpr uint64_t SKIN_APPLY_DEAD_INTERVAL_MS = 1000;
 static constexpr uint64_t APPLY_DEAD_QUIET_MS = 400;
 
+// Death is the one moment CS2 tears the weapon, econ and loadout graph down at
+// once. The inventory / native-loadout pass and the shared regenerate are left
+// alone from the kill until the pawn is back and has settled for this long:
+// neither is visible on the death camera, and both create and equip items while
+// the engine is destroying them.
+static constexpr uint64_t DEATH_SETTLE_MS = 5000;
+static uint64_t g_deathSettleUntilMs = 0;
+
 // A match accepted, a map loaded or a round started: every equipped weapon is
 // written during this window, before the player could ask for it by switching.
 static constexpr uint64_t EAGER_WINDOW_MS = 4000;
@@ -538,6 +546,11 @@ static void __fastcall FsnDetour(void* pClient, int stage)
 
     const bool connectedToServer = !connectedKnown || connectedState == 0;
 
+    // Arm the death window here, ahead of the inventory pass: the frame the kill
+    // lands is already a teardown frame.
+    if (pawnAliveKnown && pawnIsAlive == 0)
+        g_deathSettleUntilMs = now + DEATH_SETTLE_MS;
+
     static bool g_loggedNetworkState = false;
     if (!g_loggedNetworkState)
     {
@@ -587,6 +600,7 @@ static void __fastcall FsnDetour(void* pClient, int stage)
             if (pawnIsAlive != 0 && lastAlive == 0)
             {
                 g_eagerUntilMs = now + EAGER_WINDOW_MS;
+                g_deathSettleUntilMs = now + DEATH_SETTLE_MS;
                 Log("[apply-eager] respawn: full sweep for the new round");
             }
 
@@ -708,7 +722,27 @@ static void __fastcall FsnDetour(void* pClient, int stage)
     // Armory inventory writes and attachment observation remain restricted to
     // the non-match window. CS2's native inventory UI is authoritative for
     // applying stickers and charms; the Bridge persists the observed result.
-    if (!inMatch && runtimeMode == RuntimeMode::Armory)
+    // Death and the first seconds after the respawn: no item creation, no
+    // native equipping, no attachment readback. This is the work that was
+    // running in the last ten seconds of the session that ended without an
+    // exception, right after the pawn died.
+    const bool deathSettling = now < g_deathSettleUntilMs;
+
+    {
+        static bool loggedDeathGuard = false;
+
+        if (deathSettling && !loggedDeathGuard)
+        {
+            loggedDeathGuard = true;
+            Log("[death-guard] inventory and loadout work paused until the pawn is back");
+        }
+        else if (!deathSettling)
+        {
+            loggedDeathGuard = false;
+        }
+    }
+
+    if (!inMatch && runtimeMode == RuntimeMode::Armory && !deathSettling)
     {
         // This block runs on every frame the game calls us, and it reads every
         // managed item and its view. The inventory screen opened on a background
@@ -1043,7 +1077,8 @@ static void __fastcall FsnDetour(void* pClient, int stage)
         // RegenerateSkins is what faulted the client, so wait for a clean pass.
         Log("[skin-regenerate] skipped: weapon material build faulted");
     }
-    else if (didUpdate && pRegenerateSkins)
+    else if (didUpdate && pRegenerateSkins && !pawnDead &&
+             now >= g_deathSettleUntilMs)
     {
         // The shared regenerate is the expensive half of a pass: it walks every
         // econ entity in the level and rebuilds its material. It was measured at
@@ -1091,6 +1126,17 @@ static void __fastcall FsnDetour(void* pClient, int stage)
             {
                 Log("[skin-regenerate] exception");
             }
+        }
+    }
+
+    if (didUpdate && pRegenerateSkins && (pawnDead || now < g_deathSettleUntilMs))
+    {
+        static uint64_t lastDeathSkipLogMs = 0;
+
+        if (now - lastDeathSkipLogMs >= 10000)
+        {
+            lastDeathSkipLogMs = now;
+            Log("[skin-regenerate] skipped: pawn is dead or just respawned");
         }
     }
 
