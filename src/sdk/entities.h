@@ -15,9 +15,9 @@ uintptr_t GetEntityByHandle(uint32_t handle);
 uintptr_t GetLocalPawn();
 // Read-only diagnostic: enumerate native world keychain_module entities.
 void LogWorldKeychainEntities(uintptr_t weapon);
-// Removes the world keychain_module entities hung on a weapon and returns how
-// many were removed. The first-person charm CS2 simulates is a HUD addon on the
-// HUD weapon, not one of these, so this drops the rigid duplicate only.
+// Removes the keychain_module entities hung on a weapon and returns how many
+// were removed. CS2's simulated charm is the entity AddKeychainEntity creates on
+// the weapon; the extra modules a build hangs are the rigid copies.
 int RemoveWorldKeychainEntities(uintptr_t weapon);
 
 // Lootline's RebuildHudKeychainAddon: removes the HUD weapon's "keychain" addon
@@ -28,23 +28,18 @@ int RemoveWorldKeychainEntities(uintptr_t weapon);
 // simulated keychain entity, which is the charm that should remain.
 bool RebuildHudKeychainAddon(uintptr_t weapon, uintptr_t hudWeapon, bool requestRebuild = true);
 
-// Keeps the viewmodel's own "keychain" addon - the charm CS2 simulates, the one
-// that moves with the gun - and leaves it untouched. When the viewmodel has no
-// addon (after a switch, or because CS2 dropped it) this writes CS2's 0xFF
-// rebuild state once, which makes it build the addon from the item's keychain
-// attribute again.
-// Returns 1 when the addon was already there, 2 when a rebuild was requested,
-// 0 when it is absent or the signature is missing. requestRebuild = false only
-// reports the state, which is how a later pass checks it without restarting a
-// rebuild CS2 is already running.
-int EnsureHudKeychainAddon(uintptr_t weapon, uintptr_t hudWeapon, bool requestRebuild = true);
+// Lootline's C_CSWeaponBase::AddKeyChainEntity: CS2 creates the gun's simulated
+// keychain entity from the item view's "keychain slot 0 id". That entity is the
+// charm that reacts to movement; the keychain_module copies a build hangs and
+// the viewmodel's "keychain" addon are rigid duplicates of it.
+bool AddKeychainEntity(uintptr_t weapon);
 
 // How many world keychain_module entities hang on this weapon (owned by it or
 // parented under its scene node). Read-only; the scan is shared with the remover.
 int CountWorldKeychainEntities(uintptr_t weapon);
 
-// Charm entities hanging on the first-person weapon (the static copies owned by
-// its keychain addon).
+// Charm entities hanging on the first-person weapon. They are rigid copies of
+// the charm, never the simulated one.
 int RemoveHudKeychainEntities(uintptr_t hudWeapon);
 
 // CS2's own name tag helper: reads the item view's custom name and hangs,

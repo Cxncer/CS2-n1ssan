@@ -1,15 +1,16 @@
 // n1ssan-dll / src/inventory/charm.h
 // Full port of Lootline's charm (keychain) upkeep.
 //
-// CS2 builds the first-person charm itself: it reads "keychain slot 0 id" from
-// the item and simulates it as the viewmodel's own "keychain" addon, which is
-// the charm that swings with the gun. The rigid keychain_module entities are
-// static copies of the same charm. Lootline's job is to leave exactly one
-// charm, and it is the animated one:
-//   - the viewmodel addon is kept, and only a missing one is asked for again;
-//   - the rigid copies are removed, on the gun and on the viewmodel - but on
-//     the viewmodel only once the addon is confirmed live, so a failed rebuild
-//     can never leave the gun with no charm at all.
+// CS2 builds the charm itself: it reads "keychain slot 0 id" from the item and
+// creates the gun's keychain entity from it (C_CSWeaponBase::AddKeyChainEntity).
+// That entity is the one that reacts to movement. Every model build also hangs
+// rigid keychain_module copies - on the world gun and on the viewmodel - and the
+// viewmodel carries its own "keychain" addon; they look identical but do not
+// simulate. Lootline's job is to leave exactly one charm, the simulated one:
+//   - one keychain entity on the gun is kept; duplicates, a previous
+//     selection's charm and the viewmodel copies are removed;
+//   - when CS2 created no entity, the viewmodel charm is kept and CS2 is asked
+//     to rebuild it from the item attribute, so the gun is never left bare.
 //
 // This port deliberately never rewrites the keychain attributes through CS2's
 // schema setters. On this client those setters fault ("CallSetAttribute: threw")
@@ -37,16 +38,10 @@ namespace Charm
     //    addon is confirmed live;
     //  - a gun that should carry none has every keychain entity and the addon
     //    removed.
-    // The addon is built from the item view's "keychain slot 0 id" and outlives
-    // the apply that changes that id, so a weapon bought with a real charm kept
-    // showing it while the fake skin rendered. The addon is therefore handed
-    // back to CS2 once per wanted kit, which rebuilds the animated charm from
-    // the Armory charm. A missing addon is asked for once per viewmodel; when it
-    // still does not appear after a few passes the gun keeps its rigid copy and
-    // stops, and a new viewmodel or model rebuild gives it another chance.
-    // The [charm] log reports the addon state (0 unavailable or given up, 1
-    // live, 2 rebuild requested, 3 removed) beside both entity counts, which is
-    // what settles which entity is the animated charm.
+    // The [charm] log reports the entity counts and what was removed, so a
+    // frozen charm can be told from a missing one: charmEntity=1 with
+    // hudHanging=0 is the settled single animated charm. charmEntity=1 is CS2's
+    // AddKeychainEntity call, which is the only thing that makes it simulate.
     // modelRebuilt says the viewmodel was just rebuilt this pass, which is when
     // CS2 hangs the rigid copies again and the only reliable moment to tell the
     // upkeep that a build happened.

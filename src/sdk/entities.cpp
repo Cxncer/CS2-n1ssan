@@ -466,6 +466,55 @@ int CountWorldKeychainEntities(uintptr_t weapon)
     return count;
 }
 
+// Lootline's C_CSWeaponBase::AddKeyChainEntity: CS2 builds the gun's keychain
+// entity from the item's keychain attribute. This is the simulated charm - the
+// one that reacts to movement; the modules a model build hangs, and the
+// viewmodel's "keychain" addon, are rigid copies of it.
+bool AddKeychainEntity(uintptr_t weapon)
+{
+    if (!weapon)
+        return false;
+
+    ModuleInfo client = GetClientModule();
+    if (!client.valid())
+        return false;
+
+    static uintptr_t address = 0;
+    static bool looked = false;
+
+    if (!looked)
+    {
+        looked = true;
+        address = ScanPattern(client, LootPatterns::AddKeyChainEntity);
+
+        if (!address)
+            Log("[charm] AddKeyChainEntity signature not found");
+    }
+
+    if (!address)
+        return false;
+
+    // CS2's signature is AddKeyChainEntity(weapon, item, bool) - the item is the
+    // weapon's own econ view, and passing nothing in its place made the call a
+    // no-op.
+    uintptr_t item = GetWeaponItem(weapon);
+
+    if (!item)
+        return false;
+
+    using AddKeyChainFn = bool(__fastcall*)(uintptr_t, uintptr_t, bool);
+
+    __try
+    {
+        return reinterpret_cast<AddKeyChainFn>(address)(weapon, item, false);
+    }
+    __except (EXCEPTION_EXECUTE_HANDLER)
+    {
+        Log("[charm] AddKeyChainEntity threw weapon=%p", (void*)weapon);
+        return false;
+    }
+}
+
 // Lootline's AddNametagEntity: CS2 itself reads the item view's custom name and
 // hangs, replaces or removes the gun's "nametag" module from it.
 bool AddNametag(uintptr_t weapon, uintptr_t itemView)
@@ -611,93 +660,12 @@ bool RebuildHudKeychainAddon(uintptr_t weapon, uintptr_t hudWeapon, bool request
     }
 
     // 0xFF asks CS2 to rebuild the addon dictionary from the item's keychain
-    // attribute, which is what creates the single first-person charm. When the
-    // gun already owns a simulated keychain entity that is deliberately skipped:
-    // rebuilding here would create a second, static charm next to it.
+    // attribute. On the tested build that state change did not bring a charm
+    // back (v3.5 log), so this is only the fallback for a gun whose simulated
+    // entity could not be created; with one in place it is skipped, because a
+    // rebuild here would put a second, static charm next to it.
     if (requestRebuild)
         SafeWriteU8(hudWeapon + HUD_KEYCHAIN_STATE_OFFSET, 0xFF);
 
     return true;
-}
-
-// The first-person charm that reacts to movement is the viewmodel's own
-// "keychain" addon, not a keychain_module: CS2 simulates the addon against the
-// weapon and it is what the player sees swing. v3.1 removed it and the rigid
-// world-model module was left on screen, frozen. This keeps the addon and only
-// asks CS2 to build it when it is missing; requestRebuild = false just reports
-// the state (1 live, 0 absent) without touching it.
-int EnsureHudKeychainAddon(uintptr_t weapon, uintptr_t hudWeapon, bool requestRebuild)
-{
-    if (!weapon || !hudWeapon)
-        return 0;
-
-    ModuleInfo client = GetClientModule();
-    if (!client.valid())
-        return 0;
-
-    static uintptr_t findAddonAddress = 0;
-    static bool looked = false;
-
-    if (!looked)
-    {
-        looked = true;
-        findAddonAddress = ScanPattern(client, LootPatterns::FindHudKeychainAddon);
-
-        if (!findAddonAddress)
-            Log("[charm] FindHudKeychainAddon signature not found");
-    }
-
-    if (!findAddonAddress)
-        return 0;
-
-    using FindAddonFn = uint32_t(__fastcall*)(void*, const char*, uint32_t, bool*);
-
-    const uintptr_t dictionary = hudWeapon + HUD_ADDONS_OFFSET;
-    uint32_t addonIndex = INVALID_HANDLE;
-
-    __try
-    {
-        addonIndex = reinterpret_cast<FindAddonFn>(findAddonAddress)(
-            reinterpret_cast<void*>(dictionary), "keychain",
-            KEYCHAIN_ADDON_HASH, nullptr);
-    }
-    __except (EXCEPTION_EXECUTE_HANDLER)
-    {
-        Log("[charm] HUD addon lookup threw hud=%p", (void*)hudWeapon);
-        return 0;
-    }
-
-    // A live entry means the charm is already there: touching it again would
-    // rebuild a second addon, which is the double charm.
-    if (addonIndex != INVALID_HANDLE)
-    {
-        uint32_t allocationFlags = 0;
-        uintptr_t entries = 0;
-
-        SafeReadU32(dictionary + 4, allocationFlags);
-        SafeReadQword(dictionary + 8, entries);
-
-        const uint32_t capacity = allocationFlags & 0x7FFFFFFFu;
-
-        if (entries && addonIndex < capacity)
-        {
-            uint32_t handle = 0;
-            const uintptr_t handleAddress =
-                entries + (size_t)addonIndex * HUD_ADDON_ENTRY_SIZE +
-                HUD_ADDON_HANDLE_OFFSET;
-
-            if (SafeReadU32(handleAddress, handle) && HandleValid(handle) &&
-                GetEntityByHandle(handle))
-            {
-                return 1;
-            }
-        }
-    }
-
-    // Report-only callers must not restart a rebuild CS2 is already running.
-    if (!requestRebuild)
-        return 0;
-
-    SafeWriteU8(hudWeapon + HUD_KEYCHAIN_STATE_OFFSET, 0xFF);
-    return 2;
 }
