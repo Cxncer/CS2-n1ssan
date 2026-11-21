@@ -90,21 +90,22 @@ uintptr_t GetLocalPawn()
 // traversal mirrors the already-used matchdetect chunk layout. Entity identity
 // and designer-name offsets are isolated here and used only for observation;
 // no entity is modified or removed by this pass.
-// The entity system publishes how many slots are actually in use. Walking all
-// 0x7FFE of them was tens of thousands of pointless reads per scan, and one
-// charm repair runs several scans - the hitch this bound removes.
+// The full range is scanned on purpose.
+//
+// This used to be bounded by the value at entityList + 0x2120 ("highest
+// networked"). That is the networked-slot high-water mark, not the entity index
+// limit: the 2026-11-12 session log shows highestNetworked=214 while the
+// keychain entities found on the gun sat at index 17007, 17011, 17024, 17041...
+// The bounded walk therefore never reached a single charm entity, so every
+// cleanup from that release on reported hanging=0 on a gun the player could see
+// wearing two charms and removed nothing.
+//
+// The walk is chunked (one read per 512 slots, skipped when the chunk pointer is
+// null), so scanning the full range costs little more than the live entities it
+// already touches.
 static uint32_t LiveEntityLimit()
 {
-    constexpr uint32_t MAX_ENTITY_INDEX = 0x7FFE;
-
-    uint32_t highest = 0;
-
-    if (!g_entityListGlobal ||
-        !SafeReadU32(g_entityListGlobal + 0x2120, highest) ||
-        highest == 0 || highest > MAX_ENTITY_INDEX)
-        return MAX_ENTITY_INDEX;
-
-    return highest;
+    return 0x7FFE;
 }
 
 static bool IsDesignerName(uintptr_t entity, const char* expected)

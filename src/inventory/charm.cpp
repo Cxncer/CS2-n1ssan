@@ -93,17 +93,23 @@ void Charm::Upkeep(uintptr_t weapon, uintptr_t hudWeapon, const Attachments::Set
 
     const int hanging = CountWorldKeychainEntities(weapon);
 
-    const bool duplicated = hanging > 1;
+    // Any world keychain is one too many.
+    //
+    // The charm the player sees hangs from the HUD weapon's keychain addon,
+    // which CS2 builds from the item's "keychain slot 0 id"; the world model
+    // build hangs a second, rigid copy on the gun from the same attribute. The
+    // two together are the double charm. Lootline removed every world copy, not
+    // only a surplus one - the gate used to require hanging > 1, and while the
+    // entity scan was bounded (see LiveEntityLimit) it never reported anything
+    // at all, so nothing was ever removed.
+    const bool worldLeftover = hanging > 0;
     const bool selectionChanged = state.lastWanted != wanted;
     const bool hudWork = state.pendingHud || hudRebuilt;
 
-    // A missing count is not a repair reason any more: the count cannot see this
-    // build's charms, so "hanging == 0" is true even on a gun that is wearing
-    // one, and treating it as work burned the whole repair budget on guns that
-    // were already correct.
-    const bool repairWanted = wanted > 0
-        ? (duplicated || selectionChanged || hudWork)
-        : (hanging > 0 || selectionChanged);
+    // The count is trustworthy again, so a world copy is work whether the gun
+    // should carry a charm or not.
+    const bool repairWanted =
+        worldLeftover || selectionChanged || hudWork;
 
     if (!repairWanted)
     {
@@ -126,11 +132,7 @@ void Charm::Upkeep(uintptr_t weapon, uintptr_t hudWeapon, const Attachments::Set
     }
 
     // Only scan for a removal when the count says there is something to remove.
-    // The count itself cannot see this build's charm entities, so a gun that
-    // should carry none is still cleaned whenever the count reports any.
-    const int removed = (duplicated || (wanted == 0 && hanging > 0))
-        ? RemoveWorldKeychainEntities(weapon)
-        : 0;
+    const int removed = hanging > 0 ? RemoveWorldKeychainEntities(weapon) : 0;
 
     // The item attribute is the single source: CS2 reads "keychain slot 0 id"
     // from the view and hangs the first-person charm from it.
@@ -174,8 +176,8 @@ void Charm::Upkeep(uintptr_t weapon, uintptr_t hudWeapon, const Attachments::Set
     if (wanted > 0 && hanging == 0 && !state.loggedUndetectable)
     {
         state.loggedUndetectable = true;
-        Log("[charm] gun=%p nothing to clean; CS2 hangs the charm from the item's "
-            "keychain attribute", (void*)weapon);
+        Log("[charm] gun=%p nothing to clean on the gun itself; the charm is the "
+            "HUD addon built from the item's keychain attribute", (void*)weapon);
     }
 
     state.quietUntilMs = (wanted == 0 && hanging == 0) ? now + QUIET_CHECK_MS : 0;
