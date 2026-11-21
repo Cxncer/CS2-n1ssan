@@ -406,9 +406,20 @@ namespace LoadoutApi
         if (!g_equipItemInSlot || !g_canEquipItemInSlot)
             return false;
         const std::string itemIdText = std::to_string(itemId);
-        if (!CallCanEquipItemInSlot(team, itemIdText.c_str(), slot))
-            return false;
+
+        // CanEquipItemInSlot is asked first but is not allowed to veto the call:
+        // on this client it answered "no" for four slots that the native equip
+        // then... may still accept. The answer is logged either way, so the next
+        // session shows which of the two refused.
+        const bool canEquip = CallCanEquipItemInSlot(team, itemIdText.c_str(), slot);
         const bool equipped = CallEquipItemInSlot(team, itemIdText.c_str(), slot);
+
+        if (!canEquip)
+        {
+            Log("[loadout-api] CanEquipItemInSlot said no for %s/%s id=%s; equip call %s",
+                team, slot, itemIdText.c_str(),
+                equipped ? "worked anyway" : "refused too");
+        }
         if (equipped)
         {
             std::lock_guard<std::mutex> lock(g_mutex);

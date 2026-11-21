@@ -90,6 +90,23 @@ uintptr_t GetLocalPawn()
 // traversal mirrors the already-used matchdetect chunk layout. Entity identity
 // and designer-name offsets are isolated here and used only for observation;
 // no entity is modified or removed by this pass.
+// The entity system publishes how many slots are actually in use. Walking all
+// 0x7FFE of them was tens of thousands of pointless reads per scan, and one
+// charm repair runs several scans - the hitch this bound removes.
+static uint32_t LiveEntityLimit()
+{
+    constexpr uint32_t MAX_ENTITY_INDEX = 0x7FFE;
+
+    uint32_t highest = 0;
+
+    if (!g_entityListGlobal ||
+        !SafeReadU32(g_entityListGlobal + 0x2120, highest) ||
+        highest == 0 || highest > MAX_ENTITY_INDEX)
+        return MAX_ENTITY_INDEX;
+
+    return highest;
+}
+
 static bool IsDesignerName(uintptr_t entity, const char* expected)
 {
     uintptr_t identity = 0;
@@ -136,7 +153,7 @@ void LogWorldKeychainEntities(uintptr_t weapon)
     uint32_t highestNetworked = 0;
     SafeReadU32(g_entityListGlobal + 0x2120, highestNetworked);
 
-    constexpr uint32_t MAX_ENTITY_INDEX = 0x7FFE;
+    const uint32_t maxIndex = LiveEntityLimit();
     uint32_t found = 0;
     uint32_t onWeapon = 0;
     uint32_t ownerMatches = 0;
@@ -145,7 +162,7 @@ void LogWorldKeychainEntities(uintptr_t weapon)
     uintptr_t cachedChunk = 0;
     uint32_t cachedChunkIndex = UINT32_MAX;
 
-    for (uint32_t index = 1; index <= MAX_ENTITY_INDEX; ++index)
+    for (uint32_t index = 1; index <= maxIndex; ++index)
     {
         const uint32_t chunkIndex = index >> 9;
         if (chunkIndex != cachedChunkIndex)
@@ -225,7 +242,7 @@ void LogWorldKeychainEntities(uintptr_t weapon)
 
     DebugLog("[charm-entity] world scan complete weapon=%p weaponNode=%p highestNetworked=%u maxIndex=%u valid=%u globalFound=%u ownerMatches=%u parentMatches=%u onWeapon=%u ownerOffset=0x%llX parentOffset=0x%llX",
         (void*)weapon, (void*)weaponSceneNode, highestNetworked,
-        MAX_ENTITY_INDEX, validEntities, found, ownerMatches,
+        maxIndex, validEntities, found, ownerMatches,
         parentMatches, onWeapon,
         static_cast<unsigned long long>(ownerHandleOffset),
         static_cast<unsigned long long>(sceneParentOffset));
@@ -264,12 +281,12 @@ static int RemoveKeychainsOn(uintptr_t weapon)
     if (g_off.BE_GameSceneNode)
         SafeReadQword(weapon + g_off.BE_GameSceneNode, weaponSceneNode);
 
-    constexpr uint32_t MAX_ENTITY_INDEX = 0x7FFE;
+    const uint32_t maxIndex = LiveEntityLimit();
     uintptr_t cachedChunk = 0;
     uint32_t cachedChunkIndex = UINT32_MAX;
     int removed = 0;
 
-    for (uint32_t index = 1; index <= MAX_ENTITY_INDEX; ++index)
+    for (uint32_t index = 1; index <= maxIndex; ++index)
     {
         const uint32_t chunkIndex = index >> 9;
         if (chunkIndex != cachedChunkIndex)
@@ -381,12 +398,12 @@ int CountWorldKeychainEntities(uintptr_t weapon)
     if (g_off.BE_GameSceneNode)
         SafeReadQword(weapon + g_off.BE_GameSceneNode, weaponSceneNode);
 
-    constexpr uint32_t MAX_ENTITY_INDEX = 0x7FFE;
+    const uint32_t maxIndex = LiveEntityLimit();
     uintptr_t cachedChunk = 0;
     uint32_t cachedChunkIndex = UINT32_MAX;
     int count = 0;
 
-    for (uint32_t index = 1; index <= MAX_ENTITY_INDEX; ++index)
+    for (uint32_t index = 1; index <= maxIndex; ++index)
     {
         const uint32_t chunkIndex = index >> 9;
         if (chunkIndex != cachedChunkIndex)

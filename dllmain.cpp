@@ -24,6 +24,7 @@
 #include "inventory/native_apply.h"
 #include "inventory/auto_accept.h"
 #include "inventory/runtime_mode.h"
+#include "overlay/fps_counter.h"
 #include "skin/glove_paintkit_schema.h"
 #include "skin/glove_schema.h"
 
@@ -280,6 +281,10 @@ static DWORD WINAPI InjectThread(LPVOID)
 
     // Accept a found match for the player when the Armory toggle is on.
     AutoAccept::Initialize();
+
+    // The Armory's FPS pill: hooks Present and draws only while the Extra
+    // Features switch is on. A failure here never affects the skin runtime.
+    FpsCounter::Initialize();
 
     // The team select / intro / end of match characters are built from their
     // position's items, not from weapon entities: dress ours as they are built.

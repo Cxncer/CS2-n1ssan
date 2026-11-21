@@ -13,12 +13,14 @@
 #include <io.h>
 #include <fcntl.h>
 #include <string>
+#include <atomic>
 
 namespace
 {
     FILE* g_logFile = nullptr;
     char g_logPath[MAX_PATH]{};
     char g_statusPath[MAX_PATH]{};
+    char g_statusDirectory[MAX_PATH]{};
     constexpr const char* kBuildId = "armory-obsidian-3.0";
 
     void SanitizeStatusField(const char* input, char* output, size_t capacity)
@@ -77,6 +79,7 @@ namespace
             if (sprintf_s(g_statusPath, "%s\\cs2-%lu.status",
                 statusDir, static_cast<unsigned long>(GetCurrentProcessId())) > 0)
             {
+                sprintf_s(g_statusDirectory, "%s", statusDir);
                 Log("[status-path] selected=%s source=%s",
                     g_statusPath, i == 0 ? "LOCALAPPDATA" : "TEMP");
                 return;
@@ -196,6 +199,30 @@ void LogInit(const std::string& dllPath)
         return;
     }
 
+    // One session is tens of thousands of lines; without a cap the file becomes
+    // too large to read when a bug report is needed. Keep the previous session
+    // as n1ssanlogs.prev.md instead of deleting history outright.
+    {
+        constexpr unsigned long long kMaxLogBytes = 4ull * 1024ull * 1024ull;
+        WIN32_FILE_ATTRIBUTE_DATA attributes{};
+        if (GetFileAttributesExA(g_logPath, GetFileExInfoStandard, &attributes))
+        {
+            const unsigned long long size =
+                (static_cast<unsigned long long>(attributes.nFileSizeHigh) << 32) |
+                attributes.nFileSizeLow;
+            if (size >= kMaxLogBytes)
+            {
+                char previousPath[MAX_PATH]{};
+                if (sprintf_s(previousPath, "%sn1ssanlogs.prev.md", dir) > 0)
+                {
+                    DeleteFileA(previousPath);
+                    // Rotation is best effort: a locked previous log must not stop this session.
+                    MoveFileExA(g_logPath, previousPath, MOVEFILE_REPLACE_EXISTING);
+                }
+            }
+        }
+    }
+
     // "w" intentionally replaces the previous session on every injection.
     g_logFile = _fsopen(g_logPath, "w", _SH_DENYNO);
     if (!g_logFile)
@@ -249,6 +276,16 @@ void Log(const char* fmt, ...)
     va_end(ap);
     printf("%s\n", buf);
     if (g_logFile) { fputs(buf, g_logFile); fputc('\n', g_logFile); fflush(g_logFile); }
+}
+
+const char* StatusDirectoryPath()
+{
+    return g_statusDirectory;
+}
+
+const char* BuildId()
+{
+    return kBuildId;
 }
 
 void LogStatus(const char* state, const char* reason, const char* code)
@@ -325,4 +362,20 @@ uint64_t NowMs()
     using namespace std::chrono;
     return static_cast<uint64_t>(duration_cast<milliseconds>(
         steady_clock::now().time_since_epoch()).count());
+}
+
+namespace
+{
+    std::atomic<const char*> g_activity{ "idle" };
+}
+
+void SetActivity(const char* label)
+{
+    g_activity.store(label ? label : "idle", std::memory_order_relaxed);
+}
+
+const char* CurrentActivity()
+{
+    const char* label = g_activity.load(std::memory_order_relaxed);
+    return label ? label : "idle";
 }

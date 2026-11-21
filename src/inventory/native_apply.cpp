@@ -722,6 +722,31 @@ namespace NativeApply
             return nullptr;
         }
 
+        // The projected profile item is the last attachment state written for
+        // this instance. Reading it back from the SOCache can come back empty for
+        // an item that demonstrably carries attachments (the "[attach] ... did
+        // not read back its saved attachments" lines), and rebuilding the set
+        // from that empty base is what used to drop the charm when a sticker was
+        // applied - and the stickers when a charm was applied, because
+        // SyncAttachments clears every slot the set does not fill. Filling the
+        // families the read missed from the profile keeps both on the weapon.
+        void MergeProfileAttachments(
+            Attachments::Set& set,
+            const ArmoryInventory::ManagedItem* managed)
+        {
+            if (!managed)
+                return;
+
+            if (!set.charm.present)
+                set.charm = managed->attachments.charm;
+
+            for (int slot = 0; slot < Attachments::STICKER_SLOTS; ++slot)
+            {
+                if (!set.stickers[slot].present)
+                    set.stickers[slot] = managed->attachments.stickers[slot];
+            }
+        }
+
         // A sticker or charm that was just used up: a second UseTool naming it
         // (a double click, the popup repeating) must not fall through to Valve
         // once the item is gone from the local inventory.
@@ -796,13 +821,27 @@ namespace NativeApply
             // replace what the weapon already carries.
             Attachments::Set current;
             const bool completeSnapshot = LootSOCache::ReadAttachments(job.targetId, current);
-            bool profileCharmKnown = completeSnapshot;
+
+            // The exact managed Armory item for the target: its attachments are
+            // what the profile says this instance carries.
+            std::vector<ArmoryInventory::ManagedItem> managedItems;
+            ArmoryInventory::SnapshotManagedItems(managedItems);
+            const auto found = std::find_if(
+                managedItems.begin(), managedItems.end(),
+                [&job](const ArmoryInventory::ManagedItem& item)
+                {
+                    return item.id == job.targetId;
+                });
+            const ArmoryInventory::ManagedItem* managed =
+                found != managedItems.end() ? &*found : nullptr;
+
+            const bool profileCharmKnown = completeSnapshot || managed != nullptr;
+
             if (!completeSnapshot)
             {
                 // CS2's ItemView getters expose sticker slots, but not the charm.
-                // Recover the charm from this exact managed Armory item so a
-                // sticker apply can persist a complete profile snapshot without
-                // ever replacing the unreadable live charm with "none".
+                // The managed Armory item supplies it below, so a sticker apply
+                // never replaces the live charm with "none".
                 if (!Attachments::ReadStickerSlotsViaItemView(job.targetId, current))
                 {
                     Log("[use-tool] sticker %d: %016llX could not be read by SOCache or CS2 ItemView - not applying",
@@ -810,28 +849,12 @@ namespace NativeApply
                     return false;
                 }
 
-                std::vector<ArmoryInventory::ManagedItem> managedItems;
-                if (ArmoryInventory::SnapshotManagedItems(managedItems))
-                {
-                    const auto managed = std::find_if(
-                        managedItems.begin(), managedItems.end(),
-                        [&job](const ArmoryInventory::ManagedItem& item)
-                        {
-                            return item.id == job.targetId;
-                        });
-
-                    if (managed != managedItems.end())
-                    {
-                        current.charm = managed->attachments.charm;
-                        profileCharmKnown = true;
-                    }
-                }
-
                 Log("[use-tool] sticker target ItemView fallback; profile charm %s",
                     profileCharmKnown ? "recovered for exact item" : "unavailable");
             }
 
             Attachments::Set next = current;
+            MergeProfileAttachments(next, managed);
             const int slot = FirstFreeStickerSlot(next);
 
             if (slot < 0)
@@ -906,7 +929,8 @@ namespace NativeApply
         bool ApplyCharm(const Job& job)
         {
             Attachments::Set current;
-            if (!LootSOCache::ReadAttachments(job.targetId, current))
+            const bool completeSnapshot = LootSOCache::ReadAttachments(job.targetId, current);
+            if (!completeSnapshot)
             {
                 // Preserve existing stickers when the full SOCache snapshot is unavailable.
                 // CS2's ItemView getters provide the same sticker-slot fallback used by ApplySticker.
@@ -918,7 +942,20 @@ namespace NativeApply
                 Log("[use-tool] charm target sticker slots read through CS2 ItemView fallback; preserving stickers");
             }
 
+            // Same profile recovery as a sticker apply: stickers that are already
+            // on the item but missing from the read would otherwise be cleared by
+            // the write below.
+            std::vector<ArmoryInventory::ManagedItem> managedItems;
+            ArmoryInventory::SnapshotManagedItems(managedItems);
+            const auto found = std::find_if(
+                managedItems.begin(), managedItems.end(),
+                [&job](const ArmoryInventory::ManagedItem& item)
+                {
+                    return item.id == job.targetId;
+                });
+
             Attachments::Set next = current;
+            MergeProfileAttachments(next, found != managedItems.end() ? &*found : nullptr);
             Attachments::Charm& charm = next.charm;
             charm.present = true;
             charm.kit = job.kit;

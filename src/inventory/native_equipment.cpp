@@ -4,6 +4,7 @@
 // them through LoadoutAPI. It never assigns by definition or catalogue ID.
 
 #include "inventory/native_equipment.h"
+#include "diagnostics/armory_status.h"
 
 #include "diagnostics/log.h"
 #include "inventory/armory_inventory.h"
@@ -25,6 +26,10 @@
 
 namespace
 {
+    // A slot CS2 refuses this many times is left to the game so the rest of
+    // the restore can finish (see Restore below).
+    constexpr int MAX_EQUIP_ATTEMPTS = 8;
+
     struct Assignment
     {
         std::string team;
@@ -39,6 +44,7 @@ namespace
     std::string g_activeProfileId;
     std::vector<Assignment> g_restoreAssignments;
     std::vector<bool> g_restoreCompleted;
+    std::vector<int> g_restoreAttempts;
     std::vector<Assignment> g_blockedBaseline;
     bool g_loaded = false;
     bool g_restorePending = false;
@@ -404,6 +410,7 @@ namespace
         g_activeProfileId = profileId;
         g_restoreAssignments.clear();
         g_restoreCompleted.clear();
+        g_restoreAttempts.clear();
         g_restorePending = false;
         g_captureBlockedUntilChange = false;
         g_blockedBaseline.clear();
@@ -413,6 +420,7 @@ namespace
         {
             g_restoreAssignments = saved->second;
             g_restoreCompleted.assign(g_restoreAssignments.size(), false);
+            g_restoreAttempts.assign(g_restoreAssignments.size(), 0);
             g_restorePending = true;
             g_restoreStarted = now;
             g_lastRestoreAttempt = 0;
@@ -462,6 +470,21 @@ namespace
             }
 
             const char* team = assignment.team == "T" ? "t" : "ct";
+
+            // The native call reports "nothing changed" as a failure, so a slot
+            // that already holds this exact instance counts as restored. Without
+            // this, that one slot held the whole restore open until it timed out
+            // and no later restore ran either.
+            if (LoadoutApi::EquippedItemId(team, assignment.slot.c_str()) == item->id)
+            {
+                g_restoreCompleted[i] = true;
+                ++skipped;
+                Log("[native-equipment] %s/%s already holds instance=%s",
+                    assignment.team.c_str(), assignment.slot.c_str(),
+                    assignment.instanceId.c_str());
+                continue;
+            }
+
             if (LoadoutApi::EquipItemInSlot(team, item->id, assignment.slot.c_str()))
             {
                 g_restoreCompleted[i] = true;
@@ -474,6 +497,25 @@ namespace
             {
                 allCompleted = false;
                 ++failed;
+
+                const int attempts = ++g_restoreAttempts[i];
+
+                Log("[native-equipment] could not equip %s/%s instance=%s id=%016llX (attempt %d)",
+                    assignment.team.c_str(), assignment.slot.c_str(),
+                    assignment.instanceId.c_str(),
+                    static_cast<unsigned long long>(item->id), attempts);
+
+                // One slot that CS2 keeps refusing must not hold the whole
+                // restore open until the deadline: every other slot gets its
+                // chance, and this one is left to the game. That is what made a
+                // used weapon come back with its default item after a match.
+                if (attempts >= MAX_EQUIP_ATTEMPTS)
+                {
+                    g_restoreCompleted[i] = true;
+                    Log("[native-equipment] giving up on %s/%s after %d attempts; "
+                        "CS2 keeps this slot as it is",
+                        assignment.team.c_str(), assignment.slot.c_str(), attempts);
+                }
             }
         }
 
@@ -486,6 +528,7 @@ namespace
             g_captureAfter = now + 1000;
             Log("[native-equipment] restore complete: equipped=%d skipped=%d",
                 equipped, skipped);
+            ArmoryStatus::NoteRestore(equipped, skipped, failed, false);
             return true;
         }
 
@@ -496,6 +539,7 @@ namespace
             g_blockedBaseline = Capture(items);
             Log("[native-equipment] restore timed out: equipped=%d failed=%d; preserving saved map until a native selection changes",
                 equipped, failed);
+            ArmoryStatus::NoteRestore(equipped, skipped, failed, true);
             return true;
         }
 
@@ -503,8 +547,92 @@ namespace
     }
 }
 
+namespace
+{
+    // Capture only sees slots CS2 currently shows as ours. A slot that briefly
+    // fell back to the vanilla item is indistinguishable from the player
+    // unequipping it, and dropping it turns that skin off for good, so the saved
+    // entry is kept unless its instance is no longer owned. Slots CS2 does show
+    // as ours are updated in place.
+    std::vector<Assignment> MergeCaptured(
+        const std::string& profileId,
+        const std::vector<Assignment>& captured,
+        const std::vector<ArmoryInventory::ManagedItem>& items)
+    {
+        std::vector<Assignment> merged;
+
+        const auto saved = g_profiles.find(profileId);
+        if (saved != g_profiles.end())
+        {
+            for (const Assignment& assignment : saved->second)
+            {
+                const bool owned = std::any_of(
+                    items.begin(), items.end(),
+                    [&assignment](const ArmoryInventory::ManagedItem& item)
+                    {
+                        return item.instanceId == assignment.instanceId;
+                    });
+
+                if (owned) merged.push_back(assignment);
+            }
+        }
+
+        for (const Assignment& assignment : captured)
+        {
+            const auto existing = std::find_if(
+                merged.begin(), merged.end(),
+                [&assignment](const Assignment& candidate)
+                {
+                    return candidate.team == assignment.team &&
+                        candidate.slot == assignment.slot;
+                });
+
+            if (existing != merged.end()) *existing = assignment;
+            else merged.push_back(assignment);
+        }
+
+        std::sort(merged.begin(), merged.end(),
+            [](const Assignment& a, const Assignment& b)
+            {
+                if (a.team != b.team) return a.team < b.team;
+                if (a.slot != b.slot) return a.slot < b.slot;
+                return a.instanceId < b.instanceId;
+            });
+
+        return merged;
+    }
+}
+
 namespace NativeEquipment
 {
+    bool SavedInstanceForSlot(
+        const char* apiTeam,
+        const char* nativeSlot,
+        std::string& instanceId)
+    {
+        instanceId.clear();
+        if (!apiTeam || !nativeSlot)
+            return false;
+
+        const bool wantT = apiTeam[0] == 't' || apiTeam[0] == 'T';
+        const char* teamLabel = wantT ? "T" : "CT";
+
+        const auto profile = g_profiles.find(g_activeProfileId);
+        if (profile == g_profiles.end())
+            return false;
+
+        for (const Assignment& assignment : profile->second)
+        {
+            if (assignment.slot == nativeSlot && assignment.team == teamLabel)
+            {
+                instanceId = assignment.instanceId;
+                return true;
+            }
+        }
+
+        return false;
+    }
+
     void Tick()
     {
         const ULONGLONG now = GetTickCount64();
@@ -569,7 +697,8 @@ namespace NativeEquipment
         if (now < g_captureAfter)
             return;
 
-        const std::vector<Assignment> snapshot = Capture(items);
+        const std::vector<Assignment> snapshot =
+            MergeCaptured(profileId, Capture(items), items);
         if (g_captureBlockedUntilChange)
         {
             if (SameAssignments(snapshot, g_blockedBaseline))

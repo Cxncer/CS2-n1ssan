@@ -577,12 +577,33 @@ namespace
         Log("[apply] %s view pre-write: size=%u data=0x%p",
             which, preCount, (void*)preData);
 
-        // If the game already has attributes here, don't touch them.
-        if (preCount > 0 && preCount < 1000 && preData > 0x10000)
+        // CS2 fills the item view of every item it created - the weapon you
+        // just bought, the real item behind the skin - with that item's own
+        // attributes. Treating those as "game-owned, never write" left the gun
+        // on its default skin until CS2 happened to hand us an empty view,
+        // which is the "the skin only showed after I re-bought it" report, and
+        // it is why every weapon used in a match came back with the real
+        // item's look afterwards: the rebuilt view was populated, so the apply
+        // pass refused it.
+        //
+        // The lineup path has always replaced a game-populated view
+        // (DressItemView removes the list first), and nothing faults over it
+        // because the write goes straight into the vector instead of through
+        // CS2's schema setters. The in-match path does the same now: the
+        // entries are dropped by EconAttr_Remove below, then ours are built.
+        // A size or pointer that cannot be a real attribute list is still left
+        // alone, because freeing that would be freeing the game's memory.
+        if (preCount > 0)
         {
-            Log("[apply] %s view already has %u attrs � skipping write (game-owned)",
+            if (preCount >= 1000 || preData <= 0x10000)
+            {
+                Log("[apply] %s view attribute list looks corrupt (%u/0x%p); leaving it alone",
+                    which, preCount, (void*)preData);
+                return false;
+            }
+
+            Log("[apply] %s view had %u game attributes; reclaiming the view",
                 which, preCount);
-            return false;
         }
 
         EconAttr_Remove(v);
@@ -698,11 +719,29 @@ namespace
         // it was sold and bought again. An empty attribute list is exactly the
         // state the write path can safely repaint; a view CS2 has populated is
         // left alone above.
+        // The fallback fields live on the weapon entity and survive CS2
+        // rebuilding the item view, so they alone cannot prove the view still
+        // carries our paint. While the view is populated CS2 may have put the
+        // real item's attributes back; reading the paint attribute out of the
+        // view is what turns that into a re-write on this tick instead of a
+        // gun that keeps its default skin until the next buy.
+        int viewPaint = -1;
         {
             AttributeVector_t* vector = GetAttributeVector(view);
 
             if (!vector || vector->size <= 0 || vector->size > 512 || !vector->data)
                 return false;
+
+            auto* attributes = reinterpret_cast<EconItemAttribute_t*>(vector->data);
+
+            for (int i = 0; i < vector->size; ++i)
+            {
+                if (attributes[i].defIndex == ATTR_PAINT)
+                {
+                    viewPaint = static_cast<int>(attributes[i].value);
+                    break;
+                }
+            }
         }
 
         const int wantQuality = IsKnifeDefinition(t.defIndex) ? 3 : (t.statTrak ? 9 : 0);
@@ -720,6 +759,7 @@ namespace
         const bool killsAhead = t.statTrak && t.statTrakKills > curStatTrak;
 
         return curPK == t.paintKit &&
+            (t.paintKit <= 0 || viewPaint == t.paintKit) &&
             curSeed == t.resolvedSeed &&
             wearMatch &&
             statTrakMatches &&
@@ -734,9 +774,6 @@ namespace
     // apply must not re-create the tag module; only a name change does.
     std::unordered_map<uintptr_t, std::string> g_nameTagCache;
 
-    // Weapons whose item view belongs to CS2 (it already carried attributes) and
-    // must not be written again, keyed to the view they were ignored on.
-    std::unordered_map<uintptr_t, uintptr_t> g_ignoredViews;
 
     // Views whose real stickers/charm were already cleared once. CS2's attribute
     // vector there cannot be rebuilt, but sticker ids are ordinary schema
@@ -753,10 +790,10 @@ namespace
     // "CallSetAttribute: threw" storm), so nothing is set there. The vector is
     // emptied instead, the way Lootline does it: no setter, no allocation, and
     // CS2 then reads only the ordinary list this apply pass writes.
-    void ClearNetworkedAttachmentsInPlace(uintptr_t weaponEnt, uintptr_t view)
+    bool ClearNetworkedAttachmentsInPlace(uintptr_t weaponEnt, uintptr_t view)
     {
         if (g_networkedCleared[weaponEnt] == view)
-            return;
+            return false;
 
         g_networkedCleared[weaponEnt] = view;
 
@@ -776,7 +813,7 @@ namespace
 
             if (!vector || vector->size <= 0 || vector->size > MAX_ATTRIBUTES ||
                 !vector->data)
-                return;
+                return false;
 
             entries = vector->size;
 
@@ -789,12 +826,14 @@ namespace
         {
             Log("[attach-foreign] networked clear faulted weapon=%p view=%p",
                 (void*)weaponEnt, (void*)view);
-            return;
+            return false;
         }
 
         if (cleared > 0)
             Log("[attach-foreign] networked cleared %d of %d attributes weapon=%p",
                 cleared, entries, (void*)weaponEnt);
+
+        return cleared > 0;
     }
 
     // Removes the real item's stickers and charm from a view CS2 populated, so a
@@ -846,6 +885,56 @@ namespace
         return GetEntityByHandle(ownerHandle) == weaponEnt;
     }
 
+    // One apply pass runs every 250 ms and walks every owned weapon. A full buy
+    // introduces them all at once, and the model rebuild (mesh group, material,
+    // HUD knife model) is the expensive part: ten of them in one pass is the
+    // freeze at the start of a round. The skin attributes and the name are
+    // written either way; only the rebuild waits, so a weapon is never left
+    // unpainted - it arrives at most one pass later. The window self-resets, so
+    // no caller can leave the budget stuck closed.
+    // One rebuild per window, not two: each one compiles a material and re-hangs
+    // the HUD model, and two of them in the same frame is already a visible
+    // hitch. A weapon that has to wait is painted one pass (250 ms) later.
+    constexpr int      MAX_MODEL_BUILDS_PER_WINDOW = 1;
+    constexpr int      EAGER_MODEL_BUILDS_PER_WINDOW = 4;
+
+    // Set by the apply pass while a match or round is loading.
+    bool               g_eagerApply = false;
+    constexpr uint64_t MODEL_BUILD_WINDOW_MS = 250;
+
+    int      g_modelBuildsInWindow = 0;
+    uint64_t g_modelBuildWindowStartMs = 0;
+    uint64_t g_lastBuildDeferLogMs = 0;
+
+    bool ModelBuildBudgetAllows()
+    {
+        const uint64_t now = GetTickCount64();
+
+        if (now - g_modelBuildWindowStartMs >= MODEL_BUILD_WINDOW_MS)
+        {
+            g_modelBuildWindowStartMs = now;
+            g_modelBuildsInWindow = 0;
+        }
+
+        const int allowed = g_eagerApply ? EAGER_MODEL_BUILDS_PER_WINDOW
+                                         : MAX_MODEL_BUILDS_PER_WINDOW;
+
+        if (g_modelBuildsInWindow < allowed)
+        {
+            ++g_modelBuildsInWindow;
+            return true;
+        }
+
+        if (now - g_lastBuildDeferLogMs >= 5000)
+        {
+            g_lastBuildDeferLogMs = now;
+            Log("[apply-budget] %d model rebuilds done in this pass; the rest wait for the next one",
+                MAX_MODEL_BUILDS_PER_WINDOW);
+        }
+
+        return false;
+    }
+
     // Set when an apply pass could not build a weapon's material, so the caller
     // does not hand the half-built item to RegenerateSkins.
     bool g_buildFaulted = false;
@@ -861,11 +950,20 @@ void ClearApplyBuildFault()
     g_buildFaulted = false;
 }
 
+void SetEagerApply(bool eager)
+{
+    g_eagerApply = eager;
+}
+
+bool EagerApplyActive()
+{
+    return g_eagerApply;
+}
+
 void InvalidateWeaponModelCache()
 {
     g_weaponModelCache.clear();
     g_nameTagCache.clear();
-    g_ignoredViews.clear();
     g_foreignCleared.clear();
     g_networkedCleared.clear();
     g_lastHudWeapon.clear();
@@ -926,18 +1024,13 @@ bool ApplyWeaponSkin(uintptr_t weaponEnt, uintptr_t pawn, const TargetSkin& t,
     const bool alreadyPainted =
         IsAlreadyApplied(weaponEnt, view, t);
 
-    // A view CS2 already populated is the game's own item, not ours. Writing
-    // into it makes CS2's schema setters throw on every attribute
-    // ("CallSetAttribute: threw"), leaves a second keychain entity behind (the
-    // double charm on AWP/M4A4) and then makes BuildModernSkin and
-    // RegenerateSkins fault on the same tick, which is the client crash. Leave
-    // that item to the game, and remember the decision so an ignored weapon does
-    // not retry - or log - on every apply tick.
-    if (!alreadyPainted && g_ignoredViews[weaponEnt] == view)
-    {
-        ClearForeignAttachments(weaponEnt, view, buildAttachments);
-        return false;
-    }
+    // Emptied before the view write, not after it. This list is the one CS2 reads
+    // a sticker from, and WriteViewSafely writes the stickers into both lists, so
+    // clearing it afterwards removed the stickers that had just been written
+    // there: the weapon kept the paint but showed no stickers until the game
+    // rebuilt the item (the USP-S that only showed its stickers after a re-buy).
+    const bool networkedClearedNow =
+        ClearNetworkedAttachmentsInPlace(weaponEnt, view);
 
     if (!alreadyPainted)
     {
@@ -952,9 +1045,7 @@ bool ApplyWeaponSkin(uintptr_t weaponEnt, uintptr_t pawn, const TargetSkin& t,
                 "world",
                 buildAttachments))
         {
-            g_ignoredViews[weaponEnt] = view;
-
-            Log("[apply] def=%u view=0x%p is CS2-owned; leaving the game's item untouched",
+            Log("[apply] def=%u view=0x%p could not be written; leaving the game's item untouched",
                 t.defIndex, (void*)view);
 
             return false;
@@ -968,8 +1059,6 @@ bool ApplyWeaponSkin(uintptr_t weaponEnt, uintptr_t pawn, const TargetSkin& t,
         SafeWriteFloat(weaponEnt + g_off.EE_FallbackWear, t.wear);
         SafeWriteI32(weaponEnt + g_off.EE_FallbackStatTrak, wantStatTrak);
     }
-
-    ClearNetworkedAttachmentsInPlace(weaponEnt, view);
 
     const bool viewWritten = !alreadyPainted;
 
@@ -1003,7 +1092,9 @@ bool ApplyWeaponSkin(uintptr_t weaponEnt, uintptr_t pawn, const TargetSkin& t,
         const bool readable =
             Attachments::Read(reinterpret_cast<void*>(view), current);
 
-        if (!readable || current != desired)
+        // A clear this pass emptied the networked sticker attributes, so the
+        // ordinary list matching is not enough: write them back.
+        if (networkedClearedNow || !readable || current != desired)
         {
             if (Attachments::WriteItemView(view, desired,
                     readable ? &current : nullptr, true))
@@ -1099,8 +1190,13 @@ bool ApplyWeaponSkin(uintptr_t weaponEnt, uintptr_t pawn, const TargetSkin& t,
             wantQuality,
             mask);
 
-    if (modelChanged)
+    if (modelChanged && ModelBuildBudgetAllows())
     {
+        // A frame that runs long here is reported as a model rebuild.
+        SetActivity("model rebuild");
+
+        const uint64_t rebuildStartMs = NowMs();
+
         Log("[apply-cache] rebuilding weapon=%p hud=%p def=%u pk=%d",
             (void*)weaponEnt,
             (void*)hudWeapon,
@@ -1115,10 +1211,40 @@ bool ApplyWeaponSkin(uintptr_t weaponEnt, uintptr_t pawn, const TargetSkin& t,
                 static_cast<unsigned long long>(mask));
         }
 
+        // One charm, not two.
+        //
+        // Both builds read "keychain slot 0 id" from the same item view, and each
+        // one hangs a keychain of its own: the world build a rigid one on the gun,
+        // the HUD build the first-person charm. In first person both are drawn,
+        // which is the double charm the player sees. The attribute is therefore
+        // taken off the view for the world build and put back before the HUD
+        // build, so exactly one charm is ever created. This is a charm-only write
+        // on the ordinary attribute list - the same call the normal path already
+        // makes successfully on this client.
+        void* viewAttributes = g_off.EIV_AttributeList
+            ? reinterpret_cast<void*>(view + g_off.EIV_AttributeList)
+            : nullptr;
+
+        const bool charmShelled = viewAttributes && desired.charm.present;
+
+        if (charmShelled)
+        {
+            Attachments::Charm none{};
+            Attachments::WriteCharm(viewAttributes, none);
+        }
+
         SetMeshGroup(weaponEnt, mask);
 
         const bool worldBuilt =
             CallBuildModernSkin(view, weaponEnt, "world");
+
+        if (charmShelled)
+        {
+            Attachments::WriteCharm(viewAttributes, desired.charm);
+
+            Log("[charm-build] weapon=%p kit=%d restored after the world build",
+                (void*)weaponEnt, desired.charm.kit);
+        }
 
         bool hudBuilt = (hudWeapon == 0);
         bool hudModelReady = true;
@@ -1173,7 +1299,15 @@ bool ApplyWeaponSkin(uintptr_t weaponEnt, uintptr_t pawn, const TargetSkin& t,
 
             state.paintKit = t.paintKit;
             state.seed = t.resolvedSeed;
-            state.statTrak = wantStatTrak;
+
+            // StatTrak is identity here, exactly as SameModelState compares it.
+            // This used to store the kill count, so every StatTrak weapon failed
+            // the compare on the next pass and rebuilt its model every 250 ms for
+            // as long as it was in hand - the non-Stop sticker flicker, a fresh
+            // keychain hung every pass (the double charm), and a rebuild of all
+            // 35 weapons each round. Non-StatTrak weapons cached normally, which
+            // is why the knife settled after two builds and the guns never did.
+            state.statTrak = t.statTrak ? 0 : -1;
             state.quality = wantQuality;
 
             state.wear = t.wear;
@@ -1183,6 +1317,33 @@ bool ApplyWeaponSkin(uintptr_t weaponEnt, uintptr_t pawn, const TargetSkin& t,
 
             g_weaponModelCache[weaponEnt] = state;
         }
+        else
+        {
+            // Nothing used to report this, so a build that never cached looked
+            // exactly like a working one in the log.
+            static std::unordered_map<uintptr_t, uintptr_t> g_lastUncached;
+
+            if (g_lastUncached[weaponEnt] != view)
+            {
+                g_lastUncached[weaponEnt] = view;
+
+                Log("[apply-cache] rebuild not cached weapon=%p world=%d hud=%d hudModel=%d",
+                    (void*)weaponEnt, worldBuilt ? 1 : 0, hudBuilt ? 1 : 0,
+                    hudModelReady ? 1 : 0);
+            }
+        }
+
+        SetActivity("apply pass");
+
+        // The rebuild is the expensive half of an apply: material compile, mesh
+        // group change and the HUD model. Recording the slow ones is what lets
+        // the next log name the cost instead of a vague "it froze".
+        const uint64_t rebuildMs = NowMs() - rebuildStartMs;
+
+        if (rebuildMs >= 20)
+            Log("[perf] model rebuild took %llu ms (weapon=%p def=%u hud=%p)",
+                static_cast<unsigned long long>(rebuildMs), (void*)weaponEnt,
+                t.defIndex, (void*)hudWeapon);
     }
 
     // Name tag: the custom name lives on the item view, and CS2's own helper

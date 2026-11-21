@@ -7,10 +7,9 @@
 // exactly ONE charm is hanging, which it does by
 //   - removing every world keychain entity the gun carries
 //     (RemoveKeychainModule per entity, Lootline's RemoveWorldKeychains), and
-//   - clearing the HUD weapon's "keychain" addon and flagging its addon state
-//     (FindHudKeychainAddon + RemoveHudKeychainAddon, then
-//     RebuildHudKeychainAddon's keychainState = 0xFF)
-// so CS2 rebuilds the first-person charm from the attribute, once.
+// That is all. The HUD weapon's keychain addon is deliberately not touched:
+// asking CS2 to rebuild it (keychainState = 0xFF) added a second charm beside
+// the one it had already built from the item attribute.
 //
 // This port deliberately does the same and nothing more: it never rewrites the
 // keychain attributes after a model build. On this client those setters fault

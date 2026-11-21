@@ -156,6 +156,10 @@
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">false</ExcludedFromBuild>
     </ClCompile>
+    <ClCompile Include="src\diagnostics\armory_status.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">false</ExcludedFromBuild>
+    </ClCompile>
     <ClCompile Include="src\diagnostics\log.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">false</ExcludedFromBuild>
@@ -227,6 +231,9 @@
     <ClCompile Include="src\skin\glove_attribute_manager.cpp" />
     <ClCompile Include="src\skin\glove_paintkit_schema.cpp" />
     <ClCompile Include="src\skin\glove_schema.cpp" />
+    <ClCompile Include="src\overlay\accept_watch.cpp" />
+    <ClCompile Include="src\overlay\fps_counter.cpp" />
+    <ClCompile Include="src\overlay\pill_art.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
@@ -234,6 +241,7 @@
   <ItemGroup>
     <ClInclude Include="src\config\auto_offsets.h" />
     <ClInclude Include="src\config\offsets.h" />
+    <ClInclude Include="src\diagnostics\armory_status.h" />
     <ClInclude Include="src\diagnostics\log.h" />
     <ClInclude Include="src\hooks\frame_stage.h" />
     <ClInclude Include="src\hooks\knife_animation.h" />
@@ -267,6 +275,10 @@
     <ClInclude Include="src\skin\glove_attribute_manager.h" />
     <ClInclude Include="src\skin\glove_paintkit_schema.h" />
     <ClInclude Include="src\skin\glove_schema.h" />
+    <ClInclude Include="src\overlay\accept_watch.h" />
+    <ClInclude Include="src\overlay\fps_counter.h" />
+    <ClInclude Include="src\overlay\n1ssan_mark.h" />
+    <ClInclude Include="src\overlay\pill_art.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

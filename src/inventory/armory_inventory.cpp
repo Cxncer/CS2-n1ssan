@@ -7,6 +7,8 @@
 #include "diagnostics/log.h"
 #include "inventory/loadout.h"
 #include "inventory/loadout_api.h"
+#include "inventory/native_equipment.h"
+#include "diagnostics/armory_status.h"
 #include "inventory/loot_socache.h"
 
 #include <windows.h>
@@ -708,6 +710,7 @@ namespace ArmoryInventory
             // Deliberately no baseline: the existing inventory file must be
             // applied once on every injection, not only after it changes.
             bool haveBaseline = false;
+            std::string lastAppliedText;
 
             for (;;)
             {
@@ -742,6 +745,15 @@ namespace ArmoryInventory
                     continue;
                 }
 
+                // The Bridge re-projects this document after every Armory read
+                // or merge, and a rewrite gets a new timestamp even when the
+                // bytes are identical. Re-staging identical content made the
+                // adapter below remove and re-create every sticker and charm,
+                // which is the flickering attachments and the inventory
+                // stutter. Content decides, not the timestamp.
+                if (text == lastAppliedText)
+                    continue;
+
                 std::vector<ArmoryItem> items;
                 std::string profileId;
                 int inventoryRevision = 0;
@@ -750,6 +762,8 @@ namespace ArmoryInventory
                     Log("[armory-inventory] reload skipped: malformed inventory document");
                     continue;
                 }
+
+                lastAppliedText = text;
 
                 const size_t count = items.size();
                 {
@@ -1038,6 +1052,8 @@ namespace ArmoryInventory
         if (!team)
         {
             detail = "team unknown";
+            ArmoryStatus::NoteSlot("", "", 0,
+                ArmoryStatus::State::UnknownSlot, detail.c_str());
             return ArmoryMatch::None;
         }
 
@@ -1049,39 +1065,93 @@ namespace ArmoryInventory
         }
 
         const char* apiTeam = TeamApiName(team);
+        std::string nativeSlot;
+        if (knife) nativeSlot = "melee";
+        else LoadoutApi::SlotForDefinition(apiTeam, definition, nativeSlot);
+
         const uint64_t equippedId = knife
             ? LoadoutApi::EquippedItemId(apiTeam, "melee")
             : LoadoutApi::EquippedItemIdForDefinition(apiTeam, definition);
 
-        if (!equippedId)
+        const ArmoryItem* item =
+            equippedId ? FindByIdLocked(equippedId) : nullptr;
+        const char* origin = "native item";
+        bool fromSaved = false;
+
+        // CS2 re-sends the real loadout during a match (round change, respawn,
+        // inventory update), which puts the vanilla item back in the slot. The
+        // Armory's saved selection is still what the player asked for, so the
+        // weapon keeps its skin instead of reverting until the next restore.
+        //
+        // The same fallback is used when the native slot names a projected item
+        // of another definition: the saved selection for this team slot is still
+        // what the player asked for, and it is only used when its definition
+        // matches the weapon actually in hand.
+        const bool nativeMismatch =
+            item && !knife && item->definition != definition;
+
+        if ((!item || nativeMismatch) && !nativeSlot.empty())
         {
-            detail = "no native CS2 item selected in this slot";
-            return ArmoryMatch::None;
+            std::string saved;
+            if (NativeEquipment::SavedInstanceForSlot(
+                    apiTeam, nativeSlot.c_str(), saved))
+            {
+                const ArmoryItem* savedItem = FindByInstanceIdLocked(saved);
+
+                // The saved slot may now hold another weapon of the same slot
+                // (a different pistol, say); painting it on this entity would be
+                // wrong, so only a matching definition is used.
+                if (savedItem && (knife || savedItem->definition == definition))
+                {
+                    item = savedItem;
+                    origin = "saved armory selection";
+                    fromSaved = true;
+                }
+            }
         }
 
-        const ArmoryItem* item = FindByIdLocked(equippedId);
         if (!item)
         {
-            char label[32]{};
-            DefinitionLabel(definition, label);
-            NoteForeignEquipped(team, knife ? "melee" : label, equippedId);
-            detail = "native selection is not an item in the active Armory profile";
+            ArmoryStatus::State state = ArmoryStatus::State::NoSelection;
+
+            if (equippedId)
+            {
+                char label[32]{};
+                DefinitionLabel(definition, label);
+                NoteForeignEquipped(team, knife ? "melee" : label, equippedId);
+                detail = "native selection is not an item in the active Armory profile";
+                state = ArmoryStatus::State::ForeignItem;
+            }
+            else
+            {
+                detail = "no native CS2 item selected in this slot";
+            }
+
+            ArmoryStatus::NoteSlot(apiTeam, nativeSlot.c_str(), definition,
+                state, detail.c_str());
             return ArmoryMatch::None;
         }
 
         if (!knife && item->definition != definition)
         {
             detail = "native item definition does not match the live weapon";
+            ArmoryStatus::NoteSlot(apiTeam, nativeSlot.c_str(), definition,
+                ArmoryStatus::State::DefinitionMismatch, detail.c_str());
             return ArmoryMatch::None;
         }
 
         if (liveItemId) *liveItemId = equippedId;
 
         FillTarget(*item, target, attachments);
-        char why[128]{};
-        snprintf(why, sizeof(why), "native item instance %016llX",
+        char why[160]{};
+        snprintf(why, sizeof(why), "%s %s instance %016llX",
+            origin, nativeSlot.c_str(),
             static_cast<unsigned long long>(item->id));
         detail = why;
+        ArmoryStatus::NoteSlot(apiTeam, nativeSlot.c_str(), definition,
+            fromSaved ? ArmoryStatus::State::SavedSlot
+                      : ArmoryStatus::State::Native,
+            detail.c_str());
         return ArmoryMatch::EquippedInGame;
     }
 
@@ -1100,6 +1170,8 @@ namespace ArmoryInventory
         if (!team)
         {
             detail = "team unknown";
+            ArmoryStatus::NoteSlot("", "", 0,
+                ArmoryStatus::State::UnknownSlot, detail.c_str());
             return ArmoryMatch::None;
         }
 
@@ -1115,43 +1187,72 @@ namespace ArmoryInventory
         if (!nativeSlot)
         {
             detail = "unknown native slot";
+            ArmoryStatus::NoteSlot(apiTeam, "", 0,
+                ArmoryStatus::State::UnknownSlot, detail.c_str());
             return ArmoryMatch::None;
         }
+
+        const std::string slotName = nativeSlot;
 
         std::lock_guard<std::mutex> lock(g_mutex);
         if (g_inventoryItems.empty())
         {
             detail = "no projected inventory";
+            ArmoryStatus::NoteSlot(apiTeam, slotName.c_str(), 0,
+                ArmoryStatus::State::NoProjection, detail.c_str());
             return ArmoryMatch::None;
         }
 
         const uint64_t equippedId =
-            LoadoutApi::EquippedItemId(apiTeam, nativeSlot);
-        if (!equippedId)
-        {
-            detail = "no native CS2 item selected in this slot";
-            return ArmoryMatch::None;
-        }
+            LoadoutApi::EquippedItemId(apiTeam, slotName.c_str());
 
-        const ArmoryItem* item = FindByIdLocked(equippedId);
+        const ArmoryItem* item =
+            equippedId ? FindByIdLocked(equippedId) : nullptr;
+
+        // Same fallback as weapons: gloves, the agent and the Zeus keep the
+        // Armory selection while CS2 shows the vanilla one.
+        bool fromSaved = false;
         if (!item)
         {
-            NoteForeignEquipped(team, nativeSlot, equippedId);
-            detail = "native selection is not an item in the active Armory profile";
+            std::string saved;
+            if (NativeEquipment::SavedInstanceForSlot(apiTeam, slotName.c_str(), saved))
+            {
+                item = FindByInstanceIdLocked(saved);
+                if (item) fromSaved = true;
+            }
+        }
+
+        if (!item)
+        {
+            if (equippedId) NoteForeignEquipped(team, slotName.c_str(), equippedId);
+            detail = equippedId
+                ? "native selection is not an item in the active Armory profile"
+                : "no native CS2 item selected in this slot";
+            ArmoryStatus::NoteSlot(apiTeam, slotName.c_str(), 0,
+                equippedId ? ArmoryStatus::State::ForeignItem
+                           : ArmoryStatus::State::NoSelection,
+                detail.c_str());
             return ArmoryMatch::None;
         }
 
         if (slot && std::strcmp(slot, "zeus") == 0 && item->definition != 31)
         {
             detail = "native equipment slot does not contain the Zeus";
+            ArmoryStatus::NoteSlot(apiTeam, slotName.c_str(), item->definition,
+                ArmoryStatus::State::DefinitionMismatch, detail.c_str());
             return ArmoryMatch::None;
         }
 
         FillTarget(*item, target);
         char why[160]{};
-        snprintf(why, sizeof(why), "native item %s instance %016llX",
-            nativeSlot, static_cast<unsigned long long>(item->id));
+        snprintf(why, sizeof(why), "%s %s instance %016llX",
+            fromSaved ? "saved armory selection" : "native item",
+            slotName.c_str(), static_cast<unsigned long long>(item->id));
         detail = why;
+        ArmoryStatus::NoteSlot(apiTeam, slotName.c_str(), item->definition,
+            fromSaved ? ArmoryStatus::State::SavedSlot
+                      : ArmoryStatus::State::Native,
+            detail.c_str());
         return ArmoryMatch::EquippedInGame;
     }
 }

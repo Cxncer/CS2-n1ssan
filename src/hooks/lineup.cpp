@@ -1163,3 +1163,54 @@ void Lineup::FrameTick()
         g_pendingGloves = keep ? pending : GlovePending{};
     }
 }
+
+namespace Lineup
+{
+    bool RepairGloveMaterials(std::uintptr_t pawn, char* detail,
+                              std::size_t size)
+    {
+        if (!detail || !size)
+            return false;
+
+        detail[0] = '\0';
+
+        const GloveRoutine& routine = GloveRoutineFunction();
+
+        if (!routine.helper)
+        {
+            std::snprintf(detail, size, "no glove routine");
+            return false;
+        }
+
+        const uintptr_t model = GloveModelEntity(pawn, routine.helper);
+
+        if (!model)
+        {
+            std::snprintf(detail, size, "no glove model");
+            return false;
+        }
+
+        int finished = -1;
+        int waiting = -1;
+
+        if (!MaterialCounts(model, finished, waiting))
+        {
+            std::snprintf(detail, size, "counts unreadable");
+            return false;
+        }
+
+        if (waiting <= 0)
+            return false;
+
+        const char* freed = UnshareRequests(model);
+
+        // The same kick the lineup pass gives the local gloves every frame: a
+        // request that sits at step 0 is otherwise never looked at.
+        TouchModel(model);
+
+        std::snprintf(detail, size, "finished=%d waiting=%d %s",
+            finished, waiting, freed);
+
+        return std::strcmp(freed, "freed") == 0;
+    }
+}

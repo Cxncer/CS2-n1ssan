@@ -1,6 +1,7 @@
 #include "inventory/attachments.h"
 
 #include "diagnostics/log.h"
+#include "diagnostics/armory_status.h"
 #include "inventory/armory_inventory.h"
 #include "inventory/loot_schema.h"
 #include "inventory/loot_socache.h"
@@ -219,9 +220,19 @@ namespace Attachments
             uint64_t firstMs = 0;
         };
 
+        // A sticker or charm write can land on an item view the game is still
+        // rebuilding, so one failed read-back is not proof the attachment was
+        // lost. These are re-tried with backoff before being reported.
+        struct ReadbackRetry
+        {
+            int      attempts = 0;
+            uint64_t nextMs = 0;
+        };
+
         std::mutex g_stateMutex;
         std::unordered_map<uint64_t, Set> g_lastKnown;
         std::unordered_map<uint64_t, Pending> g_pending;
+        std::unordered_map<uint64_t, ReadbackRetry> g_readbackRetries;
         std::vector<Record> g_records;
         uint64_t g_seq = 0;
         uint64_t g_lastAck = 0;
@@ -1033,6 +1044,64 @@ namespace Attachments
 
         bool dirty = DropAcked();
 
+        for (auto retry = g_readbackRetries.begin(); retry != g_readbackRetries.end();)
+        {
+            const auto managed = std::find_if(items.begin(), items.end(),
+                [&retry](const ArmoryInventory::ManagedItem& item)
+                {
+                    return item.id == retry->first;
+                });
+
+            if (managed == items.end())
+            {
+                retry = g_readbackRetries.erase(retry);
+                continue;
+            }
+
+            if (now < retry->second.nextMs)
+            {
+                ++retry;
+                continue;
+            }
+
+            void* item = LootSOCache::Find(retry->first);
+            Set current;
+            if (!item || !Read(item, current))
+            {
+                retry = g_readbackRetries.erase(retry);
+                continue;
+            }
+
+            if (current == managed->attachments)
+            {
+                Log("[attach] item %016llX read its attachments back after retry",
+                    static_cast<unsigned long long>(retry->first));
+                retry = g_readbackRetries.erase(retry);
+                continue;
+            }
+
+            ++retry->second.attempts;
+            // A re-created item reads its attributes back empty for a few writes
+            // after a match ends (the 2026-11-20 log lost the USP-S and the T
+            // rifle1 that way). Backing off over ~7 s instead of ~1 s gives the
+            // game time to finish rebuilding the item before giving up.
+            if (retry->second.attempts >= 5)
+            {
+                char text[256]{};
+                Describe(current, text, sizeof(text));
+                Log("[attach] item %016llX still missing its attachments after retries: %s",
+                    static_cast<unsigned long long>(retry->first), text);
+                ArmoryStatus::NoteAttachReadbackFailure();
+                retry = g_readbackRetries.erase(retry);
+                continue;
+            }
+
+            Write(item, managed->attachments, &current, true, true);
+            retry->second.nextMs =
+                now + 500ull * static_cast<uint64_t>(retry->second.attempts);
+            ++retry;
+        }
+
         std::vector<uint64_t> live;
         live.reserve(items.size());
 
@@ -1056,14 +1125,41 @@ namespace Attachments
                 {
                     char text[256]{};
                     Describe(current, text, sizeof(text));
-                    Log("[attach] item %016llX did not read back its saved attachments: %s",
+                    Log("[attach] item %016llX did not read back its saved attachments: %s; retrying",
                         static_cast<unsigned long long>(managed.id), text);
+
+                    ReadbackRetry retry;
+                    retry.attempts = 0;
+                    retry.nextMs = now + 300;
+                    g_readbackRetries[managed.id] = retry;
+                    Write(item, managed.attachments, &current, true, true);
                 }
                 continue;
             }
 
             if (current == known->second)
             {
+                g_pending.erase(managed.id);
+                continue;
+            }
+
+            // Reading the attachment attributes of a managed item can come back
+            // empty even while that item carries the very set the apply path just
+            // wrote to it (the "did not read back its saved attachments" lines).
+            // Recording that as a change made the Bridge overwrite the profile's
+            // stickers and charm with "none", which is the other half of "applying
+            // a sticker removes the charm". An empty read against a baseline that
+            // was not empty is therefore left alone, like any other inconclusive
+            // read, instead of being persisted.
+            if (current.Empty() && !known->second.Empty())
+            {
+                static uint64_t lastEmptyReadLogMs = 0;
+                if (lastEmptyReadLogMs == 0 || now - lastEmptyReadLogMs >= 5000)
+                {
+                    lastEmptyReadLogMs = now;
+                    Log("[attach] item %016llX read no attachments while it should carry some; keeping the saved set",
+                        static_cast<unsigned long long>(managed.id));
+                }
                 g_pending.erase(managed.id);
                 continue;
             }

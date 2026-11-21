@@ -1,5 +1,5 @@
 // n1ssan-dll / src/config/offsets.h
-// Hardcoded offsets — verified against a2x 2026-10-23 dumper and matchdetect.
+// Hardcoded offsets ï¿½ verified against a2x 2026-10-23 dumper and matchdetect.
 // Carried forward from v9.0.2 without changes.
 
 #pragma once
@@ -8,7 +8,7 @@
 namespace AutoOffsets
 {
     // Absolute VAs of the three globals that shift on every client.dll recompile.
-    // Zero means "not resolved" — callers should fall back to their hardcoded RVA.
+    // Zero means "not resolved" ï¿½ callers should fall back to their hardcoded RVA.
     extern uintptr_t RVA_ENTITY_LIST;
     extern uintptr_t RVA_LOCALPLAYERCONTROLLER;
     extern uintptr_t RVA_LOCALPLAYERPAWN;
@@ -57,7 +57,9 @@ static constexpr uintptr_t FB_PAWN_ItemServices = 0x1210;
 static constexpr uintptr_t FB_PAWN_hController = 0x1DE0;
 static constexpr uintptr_t FB_PAWN_TeamNum = 0x3E7;
 static constexpr uintptr_t FB_PAWN_Health = 0x34C;
-static constexpr uintptr_t FB_PAWN_SpawnTime = 0x1DC8;
+// PAWN_SpawnTime has no fallback constant: a fixed offset pointed at the
+// wrong field on the 5 Nov 2026 build, so it is resolved by name at start-up
+// and stays 0 (spawn-time refresh disabled) when the schema cannot name it.
 static constexpr uintptr_t FB_PAWN_hHudModelArms = 0x1DA8;
 static constexpr uintptr_t FB_PAWN_EconGloves = 0x1770;
 static constexpr uintptr_t FB_PAWN_NeedReapplyGloves = 0x176D;
@@ -66,6 +68,10 @@ static constexpr uintptr_t FB_PAWN_MyWearables = 0x1268;
 
 // ---- CCSPlayer_WeaponServices ----
 static constexpr uintptr_t FB_WS_ActiveWeapon = 0x60;
+// The handle vector this pass walks. Resolved by name first: a wrong member
+// here resolves arbitrary handles, and GetEntityByHandle will happily return
+// another player's weapon for one.
+static constexpr uintptr_t FB_WS_MyWeapons = 0x48;
 
 // ---- CBasePlayerController ----
 static constexpr uintptr_t FB_CTRL_SteamID = 0x788;
@@ -118,6 +124,7 @@ struct Offsets
     uintptr_t PAWN_MyWearables = 0;
 
     uintptr_t WS_ActiveWeapon = 0;
+    uintptr_t WS_MyWeapons = 0;
 
     uintptr_t CTRL_SteamID = 0;
     uintptr_t CTRL_hPawn = 0;
@@ -126,6 +133,17 @@ struct Offsets
 extern Offsets g_off;
 // Populates g_off from the FB_* constants above. Called once at startup.
 void ResolveOffsets();
+
+// Whether the econ-item fields may be written to. The schema is checked first:
+// if it answered for the fields at all, it is the authority, and a core econ
+// field it could not name means the FB_* constants describe another CS2 build.
+// Writing those would land on unrelated members, so the apply pass stays off
+// until the table is corrected. When the schema is entirely unavailable the
+// constants remain the only source and stay in use (they did before the sweep).
+bool CoreOffsetsTrusted();
+
+// How many schema fields could not be resolved by name on this build.
+int UnresolvedOffsetFieldCount();
 
 // ---- Resolved runtime addresses (set by AutoOffsets::Resolve or by the RVA fallback) ----
 // These are ABSOLUTE VAs, not RVAs, despite the name. Kept for backward compat with

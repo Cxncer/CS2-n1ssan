@@ -5,6 +5,7 @@
 #include "skin/apply.h"
 #include "sdk/item_view.h"
 #include "config/offsets.h"
+#include "inventory/engine_schema_diagnostic.h"
 #include "inventory/loadout.h"
 #include "inventory/armory_inventory.h"
 #include "inventory/runtime_mode.h"
@@ -13,6 +14,7 @@
 #include "sdk/handles.h"
 #include "skin/glove_schema.h"
 #include "diagnostics/log.h"
+#include "diagnostics/armory_status.h"
 
 #include <string>
 #include <unordered_map>
@@ -22,33 +24,126 @@ namespace
     // dropped weapon merely because it appears in the local weapon handle list.
     // If schema/account ownership data is unavailable, preserve the existing
     // fail-open behavior rather than suppressing the player's own cosmetics.
+    //
+    // The authoritative field is C_EconItemView::m_iAccountID: it is the account
+    // CS2 itself stamps on the item view, so a weapon the server created for this
+    // player carries this player's id while a weapon picked up from someone else
+    // keeps theirs. m_OriginalOwnerXuidLow is only a fallback, because the game
+    // leaves it unset on freshly created weapons and it disagreed with the local
+    // account id on the player's own pistol and knife (2026-11-20 log: a whole
+    // T-side round was skipped as "non-owned", def=4, def=49, def=59).
+    // The local account id the server stamps on this player's items. The
+    // controller global is tried first: it is pattern-resolved at start-up, while
+    // the pawn's controller handle and the m_steamID offset both come from struct
+    // layout. In the 20 Nov session this returned 0, every weapon in the level
+    // counted as ours, and nothing was logged about it - the "my skins are on
+    // other players' guns" report.
+    uint32_t LocalAccountId(uintptr_t pawn)
+    {
+        uintptr_t controller = 0;
+
+        if (RVA_LOCALPLAYERCONTROLLER)
+            SafeReadQword(RVA_LOCALPLAYERCONTROLLER, controller);
+
+        if (controller < 0x10000)
+        {
+            uint32_t controllerHandle = 0;
+            if (pawn && g_off.PAWN_hController &&
+                SafeReadU32(pawn + g_off.PAWN_hController, controllerHandle) &&
+                HandleValid(controllerHandle))
+                controller = GetEntityByHandle(controllerHandle);
+        }
+
+        if (controller < 0x10000 || !g_off.CTRL_SteamID)
+            return 0;
+
+        uint64_t steamId = 0;
+        if (!SafeReadQword(controller + g_off.CTRL_SteamID, steamId))
+            return 0;
+
+        return static_cast<uint32_t>(steamId & 0xFFFFFFFFull);
+    }
+
+    // Whose gun this is. Two independent signals, because either one alone has
+    // been wrong on this client:
+    //   * C_EconItemView::m_iAccountID - the account CS2 stamped on the item;
+    //   * C_BaseEntity::m_hOwnerEntity - the entity holding the weapon right now.
+    // A weapon the local pawn holds is ours even when its item view was copied
+    // from a pickup, so the owner handle decides while it resolves and a known
+    // account id decides otherwise. When neither can be read the answer stays
+    // "ours" (never suppress the player's own cosmetics) but it is logged, so a
+    // session that repaints foreign guns says exactly why.
     bool IsOwnArmoryWeapon(uintptr_t weaponEnt, uintptr_t pawn)
     {
-        uint32_t ownerOffset = 0;
-        if (!GlovesSchema::TryGet(
-                "C_EconEntity", "m_OriginalOwnerXuidLow", ownerOffset) ||
-            ownerOffset == 0)
-            return true;
+        const uintptr_t view = GetWeaponItem(weaponEnt);
+        const uint32_t localAccountId = LocalAccountId(pawn);
 
-        uint32_t originalOwner = 0;
-        if (!SafeReadU32(weaponEnt + ownerOffset, originalOwner) ||
-            originalOwner == 0)
-            return true;
+        uint32_t viewAccountId = 0;
+        const bool viewAccountKnown =
+            view && g_off.EIV_AccountID &&
+            SafeReadU32(view + g_off.EIV_AccountID, viewAccountId) &&
+            viewAccountId != 0;
 
-        uint32_t controllerHandle = 0;
-        if (!SafeReadU32(pawn + g_off.PAWN_hController, controllerHandle) ||
-            !HandleValid(controllerHandle))
-            return true;
+        // Resolved by name at first use: the FB_* constant pointed at a different
+        // member on an earlier build, and a stale owner handle makes every gun
+        // look foreign.
+        static uintptr_t ownerOffset = 0;
+        static bool ownerOffsetTried = false;
+        if (!ownerOffsetTried)
+        {
+            ownerOffsetTried = true;
+            if (!ResolveEngineSchemaField("C_BaseEntity", "m_hOwnerEntity", ownerOffset))
+                ownerOffset = 0;
+        }
 
-        const uintptr_t controller = GetEntityByHandle(controllerHandle);
-        uint64_t steamId = 0;
-        if (!controller ||
-            !SafeReadQword(controller + g_off.CTRL_SteamID, steamId))
-            return true;
+        uintptr_t ownerEntity = 0;
+        bool ownerKnown = false;
+        if (ownerOffset)
+        {
+            uint32_t ownerHandle = 0;
+            if (SafeReadU32(weaponEnt + ownerOffset, ownerHandle) &&
+                HandleValid(ownerHandle))
+            {
+                ownerEntity = GetEntityByHandle(ownerHandle);
+                ownerKnown = ownerEntity >= 0x10000;
+            }
+        }
 
-        const uint32_t localAccountId =
-            static_cast<uint32_t>(steamId & 0xFFFFFFFFull);
-        return localAccountId == 0 || originalOwner == localAccountId;
+        bool own = true;
+        const char* decidedBy = "no ownership data - assumed ours";
+
+        if (ownerKnown)
+        {
+            own = ownerEntity == pawn;
+            decidedBy = own ? "held by the local pawn" : "held by another pawn";
+        }
+        else if (viewAccountKnown && localAccountId)
+        {
+            own = viewAccountId == localAccountId;
+            decidedBy = own ? "account matches" : "account differs";
+        }
+        else if (!localAccountId)
+        {
+            decidedBy = "local account id unavailable - assumed ours";
+        }
+        else
+        {
+            decidedBy = "item account id unavailable - assumed ours";
+        }
+
+        // One line per weapon view, so the next log names the field that decided.
+        {
+            static std::unordered_map<uintptr_t, uintptr_t> g_loggedOwnView;
+            if (g_loggedOwnView[weaponEnt] != view)
+            {
+                g_loggedOwnView[weaponEnt] = view;
+                Log("[own] weapon=%p view=%p account=%u local=%u owner=%p -> %s (%s)",
+                    (void*)weaponEnt, (void*)view, viewAccountId, localAccountId,
+                    (void*)ownerEntity, own ? "own" : "not ours", decidedBy);
+            }
+        }
+
+        return own;
     }
 }
 
@@ -105,6 +200,7 @@ bool ProcessWeapon(uintptr_t weaponEnt, uintptr_t pawn)
         {
             Log("[armory-apply] skipped non-owned weapon entity=%p def=%u",
                 (void*)weaponEnt, def);
+            ArmoryStatus::NoteSkippedEntity();
             return false;
         }
 
@@ -124,15 +220,40 @@ bool ProcessWeapon(uintptr_t weaponEnt, uintptr_t pawn)
 
         if (match == ArmoryInventory::ArmoryMatch::None)
         {
-            Log("[armory-apply] no Armory target for live weapon def=%u team=%s (%s)",
-                def, teamLabel, matchDetail.c_str());
+            // This runs for every owned weapon on every apply tick (250 ms).
+            // Logging unconditionally meant a file write and flush per weapon per
+            // tick, which is stutter of its own.
+            static std::unordered_map<uintptr_t, std::string> g_lastArmoryMiss;
+
+            if (g_lastArmoryMiss[weaponEnt] != matchDetail)
+            {
+                g_lastArmoryMiss[weaponEnt] = matchDetail;
+
+                Log("[armory-apply] no Armory target for live weapon def=%u team=%s (%s)",
+                    def, teamLabel, matchDetail.c_str());
+            }
+
             return false;
         }
 
         const char* source = "native-loadout";
 
-        Log("[armory-apply] %s live weapon def=%u team=%s paintKit=%d (%s)",
-            source, def, teamLabel, equipped.paintKit, matchDetail.c_str());
+        // Same per-tick path: report the resolved target only when it changes.
+        {
+            static std::unordered_map<uintptr_t, std::string> g_lastArmoryLog;
+
+            const std::string signature =
+                std::to_string(static_cast<unsigned>(equipped.defIndex)) + "|" +
+                std::to_string(equipped.paintKit) + "|" + matchDetail;
+
+            if (g_lastArmoryLog[weaponEnt] != signature)
+            {
+                g_lastArmoryLog[weaponEnt] = signature;
+
+                Log("[armory-apply] %s live weapon def=%u team=%s paintKit=%d (%s)",
+                    source, def, teamLabel, equipped.paintKit, matchDetail.c_str());
+            }
+        }
 
         if (knife)
         {

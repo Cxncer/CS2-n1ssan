@@ -24,3 +24,17 @@ void LogStatus(const char* state, const char* reason = nullptr, const char* code
 
 // Monotonic millisecond clock.
 uint64_t NowMs();
+
+// What the runtime is doing right now: "idle", "apply pass", "model rebuild".
+// Cheap enough to set every pass; read by the FPS counter so a frame that ran
+// long can name the work it overlapped instead of only its length.
+void SetActivity(const char* label);
+const char* CurrentActivity();
+
+// Build identifier shared by the session log header, the status record and the
+// Armory status document, so every layer can tell which binary is talking.
+const char* BuildId();
+
+// Directory that holds the per-session status files, without a trailing
+// separator. Empty when no writable status directory was found.
+const char* StatusDirectoryPath();

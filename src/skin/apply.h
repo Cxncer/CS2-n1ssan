@@ -36,6 +36,13 @@ bool DressItemView(uintptr_t view, const TargetSkin& t,
 bool     IsKnifeDefinition(uint16_t d);
 uint32_t GetKnifeSubclassId(uint16_t d);
 
+// When an eager window is open (match accepted, map loaded, round started) the
+// pass may build several weapon materials per window instead of one: nobody is
+// watching the frame rate yet, and building them then is what stops a weapon
+// from waiting for the player to switch to it.
+void SetEagerApply(bool eager);
+bool EagerApplyActive();
+
 // Change the weapon's model + subclass to the target knife definition.
 // Returns true if the entity was modified.
 bool KnifeApply(uintptr_t weaponEnt, uintptr_t view, uint16_t targetDef);

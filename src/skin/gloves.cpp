@@ -13,6 +13,7 @@
 #include "skin/glove_attribute_manager.h"
 #include "skin/glove_model_refresh.h"
 #include "skin/glove_paintkit_schema.h"
+#include "hooks/lineup.h"
 
 #include <algorithm>
 #include <iterator>
@@ -27,6 +28,18 @@ namespace
     constexpr std::uint64_t OWN_FLAG_FRAMES = 3;
     constexpr std::uint64_t FOLLOW_UP_DELAYS_MS[] = { 400, 1200, 3000 };
     constexpr std::uint64_t VERIFY_INTERVAL_MS = 1000;
+
+    // Repairs of a glove model whose paint request never leaves step 0. A few
+    // tries after a change, not a loop: the request only has to be freed once.
+    constexpr std::size_t GLOVE_MATERIAL_REPAIRS = 4;
+    constexpr std::uint64_t GLOVE_MATERIAL_REPAIR_MS = 400;
+
+    // The stuck request is not a one-off after a change: on CT the in-match glove
+    // paint request can be re-created mid-round (round restart, HUD rebuild) and
+    // then sits at step 0 until something kicks it. RepairGloveMaterials returns
+    // immediately when nothing is waiting, so it can run as a slow upkeep - this
+    // is the "CT gloves render default for a round, then come back" report.
+    constexpr std::uint64_t GLOVE_MATERIAL_UPKEEP_MS = 1500;
 
     bool g_appliedCustomGloves = false;
     bool g_appliedThisTick = false;
@@ -47,6 +60,29 @@ namespace
     std::uint64_t g_spawnSeenAt = 0;
     std::size_t g_followUpIndex = 0;
     std::uint64_t g_lastVerifyMs = 0;
+    std::size_t g_materialRepairsLeft = 0;
+    std::uint64_t g_lastMaterialRepairMs = 0;
+
+    // Spawn-time guard. On this build the field can hold a nonsense value (the
+    // log showed 1.4e34) or a number that climbs every frame. Treating either as
+    // "respawning" re-armed APPLY_FRAMES on every frame, so every weapon model
+    // was rebuilt continuously - the stutter, the flickering stickers and the
+    // second charm hanging on the gun all come from that loop.
+    bool g_spawnTimeTrusted = true;
+
+    // Moves seen on the current pawn. A pawn keeps one spawn time for its whole
+    // life, so more than two moves means the field is not a spawn time.
+    std::uintptr_t g_spawnMovePawn = 0;
+    int g_spawnMovesForPawn = 0;
+
+    // Last gloves actually written, for GloveIdentityChangedThisTick().
+    std::uint16_t g_appliedDefinition = 0;
+    std::uint8_t g_appliedTeam = 0xFF;
+    bool g_identityChanged = false;
+
+    // 0 = dead, 1 = alive, 0xFF = not known yet. Death -> alive is the respawn
+    // signal this build can trust; the spawn-time field cannot provide it.
+    std::uint8_t g_lastHealth = 0xFF;
 
     std::uint16_t DefaultDefinition(std::uint8_t team)
     {
@@ -272,20 +308,72 @@ void RunGloves(std::uintptr_t pawn)
 {
     ++g_frame;
     g_appliedThisTick = false;
+    g_identityChanged = false;
 
     if (!pawn)
         return;
 
     std::int32_t health = 0;
-    if (!SafeReadI32(pawn + g_off.PAWN_Health, health) || health <= 0)
+    if (!SafeReadI32(pawn + g_off.PAWN_Health, health))
         return;
+
+    if (health <= 0)
+    {
+        g_lastHealth = 0;
+        return;
+    }
+
+    // A respawn puts CS2's own (default) gloves back on the skeleton while the
+    // glove item view still looks applied, so nothing else here notices and the
+    // custom gloves stay gone for the round - the "CT gloves disappear from
+    // round 3" report. Health leaving zero is the one respawn signal that held
+    // up in the log, so it re-arms the apply.
+    const bool respawned = g_lastHealth == 0;
+    g_lastHealth = 1;
 
     const std::uintptr_t item = pawn + g_off.PAWN_EconGloves;
     std::uint8_t team = 0;
     float spawnTime = 0.0f;
+    // An unresolved spawn-time field leaves the value at 0, so the gloves are
+    // treated as not respawned rather than being rebuilt on every call.
     if (!SafeReadU8(pawn + g_off.PAWN_TeamNum, team) ||
-        !SafeReadFloat(pawn + g_off.PAWN_SpawnTime, spawnTime))
+        (g_off.PAWN_SpawnTime &&
+            !SafeReadFloat(pawn + g_off.PAWN_SpawnTime, spawnTime)))
         return;
+
+    // Only a plausible, stable spawn time may count as a respawn. A garbage or
+    // constantly moving value is replaced by the last good one so it can never
+    // drive the apply loop.
+    const bool spawnTimeSane = spawnTime > 0.0f && spawnTime < 10000000.0f;
+
+    if (!spawnTimeSane)
+    {
+        spawnTime = g_lastSpawnTime;
+    }
+    else if (spawnTime != g_lastSpawnTime)
+    {
+        // Counted per pawn instead of in a two-second burst: the field on this
+        // build moves every ~80 seconds, so the old burst guard never tripped and
+        // every move re-armed the apply - and, through that, wiped the weapon
+        // model cache for the whole loadout.
+        if (g_spawnMovePawn != pawn)
+        {
+            g_spawnMovePawn = pawn;
+            g_spawnMovesForPawn = 0;
+        }
+
+        if (++g_spawnMovesForPawn > 2)
+        {
+            if (g_spawnTimeTrusted)
+                Log("[glove-runtime] spawn time keeps moving (%.2f) - ignoring it for this session",
+                    spawnTime);
+
+            g_spawnTimeTrusted = false;
+        }
+
+        if (!g_spawnTimeTrusted)
+            spawnTime = g_lastSpawnTime;
+    }
 
     // In Armory mode the pawn's native glove view can never name an owned
     // instance: this function is the only writer of that view. The equipment
@@ -396,8 +484,11 @@ void RunGloves(std::uintptr_t pawn)
         GloveModelRefresh::Request();
     }
 
+    if (respawned && customSelection)
+        Log("[glove-runtime] respawn detected; re-applying gloves def=%u", definition);
+
     if (configChanged || teamChanged || pawnChanged || spawnChanged ||
-        itemWasReset || followUp)
+        itemWasReset || followUp || respawned)
         g_updateFrames = APPLY_FRAMES;
 
     if (g_clearFrames > 0)
@@ -435,6 +526,40 @@ void RunGloves(std::uintptr_t pawn)
     }
 
 
+    // Slow upkeep: while custom gloves are on and nothing is being written,
+    // look for a paint request that is waiting and kick it. Cheap when there is
+    // none, and the only thing that recovers the gloves mid-round on CT.
+    if (customSelection && paintKit > 0 && g_updateFrames <= 0 &&
+        now - g_lastMaterialRepairMs >= GLOVE_MATERIAL_UPKEEP_MS)
+    {
+        g_lastMaterialRepairMs = now;
+
+        char upkeepDetail[96]{};
+
+        if (Lineup::RepairGloveMaterials(pawn, upkeepDetail, sizeof(upkeepDetail)))
+            Log("[glove-runtime] glove paint request freed and rebuilt (%s)",
+                upkeepDetail);
+    }
+
+    // The glove model's paint request can sit at step 0 forever: the material
+    // manager never polls a shared request, and on CT the in-match glove request
+    // is exactly that. The item view then looks perfect while the gloves render
+    // unpainted (or default), and rewriting it only makes another stuck request.
+    // Free it and kick the manager - the repair the lineup screens already run
+    // for the local gloves - a few times after a change, then leave it alone.
+    if (customSelection && paintKit > 0 && g_materialRepairsLeft > 0 &&
+        now - g_lastMaterialRepairMs >= GLOVE_MATERIAL_REPAIR_MS)
+    {
+        g_lastMaterialRepairMs = now;
+        --g_materialRepairsLeft;
+
+        char detail[96]{};
+
+        if (Lineup::RepairGloveMaterials(pawn, detail, sizeof(detail)))
+            Log("[glove-runtime] glove paint request freed and rebuilt (%s)",
+                detail);
+    }
+
     if (g_updateFrames <= 0)
         return;
 
@@ -446,6 +571,11 @@ void RunGloves(std::uintptr_t pawn)
     }
 
     g_appliedThisTick = true;
+    g_identityChanged =
+        g_appliedDefinition != definition ||
+        (g_appliedTeam != 0xFF && g_appliedTeam != team);
+    g_appliedDefinition = definition;
+    g_appliedTeam = team;
     g_lastWriteFrame = g_frame;
     --g_updateFrames;
     g_lastPawn = pawn;
@@ -456,6 +586,14 @@ void RunGloves(std::uintptr_t pawn)
     g_lastSpawnTime = spawnTime;
     g_lastTeam = team;
     g_appliedCustomGloves = customSelection;
+
+    // Any re-apply can leave the model with a fresh, stuck paint request.
+    if (configChanged || teamChanged || pawnChanged || respawned ||
+        itemWasReset || followUp)
+    {
+        g_materialRepairsLeft = GLOVE_MATERIAL_REPAIRS;
+        g_lastMaterialRepairMs = 0;
+    }
 }
 
 void ResetGloves()
@@ -477,11 +615,25 @@ void ResetGloves()
     g_spawnSeenAt = 0;
     g_followUpIndex = 0;
     g_lastVerifyMs = 0;
+    g_materialRepairsLeft = 0;
+    g_lastMaterialRepairMs = 0;
+    g_spawnTimeTrusted = true;
+    g_spawnMovePawn = 0;
+    g_spawnMovesForPawn = 0;
+    g_appliedDefinition = 0;
+    g_appliedTeam = 0xFF;
+    g_identityChanged = false;
+    g_lastHealth = 0xFF;
 }
 
 bool GloveAppliedThisTick()
 {
     return g_appliedThisTick;
+}
+
+bool GloveIdentityChangedThisTick()
+{
+    return g_identityChanged;
 }
 
 // A lineup character's glove item: the same identity the in-match path writes,

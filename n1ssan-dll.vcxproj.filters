@@ -37,6 +37,9 @@
     <Filter Include="src\hooks">
       <UniqueIdentifier>{0be7c953-e370-4326-8f2c-5e3b1c269fb5}</UniqueIdentifier>
     </Filter>
+    <Filter Include="src\overlay">
+      <UniqueIdentifier>{6d1d3f0b-6a4e-4d05-9a51-1c5f0d7c2a41}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="dllmain.cpp">
@@ -44,6 +47,9 @@
     </ClCompile>
     <ClCompile Include="src\config\offsets.cpp">
       <Filter>src\config</Filter>
+    </ClCompile>
+    <ClCompile Include="src\diagnostics\armory_status.cpp">
+      <Filter>src\diagnostics</Filter>
     </ClCompile>
     <ClCompile Include="src\diagnostics\log.cpp">
       <Filter>src\diagnostics</Filter>
@@ -117,6 +123,15 @@
     <ClCompile Include="src\skin\glove_schema.cpp">
       <Filter>src\skin</Filter>
     </ClCompile>
+    <ClCompile Include="src\overlay\accept_watch.cpp">
+      <Filter>src\overlay</Filter>
+    </ClCompile>
+    <ClCompile Include="src\overlay\fps_counter.cpp">
+      <Filter>src\overlay</Filter>
+    </ClCompile>
+    <ClCompile Include="src\overlay\pill_art.cpp">
+      <Filter>src\overlay</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
@@ -124,6 +139,9 @@
   <ItemGroup>
     <ClInclude Include="src\config\offsets.h">
       <Filter>src\config</Filter>
+    </ClInclude>
+    <ClInclude Include="src\diagnostics\armory_status.h">
+      <Filter>src\diagnostics</Filter>
     </ClInclude>
     <ClInclude Include="src\diagnostics\log.h">
       <Filter>src\diagnostics</Filter>
@@ -208,6 +226,18 @@
     </ClInclude>
     <ClInclude Include="src\skin\glove_schema.h">
       <Filter>src\skin</Filter>
+    </ClInclude>
+    <ClInclude Include="src\overlay\accept_watch.h">
+      <Filter>src\overlay</Filter>
+    </ClInclude>
+    <ClInclude Include="src\overlay\fps_counter.h">
+      <Filter>src\overlay</Filter>
+    </ClInclude>
+    <ClInclude Include="src\overlay\n1ssan_mark.h">
+      <Filter>src\overlay</Filter>
+    </ClInclude>
+    <ClInclude Include="src\overlay\pill_art.h">
+      <Filter>src\overlay</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

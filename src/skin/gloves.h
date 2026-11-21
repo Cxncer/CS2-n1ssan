@@ -11,6 +11,10 @@ void ResetGloves();
 
 bool GloveAppliedThisTick();
 
+// True when this tick's apply changed which gloves are worn (definition or
+// team), which is the only glove change that invalidates weapon/HUD models.
+bool GloveIdentityChangedThisTick();
+
 // Dresses an item view as a glove item without a pawn: your own lineup
 // character's gloves on the team select / intro / end of match screens, which
 // have no pawn to run the glove routine on. `definition` is a glove definition;

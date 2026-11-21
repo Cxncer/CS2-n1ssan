@@ -90,9 +90,12 @@ void Agents::Run(std::uintptr_t pawn)
     std::uint8_t team = 0;
     float spawnTime = 0.0f;
 
+    // Without a resolved spawn-time field the spawn time stays 0: identical on
+    // every call, so the agent is dressed once instead of being re-applied.
     if (!SafeReadI32(pawn + g_off.PAWN_Health, health) || health <= 0 ||
         !SafeReadU8(pawn + g_off.PAWN_TeamNum, team) ||
-        !SafeReadFloat(pawn + g_off.PAWN_SpawnTime, spawnTime))
+        (g_off.PAWN_SpawnTime &&
+            !SafeReadFloat(pawn + g_off.PAWN_SpawnTime, spawnTime)))
         return;
 
     TargetSkin target{};
