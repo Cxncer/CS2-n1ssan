@@ -16,6 +16,8 @@
 #include "hooks/lineup.h"
 
 #include <algorithm>
+#include <cstdio>
+#include <cstring>
 #include <iterator>
 #include <string>
 
@@ -527,18 +529,35 @@ void RunGloves(std::uintptr_t pawn)
 
 
     // Slow upkeep: while custom gloves are on and nothing is being written,
-    // look for a paint request that is waiting and kick it. Cheap when there is
-    // none, and the only thing that recovers the gloves mid-round on CT.
+    // look at the glove model itself. The item view can be perfect while the
+    // model draws plain - CS2 rebuilds that model on its own (agent swap, round
+    // restart, respawn) and the rebuilt model does not always ask for its paint
+    // again, which is the gloves that don't render again until something else
+    // happens to re-apply them.
     if (customSelection && paintKit > 0 && g_updateFrames <= 0 &&
         now - g_lastMaterialRepairMs >= GLOVE_MATERIAL_UPKEEP_MS)
     {
         g_lastMaterialRepairMs = now;
 
-        char upkeepDetail[96]{};
+        char upkeepDetail[112]{};
+        const int modelState = Lineup::EnsureGloveModel(pawn, upkeepDetail,
+            sizeof(upkeepDetail));
 
-        if (Lineup::RepairGloveMaterials(pawn, upkeepDetail, sizeof(upkeepDetail)))
-            Log("[glove-runtime] glove paint request freed and rebuilt (%s)",
+        // One line per change of answer, not per upkeep: this runs every 1.5 s.
+        static int lastModelState = -2;
+        static char lastModelDetail[112]{};
+
+        if (modelState != lastModelState ||
+            std::strcmp(upkeepDetail, lastModelDetail) != 0)
+        {
+            lastModelState = modelState;
+            std::snprintf(lastModelDetail, sizeof(lastModelDetail), "%s",
                 upkeepDetail);
+
+            Log("[glove-model] %s (state %d) team=%s",
+                upkeepDetail[0] ? upkeepDetail : "painted", modelState,
+                team == 2 ? "T" : "CT");
+        }
     }
 
     // The glove model's paint request can sit at step 0 forever: the material

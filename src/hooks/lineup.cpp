@@ -169,6 +169,30 @@ namespace
         return g_gloveRoutine;
     }
 
+    // The pawn's own glove routine, SEH-guarded. The game runs this from the
+    // pawn's update; it is what spawns the glove model and asks for its paint,
+    // so it is also what recovers a model that came back without a request.
+    bool RunGloveRoutine(std::uintptr_t pawn, std::uint32_t helper)
+    {
+        const GloveRoutine& routine = GloveRoutineFunction();
+
+        if (!pawn || !helper || !routine.routine)
+            return false;
+
+        void* argument = reinterpret_cast<void*>(pawn + helper);
+
+        __try
+        {
+            routine.routine(argument);
+        }
+        __except (EXCEPTION_EXECUTE_HANDLER)
+        {
+            return false;
+        }
+
+        return true;
+    }
+
     using CompositeCopyFn = void(__fastcall*)(void* source, void* destination, char releaseFirst);
 
     struct CompositeCopy
@@ -327,7 +351,17 @@ namespace
         if (!SafeReadQword(owner + copy.countOffset + 0x20, ids) || !ids)
             return "no request ids";
 
-        const uintptr_t getter = ScanPattern(GetClientModule(), LINEUP_COMPOSITE_MANAGER);
+        // Resolved once: the getter never moves within a session, and this is
+        // now called from the glove upkeep - a full client-module scan there is
+        // a frame hitch every time a request is freed.
+        static uintptr_t getter = 0;
+        static bool lookedUp = false;
+
+        if (!lookedUp)
+        {
+            lookedUp = true;
+            getter = ScanPattern(GetClientModule(), LINEUP_COMPOSITE_MANAGER);
+        }
 
         if (!getter)
             return "manager pattern not found";
@@ -1166,6 +1200,97 @@ void Lineup::FrameTick()
 
 namespace Lineup
 {
+    int EnsureGloveModel(std::uintptr_t pawn, char* detail, std::size_t size)
+    {
+        if (!detail || !size)
+            return -1;
+
+        detail[0] = '\0';
+
+        const GloveRoutine& routine = GloveRoutineFunction();
+
+        if (!routine.routine || !routine.helper)
+        {
+            std::snprintf(detail, size, "no glove routine");
+            return -1;
+        }
+
+        if (!pawn)
+        {
+            std::snprintf(detail, size, "no pawn");
+            return -1;
+        }
+
+        // One plain reading is left alone: a model that was just rebuilt is
+        // allowed to finish. Repeats mean it will not ask for its paint by
+        // itself, and only the game's own routine brings it back.
+        static std::uintptr_t strikePawn = 0;
+        static int strikes = 0;
+
+        if (pawn != strikePawn)
+        {
+            strikePawn = pawn;
+            strikes = 0;
+        }
+
+        const std::uintptr_t model = GloveModelEntity(pawn, routine.helper);
+
+        if (!model)
+        {
+            SafeWriteU8(pawn + g_off.PAWN_NeedReapplyGloves, 1);
+
+            const bool ran = RunGloveRoutine(pawn, routine.helper);
+
+            std::snprintf(detail, size, "no glove model, routine %s",
+                ran ? "run" : "faulted");
+
+            return ran ? 1 : -1;
+        }
+
+        int finished = -1;
+        int waiting = -1;
+
+        if (!MaterialCounts(model, finished, waiting))
+        {
+            std::snprintf(detail, size, "counts unreadable");
+            return -1;
+        }
+
+        if (finished > 0)
+        {
+            strikes = 0;
+            return 0;
+        }
+
+        // Nothing finished: the model draws plain. Free a shared request so the
+        // manager polls it and kick the owner, then give that a moment.
+        const char* freed = UnshareRequests(model);
+        TouchModel(model);
+
+        // A pending request gets more time to build; with no request at all
+        // there is nothing to wait for.
+        const int limit = (waiting > 0) ? 3 : 2;
+
+        if (++strikes < limit)
+        {
+            std::snprintf(detail, size,
+                "unpainted finished=%d waiting=%d %s - request kicked",
+                finished, waiting, freed);
+            return 2;
+        }
+
+        strikes = 0;
+        SafeWriteU8(pawn + g_off.PAWN_NeedReapplyGloves, 1);
+
+        const bool ran = RunGloveRoutine(pawn, routine.helper);
+
+        std::snprintf(detail, size,
+            "unpainted finished=%d waiting=%d %s - model rebuild %s",
+            finished, waiting, freed, ran ? "run" : "faulted");
+
+        return ran ? 1 : -1;
+    }
+
     bool RepairGloveMaterials(std::uintptr_t pawn, char* detail,
                               std::size_t size)
     {
