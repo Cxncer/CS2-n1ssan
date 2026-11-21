@@ -795,10 +795,21 @@ static void __fastcall FsnDetour(void* pClient, int stage)
     // player is killed. Only those teardown frames are skipped now: the death
     // camera re-creates the viewmodel, and skipping it entirely left that copy on
     // the default skin.
-    if (pawnAliveKnown && pawnIsAlive == 0)
+    const bool pawnDead = pawnAliveKnown && pawnIsAlive == 0;
+
+    if (pawnDead)
     {
         if (g_deadSinceMs == 0)
+        {
             g_deadSinceMs = now;
+
+            // Death tears the round down: drop the pending sweep instead of
+            // spending it on weapons that are being destroyed, and leave a line
+            // so a crash report shows the pass was in its dead state.
+            g_eagerUntilMs = 0;
+
+            Log("[death] pawn died - pass falls back to the held weapon");
+        }
 
         if (now - g_deadSinceMs < APPLY_DEAD_QUIET_MS)
             return;
@@ -811,7 +822,7 @@ static void __fastcall FsnDetour(void* pClient, int stage)
     // ---- IN_MATCH: Phase C apply cadence ----
     // An eager window runs on every frame the game calls us; while dead the pass
     // runs slowly, because nothing on the death camera is in a hurry.
-    const bool eager = now < g_eagerUntilMs;
+    const bool eager = !pawnDead && now < g_eagerUntilMs;
 
     uint64_t applyIntervalMs = SKIN_APPLY_INTERVAL_MS;
 
@@ -940,7 +951,12 @@ static void __fastcall FsnDetour(void* pClient, int stage)
         }
     }
 
-    if (wCount > 0 && wCount <= 32 && wData >= 0x10000)
+    // While dead, CS2 is destroying the weapon entities and the viewmodel: a
+    // walk over every handle in m_hMyWeapons there processed guns that were
+    // being torn down, and the log of the death crash ends inside exactly that
+    // walk. The death camera only needs the weapon the pawn is holding, which
+    // is written above; the owned weapons come back on the respawn sweep.
+    if (wCount > 0 && wCount <= 32 && wData >= 0x10000 && !pawnDead)
     {
         // The list resumes where the last pass stopped instead of starting at
         // index 0 again. The active weapon is always processed first above, so
@@ -1095,7 +1111,10 @@ static void __fastcall FsnDetour(void* pClient, int stage)
 
         if (wCount > 0 && hash != lastListHash)
         {
-            if (!eager)
+            // A weapon list that changed because the pawn died is not a new
+            // round: arming the sweep there is what ran the pass over the
+            // teardown. The respawn arms it again.
+            if (!eager && !pawnDead)
             {
                 g_eagerUntilMs = now + EAGER_WINDOW_MS;
 
