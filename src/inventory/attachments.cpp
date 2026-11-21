@@ -896,6 +896,66 @@ namespace Attachments
         return changed;
     }
 
+    // The real item's charm and StatTrak entries live in the item view's
+    // networked list, and CS2 refills that list from the equipped item. Those
+    // definitions are dropped here in place, keeping everything else (the
+    // stickers CS2 reads from the same list).
+    int StripNetworkedCharmAndStatTrak(void* itemView)
+    {
+        if (!itemView) return 0;
+
+        AttributeVector_t* vector =
+            GetNetworkedVector(reinterpret_cast<uintptr_t>(itemView));
+
+        if (!vector) return 0;
+        if (vector->size <= 0 || vector->size > MAX_ATTRIBUTES) return 0;
+        if (!vector->data || vector->data < 0x10000u) return 0;
+
+        int removed = 0;
+
+        __try
+        {
+            auto* attributes =
+                reinterpret_cast<EconItemAttribute_t*>(vector->data);
+            int keep = 0;
+
+            for (int i = 0; i < vector->size; ++i)
+            {
+                const uint16_t def = attributes[i].defIndex;
+
+                const bool charm =
+                    def == ATTR_CHARM_ID || def == ATTR_CHARM_X ||
+                    def == ATTR_CHARM_Y || def == ATTR_CHARM_Z ||
+                    def == ATTR_CHARM_SEED || def == ATTR_CHARM_HIGHLIGHT ||
+                    def == ATTR_CHARM_STICKER;
+
+                // "kill eater" and its score type are the StatTrak badge; a
+                // second copy of them on the same item draws a second badge.
+                const bool statTrak = def == 80 || def == 81;
+
+                if (charm || statTrak)
+                {
+                    ++removed;
+                    continue;
+                }
+
+                if (keep != i)
+                    attributes[keep] = attributes[i];
+
+                ++keep;
+            }
+
+            if (removed > 0)
+                vector->size = keep;
+        }
+        __except (EXCEPTION_EXECUTE_HANDLER)
+        {
+            return 0;
+        }
+
+        return removed;
+    }
+
     bool Write(void* econItem, const Set& set, const Set* previous, bool includeCharm,
                bool clearMissing)
     {

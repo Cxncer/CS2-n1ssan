@@ -596,10 +596,19 @@ bool RebuildHudKeychainAddon(uintptr_t weapon, uintptr_t hudWeapon, bool request
     if (!client.valid())
         return false;
 
-    const uintptr_t findAddonAddress =
-        ScanPattern(client, LootPatterns::FindHudKeychainAddon);
-    const uintptr_t removeAddonAddress =
-        ScanPattern(client, LootPatterns::RemoveHudKeychainAddon);
+    // Resolved once. This now runs on every charm repair (a model build hangs
+    // the static charm addon again), and scanning module memory on each call was
+    // a per-repair cost with no benefit.
+    static uintptr_t findAddonAddress = 0;
+    static uintptr_t removeAddonAddress = 0;
+    static bool looked = false;
+
+    if (!looked)
+    {
+        looked = true;
+        findAddonAddress = ScanPattern(client, LootPatterns::FindHudKeychainAddon);
+        removeAddonAddress = ScanPattern(client, LootPatterns::RemoveHudKeychainAddon);
+    }
 
     if (!findAddonAddress || !removeAddonAddress)
         return false;

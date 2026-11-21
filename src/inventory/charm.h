@@ -31,12 +31,18 @@ namespace Charm
     int DesiredKit(const Attachments::Set* set);
 
     // Lootline's per-gun upkeep, at most once a second:
-    //  - a gun that should carry a charm gets rid of every world keychain and
-    //    has its HUD keychain addon rebuilt so CS2 re-creates exactly one;
-    //  - a gun that should carry none has its world keychains removed too.
+    //  - a gun that should carry a charm keeps exactly one simulated keychain
+    //    entity and has the HUD keychain addon (the static copy drawn on the
+    //    viewmodel) removed, without asking CS2 to rebuild it;
+    //  - a gun that should carry none has every keychain entity and the addon
+    //    removed.
+    // modelRebuilt says the viewmodel was just rebuilt this pass, which is when
+    // CS2 hangs the static addon again and the only reliable moment to tell the
+    // upkeep that the static charm is back.
     // Repairs are capped per gun (Lootline: 20) so a charm CS2 refuses to build
     // cannot loop forever.
-    void Upkeep(uintptr_t weapon, uintptr_t hudWeapon, const Attachments::Set* set);
+    void Upkeep(uintptr_t weapon, uintptr_t hudWeapon, const Attachments::Set* set,
+                bool modelRebuilt);
 
     // Forget a gun's upkeep state (weapon cache invalidation / map change).
     void Forget(uintptr_t weapon);

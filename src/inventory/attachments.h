@@ -106,6 +106,17 @@ namespace Attachments
     // sees the real kit. Pass the CEconItemView, not its CAttributeList.
     int SetCharmIdInPlace(void* itemView, int kit);
 
+    // Drops the real item's charm and StatTrak entries from the networked
+    // attribute list of a live CEconItemView, in place: no setter, no
+    // allocation. Every other entry in that list is kept, because the stickers
+    // CS2 reads for the fake skin live there too.
+    //
+    // The list is rebuilt from the equipped item (the view restores its custom
+    // attributes), so a one-time clear is not enough: the real charm came back
+    // beside the Armory one, and the real "kill eater" came back as a second
+    // StatTrak badge. Call this every apply pass; it does nothing when the list
+    // carries neither.
+    int StripNetworkedCharmAndStatTrak(void* itemView);
 
     // One-line description for diagnostics.
     void Describe(const Set& set, char* out, std::size_t size);

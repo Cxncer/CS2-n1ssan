@@ -55,7 +55,8 @@ int Charm::DesiredKit(const Attachments::Set* set)
     return set && set->charm.present ? set->charm.kit : 0;
 }
 
-void Charm::Upkeep(uintptr_t weapon, uintptr_t hudWeapon, const Attachments::Set* set)
+void Charm::Upkeep(uintptr_t weapon, uintptr_t hudWeapon, const Attachments::Set* set,
+                   bool modelRebuilt)
 {
     if (!weapon)
         return;
@@ -63,10 +64,17 @@ void Charm::Upkeep(uintptr_t weapon, uintptr_t hudWeapon, const Attachments::Set
     const uint64_t now = GetTickCount64();
     GunState& state = g_guns[weapon];
 
-    if (now < state.nextCheckMs)
+    // A model build is a real event and must not wait out the check interval:
+    // the addon it just re-hung is the static charm the player is looking at.
+    if (now < state.nextCheckMs && !modelRebuilt)
         return;
 
     state.nextCheckMs = now + CHECK_MS;
+
+    // A build also cancels a quiet period, which only ever applies to a gun that
+    // was already settled.
+    if (modelRebuilt)
+        state.quietUntilMs = 0;
 
     if (now < state.quietUntilMs)
         return;
@@ -84,32 +92,47 @@ void Charm::Upkeep(uintptr_t weapon, uintptr_t hudWeapon, const Attachments::Set
     }
 
     // A rebuilt viewmodel is a new HUD weapon carrying a freshly built keychain
-    // addon; that is the moment the static second charm comes back, and it is
-    // visible without scanning anything.
+    // addon, and the addon is one of the two charms the player sees.
     const bool hudRebuilt = hudWeapon && state.lastHud && hudWeapon != state.lastHud;
 
     if (hudWeapon)
         state.lastHud = hudWeapon;
 
+    // A build is what hangs the static addon again, so it also reopens the
+    // repair budget: a model can be rebuilt several times per gun.
+    if (modelRebuilt)
+    {
+        state.repairs = 0;
+        state.quietUntilMs = 0;
+        state.pendingHud = false;
+    }
+
     const int hanging = CountWorldKeychainEntities(weapon);
 
-    // Any world keychain is one too many.
-    //
-    // The charm the player sees hangs from the HUD weapon's keychain addon,
-    // which CS2 builds from the item's "keychain slot 0 id"; the world model
-    // build hangs a second, rigid copy on the gun from the same attribute. The
-    // two together are the double charm. Lootline removed every world copy, not
-    // only a surplus one - the gate used to require hanging > 1, and while the
-    // entity scan was bounded (see LiveEntityLimit) it never reported anything
-    // at all, so nothing was ever removed.
-    const bool worldLeftover = hanging > 0;
-    const bool selectionChanged = state.lastWanted != wanted;
-    const bool hudWork = state.pendingHud || hudRebuilt;
+    // One keychain module on the gun is the charm that swings: it is simulated,
+    // and it is left alone. Anything beyond that is a rigid copy hung by a
+    // model build from the same attribute. Removing the one module as well is
+    // what made the charm vanish and come back as a static one.
+    const int expected = wanted > 0 ? 1 : 0;
+    const bool worldSurplus = hanging > expected;
 
-    // The count is trustworthy again, so a world copy is work whether the gun
-    // should carry a charm or not.
+    // The HUD keychain modules are only counted when no charm is wanted, where
+    // every one of them has to go. A keychain module on the HUD weapon is the
+    // simulated charm, not the static copy: the static copy is the keychain
+    // addon, which is not an entity of this class and therefore cannot be
+    // counted - it is removed around the addon handle instead.
+    const int hudHanging = (wanted == 0 && hudWeapon)
+        ? CountWorldKeychainEntities(hudWeapon)
+        : -1;
+
+    const bool selectionChanged = state.lastWanted != wanted;
+    const bool hudWork = state.pendingHud || hudRebuilt || modelRebuilt;
+
     const bool repairWanted =
-        worldLeftover || selectionChanged || hudWork;
+        worldSurplus ||
+        (wanted == 0 && (hanging > 0 || hudHanging > 0)) ||
+        selectionChanged ||
+        hudWork;
 
     if (!repairWanted)
     {
@@ -131,24 +154,28 @@ void Charm::Upkeep(uintptr_t weapon, uintptr_t hudWeapon, const Attachments::Set
         return;
     }
 
-    // Only scan for a removal when the count says there is something to remove.
-    const int removed = hanging > 0 ? RemoveWorldKeychainEntities(weapon) : 0;
+    int removed = 0;
+    bool added = false;
 
-    // The item attribute is the single source: CS2 reads "keychain slot 0 id"
-    // from the view and hangs the first-person charm from it.
-    //
-    // The HUD keychain addon is deliberately left alone now. Its 0xFF "rebuild"
-    // flag was the last thing that still created a charm - every charmed gun in
-    // the v2.6 log showed one repair and hudCall=1 - and the game then showed
-    // two: the charm CS2 had already built from the attribute, plus the one the
-    // rebuild flag asked for. AddKeychainEntity is gone for the same reason, so
-    // nothing in this file creates a charm; it only removes a second one.
-    const int hudHanging = hudWeapon ? CountWorldKeychainEntities(hudWeapon) : 0;
+    if (worldSurplus)
+    {
+        // Every module comes off together, then one simulated charm is asked
+        // for again: CS2 has no "remove just the copies" call, and leaving the
+        // gun with none made the game re-hang a rigid one on the next build.
+        removed = RemoveWorldKeychainEntities(weapon);
+
+        if (wanted > 0)
+            added = AddKeychainEntity(weapon);
+    }
+    else if (wanted == 0 && hanging > 0)
+    {
+        removed = RemoveWorldKeychainEntities(weapon);
+    }
 
     // The HUD weapon is unresolvable while CS2 is still building the viewmodel.
-    // Nothing about the charm can be settled without it, and the attempt does not
-    // count against the repair budget: burning the budget on passes that could
-    // not act is what left a gun unrepaired for the rest of the match.
+    // Nothing about the addon can be settled without it, and the attempt does
+    // not count against the repair budget: burning the budget on passes that
+    // could not act is what left a gun unrepaired for the rest of the match.
     if (wanted > 0 && !hudWeapon)
     {
         if (++state.deferredAttempts <= MAX_DEFERRED_ATTEMPTS)
@@ -164,20 +191,33 @@ void Charm::Upkeep(uintptr_t weapon, uintptr_t hudWeapon, const Attachments::Set
         state.pendingHud = false;
     }
 
+    // With no charm wanted, every module on the viewmodel goes too.
+    const int hudRemoved =
+        (wanted == 0 && hudHanging > 0) ? RemoveHudKeychainEntities(hudWeapon) : 0;
+
+    // The static charm: the "keychain" addon CS2 hangs on the viewmodel. It is
+    // removed together with its dictionary entry, and the 0xFF rebuild request
+    // is deliberately not written - that is what asked CS2 for a second charm.
+    // The keychain module beside it is untouched, so the charm that swings
+    // stays on the gun.
+    const bool addonCleared =
+        hudWeapon ? RebuildHudKeychainAddon(weapon, hudWeapon, false) : false;
+
     state.pendingHud = false;
     state.deferredAttempts = 0;
     ++state.repairs;
 
-    Log("[charm] gun=%p hud=%p wanted=%d hanging=%d removed=%d hudHanging=%d repair=%d",
-        (void*)weapon, (void*)hudWeapon, wanted, hanging, removed, hudHanging, state.repairs);
+    Log("[charm] gun=%p hud=%p wanted=%d hanging=%d removed=%d added=%d hudHanging=%d hudRemoved=%d addonCleared=%d repair=%d",
+        (void*)weapon, (void*)hudWeapon, wanted, hanging, removed, added ? 1 : 0,
+        hudHanging, hudRemoved, addonCleared ? 1 : 0, state.repairs);
 
     // Said once per gun and selection, so a count of zero is explained instead of
     // looking like the upkeep simply is not running.
     if (wanted > 0 && hanging == 0 && !state.loggedUndetectable)
     {
         state.loggedUndetectable = true;
-        Log("[charm] gun=%p nothing to clean on the gun itself; the charm is the "
-            "HUD addon built from the item's keychain attribute", (void*)weapon);
+        Log("[charm] gun=%p carries no world keychain; the charm on it is the HUD "
+            "one built from the item's keychain attribute", (void*)weapon);
     }
 
     state.quietUntilMs = (wanted == 0 && hanging == 0) ? now + QUIET_CHECK_MS : 0;
@@ -185,7 +225,6 @@ void Charm::Upkeep(uintptr_t weapon, uintptr_t hudWeapon, const Attachments::Set
     state.lastWanted = wanted;
     state.lastHanging = hanging;
 }
-
 void Charm::Forget(uintptr_t weapon)
 {
     if (!weapon)

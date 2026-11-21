@@ -1032,6 +1032,25 @@ bool ApplyWeaponSkin(uintptr_t weaponEnt, uintptr_t pawn, const TargetSkin& t,
     const bool networkedClearedNow =
         ClearNetworkedAttachmentsInPlace(weaponEnt, view);
 
+    // The real item's own charm and "kill eater" live in that networked list
+    // too, and CS2 refills the list from the equipped item. Dropping just those
+    // entries on every pass is what stops the real charm from being drawn
+    // beside the Armory one and the real StatTrak badge from being drawn on top
+    // of ours. The stickers the fake skin carries are left in place.
+    {
+        static std::unordered_map<uintptr_t, uintptr_t> g_lastStripped;
+
+        const int stripped = Attachments::StripNetworkedCharmAndStatTrak(
+            reinterpret_cast<void*>(view));
+
+        if (stripped > 0 && g_lastStripped[weaponEnt] != view)
+        {
+            g_lastStripped[weaponEnt] = view;
+            Log("[attach-foreign] dropped %d real charm/StatTrak attributes weapon=%p",
+                stripped, (void*)weaponEnt);
+        }
+    }
+
     if (!alreadyPainted)
     {
         Log("[apply] enter (weapon=0x%p def=%u pk=%d)",
@@ -1190,8 +1209,12 @@ bool ApplyWeaponSkin(uintptr_t weaponEnt, uintptr_t pawn, const TargetSkin& t,
             wantQuality,
             mask);
 
+    bool modelBuiltThisPass = false;
+
     if (modelChanged && ModelBuildBudgetAllows())
     {
+        modelBuiltThisPass = true;
+
         // A frame that runs long here is reported as a model rebuild.
         SetActivity("model rebuild");
 
@@ -1396,10 +1419,11 @@ bool ApplyWeaponSkin(uintptr_t weaponEnt, uintptr_t pawn, const TargetSkin& t,
     }
 
     // Charm: Lootline's upkeep. CS2 builds the charm from the item's keychain
-    // attribute (written with the view above); the world model build also hangs a
-    // rigid copy on the gun, so every charm entity is taken off the gun and the
-    // first-person addon is rebuilt from the attribute - once, not every tick.
-    Charm::Upkeep(weaponEnt, hudWeapon, attachments);
+    // attribute (written with the view above). The build also hangs a static
+    // "keychain" addon on the viewmodel, which is the second charm beside the
+    // one that swings, so the addon is removed after every build and the
+    // simulated charm is left alone.
+    Charm::Upkeep(weaponEnt, hudWeapon, attachments, modelBuiltThisPass);
 
     // StatTrak: the counter the game keeps lives on the weapon, not on the saved
     // instance. Hand it back to the Armory instance so loading the same skin
