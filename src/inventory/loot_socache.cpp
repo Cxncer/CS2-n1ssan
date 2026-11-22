@@ -52,6 +52,10 @@ namespace
     constexpr int ATTR_PAINT_WEAR = 8;
     constexpr int ATTR_KILL_EATER = 80;
     constexpr int ATTR_KILL_EATER_TYPE = 81;
+    // An unsealed graffiti's charges ("sprays remaining") and colour variant
+    // ("spray tint id", 1-19), both stored as integers.
+    constexpr int ATTR_SPRAYS_REMAINING = 232;
+    constexpr int ATTR_SPRAY_TINT = 233;
 
     CreateTypeCacheFn g_createTypeCache = nullptr;
     uint32_t g_soCacheOffset = 0;
@@ -577,6 +581,53 @@ namespace LootSOCache
             }
         }
 
+        // A music kit is identified by "music id" (166); without it the item
+        // exists in the inventory but names no anthem.
+        if (req.musicKit > 0)
+        {
+            const float musicId = FloatFromBits(static_cast<uint32_t>(req.musicKit));
+            // Not fatal: a schema that does not name this attribute must not
+            // abort the whole inventory projection. The kit is then listed
+            // without its anthem, and the next reload retries it.
+            if (!LootSchema::SetAttributeFloatByName(item, "music id", musicId))
+                Log("[socache] music id=%d not written (attribute not in this schema)",
+                    req.musicKit);
+        }
+
+        // An unsealed graffiti without charges is an item CS2 will not let the
+        // player equip: the spray wheel only offers a "spray0" graffiti that
+        // still has uses left. "sprays remaining" (232) is an integer stored as
+        // the raw 32 bits, like "kill eater", so it goes through the int setter.
+        if (req.spraysRemaining > 0)
+        {
+            if (!LootSchema::SetAttributeInt(item, ATTR_SPRAYS_REMAINING,
+                    req.spraysRemaining))
+                Log("[socache] sprays remaining=%d not written (attribute not in this schema)",
+                    req.spraysRemaining);
+        }
+
+        // The tint is what CS2 picks the card's image with: a tinted pattern's
+        // art is the kit material suffixed with the tint index ("..._9").
+        // Without it the item lists with no preview, so a tint that cannot be
+        // written is worth a line of its own.
+        if (req.sprayTint > 0)
+        {
+            if (!LootSchema::SetAttributeInt(item, ATTR_SPRAY_TINT, req.sprayTint))
+                Log("[socache] spray tint=%d not written (attribute not in this schema)",
+                    req.sprayTint);
+        }
+
+        if (req.definition == 1349)
+        {
+            Log("[socache] graffiti kit=%d tint=%d charges=%d def=%u",
+                req.stickerKit, req.sprayTint, req.spraysRemaining, req.definition);
+        }
+
+        if (req.definition == 1314)
+        {
+            Log("[socache] music kit id=%d def=%u", req.musicKit, req.definition);
+        }
+
         // Same for the charm: the pair of attributes is what makes the keychain
         // resolve on the card.
         if (req.keychain > 0)
@@ -622,7 +673,9 @@ namespace LootSOCache
                 req.definition, text);
         }
 
-        if (req.definition == 1209 || req.definition == 1355)
+        if (req.definition == 1209 || req.definition == 1355 ||
+            req.definition == 1349 || req.definition == 1348 ||
+            req.definition == 1314)
             LogAttachmentIdentity(item, req.definition, req.stickerKit,
                                   req.keychain);
 

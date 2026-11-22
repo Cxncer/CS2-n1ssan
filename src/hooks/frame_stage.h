@@ -7,3 +7,12 @@
 // Install the FSN vtable hook. Called once from InjectThread.
 // Returns true on success. Logs all failures.
 bool InstallFSNHook();
+
+// True while a team change is still settling: the game is re-creating the
+// player model, the gloves and the first-person viewmodel, so anything that
+// swaps a model has to wait.
+bool TeamSwitchSettling();
+
+// Names the next game call in the log while a team change is recent, so a crash
+// that leaves no dump still names the call it died in. Silent otherwise.
+void TraceSwitch(const char* what);

@@ -29,6 +29,7 @@ namespace ArmoryInventory
         std::string     instanceId;
         uint16_t        definition = 0;
         int             stickerKit = 0;
+        int             sprayTint = 0;   // a graffiti's colour variant (0 = default)
         int             keychain = 0;
         int             keychainSeed = 0;
         int             keychainSticker = 0;   // a Slab's sealed sticker

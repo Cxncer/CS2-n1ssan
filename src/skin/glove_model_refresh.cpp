@@ -1,5 +1,6 @@
 #include "skin/glove_model_refresh.h"
 #include "skin/glove_schema.h"
+#include "hooks/frame_stage.h"
 
 #include <Windows.h>
 #include <Psapi.h>
@@ -1018,6 +1019,17 @@ namespace GloveModelRefresh
     void OnRenderEnd(void* pawn)
     {
         InitializeFunctions();
+
+        // A team change re-creates the pawn's model. The two-render-end swap
+        // below renames that model and restores it a frame later, which is a
+        // rename of a model the game is already replacing. Dropped here, and
+        // re-requested by the agent pass once the window ends.
+        if (TeamSwitchSettling())
+        {
+            ResetSwap();
+            g_request.store(0, std::memory_order_release);
+            return;
+        }
 
         std::int32_t health = 0;
         std::uint8_t team = 0;

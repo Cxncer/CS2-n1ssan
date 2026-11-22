@@ -51,6 +51,10 @@ namespace ArmoryStatus
     // Health of the schema name sweep for this CS2 build. `coreTrusted` is false
     // when the schema answered for most fields but not the econ ones the paint
     // writes land on, which is when the runtime refuses to write at all.
+    // Names of the schema fields the resolver could not find, comma separated.
+    // "none" when every field resolved.
+    void NoteUnresolvedOffsetNames(const char* names);
+
     void NoteOffsets(int checked, int applied, int unresolved,
                      bool coreTrusted, bool spawnTime);
 

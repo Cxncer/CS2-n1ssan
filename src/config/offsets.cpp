@@ -94,6 +94,33 @@ namespace
     int g_unresolvedFields = 0;
     int g_appliedFields = 0;
 
+    // Labels of the fields the schema could not resolve. The count alone said
+    // "1 unresolved" and left every reader to guess which one; the digest now
+    // names it, because the single unresolved field is usually the only reason
+    // one feature silently does nothing.
+    char g_unresolvedList[240]{};
+
+    void AppendUnresolvedLabel(const char* label)
+    {
+        if (!label || !*label)
+            return;
+
+        const size_t length = std::strlen(g_unresolvedList);
+        const size_t labelLength = std::strlen(label);
+        const size_t needed = labelLength + (length ? 2 : 1);
+
+        if (length + needed >= sizeof(g_unresolvedList))
+            return;
+
+        if (length)
+        {
+            g_unresolvedList[length] = ',';
+            g_unresolvedList[length + 1] = '\0';
+        }
+
+        strcat_s(g_unresolvedList, sizeof(g_unresolvedList), label);
+    }
+
     // Resolves one row, trying each candidate class in turn.
     bool ResolveFieldOffset(const SchemaField& field, uintptr_t& offset)
     {
@@ -141,6 +168,7 @@ namespace
             if (!ResolveFieldOffset(field, offset))
             {
                 ++unresolved;
+                AppendUnresolvedLabel(field.label);
                 if (IsCoreSchemaField(field.label))
                     ++coreUnresolved;
                 continue;
@@ -162,6 +190,7 @@ namespace
 
         g_unresolvedFields = unresolved;
         g_appliedFields = applied;
+        ArmoryStatus::NoteUnresolvedOffsetNames(g_unresolvedList);
         g_coreTrusted = applied == 0 || coreUnresolved == 0;
 
         Log("[off] schema fields: %d checked, %d applied by name, %d corrected, %d unresolved (core unresolved=%d, trusted=%d)",

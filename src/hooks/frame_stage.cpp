@@ -17,6 +17,7 @@
 #include "sdk/entities.h"
 #include "sdk/functions.h"
 #include "sdk/handles.h"
+#include "sdk/item_view.h"
 #include "skin/dispatch.h"
 #include "skin/gloves.h"
 #include "skin/stattrak_counter.h"
@@ -75,6 +76,58 @@ static constexpr uint64_t APPLY_DEAD_QUIET_MS = 400;
 // the engine is destroying them.
 static constexpr uint64_t DEATH_SETTLE_MS = 5000;
 static uint64_t g_deathSettleUntilMs = 0;
+
+// A team change replaces the player model, the gloves and the first-person
+// viewmodel in one go. The 20:56 session (v4.6) ended two frames after the
+// switch to T, right after the T glove paint wiped the weapon model cache: the
+// pass that followed would have rebuilt every weapon's material on a viewmodel
+// CS2 was still swapping. Model work is therefore held until the game has
+// finished its own swap. Nothing is visible for those 1.5 s - the switch
+// happens on the team intro, and the skins arrive right after it.
+static constexpr uint64_t TEAM_SETTLE_MS = 3000;
+static uint64_t g_teamSettleUntilMs = 0;
+static int32_t  g_lastTeamNum = -1;
+
+// Feeds the local pawn's team into the settle window and answers whether model
+// work (gloves, agent, weapon materials) is still held.
+static bool TeamModelWorkHeld(uintptr_t pawn, uint64_t now)
+{
+    uint8_t team = 0;
+
+    if (pawn > 0x10000 &&
+        SafeReadU8(pawn + g_off.PAWN_TeamNum, team) &&
+        (team == 2 || team == 3))
+    {
+        if (g_lastTeamNum >= 0 && static_cast<int32_t>(team) != g_lastTeamNum)
+        {
+            g_teamSettleUntilMs = now + TEAM_SETTLE_MS;
+
+            Log("[team-switch] team %d -> %d: model work held for %llu ms",
+                static_cast<int>(g_lastTeamNum), static_cast<int>(team),
+                static_cast<unsigned long long>(TEAM_SETTLE_MS));
+        }
+
+        g_lastTeamNum = static_cast<int32_t>(team);
+    }
+
+    return now < g_teamSettleUntilMs;
+}
+
+bool TeamSwitchSettling()
+{
+    return GetTickCount64() < g_teamSettleUntilMs;
+}
+
+void TraceSwitch(const char* what)
+{
+    // The settle window and a few seconds after it: that is the span every crash
+    // so far happened in, and the only span that can afford the extra lines.
+    if (g_teamSettleUntilMs != 0 &&
+        GetTickCount64() < g_teamSettleUntilMs + 5000)
+    {
+        Log("[trace] %s", what ? what : "?");
+    }
+}
 
 // A death only counts as a match death while the player was in a match this
 // recently. Without this window the guard armed at the main menu too, where the
@@ -423,15 +476,18 @@ static void __fastcall FsnDetour(void* pClient, int stage)
         const uintptr_t glovePawn = MatchdetectGetPawn();
         int32_t gloveHp = 0;
 
+        const bool modelWorkHeld = TeamModelWorkHeld(glovePawn, NowMs());
+
         if (glovePawn > 0x10000 &&
             SafeReadI32(glovePawn + PAWN_OFF_HEALTH, gloveHp))
         {
             // Called while dead too: RunGloves returns on zero health but records
             // the death, which is how the next alive frame is recognised as a
             // respawn (the spawn-time field cannot be used for that here).
-            RunGloves(glovePawn);
+            if (!modelWorkHeld)
+                RunGloves(glovePawn);
 
-            if (gloveHp > 0)
+            if (gloveHp > 0 && !modelWorkHeld)
             {
                 // A glove re-apply that keeps the same glove definition does not
                 // change the pawn's skeleton, so every weapon/HUD model is still
@@ -646,10 +702,19 @@ static void __fastcall FsnDetour(void* pClient, int stage)
             g_lastApplyMs = 0;
             g_eagerUntilMs = g_eagerUntilMs > now ? g_eagerUntilMs : now + EAGER_WINDOW_MS;
 
+            // A new pawn is a new round, a new match or a map load - not a team
+            // switch. Forgetting the last team here is what keeps the first
+            // frame of the round from being read as "T -> CT" and holding all
+            // model work (gloves, agent, weapon materials) for
+            // TEAM_SETTLE_MS. That hold is for CS2 swapping the player model
+            // mid-round; at a round start it was the CT glove and the knife
+            // arriving a few seconds late.
+            g_lastTeamNum = -1;
+
             Log("[apply-cache] pawn reset: pawn=%p", (void*)pawn);
         }
     }
-    else if (g_lastModelCachePawn != 0)
+    else if (g_lastModelCachePawn != 0 && !matchDeath)
     {
         InvalidateWeaponModelCache();
         g_lastModelCachePawn = 0;
@@ -663,6 +728,10 @@ static void __fastcall FsnDetour(void* pClient, int stage)
         g_matchState = MatchState::IN_MATCH;
         g_lastApplyMs = 0;
         g_eagerUntilMs = now + EAGER_WINDOW_MS;
+
+        // Joined a match: whatever team was seen in the menu or the previous
+        // map is not a switch that CS2 has to settle for.
+        g_lastTeamNum = -1;
         Log("[match] FOUND pawn=0x%p hp=%d signOn=%d bg=%d connected=%d",
             (void*)pawn, hp, network.signOn, network.backgroundMap ? 1 : 0,
             connectedKnown ? connectedState : -999);
@@ -740,6 +809,14 @@ static void __fastcall FsnDetour(void* pClient, int stage)
     // exception, right after the pawn died.
     const bool deathSettling = now < g_deathSettleUntilMs;
 
+    // In a match, dead: `inMatch` is false the moment the pawn dies (the network
+    // heuristic requires a live pawn), but the session is still the one the
+    // state machine calls IN_MATCH. Work that is only safe outside a match must
+    // not treat the death camera as "outside a match".
+    const bool deadButStillInMatch =
+        !inMatch && g_matchState == MatchState::IN_MATCH &&
+        pawnAliveKnown && pawnIsAlive == 0 && pawn > 0x10000;
+
     {
         static bool loggedDeathGuard = false;
 
@@ -754,7 +831,8 @@ static void __fastcall FsnDetour(void* pClient, int stage)
         }
     }
 
-    if (!inMatch && runtimeMode == RuntimeMode::Armory && !deathSettling)
+    if (!inMatch && !deadButStillInMatch &&
+        runtimeMode == RuntimeMode::Armory && !deathSettling)
     {
         // This block runs on every frame the game calls us, and it reads every
         // managed item and its view. The inventory screen opened on a background
@@ -817,9 +895,7 @@ static void __fastcall FsnDetour(void* pClient, int stage)
     // screen, and those screens still render the weapons. While the match is
     // still considered active, keep the apply pass running so the entities and
     // their models keep the fake skins instead of reverting to the real ones.
-    const bool deadButStillInMatch =
-        !inMatch && g_matchState == MatchState::IN_MATCH &&
-        pawnAliveKnown && pawnIsAlive == 0 && pawn > 0x10000;
+    // (deadButStillInMatch is decided above, before the inventory work.)
 
     // Death tears the pawn's weapons, their keychain entities and the viewmodel
     // down. Charm upkeep calls CS2's own entity creator and remover, and doing
@@ -832,6 +908,14 @@ static void __fastcall FsnDetour(void* pClient, int stage)
     // network reports the session ended; do not run the apply pass on a pawn
     // that may already be gone.
     if (!inMatch && !deadButStillInMatch)
+        return;
+
+    // A team switch re-creates the player model, the gloves and the viewmodel at
+    // once. The 20:56 session (v4.6) ended two frames after the switch to T, on
+    // the pass that followed the glove change wiping the weapon cache. The pass
+    // is held for TEAM_SETTLE_MS so CS2 finishes its own swap first; the team
+    // intro is on screen, so nothing that matters is skipped.
+    if (TeamModelWorkHeld(pawn, now))
         return;
 
     // A dead pawn used to cost a full pass over every weapon on the exact frame
@@ -899,8 +983,8 @@ static void __fastcall FsnDetour(void* pClient, int stage)
         {
             lastEagerLogMs = now;
 
-            Log("[apply-eager] full sweep: every equipped weapon written (budget %llu ms, %d builds per window)",
-                static_cast<unsigned long long>(APPLY_PASS_BUDGET_EAGER_MS), 4);
+            Log("[apply-eager] full sweep: every equipped weapon written (pass budget %llu ms, no build window)",
+                static_cast<unsigned long long>(APPLY_PASS_BUDGET_EAGER_MS));
         }
     }
 
@@ -1018,6 +1102,52 @@ static void __fastcall FsnDetour(void* pClient, int stage)
         const uint64_t budgetMs =
             eager ? APPLY_PASS_BUDGET_EAGER_MS : APPLY_PASS_BUDGET_MS;
 
+        // Round start: the knife first.
+        //
+        // The cursor below spreads a sweep over several passes and the knife is
+        // one weapon among them, so a fresh loadout left it behind the rifles and
+        // the default knife stayed in the hands for about a second ("the knife
+        // takes a second to render when the match starts"). During the eager
+        // window the knife is written before the budgeted sweep: it is one model
+        // swap and one material, and it is the weapon the round starts with.
+        if (eager)
+        {
+            for (int32_t i = 0; i < wCount; ++i)
+            {
+                uint32_t h = 0;
+
+                if (!SafeReadU32(wData + i * 4, h) ||
+                    !HandleValid(h) ||
+                    h == activeHandle)
+                    continue;
+
+                const uintptr_t weapon = GetEntityByHandle(h);
+
+                if (!weapon)
+                    continue;
+
+                const uintptr_t view = GetWeaponItem(weapon);
+                uint16_t knifeDef = 0;
+
+                if (!view ||
+                    !SafeReadU16(view + g_off.EIV_ItemDefIndex, knifeDef) ||
+                    !IsKnifeDefinition(knifeDef))
+                    continue;
+
+                __try
+                {
+                    if (ProcessWeapon(weapon, pawn))
+                        didUpdate = true;
+                }
+                __except (1)
+                {
+                    Log("[apply] exception eager knife");
+                }
+
+                break;
+            }
+        }
+
         bool stoppedEarly = false;
 
         for (int32_t n = 0; n < wCount; ++n)
@@ -1081,79 +1211,70 @@ static void __fastcall FsnDetour(void* pClient, int stage)
         }
     }
 
-    // Match Lootline: the shared regenerate pass is driven by weapon/knife
-    // identity changes. Glove rebuilding is handled by its own engine flag.
-    if (didUpdate && pRegenerateSkins && ApplyBuildFaulted())
+    // Lootline calls the game's own regenerate pass after any update
+    // (skinchanger.cpp:1508: `if (didUpdate) SkinApplication::RegenerateSkins();`)
+    // and its skins hold. This runtime had removed the call because a pass that
+    // ran it every frame measured 1.3-1.5 s; that measurement was of a per-frame
+    // call, not of one per apply.
+    //
+    // It is what makes the material survive: BuildModernSkin builds the composite
+    // for the model this pass, and CS2 replaces it again from the item it synced
+    // when its own data update lands. RegenerateSkins is CS2 rebuilding the
+    // weapon materials from the fallback paint fields we wrote - the same values
+    // - so the fake skin is what its next rebuild produces. Without it the gun
+    // holds the fake material only until the game's next update, which is the
+    // "renders one time in ten" report.
+    //
+    // Only when this pass actually wrote a weapon (`didUpdate` is
+    // ApplyWeaponSkin's identityChanged) and never on top of a half-built
+    // material (ApplyBuildFaulted), which is what faulted during a match start.
+    // Throttled to one call a second so a gun that keeps losing its item cannot
+    // put the pass on the render thread every frame.
+    // Never while the round is being torn down: RegenerateSkins walks every econ
+    // entity in the level, and after a death those are exactly the entities CS2
+    // is destroying. The respawn sweep writes the guns again and the next live
+    // pass regenerates them.
+    if (didUpdate && pRegenerateSkins && !ApplyBuildFaulted() &&
+        !pawnDead && !deadButStillInMatch && NowMs() >= g_deathSettleUntilMs)
     {
-        // A material build faulted on this pass. Handing the half-built item to
-        // RegenerateSkins is what faulted the client, so wait for a clean pass.
-        Log("[skin-regenerate] skipped: weapon material build faulted");
-    }
-    else if (didUpdate && pRegenerateSkins && !pawnDead &&
-             now >= g_deathSettleUntilMs)
-    {
-        // The shared regenerate is the expensive half of a pass: it walks every
-        // econ entity in the level and rebuilds its material. It was measured at
-        // 85 ms for two weapons and 1562 ms for three, and the pass called it
-        // whenever one weapon's view had been rewritten - inside an eager window
-        // that is every 150 ms, so a round start paid it over and over and the
-        // frame budget it was supposed to protect was gone.
-        //
-        // The weapon's own material is built per weapon above (world and HUD),
-        // so one call a second is enough for the item names and descriptions it
-        // refreshes. The throttle line is written once per ten seconds, not per
-        // skipped pass.
-        constexpr uint64_t REGEN_MIN_INTERVAL_MS = 1000;
-        static uint64_t lastRegenMs = 0;
+        static uint64_t lastRegenerateMs = 0;
 
-        const bool throttled =
-            lastRegenMs != 0 && now - lastRegenMs < REGEN_MIN_INTERVAL_MS;
-
-        if (throttled)
+        if (lastRegenerateMs == 0 || now - lastRegenerateMs >= 1000)
         {
-            static uint64_t lastThrottleLogMs = 0;
+            lastRegenerateMs = now;
 
-            if (now - lastThrottleLogMs >= 10000)
-            {
-                lastThrottleLogMs = now;
-                Log("[skin-regenerate] throttled: last run %llu ms ago",
-                    static_cast<unsigned long long>(now - lastRegenMs));
-            }
-        }
-        else
-        {
-            lastRegenMs = now;
+            const uint64_t regenStartMs = NowMs();
+            bool regenFaulted = false;
 
-            Log("[skin-regenerate] calling pRegenerateSkins weaponChanged=%d",
-                (int)didUpdate);
+            SetActivity("regenerate skins");
 
             __try
             {
                 pRegenerateSkins();
-
-                Log("[skin-regenerate] returned");
-
             }
             __except (1)
             {
-                Log("[skin-regenerate] exception");
+                regenFaulted = true;
             }
-        }
-    }
 
-    if (didUpdate && pRegenerateSkins && (pawnDead || now < g_deathSettleUntilMs))
-    {
-        static uint64_t lastDeathSkipLogMs = 0;
+            const uint64_t regenMs = NowMs() - regenStartMs;
 
-        if (now - lastDeathSkipLogMs >= 10000)
-        {
-            lastDeathSkipLogMs = now;
-            Log("[skin-regenerate] skipped: pawn is dead or just respawned");
+            if (regenFaulted)
+            {
+                Log("[apply-regen] RegenerateSkins faulted; the next pass builds again");
+            }
+            else if (regenMs >= 20)
+            {
+                Log("[perf] RegenerateSkins took %llu ms (weapons=%d)",
+                    static_cast<unsigned long long>(regenMs), wCount);
+            }
+
+            SetActivity("apply pass");
         }
     }
 
     // Turns the next "the game hitched when a round started" report into a
-    // number: what the pass cost, and how much of it the shared regenerate was.
+    // number: what the pass cost, and how much of it the weapon writes were.
     {
         const uint64_t totalMs = NowMs() - passStartMs;
 
@@ -1164,9 +1285,9 @@ static void __fastcall FsnDetour(void* pClient, int stage)
             if (now - lastSlowPassLogMs >= 2000)
             {
                 lastSlowPassLogMs = now;
-                Log("[perf] apply pass took %llu ms (weapons=%d deferred=%d changed=%d regen=%d)",
+                Log("[perf] apply pass took %llu ms (weapons=%d deferred=%d changed=%d)",
                     static_cast<unsigned long long>(totalMs), wCount, deferredWeapons,
-                    didUpdate ? 1 : 0, (didUpdate && pRegenerateSkins) ? 1 : 0);
+                    didUpdate ? 1 : 0);
             }
         }
     }

@@ -50,6 +50,10 @@ namespace
 
     OffsetReport g_offsets;
 
+    // Names of the schema fields the offset resolver could not find, comma
+    // separated. Empty when every field resolved.
+    char g_unresolvedNames[240]{};
+
     bool g_dirty = false;
     bool g_anySlot = false;
     uint64_t g_lastWriteMs = 0;
@@ -232,6 +236,13 @@ namespace ArmoryStatus
         g_dirty = true;
     }
 
+    void NoteUnresolvedOffsetNames(const char* names)
+    {
+        CopyText(g_unresolvedNames, sizeof(g_unresolvedNames),
+            (names && *names) ? names : "none");
+        g_dirty = true;
+    }
+
     void NoteOffsets(int checked, int applied, int unresolved,
                      bool coreTrusted, bool spawnTime)
     {
@@ -308,11 +319,13 @@ namespace ArmoryStatus
             g_attachReadbackFailures, g_skippedEntities, g_drift);
         body += counters;
 
-        char offsets[192]{};
+        char offsets[384]{};
         sprintf_s(offsets, sizeof(offsets),
             ",\"offsets\":{\"checked\":%d,\"applied\":%d,"
-            "\"unresolved\":%d,\"coreTrusted\":%s,\"spawnTime\":%s}",
+            "\"unresolved\":%d,\"unresolvedNames\":\"%s\","
+            "\"coreTrusted\":%s,\"spawnTime\":%s}",
             g_offsets.checked, g_offsets.applied, g_offsets.unresolved,
+            g_unresolvedNames[0] ? g_unresolvedNames : "none",
             g_offsets.coreTrusted ? "true" : "false",
             g_offsets.spawnTime ? "true" : "false");
         body += offsets;
@@ -333,10 +346,11 @@ namespace ArmoryStatus
             }
 
             Log("[session-digest] slots=%d painted=%d drift=%u restores=%u "
-                "timeouts=%u readback=%u skipped=%u offsetsUnresolved=%d build=%s",
+                "timeouts=%u readback=%u skipped=%u offsetsUnresolved=%d offsets=[%s] build=%s",
                 g_slotCount, painted, g_drift, g_restores, g_restoreTimeouts,
                 g_attachReadbackFailures, g_skippedEntities,
-                g_offsets.unresolved, BuildId());
+                g_offsets.unresolved,
+                g_unresolvedNames[0] ? g_unresolvedNames : "none", BuildId());
         }
 
         if (WriteDocument(body))

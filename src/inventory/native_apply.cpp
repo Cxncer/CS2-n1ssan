@@ -27,6 +27,7 @@
 #include "inventory/hde64.h"
 
 #include "diagnostics/log.h"
+#include "hooks/local_spray.h"
 #include "hooks/minhook_dynamic.h"
 #include "inventory/armory_inventory.h"
 #include "inventory/attachments.h"
@@ -621,6 +622,10 @@ namespace NativeApply
         {
             if (!g_inJobs.load())
                 ProcessJobs();
+
+            // The Armory's own graffiti: the decals this runtime placed are kept
+            // on the walls (and taken down when they fade) from the same frame.
+            LocalSpray::MainThreadTick();
 
             if (g_originalRunFrame)
                 g_originalRunFrame(engine);

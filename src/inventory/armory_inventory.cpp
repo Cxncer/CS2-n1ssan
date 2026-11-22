@@ -44,6 +44,12 @@ namespace
                 int statTrak = -1; // -1 none, otherwise the saved kill count (0 = none yet)
         std::string customName; // nametag, empty when none
         int         stickerKit = 0;
+        // A music kit's anthem ("music id"); 0 for every other item.
+        int         musicKit = 0;
+        // An unsealed graffiti's charges ("sprays remaining") and colour
+        // variant ("spray tint id", 1-19; 0 = the pattern's default colour).
+        int         spraysRemaining = 0;
+        int         sprayTint = 0;
         int         keychain = 0;
         int         keychainSeed = 0;
         int         keychainSticker = 0;   // a Slab's sealed sticker
@@ -342,6 +348,9 @@ namespace
             if (ExtractNumber(object, "seed", number)) item.seed = static_cast<int>(number);
             if (ExtractNumber(object, "float", number)) item.wear = static_cast<float>(number);
             if (ExtractNumber(object, "stickerKit", number)) item.stickerKit = static_cast<int>(number);
+            if (ExtractNumber(object, "musicKit", number)) item.musicKit = static_cast<int>(number);
+            if (ExtractNumber(object, "spraysRemaining", number)) item.spraysRemaining = static_cast<int>(number);
+            if (ExtractNumber(object, "sprayTint", number)) item.sprayTint = static_cast<int>(number);
             if (ExtractNumber(object, "keychain", number)) item.keychain = static_cast<int>(number);
             if (ExtractNumber(object, "keychainSeed", number)) item.keychainSeed = static_cast<int>(number);
             if (ExtractNumber(object, "keychainSticker", number)) item.keychainSticker = static_cast<int>(number);
@@ -362,6 +371,10 @@ namespace
             if (ExtractString(object, "customName", customName))
                 item.customName = customName;
 
+            // The projection owns the item's shape: graffiti arrive already
+            // unsealed (1349) with their pattern, tint and charges, music kits
+            // with their anthem. Nothing is rewritten here, so this reader stays
+            // a plain reader.
             item.id = StableIdFor(item);
             out.push_back(std::move(item));
         }
@@ -846,15 +859,18 @@ namespace ArmoryInventory
 
             // A weapon has to keep its SOCache object, because CS2's native
             // Loadout points at it, so it is retained and only its attributes are
-            // synced. A sticker or charm is only ever referenced by the gun it is
-            // attached to, and CS2 draws its card once, when the item arrives:
-            // patching the kit onto an item the cache already held leaves the card
-            // blank (the inventory then showed every sticker and charm empty). So
-            // those two are replaced instead, which hands CS2 a fresh item carrying
-            // its kit from the start - the same result as removing one in the
-            // Armory and adding it again.
+            // synced. A sticker, charm, graffiti or music kit is only ever
+            // referenced by the gun it is attached to (or the slot it is equipped
+            // in), and CS2 draws its card and resolves its kit once, when the item
+            // arrives: patching the kit onto an item the cache already held leaves
+            // the card blank (the inventory then showed every sticker and charm
+            // empty, and a graffiti from an earlier build stayed sealed). So those
+            // are replaced instead, which hands CS2 a fresh item carrying its kit
+            // from the start - the same result as removing one in the Armory and
+            // adding it again.
             if (LootSOCache::HasItem(item.id) &&
-                (item.definition == 1209 || item.definition == 1355))
+                (item.definition == 1209 || item.definition == 1355 ||
+                 item.definition == 1349 || item.definition == 1314))
             {
                 if (LootSOCache::Remove(item.id))
                 {
@@ -905,6 +921,9 @@ namespace ArmoryInventory
             request.wear = item.wear;
             request.statTrak = item.statTrak;
             request.stickerKit = item.stickerKit;
+            request.musicKit = item.musicKit;
+            request.spraysRemaining = item.spraysRemaining;
+            request.sprayTint = item.sprayTint;
             request.keychain = item.keychain;
             request.keychainSeed = item.keychainSeed;
             request.keychainSticker = item.keychainSticker;
@@ -1001,6 +1020,7 @@ namespace ArmoryInventory
             managed.instanceId = item.instanceId;
             managed.definition = item.definition;
             managed.stickerKit = item.stickerKit;
+            managed.sprayTint = item.sprayTint;
             managed.keychain = item.keychain;
             managed.keychainSeed = item.keychainSeed;
             managed.keychainSticker = item.keychainSticker;

@@ -330,9 +330,14 @@ namespace
         std::unordered_set<std::uint16_t> definitions;
         for (const auto& item : items)
         {
-            // Sticker and keychain tool definitions are inventory consumables,
-            // not loadout slots.
-            if (item.definition == 1209 || item.definition == 1355)
+            // Sticker, keychain, graffiti and music kit definitions are
+            // inventory consumables, not loadout slots. Graffiti are projected
+            // unsealed (1349; 1348 is the sealed form), and they and music kits
+            // (1314) are equipped from the game's own inventory, so asking the
+            // Loadout for a slot would only log a miss.
+            if (item.definition == 1209 || item.definition == 1355 ||
+                item.definition == 1349 || item.definition == 1348 ||
+                item.definition == 1314)
                 continue;
             if (item.definition != 0)
                 definitions.insert(item.definition);

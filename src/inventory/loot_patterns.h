@@ -41,6 +41,30 @@ namespace LootPatterns
     // RebuildHudKeychainAddon).
     inline constexpr const char* FindHudKeychainAddon = "48 89 5C 24 18 57 41 56 41 57 48 83 EC 20 49 8B F9 45 8B F0 45 33 C9 4C 8B FA 48 8B D9 E8";
     inline constexpr const char* RemoveHudKeychainAddon = "48 83 EC 28 48 85 C9 0F 84 ? ? ? ? 48 8B 51 10 8B 42 30 0F BA E0 0B 73 07 C1 E8";
+    // ---- graffiti spray (Lootline 1.5.5, source/patterns.h) ----
+    // The spray wheel's "spray": ecx is the slot 0-3, it is what sends the server
+    // a spray of the graffiti in that slot. Hooked so an Armory graffiti is drawn
+    // locally instead of being sent to a server that does not know the item.
+    inline constexpr const char* SprayAction = "40 55 57 48 8D 6C 24 E8 48 81 EC 18 01 00 00 8B F9 E8 ? ? ? ? 48 8B 88 ? ? ? ? 48 85 C9 0F 84";
+    // GetSprayApplicationError's check: (pawn, CGameTrace* out, Vector* forward
+    // out, Vector* left out) - null means the spot the player looks at can hold a
+    // spray, and the trace carries the spray point and the wall normal.
+    inline constexpr const char* SprayCheck = "48 8B C4 48 89 58 10 48 89 70 18 48 89 78 20 55 48 8D A8 ? ? ? ? 48 81 EC ? ? ? ? 4C 89 70 08 49 8B F1 4D 8B F0 48 8B DA";
+    // CPlayerSprayDecalRenderHelper: SetKit / Place / Release. SetKit loads
+    // materials/decals/sprays/<kit>.vtex, Place draws (and moves) the decal in the
+    // world - the game calls it every frame for its own graffiti.
+    inline constexpr const char* SpraySetKit = "48 89 5C 24 10 56 48 81 EC E0 01 00 00 8B F2 48 8B D9 3B 11 0F 84";
+    inline constexpr const char* SprayPlace = "48 8B C4 48 89 48 08 55 53 56 57 41 57 48 8D A8 ? ? ? ? 48 81 EC ? ? ? ? 80 79 28 00 49 8B D9 49 8B F8 48 8B F2";
+    inline constexpr const char* SprayRelease = "48 89 5C 24 08 57 48 83 EC 20 48 8B 51 20 33 FF 48 8B D9 48 85 D2 74 ? 48 8B 0D";
+    // mov rax, [rip + disp32]: the variable holding the game's globals pointer,
+    // the clock Place compares a decal's creation time with.
+    inline constexpr const char* SprayClock = "48 8B 05 ? ? ? ? 45 0F 28 ? F3 45 0F 10 ? 04 F3 0F 10 ? 30 41 0F 2F";
+    // The response rules' level shutdown (Lootline 1.5.5: AgentRulesLevelShutdown).
+    // It runs while the world still exists, unlike the world's own teardown, so
+    // the graffiti decals have to come down here - after it the scene system
+    // deletes their scene objects and releasing one then trips
+    // CScenSystem::DeleteSceneObject's !pObj->IsDeleted() assert.
+    inline constexpr const char* LevelShutdown = "48 89 5C 24 ? 55 48 83 EC 20 8B 41 ? 48 8B D9 83 E8 01 48 89 7C 24 ? 48 63 F8 BD FF FF FF FF";
     // The Game Coordinator reply handler that builds CS2's "item customization"
     // event. Every field of the event is read from the instructions after it - see
     // native_apply.cpp (ResolveNotifier).

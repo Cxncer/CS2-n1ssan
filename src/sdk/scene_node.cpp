@@ -9,8 +9,9 @@
 #include "config/offsets.h"
 #include "memory/access.h"
 #include "diagnostics/log.h"
+#include "inventory/engine_schema_diagnostic.h"
 
-// Set by ResolveFunctions() — the two schema-resolved offsets for the
+// Set by ResolveFunctions() ï¿½ the two schema-resolved offsets for the
 // model chain. Both currently hardcoded in functions.cpp, exposed here
 // via extern.
 extern uintptr_t g_off_CSkeleton_modelState;
@@ -65,6 +66,56 @@ void SetMeshGroup(uintptr_t entity, uint64_t mask)
 
     __try { pSetMeshGroupMask((void*)sceneNode, mask); }
     __except (1) {}
+}
+
+// Lootline's ReadMeshGroup (skin_application.cpp:264): the mask CS2 currently has
+// on the entity, read straight out of the model state. It exists so the mesh can
+// be checked before being set again - an old-model paint kit's mask is what CS2
+// restores on its own, and setting it on every pass without looking is one write
+// too many on a gun that already has the right mesh.
+//
+// 0 means the mask could not be read: the scene node, the skeleton or the
+// schema field is missing. Callers must treat it as unknown and leave the entity
+// alone rather than as a mask that is wrong, or a build without the schema field
+// would rewrite the mesh on every pass.
+uint64_t ReadMeshGroupMask(uintptr_t entity)
+{
+    static uintptr_t maskOffset = 0;
+    static bool resolved = false;
+
+    if (!resolved)
+    {
+        resolved = true;
+
+        if (!ResolveEngineSchemaField("CModelState", "m_MeshGroupMask", maskOffset) ||
+            maskOffset == 0 || maskOffset >= 0x4000)
+        {
+            maskOffset = 0;
+            Log("[mesh-fit] CModelState->m_MeshGroupMask not resolved; the mesh is set without reading it back");
+        }
+        else
+        {
+            Log("[mesh-fit] CModelState->m_MeshGroupMask = 0x%X",
+                static_cast<unsigned int>(maskOffset));
+        }
+    }
+
+    if (!entity || !maskOffset)
+        return 0;
+
+    uintptr_t sceneNode = 0;
+    if (!SafeReadQword(entity + g_off.BE_GameSceneNode, sceneNode) || sceneNode < 0x10000)
+        return 0;
+
+    const uintptr_t skeleton = GetSkeletonInstance(sceneNode);
+    if (!skeleton)
+        return 0;
+
+    uint64_t mask = 0;
+    if (!SafeReadQword(skeleton + g_off_CSkeleton_modelState + maskOffset, mask))
+        return 0;
+
+    return mask;
 }
 
 bool BuildModernSkin(uintptr_t item, uintptr_t model)

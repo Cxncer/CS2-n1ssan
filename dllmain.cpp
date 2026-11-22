@@ -14,6 +14,7 @@
 #include "hooks/frame_stage.h"
 #include "hooks/knife_animation.h"
 #include "hooks/lineup.h"
+#include "hooks/local_spray.h"
 #include "inventory/schema_probe.h"
 #include "inventory/plan_a.h"
 #include "hooks/minhook_dynamic.h"
@@ -294,6 +295,13 @@ static DWORD WINAPI InjectThread(LPVOID)
     // position's items, not from weapon entities: dress ours as they are built.
     Lineup::Initialize();
 
+    // Graffiti: the spray decal is server-authoritative, so an Armory graffiti is
+    // drawn locally from CS2's own decal helper when the spray wheel fires
+    // (Lootline's local_spray, ported). A missing signature leaves the game's
+    // own spray path untouched.
+    //
+    LocalSpray::Initialize();
+
     // Both data sources can be watched while inactive. FrameStageNotify only
     // adopts the source that has been explicitly activated below.
     ArmoryInventory::StartWatcher();
@@ -378,6 +386,10 @@ BOOL APIENTRY DllMain(HMODULE hModule, DWORD reason, LPVOID)
     }
     else if (reason == DLL_PROCESS_DETACH)
     {
+        // Clear the session marker first: everything after it is teardown that
+        // may not run, and a clean close is exactly what the marker records.
+        LogMarkCleanExit();
+
         if (g_hMinHook) FreeLibrary(g_hMinHook);
     }
     return TRUE;

@@ -663,7 +663,7 @@ bool GloveIdentityChangedThisTick()
 // screens, and the character is built from this item.
 bool DressGloveItemView(std::uintptr_t item, std::uint16_t definition,
                         int paintKit, int seed, float wear,
-                        std::uint32_t accountId)
+                        std::uint32_t accountId, std::uint32_t idLow)
 {
     if (!item || !definition)
         return false;
@@ -689,6 +689,12 @@ bool DressGloveItemView(std::uintptr_t item, std::uint16_t definition,
     // write carries the local account id.
     if (accountId)
         SafeWriteU32(item + g_off.EIV_AccountID, accountId);
+
+    // A lineup item gets its own id (Lootline's way): the skin material manager
+    // otherwise treats it as your in-match item and its material waits for the
+    // in-match one, which these screens never draw.
+    if (idLow && g_off.EIV_ItemIDLow)
+        SafeWriteU32(item + g_off.EIV_ItemIDLow, idLow);
 
     return SafeWriteU32(item + g_off.EIV_ItemIDHigh, 0xFFFFFFFFu) &&
            SafeWriteU8(item + g_off.EIV_Initialized, 1) &&

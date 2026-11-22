@@ -5,6 +5,7 @@
 
 #include "config/offsets.h"
 #include "diagnostics/log.h"
+#include "hooks/frame_stage.h"
 #include "inventory/armory_inventory.h"
 #include "inventory/loadout.h"
 #include "inventory/runtime_mode.h"
@@ -98,6 +99,13 @@ void Agents::Run(std::uintptr_t pawn)
             !SafeReadFloat(pawn + g_off.PAWN_SpawnTime, spawnTime)))
         return;
 
+    // A team change re-creates the pawn's model. Swapping the agent in that
+    // window is where the 21:34 session (v4.8) died: the CT agent was applied
+    // two frames before the game closed. The marker is left unset, so the agent
+    // is applied as soon as the window ends.
+    if (TeamSwitchSettling())
+        return;
+
     TargetSkin target{};
     std::string detail;
     const ArmoryInventory::ArmoryMatch match =
@@ -131,6 +139,8 @@ void Agents::Run(std::uintptr_t pawn)
         LogAgent(AgentLogState::NoModel, team, target.defIndex, detail);
         return;
     }
+
+    TraceSwitch("agent model swap");
 
     if (!GloveModelRefresh::ApplyAgentModel(
             reinterpret_cast<void*>(pawn), model.c_str()))

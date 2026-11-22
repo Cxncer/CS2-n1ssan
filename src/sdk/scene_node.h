@@ -19,6 +19,11 @@ uintptr_t GetModelPtr(uintptr_t entity);
 // Set the entity's mesh group mask via CGameSceneNode::SetMeshGroupMask.
 void SetMeshGroup(uintptr_t entity, uint64_t mask);
 
+// Read the entity's current mesh group mask (CSkeletonInstance -> m_modelState ->
+// CModelState::m_MeshGroupMask). 0 when it cannot be read - callers must then
+// treat the mask as unknown, not as "1".
+uint64_t ReadMeshGroupMask(uintptr_t entity);
+
 // ---- BuildModernSkin wrapper ----
 
 // Call BuildModernSkin(item, model, 0, 2048, 0, 0, nullptr).

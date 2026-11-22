@@ -47,7 +47,10 @@ AttributeVector_t* GetAttributeVector(uintptr_t item);
 AttributeVector_t* GetNetworkedVector(uintptr_t item);
 
 // Clear the item's m_AttributeList (frees the underlying data with MemFree).
-void EconAttr_Remove(uintptr_t item);
+// Returns false when the list's header is not a CUtlVector on this build; the
+// view must then be left alone, because freeing it would free memory that is
+// not ours.
+bool EconAttr_Remove(uintptr_t item);
 
 // Populate a fresh m_AttributeList with paint/seed/wear/stattrak attributes and,
 // when given, the stickers / charm the item carries.

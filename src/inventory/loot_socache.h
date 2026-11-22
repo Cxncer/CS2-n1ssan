@@ -18,6 +18,14 @@ namespace LootSOCache
         float    wear;
         int      statTrak;  // -1 = none
         int      stickerKit = 0;
+        // A graffiti's spray pattern lives in "sticker slot 0 id" too; a music
+        // kit carries its anthem in "music id". An unsealed graffiti (1349)
+        // additionally needs charges, or CS2 offers nothing to equip, and the
+        // colour variant in "spray tint id" - CS2 builds the card's image from
+        // kit + tint, so a tinted graffiti without it shows no preview.
+        int      musicKit = 0;
+        int      spraysRemaining = 0;
+        int      sprayTint = 0;   // 1-19, 0 = the pattern's default colour
         int      keychain = 0;
         int      keychainSeed = 0;
         // A Sticker Slab's sealed sticker; 0 for every other charm.

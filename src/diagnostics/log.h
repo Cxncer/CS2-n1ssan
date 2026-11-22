@@ -5,8 +5,16 @@
 // Initialize console and file logging.
 void LogInit(const std::string& dllPath);
 
-// Standard diagnostic logging.
+// Standard diagnostic logging. Lines are buffered and written in batches; the
+// crash handler flushes the buffer before it appends its own line.
 void Log(const char* fmt, ...);
+
+// Writes whatever is still buffered to the session log.
+void LogFlush();
+
+// Removes the "session still open" marker. Called from DLL_PROCESS_DETACH so a
+// later session can tell a clean close from a crash or a forced kill.
+void LogMarkCleanExit();
 
 // Tracing that only runs when N1SSAN_DEBUG=1 is set in the environment.
 // The per-frame tags below ([hud-find], [pw], [apply], [attr-entry],
@@ -43,4 +51,9 @@ const char* StatusDirectoryPath();
 // faulting module and its offset, and what the runtime was doing. Written with
 // raw Win32 so it does not depend on the allocator, stdio or a lock a crashed
 // thread may still hold, and the exception is handed back to Windows unchanged.
+// A minidump is written beside the session log as well (n1ssan-crash-*.dmp),
+// carrying every thread's stack, so a once-a-match crash can be opened in a
+// debugger instead of guessed at. Also installs a first-chance handler that
+// names each distinct fault an __except would otherwise swallow, once per
+// code/address pair.
 void LogInstallCrashTrap();

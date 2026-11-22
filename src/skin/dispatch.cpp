@@ -219,9 +219,30 @@ bool ProcessWeapon(uintptr_t weaponEnt, uintptr_t pawn)
     {
         if (!IsOwnArmoryWeapon(weaponEnt, pawn))
         {
-            Log("[armory-apply] skipped non-owned weapon entity=%p def=%u",
-                (void*)weaponEnt, def);
-            ArmoryStatus::NoteSkippedEntity();
+            // The pass runs every 250 ms over the same weapons, so one line per
+            // tick per foreign gun filled the log (232 skips in one session).
+            // The line names the skip once per weapon view; the repeat count
+            // stays in [session-digest] because the entity is only counted the
+            // first time this view is seen skipped.
+            static std::unordered_map<uintptr_t, uintptr_t> g_lastSkipLogView;
+            static std::unordered_map<uintptr_t, uintptr_t> g_countedSkipView;
+
+            const bool firstForView = g_countedSkipView[weaponEnt] != view;
+
+            if (firstForView)
+                g_countedSkipView[weaponEnt] = view;
+
+            if (g_lastSkipLogView[weaponEnt] != view)
+            {
+                g_lastSkipLogView[weaponEnt] = view;
+                Log("[armory-apply] skipped non-owned weapon entity=%p view=%p def=%u "
+                    "(logged once per view; repeats only count in [session-digest])",
+                    (void*)weaponEnt, (void*)view, def);
+            }
+
+            if (firstForView)
+                ArmoryStatus::NoteSkippedEntity();
+
             return false;
         }
 

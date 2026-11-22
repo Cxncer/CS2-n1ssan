@@ -99,6 +99,7 @@ namespace
     int       g_beforeGlovePaintKit = 0;
     int       g_beforeGloveSeed = 0;
     float     g_beforeGloveWear = 0.0f;
+    uint32_t  g_beforeGloveIdLow = 0;
 
     // A built lineup character waiting for its gloves to be rebuilt. The glove
     // model is spawned by the game's glove routine, which the character's own
@@ -106,7 +107,9 @@ namespace
     struct GlovePending
     {
         uintptr_t character = 0;
+        uint32_t  characterHandle = 0;   // proves the character still exists
         uintptr_t gloveItem = 0;
+        uint32_t  idLow = 0;             // the lineup item id given to the gloves
         uint16_t  definition = 0;
         int       paintKit = 0;
         int       seed = 0;
@@ -249,6 +252,49 @@ namespace
         return -1;
     }
 
+    // A lineup character is a normal networked entity: its identity (+0x10)
+    // keeps the entity handle at +0x10. Reading that handle back out of the
+    // entity list is how the pass knows the character still exists. These
+    // screens end while the pending pass is still rebuilding gloves (round
+    // start, the match-end screen) and CS2 frees the character then; writing to
+    // the old pointer afterwards is what closed the game after the lineup.
+    uint32_t CharacterHandle(uintptr_t character)
+    {
+        uintptr_t identity = 0;
+        uint32_t handle = 0;
+
+        if (!character ||
+            !SafeReadQword(character + 0x10, identity) || identity < 0x10000 ||
+            !SafeReadU32(identity + 0x10, handle) || !HandleValid(handle))
+            return 0;
+
+        return handle;
+    }
+
+    bool CharacterAlive(uintptr_t character, uint32_t handle)
+    {
+        if (!character || !HandleValid(handle))
+            return false;
+
+        return GetEntityByHandle(handle) == character;
+    }
+
+    // Every dressed lineup item gets its own item id (Lootline does the same).
+    // The skin material manager caches by the item's id and paint, so an item
+    // that keeps your in-match id waits for the in-match material - the
+    // holstered knife's or the third-person gloves', hardly ever drawn. That is
+    // the lineup that showed the game's look instead of yours. A fresh id gives
+    // the lineup its own material, built for a model that is on screen.
+    std::uint32_t g_lineupIdLow = 0x7E000000u;
+
+    std::uint32_t NextLineupIdLow()
+    {
+        g_lineupIdLow =
+            g_lineupIdLow >= 0x7EFFFFFFu ? 0x7E000000u : g_lineupIdLow + 1;
+
+        return g_lineupIdLow;
+    }
+
     // The glove model entity the character / pawn holds a handle to.
     uintptr_t GloveModelEntity(uintptr_t pawn, uint32_t helper)
     {
@@ -382,48 +428,71 @@ namespace
             slotCount <= 0 || slotCount > 0x10000)
             return "manager slots unreadable";
 
-        int changed = 0;
+        // One pass over the slot table for every request id. The old shape ran
+        // the whole table once per id - up to eight full walks of a table that
+        // can hold tens of thousands of slots - and this is called from the
+        // game's frame path.
+        uint64_t wantedIds[8] = {};
+        int32_t wantedCount = 0;
 
         for (int32_t k = 0; k < count; ++k)
         {
             uint64_t id = 0;
-            if (!SafeReadQword(ids + static_cast<uintptr_t>(k) * 8, id) || !id)
+            if (SafeReadQword(ids + static_cast<uintptr_t>(k) * 8, id) && id)
+                wantedIds[wantedCount++] = id;
+        }
+
+        if (!wantedCount)
+            return "no request ids";
+
+        int changed = 0;
+
+        for (int32_t slotIndex = 0;
+            slotIndex < slotCount && changed < wantedCount; ++slotIndex)
+        {
+            const uintptr_t slot = slots + static_cast<uintptr_t>(slotIndex) * REQUEST_SLOT;
+
+            int32_t used = -1;
+            if (!SafeReadI32(slot, used) || used < 0)
+                continue;   // a free slot
+
+            uint64_t slotId = 0;
+            if (!SafeReadQword(slot + 0x10, slotId) || !slotId)
                 continue;
 
-            for (int32_t slotIndex = 0; slotIndex < slotCount; ++slotIndex)
+            bool wanted = false;
+            for (int32_t k = 0; k < wantedCount; ++k)
             {
-                const uintptr_t slot = slots + static_cast<uintptr_t>(slotIndex) * REQUEST_SLOT;
-
-                int32_t used = -1;
-                if (!SafeReadI32(slot, used) || used < 0)
-                    continue;   // a free slot
-
-                uint64_t slotId = 0;
-                if (!SafeReadQword(slot + 0x10, slotId) || slotId != id)
-                    continue;
-
-                const uintptr_t request = slot + 0x10;
-
-                uint8_t step = 0;
-                if (!SafeReadU8(request + REQUEST_STEP, step) || step != 0)
-                    break;   // already being made
-
-                // share = 0 is what lets the manager poll it: a request still
-                // marked shared (share = 1) is never looked at, which is exactly
-                // the first lineup after a launch. Clearing waits-for is only
-                // needed when it waits for something.
-                SafeWriteU8(request + REQUEST_SHARE, 0);
-
-                uint64_t waitsFor = 0;
-                if (SafeReadQword(request + REQUEST_WAITS_FOR, waitsFor) && waitsFor)
+                if (wantedIds[k] == slotId)
                 {
-                    SafeWriteU32(request + REQUEST_WAITS_FOR, 0);
-                    SafeWriteU32(request + REQUEST_WAITS_FOR + 4, 0);
+                    wanted = true;
+                    break;
                 }
-
-                ++changed;
-                break;
             }
+
+            if (!wanted)
+                continue;
+
+            const uintptr_t request = slot + 0x10;
+
+            uint8_t step = 0;
+            if (!SafeReadU8(request + REQUEST_STEP, step) || step != 0)
+                continue;   // already being made
+
+            // share = 0 is what lets the manager poll it: a request still
+            // marked shared (share = 1) is never looked at, which is exactly
+            // the first lineup after a launch. Clearing waits-for is only
+            // needed when it waits for something.
+            SafeWriteU8(request + REQUEST_SHARE, 0);
+
+            uint64_t waitsFor = 0;
+            if (SafeReadQword(request + REQUEST_WAITS_FOR, waitsFor) && waitsFor)
+            {
+                SafeWriteU32(request + REQUEST_WAITS_FOR, 0);
+                SafeWriteU32(request + REQUEST_WAITS_FOR + 4, 0);
+            }
+
+            ++changed;
         }
 
         return changed > 0 ? "freed" : "nothing waiting";
@@ -692,11 +761,24 @@ namespace
 
     bool ResolveLookups()
     {
-        if (g_lookupsResolved)
-            return g_offXuid != 0 && g_offWeapon != 0;
+        if (g_lookupsResolved && g_offXuid != 0 && g_offWeapon != 0)
+            return true;
 
+        // The schema can still be loading when the first lineup screen appears
+        // (team select right after a launch). This used to latch the failure for
+        // the whole session, so those lineups kept the game's items until the DLL
+        // was injected again. It is retried now, at most once every two seconds.
         if (g_lookupsFailed)
-            return false;
+        {
+            static ULONGLONG lastRetryAt = 0;
+            const ULONGLONG now = GetTickCount64();
+
+            if (lastRetryAt != 0 && now - lastRetryAt < 2000)
+                return false;
+
+            lastRetryAt = now;
+            g_lookupsFailed = false;
+        }
 
         uintptr_t xuid = 0;
         uintptr_t weapon = 0;
@@ -711,7 +793,15 @@ namespace
         if (!ok)
         {
             g_lookupsFailed = true;
-            Log("[lineup] the position's fields aren't in the schema - lineups keep the game's items");
+
+            static bool loggedMissingFields = false;
+
+            if (!loggedMissingFields)
+            {
+                loggedMissingFields = true;
+                Log("[lineup] the position's fields aren't in the schema yet - lineups keep the game's items until they resolve");
+            }
+
             return false;
         }
 
@@ -777,8 +867,30 @@ namespace
             !target.defIndex)
             return false;
 
-        const bool dressed = DressGloveItemView(pos + g_offGloves, target.defIndex,
-            target.paintKit, target.resolvedSeed, target.wear, LocalAccountId());
+        const uintptr_t item = pos + g_offGloves;
+
+        // The builder runs again for the same position on some updates. An item
+        // that already carries our id and paint is left exactly as it is:
+        // rewriting it starts a new material request every time, and a request
+        // that never finishes is the lineup that drew the game's gloves.
+        uint32_t existingIdLow = 0;
+        uint16_t existingDefinition = 0;
+
+        if (g_off.EIV_ItemIDLow)
+            SafeReadU32(item + g_off.EIV_ItemIDLow, existingIdLow);
+
+        SafeReadU16(item + g_off.EIV_ItemDefIndex, existingDefinition);
+
+        const bool alreadyOurs =
+            existingDefinition == target.defIndex &&
+            existingIdLow >= 0x7E000000u && existingIdLow <= 0x7EFFFFFFu &&
+            ReadPaintKitAttribute(item) == target.paintKit;
+
+        const uint32_t idLow = alreadyOurs ? existingIdLow : NextLineupIdLow();
+        const bool dressed = alreadyOurs ||
+            DressGloveItemView(item, target.defIndex,
+                target.paintKit, target.resolvedSeed, target.wear,
+                LocalAccountId(), idLow);
 
         if (dressed)
         {
@@ -788,6 +900,7 @@ namespace
             g_beforeGlovePaintKit = target.paintKit;
             g_beforeGloveSeed = target.resolvedSeed;
             g_beforeGloveWear = target.wear;
+            g_beforeGloveIdLow = idLow;
         }
 
         return dressed;
@@ -798,6 +911,7 @@ namespace
     bool DressPosition(void* position)
     {
         g_beforePosition = 0;
+        g_beforeGloveIdLow = 0;
 
         if (!position ||
             RuntimeModeState::Current() != RuntimeMode::Armory ||
@@ -817,12 +931,6 @@ namespace
         if (xuid != me)
             return true;   // someone else's character: nothing of ours to do
 
-        const uintptr_t item = pos + g_offWeapon;
-
-        uint16_t def = 0;
-        if (!SafeReadU16(item + g_off.EIV_ItemDefIndex, def) || def == 0)
-            return false;
-
         const uintptr_t pawn = GetLocalPawn();
         uint8_t team = 0;
         if (pawn)
@@ -836,37 +944,74 @@ namespace
                 team = static_cast<uint8_t>(positionTeam);
         }
 
-        const bool knife = IsKnifeDefinition(def);
+        // The character's model comes from its agent item, its hands from the
+        // glove item, the gun from its weapon item. The screen does not always
+        // carry a weapon item - the side pick and some intros use the position's
+        // m_sWeaponName stock item instead - so the weapon is dressed only when
+        // the item is there. Returning early on a missing weapon item is how
+        // half the lineup screens kept the game's agent and gloves too.
+        const uintptr_t item = pos + g_offWeapon;
 
+        uint16_t def = 0;
+        SafeReadU16(item + g_off.EIV_ItemDefIndex, def);
+
+        bool weaponDressed = false;
         TargetSkin target{};
-        Attachments::Set attachments;
         std::string detail;
 
-        const ArmoryInventory::ArmoryMatch match =
-            ArmoryInventory::ResolveTargetForWeapon(
-                def, team, knife, target, detail, &attachments);
-
-        if (match == ArmoryInventory::ArmoryMatch::None)
+        if (def != 0)
         {
-            if (!g_loggedNoTarget)
+            const bool knife = IsKnifeDefinition(def);
+
+            Attachments::Set attachments;
+
+            const ArmoryInventory::ArmoryMatch match =
+                ArmoryInventory::ResolveTargetForWeapon(
+                    def, team, knife, target, detail, &attachments);
+
+            if (match == ArmoryInventory::ArmoryMatch::None)
             {
-                g_loggedNoTarget = true;
-                Log("[lineup] no Armory target for your position def=%u team=%u (%s)",
-                    static_cast<unsigned int>(def),
-                    static_cast<unsigned int>(team), detail.c_str());
+                if (!g_loggedNoTarget)
+                {
+                    g_loggedNoTarget = true;
+                    Log("[lineup] no Armory target for your position def=%u team=%u (%s)",
+                        static_cast<unsigned int>(def),
+                        static_cast<unsigned int>(team), detail.c_str());
+                }
             }
-            return false;
+            else
+            {
+                // Same for the gun: a rebuild of the same position leaves an item
+                // that is already ours alone, instead of restarting its material.
+                uint32_t existingIdLow = 0;
+
+                if (g_off.EIV_ItemIDLow)
+                    SafeReadU32(item + g_off.EIV_ItemIDLow, existingIdLow);
+
+                const bool alreadyOurs =
+                    existingIdLow >= 0x7E000000u && existingIdLow <= 0x7EFFFFFFu &&
+                    ReadPaintKitAttribute(item) == target.paintKit;
+
+                if (alreadyOurs)
+                {
+                    weaponDressed = true;
+                }
+                else
+                {
+                    weaponDressed = DressItemView(
+                        item, target,
+                        0, -1,
+                        attachments.Empty() ? nullptr : &attachments,
+                        knife ? 0.0f : LINEUP_WEAR_NUDGE);
+
+                    // Its own id: the lineup material is then built for this
+                    // item, not shared with (and waiting for) your in-match one.
+                    if (weaponDressed && g_off.EIV_ItemIDLow)
+                        SafeWriteU32(item + g_off.EIV_ItemIDLow, NextLineupIdLow());
+                }
+            }
         }
 
-        const bool weaponDressed = DressItemView(
-            item, target,
-            0, -1,
-            attachments.Empty() ? nullptr : &attachments,
-            knife ? 0.0f : LINEUP_WEAR_NUDGE);
-
-        // The character's model comes from its agent item, its hands from the
-        // glove item: both are server-built like the gun, so they are dressed
-        // the same way.
         const bool agentDressed = DressAgent(pos, team);
         const bool glovesDressed = DressGloves(pos, team);
 
@@ -887,44 +1032,14 @@ namespace
         return weaponDressed || agentDressed || glovesDressed;
     }
 
-    // The material manager polls nothing on the first lineup after a launch, so
-    // the character's glove material is never built and the gloves keep their
-    // default (black) material. Asking the client to regenerate its skins - the
-    // call the in-match path already uses - wakes it. N1SSAN_LINEUP_WARM=0 turns
-    // this off without a rebuild.
-    bool WarmEnabled()
-    {
-        static const bool enabled = []()
-        {
-            char buffer[8] = "";
-            const DWORD length = GetEnvironmentVariableA(
-                "N1SSAN_LINEUP_WARM", buffer, sizeof(buffer));
-
-            return !(length > 0 && buffer[0] == '0');
-        }();
-
-        return enabled;
-    }
-
-    void WarmMaterialManager()
-    {
-        static bool attempted = false;
-
-        if (attempted || !WarmEnabled() || !pRegenerateSkins)
-            return;
-
-        attempted = true;
-
-        __try
-        {
-            pRegenerateSkins();
-            Log("[lineup] material warm: skins regenerated");
-        }
-        __except (EXCEPTION_EXECUTE_HANDLER)
-        {
-            Log("[lineup] material warm: faulted, left off for this session");
-        }
-    }
+    // There used to be a "material warm" here: pRegenerateSkins() run from inside
+    // the builder, once a session. It walks every econ entity in the level and
+    // rebuilds its material - the session log measured the pass that calls it at
+    // 1367 ms - and it ran on the frame the lineup screen was built, which is
+    // the freeze just before the round starts. Nothing needs it now: the lineup
+    // items carry their own item ids, so the material manager builds their
+    // materials for the models that are on screen and the finished in-match paint
+    // is copied onto them by the pending pass below.
 
     // After the builder ran: your character exists. Its glove item came from the
     // position; the model has to be spawned by the game's glove routine, which
@@ -936,15 +1051,15 @@ namespace
         if (!position || g_beforePosition != pos)
             return;
 
-        WarmMaterialManager();
-
         const uint16_t definition = g_beforeGloveDefinition;
         const int paintKit = g_beforeGlovePaintKit;
         const int seed = g_beforeGloveSeed;
         const float wear = g_beforeGloveWear;
+        const uint32_t idLow = g_beforeGloveIdLow;
 
         g_beforePosition = 0;
         g_beforeGloveDefinition = 0;
+        g_beforeGloveIdLow = 0;
 
         uintptr_t character = 0;
         if (g_offTeam)
@@ -952,12 +1067,35 @@ namespace
 
         std::lock_guard<std::mutex> lock(g_pendingMutex);
 
-        g_pendingGloves = GlovePending{};
-
         if (!definition || character < 0x10000)
+        {
+            g_pendingGloves = GlovePending{};
+            return;
+        }
+
+        // No handle, no pending pass: the character has to be verifiable
+        // through the entity list before anything is written to it.
+        const uint32_t characterHandle = CharacterHandle(character);
+
+        if (!characterHandle)
+        {
+            g_pendingGloves = GlovePending{};
+            return;
+        }
+
+        // The builder ran again for the same character: its applies carry on
+        // instead of starting over (Lootline's 3.5 s window). Restarting them
+        // here threw away the rebuild that was already in flight.
+        if (g_pendingGloves.character == character &&
+            g_pendingGloves.characterHandle == characterHandle &&
+            g_pendingGloves.idLow == idLow &&
+            GetTickCount64() - g_pendingGloves.createdAt < 3500)
             return;
 
+        g_pendingGloves = GlovePending{};
         g_pendingGloves.character = character;
+        g_pendingGloves.characterHandle = characterHandle;
+        g_pendingGloves.idLow = idLow;
         g_pendingGloves.gloveItem = character + g_off.PAWN_EconGloves;
         g_pendingGloves.definition = definition;
         g_pendingGloves.paintKit = paintKit;
@@ -1055,6 +1193,14 @@ static bool ApplyGlovePass(GlovePending& pending, ULONGLONG age)
 {
     __try
     {
+        // The screen this character was built for is over (round start, the
+        // match-end screen, leaving the team select): CS2 freed the character and
+        // the pointer must not be used again. Without this the pass kept writing
+        // the glove item and running the game's glove routine on that freed
+        // pointer for up to a minute - the game closed shortly after a death.
+        if (!CharacterAlive(pending.character, pending.characterHandle))
+            return false;
+
         // Without an owner id the gloves keep the model and lose the paint (the
         // changer's note), and on team select the controller can be unreadable
         // when the character is built - so the id is filled in as soon as it is.
@@ -1075,7 +1221,8 @@ static bool ApplyGlovePass(GlovePending& pending, ULONGLONG age)
             // The character's own glove item (filled by the game from the
             // position's): written again so its identity is certainly ours.
             DressGloveItemView(pending.gloveItem, pending.definition,
-                pending.paintKit, pending.seed, pending.wear, pending.accountId);
+                pending.paintKit, pending.seed, pending.wear, pending.accountId,
+                pending.idLow);
             pending.dressed = true;
         }
 

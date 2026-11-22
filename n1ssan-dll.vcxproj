@@ -170,6 +170,7 @@
     </ClCompile>
     <ClCompile Include="src\hooks\knife_animation.cpp" />
     <ClCompile Include="src\hooks\lineup.cpp" />
+    <ClCompile Include="src\hooks\local_spray.cpp" />
     <ClCompile Include="src\inventory\engine_schema_diagnostic.cpp" />
     <ClCompile Include="src\inventory\loadout.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>

@@ -400,13 +400,42 @@ namespace StatTrakCounter
 
         if (current < 0)
         {
-            // The held weapon is not StatTrak (or CS2 replaced its view), so
-            // there is nothing to credit.
+            // No "kill eater" on the live view: either the game rebuilt the
+            // item, or the Armory instance the player equipped is not the view
+            // in hand. The kill is still the player's, so it is credited to the
+            // saved Armory instance instead of being dropped, and the next apply
+            // pass writes the higher count back into the item it paints.
+            uint16_t def = 0;
+            SafeReadU16(view + g_off.EIV_ItemDefIndex, def);
+
+            uint8_t team = 0;
+            SafeReadU8(pawn + g_off.PAWN_TeamNum, team);
+
+            TargetSkin target{};
+            std::string detail;
+
+            if (def && ArmoryInventory::ResolveTargetForWeapon(
+                    def, team, IsKnifeDefinition(def), target, detail) !=
+                    ArmoryInventory::ArmoryMatch::None &&
+                target.statTrak && !target.instanceId.empty())
+            {
+                const int saved = target.statTrakKills + gained;
+
+                if (StatTrakKills::Record(target.instanceId, saved))
+                {
+                    Log("[stattrak] +%d kill(s) credited to saved instance %s (%d -> %d); "
+                        "the live view has no kill eater",
+                        gained, target.instanceId.c_str(), target.statTrakKills, saved);
+                    return;
+                }
+            }
+
             if (now - g_lastComplainMs >= 20000)
             {
                 g_lastComplainMs = now;
-                Log("[stattrak] +%d kill(s) not credited: weapon %p has no kill eater",
-                    gained, (void*)weapon);
+                Log("[stattrak] +%d kill(s) not credited: weapon %p has no kill eater "
+                    "and no StatTrak Armory instance (%s)",
+                    gained, (void*)weapon, detail.empty() ? "not armory" : detail.c_str());
             }
             return;
         }

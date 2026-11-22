@@ -132,8 +132,17 @@ void Charm::Upkeep(uintptr_t weapon, uintptr_t hudWeapon, const Attachments::Set
     // hung by a model build - on the gun or on the viewmodel - and the viewmodel's
     // "keychain" addon are rigid copies: a single module on the gun is that
     // simulated entity and is kept; anything else is a duplicate.
+    // Lootline repairs only a wrong charm count or a wrong charm id
+    // (skinchanger.cpp:1099: `count != 1 || (hanging != 0 && hanging != wanted)`).
+    // A material rebuild is not a reason to touch the charm: the module CS2
+    // created for the gun survives it. Tearing it down on every apply is a
+    // native entity destroyed and recreated on the gun in the player's hands -
+    // exactly what the two items that carry a charm did on every single apply
+    // (2026-11-23 00:10 log: `wanted=37 hanging=1 removed=1 charmEntity=1
+    // hudHanging=1 hudRemoved=1 ... repair=1`), while every item without a charm
+    // never touched the entity system at all and stayed stable.
     const bool selectionChanged = state.lastWanted != wanted;
-    const bool refresh = selectionChanged || hudRebuilt || modelRebuilt;
+    const bool refresh = selectionChanged;
 
     const bool wantsRepair =
         wanted == 0

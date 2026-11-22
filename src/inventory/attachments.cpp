@@ -900,8 +900,9 @@ namespace Attachments
     // networked list, and CS2 refills that list from the equipped item. Those
     // definitions are dropped here in place, keeping everything else (the
     // stickers CS2 reads from the same list).
-    int StripNetworkedCharmAndStatTrak(void* itemView)
+    int StripNetworkedCharmAndStatTrak(void* itemView, bool* removedPaint)
     {
+        if (removedPaint) *removedPaint = false;
         if (!itemView) return 0;
 
         AttributeVector_t* vector =
@@ -933,9 +934,23 @@ namespace Attachments
                 // second copy of them on the same item draws a second badge.
                 const bool statTrak = def == 80 || def == 81;
 
-                if (charm || statTrak)
+                // The paint also lives in this list on the real item (the clears
+                // in the log are 8, 12 and 28 entries, and three of those are
+                // paint/seed/wear). CS2 prefers this list when it builds a
+                // weapon's material, so a real paint left here after the one-time
+                // clear draws the real skin with the Armory's stickers on top -
+                // the "stickers are fine but on the real skin" report. The list
+                // refills from the equipped item, so this has to run every pass.
+                const bool paint =
+                    def == ATTR_PAINT || def == ATTR_SEED || def == ATTR_WEAR;
+
+                if (charm || statTrak || paint)
                 {
                     ++removed;
+
+                    if (paint && removedPaint)
+                        *removedPaint = true;
+
                     continue;
                 }
 

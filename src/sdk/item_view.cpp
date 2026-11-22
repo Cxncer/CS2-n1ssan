@@ -9,6 +9,8 @@
 #include "inventory/attachments.h"
 #include "inventory/loot_schema.h"
 
+#include <windows.h>
+
 #include <bit>
 #include <cstring>
 static AttributeVector_t* GetAttributeVectorAt(
@@ -56,14 +58,31 @@ static void SetIntAttr(EconItemAttribute_t& a, uint16_t def, int32_t v)
     a.initialValue = raw;
 }
 
-void EconAttr_Remove(uintptr_t item)
+bool EconAttr_Remove(uintptr_t item)
 {
-    if (!item) return;
+    if (!item) return false;
 
     AttributeVector_t* v = GetAttributeVector(item);
-    if (!v) return;
+    if (!v) return false;
 
-    if (v->size == 0 && v->data == 0) return;
+    if (v->size == 0 && v->data == 0) return true;
+
+    // The only place this runtime frees memory it did not allocate: on a view
+    // CS2 populated, `data` belongs to the game's own CUtlVector. A header that
+    // cannot describe a vector - a size the allocation could not hold, a block
+    // below the heap, a count past any real attribute list - is left untouched
+    // instead of being handed to MemFree. A wrong free here corrupts the heap
+    // and shows up later, usually as the game closing on the next round change.
+    if (v->size < 0 || v->size >= 1000 ||
+        v->data <= 0x10000 ||
+        v->allocationCount < v->size || v->allocationCount > 65536)
+    {
+        Log("[attr] %p attribute list header is not a CUtlVector "
+            "(size=%d alloc=%d data=0x%p); left alone",
+            reinterpret_cast<void*>(item), v->size, v->allocationCount,
+            reinterpret_cast<void*>(v->data));
+        return false;
+    }
 
     void* data = reinterpret_cast<void*>(v->data);
     v->size = 0;
@@ -73,6 +92,8 @@ void EconAttr_Remove(uintptr_t item)
     v->growSizeAndFlags = 0;
 
     if (data) MemFree(data);
+
+    return true;
 }
 
 void EconAttr_Create(uintptr_t item, int paintKit, float wear, int seed, int statTrak,
@@ -203,10 +224,23 @@ void SetCustomName(uintptr_t item, const std::string& name)
     char* p = reinterpret_cast<char*>(item + g_off.EIV_CustomName);
     if (!p) return;
 
-    if (name.empty())
+    // 161 bytes written straight into the item view at a layout offset. On a
+    // build whose schema moves that member, this is a blind 161-byte write into
+    // whatever the view really holds there - which does not fault at the write,
+    // it corrupts a string the game owns and crashes somewhere later. A fault in
+    // the write is caught here, so a wrong offset costs the custom name and
+    // nothing else.
+    __try
     {
-        p[0] = '\0';
-        return;
+        if (name.empty())
+        {
+            p[0] = '\0';
+            return;
+        }
+        strncpy_s(p, 161, name.c_str(), _TRUNCATE);
     }
-    strncpy_s(p, 161, name.c_str(), _TRUNCATE);
+    __except (EXCEPTION_EXECUTE_HANDLER)
+    {
+        Log("[apply] custom name write faulted item=%p", reinterpret_cast<void*>(item));
+    }
 }

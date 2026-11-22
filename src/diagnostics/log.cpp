@@ -2,8 +2,10 @@
 // Append-only file logger and atomic machine-readable status snapshot.
 
 #include "diagnostics/log.h"
+#include "overlay/overlay_version.h"
 
 #include <windows.h>
+#include <dbghelp.h>
 #include <cstdarg>
 #include <cstdio>
 #include <chrono>
@@ -19,9 +21,33 @@ namespace
 {
     FILE* g_logFile = nullptr;
     char g_logPath[MAX_PATH]{};
+    char g_sessionMarkerPath[MAX_PATH]{};
     char g_statusPath[MAX_PATH]{};
     char g_statusDirectory[MAX_PATH]{};
-    constexpr const char* kBuildId = "armory-obsidian-3.0";
+    // The DLL's build id is the overlay stamp, not a second number: a log line
+    // and the in-game corner then name the same build, so a code excerpt can be
+    // matched to the session it came from.
+    constexpr const char* kBuildId = kOverlayVersion;
+
+    // ---- buffered writer ----
+    //
+    // Every line used to be an fputs plus an fflush, so the apply pass paid a
+    // filesystem round trip per weapon per tick. Lines are collected here and
+    // written in batches; the crash handler flushes whatever is pending before
+    // it appends its own line, so a crash still ends with the log it caused.
+    CRITICAL_SECTION g_logLock;
+    struct LogLockInit
+    {
+        LogLockInit() { InitializeCriticalSection(&g_logLock); }
+    };
+    LogLockInit g_logLockInit;
+
+    std::string g_logBuffer;
+    uint64_t g_lastLogFlushMs = 0;
+    constexpr size_t kLogFlushBytes = 32 * 1024;
+    constexpr uint64_t kLogFlushIntervalMs = 250;
+
+    void FlushLogBuffer();
 
     void SanitizeStatusField(const char* input, char* output, size_t capacity)
     {
@@ -199,9 +225,24 @@ void LogInit(const std::string& dllPath)
         return;
     }
 
+    // The previous session's fate decides what happens to its log, so read the
+    // marker before anything replaces the file.
+    bool previousSessionHung = false;
+    if (sprintf_s(g_sessionMarkerPath, "%sn1ssanlogs.open", dir) > 0)
+        previousSessionHung =
+            GetFileAttributesA(g_sessionMarkerPath) != INVALID_FILE_ATTRIBUTES;
+    else
+        g_sessionMarkerPath[0] = '\0';
+
     // One session is tens of thousands of lines; without a cap the file becomes
     // too large to read when a bug report is needed. Keep the previous session
     // as n1ssanlogs.prev.md instead of deleting history outright.
+    //
+    // A session that died is the only record of its crash, and a match that
+    // crashes twice would otherwise lose the first crash to the next session
+    // before anyone reads it. An unclean end is kept as its own file, named for
+    // the moment it stopped, so every crash of a session stays on disk.
+    char previousLogName[MAX_PATH]{};
     {
         constexpr unsigned long long kMaxLogBytes = 4ull * 1024ull * 1024ull;
         WIN32_FILE_ATTRIBUTE_DATA attributes{};
@@ -210,14 +251,45 @@ void LogInit(const std::string& dllPath)
             const unsigned long long size =
                 (static_cast<unsigned long long>(attributes.nFileSizeHigh) << 32) |
                 attributes.nFileSizeLow;
-            if (size >= kMaxLogBytes)
+
+            const bool keepCrashCopy = previousSessionHung && size > 0;
+
+            if (keepCrashCopy)
             {
-                char previousPath[MAX_PATH]{};
-                if (sprintf_s(previousPath, "%sn1ssanlogs.prev.md", dir) > 0)
+                FILETIME stoppedLocal{};
+                SYSTEMTIME stopped{};
+                if (FileTimeToLocalFileTime(&attributes.ftLastWriteTime, &stoppedLocal) &&
+                    FileTimeToSystemTime(&stoppedLocal, &stopped))
                 {
-                    DeleteFileA(previousPath);
-                    // Rotation is best effort: a locked previous log must not stop this session.
-                    MoveFileExA(g_logPath, previousPath, MOVEFILE_REPLACE_EXISTING);
+                    if (sprintf_s(previousLogName, sizeof(previousLogName),
+                            "n1ssanlogs.crash-%04u%02u%02u-%02u%02u%02u.md",
+                            stopped.wYear, stopped.wMonth, stopped.wDay,
+                            stopped.wHour, stopped.wMinute, stopped.wSecond) <= 0)
+                        previousLogName[0] = '\0';
+                }
+                else
+                {
+                    strcpy_s(previousLogName, "n1ssanlogs.crash.md");
+                }
+            }
+
+            const char* archiveName = keepCrashCopy
+                ? (previousLogName[0] ? previousLogName : nullptr)
+                : (size >= kMaxLogBytes ? "n1ssanlogs.prev.md" : nullptr);
+
+            if (archiveName)
+            {
+                char archivePath[MAX_PATH]{};
+                if (sprintf_s(archivePath, "%s%s", dir, archiveName) > 0)
+                {
+                    DeleteFileA(archivePath);
+                    // Best effort: a locked previous log must not stop this session.
+                    if (!MoveFileExA(g_logPath, archivePath, MOVEFILE_REPLACE_EXISTING))
+                        previousLogName[0] = '\0';
+                }
+                else
+                {
+                    previousLogName[0] = '\0';
                 }
             }
         }
@@ -232,6 +304,34 @@ void LogInit(const std::string& dllPath)
         InitializeStatusPath();
         if (g_statusPath[0]) printf("[n1ssan] status: %s\n", g_statusPath);
         return;
+    }
+
+    // A marker next to the log survives a crash but not a clean detach, so the
+    // next session can tell "the game closed" apart from "the process died".
+    // Fail-fast paths never reach SetUnhandledExceptionFilter, which is why the
+    // [crash] line alone could not answer that question.
+    if (g_sessionMarkerPath[0])
+    {
+        HANDLE marker = CreateFileA(g_sessionMarkerPath, GENERIC_WRITE,
+            FILE_SHARE_READ | FILE_SHARE_WRITE, nullptr, CREATE_ALWAYS,
+            FILE_ATTRIBUTE_NORMAL, nullptr);
+
+        if (marker != INVALID_HANDLE_VALUE)
+        {
+            char pid[32]{};
+            sprintf_s(pid, "%lu\n", static_cast<unsigned long>(GetCurrentProcessId()));
+            DWORD written = 0;
+            WriteFile(marker, pid, static_cast<DWORD>(strlen(pid)), &written, nullptr);
+            CloseHandle(marker);
+        }
+        else
+        {
+            g_sessionMarkerPath[0] = '\0';
+        }
+
+        if (previousSessionHung)
+            Log("[session] previous session ended without a clean shutdown (marker %s) - a crash or a forced close",
+                g_sessionMarkerPath);
     }
 
     InitializeStatusPath();
@@ -265,6 +365,37 @@ void LogInit(const std::string& dllPath)
         sessionLocal.wYear, sessionLocal.wMonth, sessionLocal.wDay,
         sessionLocal.wHour, sessionLocal.wMinute, sessionLocal.wSecond);
     Log("[build] %s", kBuildId);
+
+    if (previousLogName[0])
+        Log("[session] previous session crashed; its log was kept as %s",
+            previousLogName);
+
+    // The header must be on disk before the first apply pass runs, so a crash
+    // report starts with the session it belongs to.
+    LogFlush();
+}
+
+namespace
+{
+    void FlushLogBuffer()
+    {
+        if (!g_logFile)
+            return;
+
+        std::string pending;
+
+        EnterCriticalSection(&g_logLock);
+        pending.swap(g_logBuffer);
+        LeaveCriticalSection(&g_logLock);
+
+        if (!pending.empty())
+        {
+            fwrite(pending.data(), 1, pending.size(), g_logFile);
+            fflush(g_logFile);
+        }
+
+        g_lastLogFlushMs = GetTickCount64();
+    }
 }
 
 void Log(const char* fmt, ...)
@@ -275,7 +406,36 @@ void Log(const char* fmt, ...)
     vsnprintf_s(buf, sizeof(buf), _TRUNCATE, fmt, ap);
     va_end(ap);
     printf("%s\n", buf);
-    if (g_logFile) { fputs(buf, g_logFile); fputc('\n', g_logFile); fflush(g_logFile); }
+
+    if (!g_logFile)
+        return;
+
+    EnterCriticalSection(&g_logLock);
+    g_logBuffer += buf;
+    g_logBuffer += '\n';
+    const bool due = g_logBuffer.size() >= kLogFlushBytes ||
+        GetTickCount64() - g_lastLogFlushMs >= kLogFlushIntervalMs;
+    LeaveCriticalSection(&g_logLock);
+
+    if (due)
+        FlushLogBuffer();
+}
+
+void LogFlush()
+{
+    FlushLogBuffer();
+}
+
+void LogMarkCleanExit()
+{
+    Log("[session] clean exit");
+    FlushLogBuffer();
+
+    if (g_sessionMarkerPath[0])
+    {
+        DeleteFileA(g_sessionMarkerPath);
+        g_sessionMarkerPath[0] = '\0';
+    }
 }
 
 const char* StatusDirectoryPath()
@@ -317,6 +477,9 @@ void LogStatus(const char* state, const char* reason, const char* code)
     Log("[status-write] %s state=%s error=%lu",
         written ? "success" : "FAILED", safeState,
         static_cast<unsigned long>(writeError));
+
+    // A status change is a state boundary: make it visible in the log now.
+    LogFlush();
 }
 
 
@@ -408,6 +571,67 @@ namespace
         CloseHandle(file);
     }
 
+    // ---- unhandled-exception minidump ----
+    //
+    // The crash line names where the fault was; a dump says what every thread was
+    // doing. MiniDumpWriteDump is resolved up front (the handler must not load a
+    // library while the process is going down) and the file is written next to
+    // the session log, so the log and the dump of one crash sit together. The
+    // exception is still handed to Windows unchanged: evidence only.
+    using MiniDumpWriteDumpFn = BOOL (WINAPI*)(HANDLE, DWORD, HANDLE, MINIDUMP_TYPE,
+        PMINIDUMP_EXCEPTION_INFORMATION, PMINIDUMP_USER_STREAM_INFORMATION,
+        PMINIDUMP_CALLBACK_INFORMATION);
+
+    MiniDumpWriteDumpFn g_miniDumpWriteDump = nullptr;
+    char g_dumpDirectory[MAX_PATH]{};
+
+    bool WriteCrashDump(EXCEPTION_POINTERS* info, char* pathOut, size_t pathSize)
+    {
+        if (!g_miniDumpWriteDump || !g_dumpDirectory[0] || !pathOut || pathSize == 0)
+            return false;
+
+        SYSTEMTIME now{};
+        GetLocalTime(&now);
+
+        char name[MAX_PATH]{};
+        sprintf_s(name, sizeof(name),
+            "n1ssan-crash-%04u%02u%02u-%02u%02u%02u-%lu.dmp",
+            now.wYear, now.wMonth, now.wDay, now.wHour, now.wMinute, now.wSecond,
+            static_cast<unsigned long>(GetCurrentProcessId()));
+
+        char path[MAX_PATH]{};
+        sprintf_s(path, sizeof(path), "%s%s", g_dumpDirectory, name);
+
+        HANDLE file = CreateFileA(path, GENERIC_WRITE, 0, nullptr, CREATE_ALWAYS,
+            FILE_ATTRIBUTE_NORMAL, nullptr);
+        if (file == INVALID_HANDLE_VALUE)
+            return false;
+
+        MINIDUMP_EXCEPTION_INFORMATION exception{};
+        exception.ThreadId = GetCurrentThreadId();
+        exception.ExceptionPointers = info;
+        exception.ClientPointers = FALSE;
+
+        // MiniDumpNormal already carries every thread's stack; the thread info
+        // add-on keeps their names, which is what tells the runtime's threads
+        // apart in a dump of the client.
+        const BOOL written = g_miniDumpWriteDump(
+            GetCurrentProcess(), GetCurrentProcessId(), file,
+            static_cast<MINIDUMP_TYPE>(MiniDumpNormal | MiniDumpWithThreadInfo),
+            info ? &exception : nullptr, nullptr, nullptr);
+
+        CloseHandle(file);
+
+        if (!written)
+        {
+            DeleteFileA(path);
+            return false;
+        }
+
+        strcpy_s(pathOut, pathSize, path);
+        return true;
+    }
+
     LONG WINAPI CrashFilter(EXCEPTION_POINTERS* info)
     {
         const DWORD code = (info && info->ExceptionRecord)
@@ -440,7 +664,28 @@ namespace
             moduleName[0] ? moduleName : "unknown module", offset,
             CurrentActivity());
 
+        // Whatever the pass had buffered belongs in front of this line.
+        // The crashed thread may hold the log lock, so this only flushes when
+        // the lock is free rather than blocking the handler dead.
+        if (TryEnterCriticalSection(&g_logLock))
+        {
+            LeaveCriticalSection(&g_logLock);
+            FlushLogBuffer();
+        }
+
         AppendCrashLine(line);
+
+        char dumpPath[MAX_PATH]{};
+        if (WriteCrashDump(info, dumpPath, sizeof(dumpPath)))
+        {
+            char note[MAX_PATH + 64]{};
+            sprintf_s(note, sizeof(note), "[crash] minidump written: %s\n", dumpPath);
+            AppendCrashLine(note);
+        }
+        else
+        {
+            AppendCrashLine("[crash] minidump not written\n");
+        }
 
         if (g_previousCrashFilter && g_previousCrashFilter != &CrashFilter)
             return g_previousCrashFilter(info);
@@ -449,8 +694,176 @@ namespace
     }
 }
 
+namespace
+{
+    // ---- first-chance faults ----
+    //
+    // Every apply path wraps native calls in __except (1), so a schema setter
+    // that faults is swallowed without a trace and the next report only says
+    // "skins stopped updating". This handler names the fault once per distinct
+    // code/address pair: enough to identify a broken setter, cheap enough to
+    // leave installed for the whole session.
+    constexpr int kMaxFirstChanceEntries = 64;
+
+    struct FirstChanceEntry
+    {
+        unsigned long code;
+        uintptr_t     address;
+    };
+
+    FirstChanceEntry g_firstChance[kMaxFirstChanceEntries]{};
+    int g_firstChanceCount = 0;
+    CRITICAL_SECTION g_firstChanceLock;
+
+    struct FirstChanceLockInit
+    {
+        FirstChanceLockInit() { InitializeCriticalSection(&g_firstChanceLock); }
+    };
+    FirstChanceLockInit g_firstChanceLockInit;
+
+    thread_local bool g_inFirstChanceHandler = false;
+
+    // Codes that are part of normal operation: MSVC thread naming, C++ throws
+    // (CS2 raises these constantly for its own control flow) and breakpoints.
+    bool IsRoutineException(unsigned long code)
+    {
+        return code == 0x406D1388ul || code == 0xE06D7363ul ||
+               code == 0x80000003ul || code == 0x80000004ul;
+    }
+
+    LONG WINAPI FirstChanceFilter(EXCEPTION_POINTERS* info)
+    {
+        if (g_inFirstChanceHandler || !info || !info->ExceptionRecord)
+            return EXCEPTION_CONTINUE_SEARCH;
+
+        const unsigned long code = info->ExceptionRecord->ExceptionCode;
+
+        if (IsRoutineException(code))
+            return EXCEPTION_CONTINUE_SEARCH;
+
+        const uintptr_t address =
+            reinterpret_cast<uintptr_t>(info->ExceptionRecord->ExceptionAddress);
+
+        bool first = false;
+
+        g_inFirstChanceHandler = true;
+
+        EnterCriticalSection(&g_firstChanceLock);
+
+        bool known = false;
+        for (int i = 0; i < g_firstChanceCount; ++i)
+        {
+            if (g_firstChance[i].code == code && g_firstChance[i].address == address)
+            {
+                known = true;
+                break;
+            }
+        }
+
+        if (!known && g_firstChanceCount < kMaxFirstChanceEntries)
+        {
+            g_firstChance[g_firstChanceCount].code = code;
+            g_firstChance[g_firstChanceCount].address = address;
+            ++g_firstChanceCount;
+            first = true;
+        }
+
+        LeaveCriticalSection(&g_firstChanceLock);
+
+        if (first)
+        {
+            char moduleName[MAX_PATH]{};
+            HMODULE module = nullptr;
+            unsigned long long offset = 0;
+
+            if (address && GetModuleHandleExA(
+                    GET_MODULE_HANDLE_EX_FLAG_FROM_ADDRESS |
+                    GET_MODULE_HANDLE_EX_FLAG_UNCHANGED_REFCOUNT,
+                    reinterpret_cast<LPCSTR>(address), &module) && module)
+            {
+                GetModuleFileNameA(module, moduleName, MAX_PATH);
+                offset = static_cast<unsigned long long>(
+                    address - reinterpret_cast<uintptr_t>(module));
+            }
+
+            char line[512]{};
+            sprintf_s(line, sizeof(line),
+                "\n[fault] first-chance 0x%08lX at %p (%s+0x%llX) during %s\n",
+                code, reinterpret_cast<void*>(address),
+                moduleName[0] ? moduleName : "unknown module", offset,
+                CurrentActivity());
+
+            AppendCrashLine(line);
+
+            // A fault whose instruction pointer is not inside any loaded module
+            // is not a signature that moved: the process is running a heap or
+            // stack address, i.e. a corrupted function pointer, vtable or return
+            // address. The name alone cannot be acted on - there is nothing to
+            // look up - so the first one of those also writes the minidump. The
+            // unhandled-exception filter only fires if nobody above us handles
+            // the fault, and the 2026-11-22 23:53 session died on exactly this
+            // fault (0xC0000005 at 0x...22D08, "unknown module+0x0") with no
+            // dump written, which is why this exists.
+            if (!module && code == 0xC0000005ul)
+            {
+                static bool dumpedUnmappedFault = false;
+
+                char dumpPath[MAX_PATH]{};
+
+                if (!dumpedUnmappedFault &&
+                    WriteCrashDump(info, dumpPath, sizeof(dumpPath)))
+                {
+                    dumpedUnmappedFault = true;
+
+                    char note[MAX_PATH + 96]{};
+                    sprintf_s(note, sizeof(note),
+                        "[crash] unmapped-address fault: minidump written: %s\n",
+                        dumpPath);
+
+                    AppendCrashLine(note);
+                }
+            }
+        }
+
+        g_inFirstChanceHandler = false;
+        return EXCEPTION_CONTINUE_SEARCH;
+    }
+}
+
 void LogInstallCrashTrap()
 {
+    // Resolve the dump writer while the process is healthy, and keep the file
+    // next to the session log so one crash leaves both together.
+    if (!g_miniDumpWriteDump)
+    {
+        HMODULE dbghelp = GetModuleHandleA("dbghelp.dll");
+        if (!dbghelp)
+            dbghelp = LoadLibraryA("dbghelp.dll");
+
+        if (dbghelp)
+            g_miniDumpWriteDump = reinterpret_cast<MiniDumpWriteDumpFn>(
+                GetProcAddress(dbghelp, "MiniDumpWriteDump"));
+
+        if (g_logPath[0])
+        {
+            strcpy_s(g_dumpDirectory, sizeof(g_dumpDirectory), g_logPath);
+            char* slash = strrchr(g_dumpDirectory, '\\');
+            if (slash) *(slash + 1) = '\0';
+            else g_dumpDirectory[0] = '\0';
+        }
+
+        Log("[crash] minidump %s -> %s",
+            g_miniDumpWriteDump ? "ready" : "unavailable",
+            g_dumpDirectory[0] ? g_dumpDirectory : "(no log directory)");
+    }
+
     if (!g_previousCrashFilter)
         g_previousCrashFilter = SetUnhandledExceptionFilter(&CrashFilter);
+
+    static bool installed = false;
+    if (!installed)
+    {
+        installed = true;
+        AddVectoredExceptionHandler(1, &FirstChanceFilter);
+    }
 }

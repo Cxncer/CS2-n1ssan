@@ -21,4 +21,5 @@ bool GloveIdentityChangedThisTick();
 // a paintKit of 0 keeps the default gloves' look.
 bool DressGloveItemView(std::uintptr_t item, std::uint16_t definition,
                         int paintKit, int seed, float wear,
-                        std::uint32_t accountId = 0);
+                        std::uint32_t accountId = 0,
+                        std::uint32_t idLow = 0);

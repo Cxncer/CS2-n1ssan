@@ -437,9 +437,9 @@ namespace
         return true;
     }
 
-    bool UploadArt(Renderer& r, Art& art, int key)
+    bool UploadArt(Renderer& r, Art& art, int key, bool force = false)
     {
-        if (art.view && art.key == key)
+        if (!force && art.view && art.key == key)
             return true;
 
         const PillArt::Pill& composed = art.pixels;
@@ -571,20 +571,62 @@ namespace
         if (previousBlend) previousBlend->Release();
     }
 
+    // The pill's light travels one full turn in this long, and the bitmap behind
+    // it is redrawn at PILL_ANIM_INTERVAL_MS while the counter is on screen.
+    //
+    // The recompose is CPU work on a ~200x41 pixmap, so it is deliberately slow
+    // (about twelve a second, not one a frame): the light reads as moving at
+    // that rate, and a percentage of one core is all it may cost a game that is
+    // already using the frame.
+    constexpr ULONGLONG PILL_ANIM_PERIOD_MS = 3400;
+    constexpr ULONGLONG PILL_ANIM_INTERVAL_MS = 80;
+
+    ULONGLONG g_pillComposedMs = 0;
+
     void DrawPill(Renderer& r, float scale)
     {
-        const bool spike = NowMs() < g_spikeUntilMs;
+        const ULONGLONG now = NowMs();
+        const bool spike = now < g_spikeUntilMs;
 
         // fps*1000 tops out below 1e6, so the spike flag gets its own range and
         // a tinted pill never collides with a plain one in the cache key.
         const int key = g_fps * 1000 + (int)(scale * 100.0f) + (spike ? 1000000 : 0);
 
-        if (!r.pill.view || r.pill.key != key)
+        const bool stale =
+            !r.pill.view || r.pill.key != key ||
+            now - g_pillComposedMs >= PILL_ANIM_INTERVAL_MS;
+
+        if (stale)
         {
-            if (!PillArt::Compose(g_fps, scale, r.pill.pixels, spike))
+            const float phase = (float)((double)(now % PILL_ANIM_PERIOD_MS) /
+                (double)PILL_ANIM_PERIOD_MS);
+
+            const ULONGLONG composeStartMs = NowMs();
+
+            if (!PillArt::Compose(g_fps, (float)g_frameAvgMs, scale, r.pill.pixels,
+                    spike, phase))
                 return;
-            if (!UploadArt(r, r.pill, key))
+
+            const ULONGLONG composeMs = NowMs() - composeStartMs;
+
+            // The cost of the animation, once, so "does it hurt the frame rate"
+            // is a number in the log rather than a guess.
+            if (composeMs >= 4)
+            {
+                static ULONGLONG lastComposeLogMs = 0;
+
+                if (now - lastComposeLogMs >= 5000)
+                {
+                    lastComposeLogMs = now;
+                    Log("[fps-overlay] pill compose took %llu ms",
+                        static_cast<unsigned long long>(composeMs));
+                }
+            }
+
+            if (!UploadArt(r, r.pill, key, true))
                 return;
+
+            g_pillComposedMs = now;
         }
 
         const float pillWidth = (float)r.pill.pixels.width;
