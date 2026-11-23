@@ -87,6 +87,13 @@ static uint64_t g_deathSettleUntilMs = 0;
 static constexpr uint64_t TEAM_SETTLE_MS = 3000;
 static uint64_t g_teamSettleUntilMs = 0;
 static int32_t  g_lastTeamNum = -1;
+// A switch whose hold has not yet released a pass. The first pass the hold
+// releases writes the weapons before the stage-7 glove pass has dressed the new
+// team, and the glove identity change then drops the weapon cache on the next
+// frame and rebuilds every weapon again. That second build is the gloves and
+// the knife arriving, then re-rendering a moment later. One pass is spent
+// letting the gloves land instead, so every weapon is built once.
+static bool     g_teamSettlePending = false;
 
 // Feeds the local pawn's team into the settle window and answers whether model
 // work (gloves, agent, weapon materials) is still held.
@@ -101,6 +108,7 @@ static bool TeamModelWorkHeld(uintptr_t pawn, uint64_t now)
         if (g_lastTeamNum >= 0 && static_cast<int32_t>(team) != g_lastTeamNum)
         {
             g_teamSettleUntilMs = now + TEAM_SETTLE_MS;
+            g_teamSettlePending = true;
 
             Log("[team-switch] team %d -> %d: model work held for %llu ms",
                 static_cast<int>(g_lastTeamNum), static_cast<int>(team),
@@ -116,6 +124,18 @@ static bool TeamModelWorkHeld(uintptr_t pawn, uint64_t now)
 bool TeamSwitchSettling()
 {
     return GetTickCount64() < g_teamSettleUntilMs;
+}
+
+// ---- menu / match flag ---------------------------------------------------
+// Written once per frame stage by the pass below and read by the render
+// thread's overlay, which must not do memory reads of its own. False is the
+// safe default: before anything is known the game is treated as being on the
+// main menu.
+static std::atomic<bool> g_inActiveMatch{ false };
+
+bool InActiveMatch()
+{
+    return g_inActiveMatch.load(std::memory_order_relaxed);
 }
 
 void TraceSwitch(const char* what)
@@ -655,6 +675,8 @@ static void __fastcall FsnDetour(void* pClient, int stage)
     if (pawnAliveKnown && pawnIsAlive == 0)
         inMatch = false;
 
+    g_inActiveMatch.store(inMatch, std::memory_order_relaxed);
+
     if (inMatch)
         g_lastInMatchMs = now;
 
@@ -917,6 +939,23 @@ static void __fastcall FsnDetour(void* pClient, int stage)
     // intro is on screen, so nothing that matters is skipped.
     if (TeamModelWorkHeld(pawn, now))
         return;
+
+    // The hold is over, but stage 7 - the pass that dresses the new team's
+    // gloves - runs after this stage-6 pass. Writing the weapons now builds every
+    // material on a cache the glove identity change invalidates on the next
+    // frame; the log of a switch shows exactly that: the knife painted, the
+    // gloves applied, the cache dropped, everything rebuilt again. This one pass
+    // is spent letting the gloves land. The next pass arms the eager sweep, which
+    // writes the knife before the budgeted list, and each weapon builds once.
+    if (g_teamSettlePending)
+    {
+        g_teamSettlePending = false;
+        g_eagerUntilMs = now + EAGER_WINDOW_MS;
+
+        Log("[team-switch] settle window over: eager sweep once the new gloves land");
+
+        return;
+    }
 
     // A dead pawn used to cost a full pass over every weapon on the exact frame
     // CS2 tears the round down: weapon entities, the HUD viewmodel and the glove

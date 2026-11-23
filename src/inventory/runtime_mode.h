@@ -24,4 +24,9 @@ namespace RuntimeModeState
 
     // One-shot read used before PlanA decides whether to create loadout items.
     RuntimeMode ReadFile(const std::string& bridgeDirectory);
+
+    // How many selections the watcher has adopted since injection. The overlay
+    // uses a second Armory selection (the user pressing Apply) as "they are in
+    // the Armory now" and closes the loading pill.
+    unsigned SelectionEvents();
 }

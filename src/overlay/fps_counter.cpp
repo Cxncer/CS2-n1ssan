@@ -13,9 +13,11 @@
 #include "overlay/fps_counter.h"
 
 #include "diagnostics/log.h"
+#include "hooks/frame_stage.h"
 #include "hooks/minhook_dynamic.h"
 #include "inventory/armory_inventory.h"
 #include "inventory/auto_accept.h"
+#include "inventory/runtime_mode.h"
 #include "overlay/accept_watch.h"
 #include "overlay/overlay_version.h"
 #include "overlay/pill_art.h"
@@ -48,20 +50,28 @@ namespace
 
     constexpr UINT SWAPCHAIN_PRESENT_INDEX = 8;
 
+    std::string BridgePath(const char* name)
+    {
+        std::string path = ArmoryInventory::BridgeDirectory();
+        if (path.empty())
+            return path;
+
+        if (path.back() != '\\' && path.back() != '/')
+            path += '\\';
+
+        path += name;
+        return path;
+    }
+
     // ---- switch -----------------------------------------------------------
 
     // Same file, same shape as the auto-accept switch: only `"fpsCounter": true`
     // counts, and a missing or broken file means off.
     bool ReadToggleFromBridge(const char* key)
     {
-        std::string path = ArmoryInventory::BridgeDirectory();
+        const std::string path = BridgePath(FEATURES_FILE);
         if (path.empty())
             return false;
-
-        if (path.back() != '\\' && path.back() != '/')
-            path += '\\';
-
-        path += FEATURES_FILE;
 
         std::ifstream file(path, std::ios::binary);
         if (!file)
@@ -170,9 +180,12 @@ namespace
         ID3D11BlendState* blend = nullptr;
 
         // The pill and the build stamp are both a composited image on one quad,
-        // so each keeps its own pixels, texture and rebuild key.
+        // so each keeps its own pixels, texture and rebuild key. The loading
+        // overlay adds the centred capsule and the flat dim behind it.
         Art pill;
         Art version;
+        Art loading;
+        Art dim;
 
         bool pipelineFailed = false;
     };
@@ -202,6 +215,8 @@ namespace
     {
         ReleaseArt(r.pill);
         ReleaseArt(r.version);
+        ReleaseArt(r.loading);
+        ReleaseArt(r.dim);
     }
 
     void ReleaseTarget(Renderer& r)
@@ -638,6 +653,161 @@ namespace
             pillWidth, pillHeight);
     }
 
+    // ---- armory loading pill ----------------------------------------------
+    //
+    // Choosing Armory in the app puts one capsule in the middle of CS2's main
+    // menu, dimmed like one of the game's own dialogs, for five seconds. Then it
+    // is gone for the rest of the session. No file, no acknowledgement, no
+    // handshake: the selection itself is the whole trigger.
+    //
+    // The first Armory selection arms it. That can arrive as a new runtime mode
+    // (the app's Apply) or already be on disk when the DLL was injected, so both
+    // are checked; a Loadout session never shows it.
+
+    constexpr ULONGLONG LOADING_VISIBLE_MS = 5000;
+    constexpr ULONGLONG LOADING_ANIM_PERIOD_MS = 2600;
+    constexpr ULONGLONG LOADING_ANIM_INTERVAL_MS = 80;
+    constexpr ULONGLONG LOADING_POLL_MS = 1000;
+
+    // How far the main menu is dimmed behind the pill: strong enough to read as
+    // a modal, light enough that the menu is still visible behind it.
+    constexpr uint8_t LOADING_DIM_ALPHA = 168;
+
+    std::atomic<bool> g_loadingArmed{ false };
+    std::atomic<bool> g_loadingDone{ false };
+    std::atomic<ULONGLONG> g_loadingStartMs{ 0 };
+    ULONGLONG g_loadingComposedMs = 0;
+
+    // "mode":"armory" in the Bridge's runtime-mode.json, read the same way the
+    // mode watcher reads it.
+    bool FileSaysArmory()
+    {
+        const std::string path = BridgePath("runtime-mode.json");
+        if (path.empty())
+            return false;
+
+        std::ifstream file(path, std::ios::binary);
+        if (!file)
+            return false;
+
+        std::stringstream buffer;
+        buffer << file.rdbuf();
+        const std::string text = buffer.str();
+
+        const size_t key = text.find("\"mode\"");
+        if (key == std::string::npos)
+            return false;
+
+        const size_t colon = text.find(':', key);
+        if (colon == std::string::npos)
+            return false;
+
+        const size_t quote = text.find('"', colon + 1);
+        if (quote == std::string::npos)
+            return false;
+
+        const size_t end = text.find('"', quote + 1);
+        if (end == std::string::npos)
+            return false;
+
+        return text.compare(quote + 1, end - quote - 1, "armory") == 0;
+    }
+
+    // The capsule's whole lifetime: armed once by an Armory selection, up for
+    // five seconds, then never again in this session.
+    bool LoadingOverlayWanted()
+    {
+        if (g_loadingDone.load())
+            return false;
+
+        const ULONGLONG now = NowMs();
+
+        if (g_loadingArmed.load())
+        {
+            if (now - g_loadingStartMs.load() < LOADING_VISIBLE_MS)
+                return true;
+
+            g_loadingDone.store(true);
+            Log("[armory-overlay] loading pill finished after %llu ms; main menu clear",
+                static_cast<unsigned long long>(LOADING_VISIBLE_MS));
+            return false;
+        }
+
+        // One check a second is enough: nothing here is time critical, and the
+        // render thread must not open a file every frame.
+        static ULONGLONG lastPollMs = 0;
+        if (lastPollMs != 0 && now - lastPollMs < LOADING_POLL_MS)
+            return false;
+        lastPollMs = now;
+
+        if (RuntimeModeState::Requested() != RuntimeMode::Armory &&
+            RuntimeModeState::Current() != RuntimeMode::Armory &&
+            !FileSaysArmory())
+            return false;
+
+        g_loadingStartMs.store(now);
+        g_loadingArmed.store(true);
+
+        Log("[armory-overlay] Armory selected; loading pill up for %llu ms",
+            static_cast<unsigned long long>(LOADING_VISIBLE_MS));
+        return true;
+    }
+
+    // A 4x4 premultiplied black square: stretched over the target it is the flat
+    // dim the loading capsule sits on.
+    void EnsureDim(Renderer& r)
+    {
+        if (r.dim.view && r.dim.key == 1)
+            return;
+
+        const int side = 4;
+        r.dim.pixels.width = side;
+        r.dim.pixels.height = side;
+        r.dim.pixels.pixels.assign((size_t)side * side * 4, 0);
+
+        for (int i = 0; i < side * side; ++i)
+            r.dim.pixels.pixels[(size_t)i * 4 + 3] = LOADING_DIM_ALPHA;
+
+        UploadArt(r, r.dim, 1, true);
+    }
+
+    void DrawLoadingOverlay(Renderer& r, float scale)
+    {
+        EnsureDim(r);
+
+        DrawOverlayQuad(r, r.dim.view, 0.0f, 0.0f,
+            (float)r.targetWidth, (float)r.targetHeight);
+
+        const ULONGLONG now = NowMs();
+        const int key = (int)(scale * 100.0f);
+
+        const bool stale =
+            !r.loading.view || r.loading.key != key ||
+            now - g_loadingComposedMs >= LOADING_ANIM_INTERVAL_MS;
+
+        if (stale)
+        {
+            const float phase = (float)((double)(now % LOADING_ANIM_PERIOD_MS) /
+                (double)LOADING_ANIM_PERIOD_MS);
+
+            if (!PillArt::ComposeLoading(scale, r.loading.pixels, phase))
+                return;
+
+            if (!UploadArt(r, r.loading, key, true))
+                return;
+
+            g_loadingComposedMs = now;
+        }
+
+        const float pillWidth = (float)r.loading.pixels.width;
+        const float pillHeight = (float)r.loading.pixels.height;
+
+        DrawOverlayQuad(r, r.loading.view,
+            ((float)r.targetWidth - pillWidth) / 2.0f,
+            ((float)r.targetHeight - pillHeight) / 2.0f,
+            pillWidth, pillHeight);
+    }
+
     // The Beta build stamp: smaller than the pill, white, bottom-right. It is
     // drawn whether or not the FPS switch is on, because its whole point is to
     // name the build in a screenshot.
@@ -697,7 +867,11 @@ namespace
             ? (float)g_renderer.targetHeight / 1080.0f : 1.0f;
         const float clampedScale = scale < 0.75f ? 0.75f : (scale > 2.0f ? 2.0f : scale);
 
-        if (OverlayEnabled())
+        // While the Armory is still waiting for Initiate the loading capsule owns
+        // the screen; the frame counter then stays out of its way entirely.
+        if (LoadingOverlayWanted())
+            DrawLoadingOverlay(g_renderer, clampedScale);
+        else if (OverlayEnabled())
             DrawPill(g_renderer, clampedScale);
 
         DrawVersionTag(g_renderer, clampedScale);

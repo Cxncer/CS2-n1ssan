@@ -22,6 +22,9 @@ namespace
 {
     std::atomic<int> g_mode{ static_cast<int>(RuntimeMode::Unknown) };
     std::atomic<int> g_requestedMode{ static_cast<int>(RuntimeMode::Unknown) };
+    // Counts adopted selections, so a consumer can tell "the mode was just
+    // chosen" from "the user pressed Apply again in the same mode".
+    std::atomic<unsigned> g_selectionEvents{ 0 };
     std::string g_bridgeDirectory;
 
     // A mode alone is not enough: the user can Apply the same mode again, and a
@@ -112,6 +115,11 @@ namespace
 
 namespace RuntimeModeState
 {
+    unsigned SelectionEvents()
+    {
+        return g_selectionEvents.load(std::memory_order_acquire);
+    }
+
     RuntimeMode ReadFile(const std::string& bridgeDirectory)
     {
         return ReadSelectionFile(bridgeDirectory).mode;
@@ -169,6 +177,7 @@ namespace RuntimeModeState
                     continue;
 
                 lastId = selection.id;
+                g_selectionEvents.fetch_add(1, std::memory_order_release);
 
                 if (selection.mode == RuntimeMode::Unknown)
                     continue;

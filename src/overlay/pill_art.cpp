@@ -1,12 +1,15 @@
 // n1ssan-dll / src/overlay/pill_art.cpp
 //
-// Draws the Armory's FPS capsule once per displayed value: a translucent body
-// inside a bright purple rim, an inner bloom, the white n1ssan mark on the left,
-// the frame rate in white and the frame time in a dimmer right-hand slot.
+// Draws the Armory's capsules with GDI+. The reference is one shape: an almost
+// black stadium, white text in the middle, and a single band of white-hot purple
+// light running around its edge. The frame-rate pill puts the n1ssan mark, the
+// frame rate and the frame time on that shape; the loading pill puts one centred
+// word on it. Same artwork, so the game and the web UI read as one object.
 //
-// The same capsule is drawn in the web UI while a workspace loads, so the two
-// read as one object: the shape, the purple and the travelling light are shared
-// ideas, not two separate looks.
+// The light is drawn as a bright blob swept along the stadium's perimeter and
+// clipped to the rim band. GDI+ has no conic gradient, so a soft ellipse gradient
+// that follows the outline is how the travelling band is made here; the bitmap is
+// recomposed a few times a second by the caller, never per frame.
 
 #include "overlay/pill_art.h"
 
@@ -27,6 +30,8 @@
 namespace
 {
     using namespace Gdiplus;
+
+    constexpr float PI = 3.14159265358979f;
 
     ULONG_PTR g_gdiplusToken = 0;
     Bitmap* g_mark = nullptr;
@@ -86,45 +91,189 @@ namespace
         path.CloseFigure();
     }
 
-    // The square a band gradient is built over. It has to hold the whole
-    // rotated gradient, or GDI+ tiles the edges of it and a second band shows up
-    // across the pill.
-    RectF BandSquare(const RectF& frame)
+    // One point on the capsule's outline, `t` in 0..1 clockwise from the top-left
+    // corner, with the outline's direction there (degrees) so the light can lie
+    // along the edge.
+    void PerimeterPoint(const RectF& box, float t, PointF& point, float& tangentDeg)
     {
-        const float diagonal =
-            std::sqrt(frame.Width * frame.Width + frame.Height * frame.Height) * 1.7f;
+        const float radius = box.Height / 2.0f;
+        float straight = box.Width - box.Height;
+        if (straight < 0.0f)
+            straight = 0.0f;
 
-        const PointF centre(frame.X + frame.Width / 2.0f, frame.Y + frame.Height / 2.0f);
-        return RectF(centre.X - diagonal / 2.0f, centre.Y - diagonal / 2.0f,
-            diagonal, diagonal);
+        const float cap = PI * radius;
+        const float total = 2.0f * straight + 2.0f * cap;
+
+        point = PointF(box.X + box.Width / 2.0f, box.Y);
+        tangentDeg = 0.0f;
+
+        if (total <= 0.0f)
+            return;
+
+        float remaining = (t - std::floor(t)) * total;
+
+        if (remaining < straight)
+        {
+            point = PointF(box.X + radius + remaining, box.Y);
+            return;
+        }
+        remaining -= straight;
+
+        if (remaining < cap)
+        {
+            const float angle = -PI / 2.0f + (remaining / cap) * PI;
+            point = PointF(box.X + box.Width - radius + radius * std::cos(angle),
+                box.Y + radius + radius * std::sin(angle));
+            tangentDeg = angle * 180.0f / PI + 90.0f;
+            return;
+        }
+        remaining -= cap;
+
+        if (remaining < straight)
+        {
+            point = PointF(box.X + box.Width - radius - remaining, box.Y + box.Height);
+            tangentDeg = 180.0f;
+            return;
+        }
+        remaining -= straight;
+
+        const float angle = PI / 2.0f + (std::fmin(std::fmax(remaining / cap, 0.0f), 1.0f)) * PI;
+        point = PointF(box.X + radius + radius * std::cos(angle),
+            box.Y + radius + radius * std::sin(angle));
+        tangentDeg = angle * 180.0f / PI + 90.0f;
     }
 
-    // One narrow bright band through the middle of the pill, rotated by `angle`.
-    // A conic gradient would be the exact shape of the reference's travelling
-    // light, and GDI+ has none, so this is a rotating linear band: it appears on
-    // one side of the capsule, slides around it and fades out on the other,
-    // which is the same read at this size and costs one path fill.
-    void RotateBand(LinearGradientBrush& brush, const RectF& frame, float angle)
+    // One soft ellipse of light centred on `centre`, lying along `tangentDeg`.
+    // `core` is the hot middle, `edge` the tail colour that fades to nothing at
+    // the boundary: the focus scales squeeze the hot part so it reads as a band
+    // and not a dot.
+    void FillLight(Graphics& g, const PointF& centre, float tangentDeg,
+        float length, float thickness, const Color& core, const Color& edge)
     {
-        const PointF centre(frame.X + frame.Width / 2.0f, frame.Y + frame.Height / 2.0f);
+        if (length <= 0.0f || thickness <= 0.0f)
+            return;
+
+        GraphicsPath blob;
+        blob.AddEllipse(centre.X - length / 2.0f, centre.Y - thickness / 2.0f,
+            length, thickness);
 
         Matrix rotation;
-        rotation.RotateAt(angle, centre);
-        brush.SetTransform(&rotation);
+        rotation.RotateAt(tangentDeg, centre);
+        blob.Transform(&rotation);
+
+        PathGradientBrush brush(&blob);
+        brush.SetCenterPoint(centre);
+        brush.SetCenterColor(core);
+        brush.SetFocusScales(0.45f, 0.16f);
+
+        Color surround[1] = { edge };
+        INT count = 1;
+        brush.SetSurroundColors(surround, &count);
+
+        g.FillPath(&brush, &blob);
     }
 
-    void SetBandStops(LinearGradientBrush& brush, Color mid)
+    // The capsule itself: a near-black translucent body, faint hairline, and the
+    // running light both as a wide bloom and as a band clipped to the rim.
+    void PaintShell(Graphics& g, const RectF& frame, float scale, float phase)
     {
-        const Color colors[5] = {
-            Color(0, 0, 0, 0),
-            Color(0, 0, 0, 0),
-            mid,
-            Color(0, 0, 0, 0),
-            Color(0, 0, 0, 0),
-        };
-        const REAL positions[5] = { 0.0f, 0.42f, 0.5f, 0.58f, 1.0f };
+        GraphicsPath shell;
+        AddCapsule(shell, frame);
 
-        brush.SetInterpolationColors(colors, positions, 5);
+        // Almost black, lifted only a little at the top so the capsule still has a
+        // top and a bottom instead of reading as a flat cut-out.
+        // Slightly translucent: the menu behind it stays readable through the
+        // capsule, which is what makes it sit on the screen instead of on top
+        // of it. The rim and the light stay opaque, so the edge still holds.
+        LinearGradientBrush body(frame,
+            Color(212, 26, 25, 30),
+            Color(228, 6, 6, 8),
+            LinearGradientModeVertical);
+        g.FillPath(&body, &shell);
+
+        const float radius = frame.Height / 2.0f;
+        float straight = frame.Width - frame.Height;
+        if (straight < 0.0f)
+            straight = 0.0f;
+
+        PointF light;
+        float tangent = 0.0f;
+        PerimeterPoint(frame, phase, light, tangent);
+
+        // Long enough to read as a band and not a dot, short enough that it still
+        // travels: two thirds of the flat edge plus a cap's worth of curve.
+        const float bandLength = straight * 0.55f + radius * 1.5f;
+        const float bandThickness = 0.5f * frame.Height;
+
+        // A small halo around the light only: enough to lift it off the body,
+        // small enough that the capsule stays black everywhere else. Clipped to a
+        // slightly larger capsule so the glow follows the shape instead of being
+        // cut square by the bitmap's edge.
+        {
+            const float spread = 6.0f * scale < 3.0f ? 3.0f : 6.0f * scale;
+
+            RectF haloFrame(frame.X - spread, frame.Y - spread,
+                frame.Width + spread * 2.0f, frame.Height + spread * 2.0f);
+
+            GraphicsPath haloPath;
+            AddCapsule(haloPath, haloFrame);
+
+            g.SetClip(&haloPath);
+
+            FillLight(g, light, tangent, bandLength * 0.9f, bandThickness * 1.05f,
+                Color(56, 140, 96, 255), Color(0, 112, 66, 255));
+
+            g.ResetClip();
+        }
+
+        // Glass: one white sheen brightest at the top edge and gone by the middle.
+        {
+            const RectF sheenFrame(frame.X + 1.0f, frame.Y + 1.0f,
+                frame.Width - 2.0f, frame.Height * 0.46f);
+
+            GraphicsPath sheenPath;
+            AddCapsule(sheenPath, sheenFrame);
+
+            g.SetClip(&shell);
+            LinearGradientBrush sheen(sheenFrame,
+                Color(6, 255, 255, 255),
+                Color(0, 255, 255, 255),
+                LinearGradientModeVertical);
+            g.FillPath(&sheen, &sheenPath);
+            g.ResetClip();
+        }
+
+        // Hairline: barely there, so the shape holds on a bright background without
+        // drawing a second visual line around the light.
+        Pen rim(Color(30, 255, 255, 255), 1.0f);
+        g.DrawPath(&rim, &shell);
+
+        // The light itself, clipped to the rim band: everything inside the band is
+        // the capsule's edge, so the gradient lands exactly on the outline.
+        {
+            // A hairline band: the light is a thin line on the edge, not a glow
+            // sitting in the body. Anything wider covers the capsule's top with
+            // a lavender wash.
+            const float inset = 1.8f * scale < 1.0f ? 1.0f : 1.8f * scale;
+
+            RectF innerFrame(frame.X + inset, frame.Y + inset,
+                frame.Width - inset * 2.0f, frame.Height - inset * 2.0f);
+
+            GraphicsPath inner;
+            AddCapsule(inner, innerFrame);
+
+            // ExcludeClip takes a region, not a path: the inner capsule becomes
+            // the hole, so what is left is the rim band.
+            Region innerRegion(&inner);
+
+            g.SetClip(&shell);
+            g.ExcludeClip(&innerRegion);
+
+            FillLight(g, light, tangent, bandLength, bandThickness * 0.62f,
+                Color(255, 252, 248, 255), Color(0, 158, 104, 255));
+
+            g.ResetClip();
+        }
     }
 
     bool ComposeCanvas(Bitmap& canvas, Graphics& g)
@@ -158,6 +307,31 @@ namespace
         }
 
         canvas.UnlockBits(&data);
+        return true;
+    }
+
+    std::unique_ptr<Font> MakeFont(float size, bool bold)
+    {
+        std::unique_ptr<Font> font(new Font(L"Segoe UI Semibold",
+            size, FontStyleRegular, UnitPixel));
+        if (font->GetLastStatus() != Ok)
+            font.reset(new Font(L"Segoe UI", size, bold ? FontStyleBold : FontStyleRegular, UnitPixel));
+        if (font->GetLastStatus() != Ok)
+            font.reset();
+        return font;
+    }
+
+    bool MeasureText(const wchar_t* text, Font& font, float& width, float& height)
+    {
+        Bitmap probe(1, 1, PixelFormat32bppPARGB);
+        Graphics measure(&probe);
+
+        RectF bounds;
+        if (measure.MeasureString(text, -1, &font, PointF(0.0f, 0.0f), &bounds) != Ok)
+            return false;
+
+        width = bounds.Width;
+        height = bounds.Height;
         return true;
     }
 }
@@ -194,59 +368,45 @@ namespace PillArt
 
         swprintf_s(timeLabel, L"~%dms", (int)std::lround(frameMs));
 
-        const float padLeft = 15.0f * scale;
-        const float padRight = 16.0f * scale;
-        const float gapMark = 9.0f * scale;
-        const float gapDots = 12.0f * scale;
-        const float markSide = 21.0f * scale;
-        const float height = 41.0f * scale;
-        const float dotRadius = 1.7f * scale;
-        const float dotSpacing = 6.0f * scale;
-        const float radiusStep = dotRadius * 2.0f + dotSpacing;
-        const float dotsWidth = dotRadius * 6.0f + dotSpacing * 2.0f;
-        const float numberSize = 19.0f * scale;
-        const float timeSize = 10.5f * scale;
+        const float padLeft = 13.0f * scale;
+        const float padRight = 14.0f * scale;
+        const float gapMark = 8.0f * scale;
+        const float gapTime = 9.0f * scale;
+        const float markSide = 19.0f * scale;
+        const float height = 38.0f * scale;
+        const float numberSize = 18.0f * scale;
+        const float timeSize = 10.0f * scale;
 
-        std::unique_ptr<Font> font(new Font(L"Segoe UI Semibold", numberSize, FontStyleRegular, UnitPixel));
-        if (font->GetLastStatus() != Ok)
-            font.reset(new Font(L"Segoe UI", numberSize, FontStyleBold, UnitPixel));
-        if (font->GetLastStatus() != Ok)
-            return false;
-
-        std::unique_ptr<Font> timeFont(new Font(L"Segoe UI Semibold", timeSize, FontStyleRegular, UnitPixel));
-        if (timeFont->GetLastStatus() != Ok)
-            timeFont.reset(new Font(L"Segoe UI", timeSize, FontStyleBold, UnitPixel));
-        if (timeFont->GetLastStatus() != Ok)
+        std::unique_ptr<Font> font = MakeFont(numberSize, true);
+        std::unique_ptr<Font> timeFont = MakeFont(timeSize, false);
+        if (!font || !timeFont)
             return false;
 
         float textWidth = 0.0f;
         float timeWidth = 0.0f;
+        float ignoredHeight = 0.0f;
 
-        {
-            Bitmap probe(1, 1, PixelFormat32bppPARGB);
-            Graphics measure(&probe);
-            RectF bounds;
-
-            if (measure.MeasureString(label, -1, font.get(), PointF(0.0f, 0.0f), &bounds) != Ok)
-                return false;
-            textWidth = bounds.Width;
-
-            if (measure.MeasureString(timeLabel, -1, timeFont.get(), PointF(0.0f, 0.0f), &bounds) != Ok)
-                return false;
-            timeWidth = bounds.Width;
-        }
-
-        const int width = (int)std::ceil(
-            padLeft + markSide + gapMark + textWidth + gapDots + dotsWidth +
-            gapDots + timeWidth + padRight + 3.0f);
-        const int heightPx = (int)std::ceil(height);
-        if (width < 8 || heightPx < 8)
+        if (!MeasureText(label, *font, textWidth, ignoredHeight) ||
+            !MeasureText(timeLabel, *timeFont, timeWidth, ignoredHeight))
             return false;
 
-        out.width = width;
-        out.height = heightPx;
+        const float contentWidth =
+            padLeft + markSide + gapMark + textWidth + gapTime + timeWidth + padRight + 3.0f;
 
-        Bitmap canvas(width, heightPx, PixelFormat32bppPARGB);
+        const int contentPx = (int)std::ceil(contentWidth);
+        const int heightPx = (int)std::ceil(height);
+        if (contentPx < 8 || heightPx < 8)
+            return false;
+
+        // Room around the capsule for the bloom to fade into. The extra pixels are
+        // transparent, so the caller only has to keep them on screen.
+        const int margin = (int)std::ceil(13.0f * scale);
+        const int width = contentPx + margin * 2;
+
+        out.width = width;
+        out.height = heightPx + margin * 2;
+
+        Bitmap canvas(out.width, out.height, PixelFormat32bppPARGB);
         if (canvas.GetLastStatus() != Ok)
             return false;
 
@@ -255,153 +415,98 @@ namespace PillArt
             if (!ComposeCanvas(canvas, g))
                 return false;
 
-            const RectF frame(0.0f, 0.0f, (float)width, (float)heightPx);
+            const RectF frame((float)margin, (float)margin,
+                (float)contentPx, (float)heightPx);
 
-            GraphicsPath shell;
-            AddCapsule(shell, frame);
-
-            // The band angle: one full turn per phase, offset so the light
-            // starts at the mark and travels right, the way the reference's
-            // highlight does.
-            const float angle = phase * 360.0f - 90.0f;
-
-            // Body between the rim and the inner capsule: the purple ring of the
-            // reference, dark enough that the window inside it reads as black
-            // glass rather than as a lavender bubble.
-            LinearGradientBrush shellBody(frame,
-                Color(220, 40, 10, 92),
-                Color(232, 22, 4, 52),
-                LinearGradientModeVertical);
-            g.FillPath(&shellBody, &shell);
-
-            // Outer halo, so the pill keeps its glow over a bright wall.
-            Pen halo(Color(46, 150, 106, 255), 6.0f * scale < 3.0f ? 3.0f : 6.0f * scale);
-            g.DrawPath(&halo, &shell);
-
-            // Inner capsule: the darker translucent window the contents sit in.
-            const REAL inset = 4.0f * scale < 2.0f ? 2.0f : 4.0f * scale;
-            const RectF innerFrame(frame.X + inset, frame.Y + inset,
-                frame.Width - inset * 2.0f, frame.Height - inset * 2.0f);
-
-            GraphicsPath inner;
-            AddCapsule(inner, innerFrame);
-
-            LinearGradientBrush innerBody(innerFrame,
-                Color(230, 32, 8, 70),
-                Color(242, 14, 2, 34),
-                LinearGradientModeForwardDiagonal);
-            g.FillPath(&innerBody, &inner);
-
-            // Bloom: brightest a little left of centre, exactly where the
-            // reference's glow sits behind the battery.
-            {
-                g.SetClip(&inner);
-
-                PathGradientBrush bloom(&inner);
-                const PointF centre(innerFrame.X + innerFrame.Width * 0.44f,
-                    innerFrame.Y + innerFrame.Height * 0.56f);
-                bloom.SetCenterPoint(centre);
-                bloom.SetCenterColor(Color(74, 158, 60, 255));
-
-                Color surround[1] = { Color(0, 0, 0, 0) };
-                INT count = 1;
-                bloom.SetSurroundColors(surround, &count);
-                g.FillPath(&bloom, &inner);
-
-                // Sheen: the same bright band, clipped to the body, so the
-                // gradient itself moves rather than a highlight sitting on top
-                // of a static one.
-                {
-                    LinearGradientBrush sheen(BandSquare(frame), Color(0, 0, 0, 0),
-                        Color(0, 0, 0, 0), LinearGradientModeHorizontal);
-                    SetBandStops(sheen, Color(104, 226, 186, 255));
-                    RotateBand(sheen, frame, angle + 42.0f);
-
-                    g.FillPath(&sheen, &inner);
-                }
-
-                // Static glass: one white sheen that is brightest at the top
-                // edge and gone by the bottom, which is what reads as glass.
-                LinearGradientBrush gloss(innerFrame,
-                    Color(14, 255, 255, 255),
-                    Color(0, 255, 255, 255),
-                    LinearGradientModeVertical);
-                g.FillPath(&gloss, &inner);
-
-                g.ResetClip();
-            }
-
-            // Hairline between body and rim, so the capsule keeps an edge.
-            Pen innerRim(Color(120, 196, 158, 255), 1.2f);
-            g.DrawPath(&innerRim, &inner);
-
-            // Rim: a dim purple line everywhere, plus the travelling light on
-            // the same path.
-            Pen rim(Color(205, 186, 150, 255), 1.4f * scale < 1.0f ? 1.0f : 1.4f * scale);
-            g.DrawPath(&rim, &shell);
-
-            {
-                LinearGradientBrush chase(BandSquare(frame), Color(0, 0, 0, 0),
-                    Color(0, 0, 0, 0), LinearGradientModeHorizontal);
-                SetBandStops(chase, Color(255, 246, 238, 255));
-                RotateBand(chase, frame, angle);
-
-                Pen light(&chase, 2.8f * scale < 1.5f ? 1.5f : 2.8f * scale);
-                g.DrawPath(&light, &shell);
-            }
+            PaintShell(g, frame, scale, phase);
 
             if (g_mark)
             {
-                const float top = (heightPx - markSide) / 2.0f;
-                g.DrawImage(g_mark, RectF(padLeft, top, markSide, markSide));
+                const float top = frame.Y + (frame.Height - markSide) / 2.0f;
+                g.DrawImage(g_mark, RectF(frame.X + padLeft, top, markSide, markSide));
             }
 
-            float cursor = padLeft + markSide + gapMark;
+            StringFormat format;
+            format.SetAlignment(StringAlignmentNear);
+            format.SetLineAlignment(StringAlignmentCenter);
+            format.SetFormatFlags(StringFormatFlagsNoWrap);
+
+            float cursor = frame.X + padLeft + markSide + gapMark;
 
             {
-                StringFormat format;
-                format.SetAlignment(StringAlignmentNear);
-                format.SetLineAlignment(StringAlignmentCenter);
-                format.SetFormatFlags(StringFormatFlagsNoWrap);
-
                 // Amber while a recent frame ran long, white otherwise: the same
                 // signal as the [perf-spike] log line, visible in game.
                 SolidBrush number(spike ? Color(255, 244, 178, 74) : Color(255, 255, 255, 255));
 
-                const RectF box(cursor, 0.0f, textWidth + 2.0f, (float)heightPx);
+                const RectF box(cursor, frame.Y, textWidth + 2.0f, frame.Height);
                 g.DrawString(label, -1, font.get(), box, &format, &number);
-                cursor += textWidth + 2.0f;
+                cursor += textWidth + 2.0f + gapTime;
             }
 
-            cursor += gapDots;
-
             {
-                SolidBrush dot(Color(168, 236, 224, 255));
+                // The frame time is secondary: dim grey, small, after the number.
+                SolidBrush dim(Color(170, 176, 168, 190));
 
-                for (int i = 0; i < 3; ++i)
-                {
-                    const float cx = cursor + dotRadius + (float)i * radiusStep;
-                    const float cy = heightPx / 2.0f;
-                    g.FillEllipse(&dot, cx - dotRadius, cy - dotRadius,
-                        dotRadius * 2.0f, dotRadius * 2.0f);
-                }
-
-                cursor += dotsWidth;
-            }
-
-            cursor += gapDots;
-
-            {
-                StringFormat format;
-                format.SetAlignment(StringAlignmentNear);
-                format.SetLineAlignment(StringAlignmentCenter);
-                format.SetFormatFlags(StringFormatFlagsNoWrap);
-
-                SolidBrush dim(Color(170, 226, 208, 255));
-
-                const RectF box(cursor, 0.0f, timeWidth + 2.0f, (float)heightPx);
+                const RectF box(cursor, frame.Y, timeWidth + 2.0f, frame.Height);
                 g.DrawString(timeLabel, -1, timeFont.get(), box, &format, &dim);
             }
+        }
+
+        return ReadBack(canvas, out);
+    }
+
+    bool ComposeLoading(float scale, Pill& out, float phase)
+    {
+        if (!g_gdiplusToken)
+            return false;
+
+        static const wchar_t* label = L"Loading...";
+
+        const float fontSize = 15.0f * scale;
+        const float padX = 28.0f * scale;
+        const float height = 46.0f * scale;
+
+        std::unique_ptr<Font> font = MakeFont(fontSize, true);
+        if (!font)
+            return false;
+
+        float textWidth = 0.0f;
+        float ignoredHeight = 0.0f;
+        if (!MeasureText(label, *font, textWidth, ignoredHeight))
+            return false;
+
+        const int contentPx = (int)std::ceil(padX * 2.0f + textWidth + 4.0f);
+        const int heightPx = (int)std::ceil(height);
+        if (contentPx < 8 || heightPx < 8)
+            return false;
+
+        const int margin = (int)std::ceil(13.0f * scale);
+        const int width = contentPx + margin * 2;
+
+        out.width = width;
+        out.height = heightPx + margin * 2;
+
+        Bitmap canvas(out.width, out.height, PixelFormat32bppPARGB);
+        if (canvas.GetLastStatus() != Ok)
+            return false;
+
+        {
+            Graphics g(&canvas);
+            if (!ComposeCanvas(canvas, g))
+                return false;
+
+            const RectF frame((float)margin, (float)margin,
+                (float)contentPx, (float)heightPx);
+
+            PaintShell(g, frame, scale, phase);
+
+            StringFormat format;
+            format.SetAlignment(StringAlignmentCenter);
+            format.SetLineAlignment(StringAlignmentCenter);
+            format.SetFormatFlags(StringFormatFlagsNoWrap);
+
+            SolidBrush text(Color(255, 255, 255, 255));
+            g.DrawString(label, -1, font.get(), frame, &format, &text);
         }
 
         return ReadBack(canvas, out);
@@ -419,23 +524,14 @@ namespace PillArt
         // Smaller than the pill text: this is a build stamp, not HUD.
         const float fontSize = 10.0f * scale;
 
-        std::unique_ptr<Font> font(new Font(L"Segoe UI Semibold", fontSize, FontStyleRegular, UnitPixel));
-        if (font->GetLastStatus() != Ok)
-            font.reset(new Font(L"Segoe UI", fontSize, FontStyleBold, UnitPixel));
-        if (font->GetLastStatus() != Ok)
+        std::unique_ptr<Font> font = MakeFont(fontSize, true);
+        if (!font)
             return false;
 
         float textWidth = 0.0f;
         float textHeight = 0.0f;
-        {
-            Bitmap probe(1, 1, PixelFormat32bppPARGB);
-            Graphics measure(&probe);
-            RectF bounds;
-            if (measure.MeasureString(label, -1, font.get(), PointF(0.0f, 0.0f), &bounds) != Ok)
-                return false;
-            textWidth = bounds.Width;
-            textHeight = bounds.Height;
-        }
+        if (!MeasureText(label, *font, textWidth, textHeight))
+            return false;
 
         const int pad = (int)std::ceil(2.0f * scale);
         const int width = (int)std::ceil(textWidth) + pad * 2 + 2;
