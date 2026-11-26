@@ -11,9 +11,7 @@
 #include "sdk/handles.h"
 #include "sdk/item_view.h"
 #include "skin/glove_attribute_manager.h"
-#include "skin/glove_model_refresh.h"
 #include "skin/glove_paintkit_schema.h"
-#include "hooks/lineup.h"
 
 #include <algorithm>
 #include <cstdio>
@@ -30,18 +28,6 @@ namespace
     constexpr std::uint64_t OWN_FLAG_FRAMES = 3;
     constexpr std::uint64_t FOLLOW_UP_DELAYS_MS[] = { 400, 1200, 3000 };
     constexpr std::uint64_t VERIFY_INTERVAL_MS = 1000;
-
-    // Repairs of a glove model whose paint request never leaves step 0. A few
-    // tries after a change, not a loop: the request only has to be freed once.
-    constexpr std::size_t GLOVE_MATERIAL_REPAIRS = 4;
-    constexpr std::uint64_t GLOVE_MATERIAL_REPAIR_MS = 400;
-
-    // The stuck request is not a one-off after a change: on CT the in-match glove
-    // paint request can be re-created mid-round (round restart, HUD rebuild) and
-    // then sits at step 0 until something kicks it. RepairGloveMaterials returns
-    // immediately when nothing is waiting, so it can run as a slow upkeep - this
-    // is the "CT gloves render default for a round, then come back" report.
-    constexpr std::uint64_t GLOVE_MATERIAL_UPKEEP_MS = 1500;
 
     bool g_appliedCustomGloves = false;
     bool g_appliedThisTick = false;
@@ -62,8 +48,6 @@ namespace
     std::uint64_t g_spawnSeenAt = 0;
     std::size_t g_followUpIndex = 0;
     std::uint64_t g_lastVerifyMs = 0;
-    std::size_t g_materialRepairsLeft = 0;
-    std::uint64_t g_lastMaterialRepairMs = 0;
 
     // Spawn-time guard. On this build the field can hold a nonsense value (the
     // log showed 1.4e34) or a number that climbs every frame. Treating either as
@@ -483,7 +467,6 @@ void RunGloves(std::uintptr_t pawn)
     {
         g_clearFrames = CLEAR_FRAMES;
         g_lastTeam = team;
-        GloveModelRefresh::Request();
     }
 
     if (respawned && customSelection)
@@ -528,60 +511,6 @@ void RunGloves(std::uintptr_t pawn)
     }
 
 
-    // Slow upkeep: while custom gloves are on and nothing is being written,
-    // look at the glove model itself. The item view can be perfect while the
-    // model draws plain - CS2 rebuilds that model on its own (agent swap, round
-    // restart, respawn) and the rebuilt model does not always ask for its paint
-    // again, which is the gloves that don't render again until something else
-    // happens to re-apply them.
-    if (customSelection && paintKit > 0 && g_updateFrames <= 0 &&
-        now - g_lastMaterialRepairMs >= GLOVE_MATERIAL_UPKEEP_MS)
-    {
-        g_lastMaterialRepairMs = now;
-
-        char upkeepDetail[112]{};
-        const int modelState = Lineup::EnsureGloveModel(pawn, upkeepDetail,
-            sizeof(upkeepDetail));
-
-        // Only an action is logged, one line per change of answer. Healthy
-        // gloves (state 0, whatever the material counts read) must never write
-        // a line, and this runs every 1.5 s: a session without a [glove-model]
-        // line is a session where the rebuild never fired.
-        static int lastModelState = -2;
-        static char lastModelDetail[112]{};
-
-        if (modelState != 0 &&
-            (modelState != lastModelState ||
-             std::strcmp(upkeepDetail, lastModelDetail) != 0))
-        {
-            lastModelState = modelState;
-            std::snprintf(lastModelDetail, sizeof(lastModelDetail), "%s",
-                upkeepDetail);
-
-            Log("[glove-model] %s (state %d) team=%s",
-                upkeepDetail, modelState, team == 2 ? "T" : "CT");
-        }
-    }
-
-    // The glove model's paint request can sit at step 0 forever: the material
-    // manager never polls a shared request, and on CT the in-match glove request
-    // is exactly that. The item view then looks perfect while the gloves render
-    // unpainted (or default), and rewriting it only makes another stuck request.
-    // Free it and kick the manager - the repair the lineup screens already run
-    // for the local gloves - a few times after a change, then leave it alone.
-    if (customSelection && paintKit > 0 && g_materialRepairsLeft > 0 &&
-        now - g_lastMaterialRepairMs >= GLOVE_MATERIAL_REPAIR_MS)
-    {
-        g_lastMaterialRepairMs = now;
-        --g_materialRepairsLeft;
-
-        char detail[96]{};
-
-        if (Lineup::RepairGloveMaterials(pawn, detail, sizeof(detail)))
-            Log("[glove-runtime] glove paint request freed and rebuilt (%s)",
-                detail);
-    }
-
     if (g_updateFrames <= 0)
         return;
 
@@ -609,13 +538,6 @@ void RunGloves(std::uintptr_t pawn)
     g_lastTeam = team;
     g_appliedCustomGloves = customSelection;
 
-    // Any re-apply can leave the model with a fresh, stuck paint request.
-    if (configChanged || teamChanged || pawnChanged || respawned ||
-        itemWasReset || followUp)
-    {
-        g_materialRepairsLeft = GLOVE_MATERIAL_REPAIRS;
-        g_lastMaterialRepairMs = 0;
-    }
 }
 
 void ResetGloves()
@@ -637,8 +559,6 @@ void ResetGloves()
     g_spawnSeenAt = 0;
     g_followUpIndex = 0;
     g_lastVerifyMs = 0;
-    g_materialRepairsLeft = 0;
-    g_lastMaterialRepairMs = 0;
     g_spawnTimeTrusted = true;
     g_spawnMovePawn = 0;
     g_spawnMovesForPawn = 0;

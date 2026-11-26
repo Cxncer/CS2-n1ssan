@@ -34,13 +34,22 @@ bool RebuildHudKeychainAddon(uintptr_t weapon, uintptr_t hudWeapon, bool request
 // the viewmodel's "keychain" addon are rigid duplicates of it.
 bool AddKeychainEntity(uintptr_t weapon);
 
-// How many world keychain_module entities hang on this weapon (owned by it or
-// parented under its scene node). Read-only; the scan is shared with the remover.
-int CountWorldKeychainEntities(uintptr_t weapon);
+// How many charm entities hang on this weapon (owned by it or parented under its
+// scene node), and the keychain definition of the first one (Lootline's
+// WorldKeychains). Read-only; the scan is shared with the remover.
+int CountWorldKeychainEntities(uintptr_t weapon, int* firstKit = nullptr);
 
 // Charm entities hanging on the first-person weapon. They are rigid copies of
 // the charm, never the simulated one.
 int RemoveHudKeychainEntities(uintptr_t hudWeapon);
+
+// Lootline's EntityScan::ForEach: walk the engine's entity identity table from
+// `first` to `last` (1..0x7FFE), calling `visit` for every live entity whose
+// slot handle names its slot. `visit` returns false to stop the walk. The
+// designer name is null when it cannot be read. Returns how many were visited.
+using EntityVisit = bool (*)(uintptr_t entity, uint32_t index, const char* designer,
+                             void* context);
+int ForEachEntity(uintptr_t first, uintptr_t last, EntityVisit visit, void* context);
 
 // CS2's own name tag helper: reads the item view's custom name and hangs,
 // replaces or removes the nametag module on the gun (Lootline's

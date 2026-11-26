@@ -48,10 +48,17 @@ namespace
         { "EIV_AccountID",       "C_EconItemView", "m_iAccountID",                 &g_off.EIV_AccountID },
         { "EIV_Initialized",     "C_EconItemView", "m_bInitialized",               &g_off.EIV_Initialized },
         { "EIV_DisallowSOC",     "C_EconItemView", "m_bDisallowSOC",               &g_off.EIV_DisallowSOC },
-        { "EIV_RestoreCustom",   "C_EconItemView", "m_bRestoreCustomMaterial",     &g_off.EIV_RestoreCustom },
+        // The engine's field is m_bRestoreCustomMaterialAfterPrecache. The short
+        // name this used to ask for does not exist, so the lookup failed on every
+        // session (the digest's "offsetsUnresolved=1 offsets=[EIV_RestoreCustom]")
+        // and only the FB_* constant kept the write landing on the right byte.
+        { "EIV_RestoreCustom",   "C_EconItemView", "m_bRestoreCustomMaterialAfterPrecache", &g_off.EIV_RestoreCustom },
         { "EIV_AttributeList",   "C_EconItemView", "m_AttributeList",              &g_off.EIV_AttributeList },
         { "EIV_NetworkedAttrs",  "C_EconItemView", "m_NetworkedDynamicAttributes", &g_off.EIV_NetworkedAttrs },
         { "EIV_CustomName",      "C_EconItemView", "m_szCustomName",               &g_off.EIV_CustomName },
+        // What CS2 reads first (GetCustomName): the plain field is only the
+        // fallback for a view with no item behind it.
+        { "EIV_CustomNameOverride", "C_EconItemView", "m_szCustomNameOverride",    &g_off.EIV_CustomNameOverride },
         { "AC_Item",             "C_AttributeContainer", "m_Item",                 &g_off.AC_Item },
         { "EE_AttrManager",      "C_EconEntity", "m_AttributeManager",             &g_off.EE_AttrManager },
         { "EE_FallbackPK",       "C_EconEntity", "m_nFallbackPaintKit",            &g_off.EE_FallbackPK },
@@ -229,6 +236,7 @@ void ResolveOffsets()
     g_off.EIV_AttributeList = FB_EIV_AttributeList;
     g_off.EIV_NetworkedAttrs = FB_EIV_NetworkedAttrs;
     g_off.EIV_CustomName = FB_EIV_CustomName;
+    g_off.EIV_CustomNameOverride = FB_EIV_CustomNameOverride;
 
     g_off.AC_Item = FB_AC_Item;
 

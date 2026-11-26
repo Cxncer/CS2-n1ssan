@@ -15,6 +15,10 @@ struct TargetSkin
     float       wear = 0.5f;
     bool        legacyModel = false;
     bool        statTrak = false;
+    // A Souvenir: an ordinary weapon skin carrying quality 12, never StatTrak.
+    // Written into the item view's quality, which is what makes CS2 treat the
+    // gun in hand as a Souvenir item instead of a plain one.
+    bool        souvenir = false;
     // Kills saved on the Armory instance. Written into the item's "kill eater"
     // attribute so the in-game counter continues from where it stopped.
     int         statTrakKills = 0;
@@ -23,6 +27,9 @@ struct TargetSkin
     std::string instanceId;
     // Custom name tag applied to the weapon (empty = none).
     std::string customName;
+    // An agent's model path when the Armory named one (Phase 6, custom models).
+    // Empty keeps the model the agent's definition resolves to.
+    std::string modelPath;
     std::string skinName;
     std::string weaponName;
     std::string team;

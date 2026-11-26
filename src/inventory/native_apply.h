@@ -1,5 +1,7 @@
 #pragma once
 
+#include <cstdint>
+
 // Stickers and charms on Armory items, applied through CS2's own inventory.
 //
 // CS2's inventory screen stays the thing that applies them: the player picks a
@@ -22,4 +24,20 @@ namespace NativeApply
     // client.dll is up, but a failed first attempt must not stay failed).
     // Called from the game-thread hook while nothing is applying.
     void Tick();
+
+    // Holds queued sticker/charm applies while the local pawn is dead inside a
+    // match: the job was built from an item view read before the death, and CS2
+    // destroys the round's entities then. Set once per frame-stage tick.
+    void SetLoadoutQuiet(bool quiet);
+
+    // Resolves an InventoryAPI function by its registered name: the client
+    // registers each one as "lea rdx, [function] ; lea rcx, [name]". 0 when
+    // this build does not register it. Lootline finds its tool hooks the same
+    // way, so a game update that keeps the registration needs no signature.
+    uintptr_t ResolveInventoryFunction(const char* name);
+
+    // Tells Panorama a customization finished, the way the Game Coordinator's
+    // reply does (a 0x30-byte event through the UI engine's dispatch). Main
+    // thread only. False when the notifier could not be resolved.
+    bool NotifyCustomization(int type, const char* typeName, uint64_t itemId);
 }

@@ -569,6 +569,89 @@ namespace
         DWORD written = 0;
         WriteFile(file, text, static_cast<DWORD>(strlen(text)), &written, nullptr);
         CloseHandle(file);
+
+        // The session log also has a buffered writer, and its FILE position is
+        // still where the last flush ended - behind this line. The next flush
+        // then writes from that old position and overwrites what was just
+        // appended, which is why the 2026-11-24 22:27 dump had a log with no
+        // [crash] line in it. Moving the stream to the end keeps both writers
+        // in step. Best effort: a lock the dying thread holds must not make the
+        // crash handler deadlock.
+        if (g_logFile && TryEnterCriticalSection(&g_logLock))
+        {
+            _fseeki64(g_logFile, 0, SEEK_END);
+            LeaveCriticalSection(&g_logLock);
+        }
+    }
+
+    // ---- unhandled-exception call chain ----
+    //
+    // Windows hands the filter one address, and for the crash this exists for
+    // that address is 0: the fault was a call through a null function pointer,
+    // so there is no module to name and no symbol to look up without the exact
+    // PDB of the build that died (the 2026-11-23 21:17 dump is unresolvable for
+    // exactly that reason - the next build overwrote its PDB). The return
+    // addresses the thread left on its stack do name the frames, as
+    // module+offset, which the PDB or map file of that build resolves later.
+    // Bounded, best effort, and skipped when the stack pointer is not readable.
+    void AppendCrashFrames(EXCEPTION_POINTERS* info, int maxFrames)
+    {
+        if (!info || !info->ContextRecord || maxFrames <= 0)
+            return;
+
+        const uintptr_t rsp = static_cast<uintptr_t>(info->ContextRecord->Rsp);
+
+        if (rsp < 0x10000)
+            return;
+
+        char text[320]{};
+        int named = 0;
+
+        __try
+        {
+            const uintptr_t* words = reinterpret_cast<const uintptr_t*>(rsp);
+
+            for (int i = 0; i < 1024 && named < maxFrames; ++i)
+            {
+                const uintptr_t word = words[i];
+
+                if (word < 0x10000 || (word & 0x3) != 0)
+                    continue;
+
+                HMODULE module = nullptr;
+
+                if (!GetModuleHandleExA(
+                        GET_MODULE_HANDLE_EX_FLAG_FROM_ADDRESS |
+                        GET_MODULE_HANDLE_EX_FLAG_UNCHANGED_REFCOUNT,
+                        reinterpret_cast<LPCSTR>(word), &module) || !module)
+                    continue;
+
+                char moduleName[MAX_PATH]{};
+                GetModuleFileNameA(module, moduleName, MAX_PATH);
+
+                const char* name = moduleName;
+
+                for (const char* c = moduleName; *c; ++c)
+                {
+                    if (*c == '\\')
+                        name = c + 1;
+                }
+
+                sprintf_s(text, sizeof(text),
+                    "[crash]   return %d: %s+0x%llX\n", named, name,
+                    static_cast<unsigned long long>(
+                        word - reinterpret_cast<uintptr_t>(module)));
+
+                AppendCrashLine(text);
+                ++named;
+            }
+        }
+        __except (EXCEPTION_EXECUTE_HANDLER)
+        {
+        }
+
+        if (named == 0)
+            AppendCrashLine("[crash]   no return address on the stack named a loaded module\n");
     }
 
     // ---- unhandled-exception minidump ----
@@ -675,6 +758,31 @@ namespace
 
         AppendCrashLine(line);
 
+        // Registers and return addresses: the faulting address alone cannot
+        // name a null call, and the dump only resolves against the PDB of the
+        // build that crashed.
+        if (info && info->ContextRecord)
+        {
+            const CONTEXT* context = info->ContextRecord;
+
+            char registers[320]{};
+            sprintf_s(registers, sizeof(registers),
+                "[crash]   rip=%p rsp=%p rbp=%p rax=%p rbx=%p rcx=%p rdx=%p rsi=%p rdi=%p\n",
+                reinterpret_cast<const void*>(static_cast<uintptr_t>(context->Rip)),
+                reinterpret_cast<const void*>(static_cast<uintptr_t>(context->Rsp)),
+                reinterpret_cast<const void*>(static_cast<uintptr_t>(context->Rbp)),
+                reinterpret_cast<const void*>(static_cast<uintptr_t>(context->Rax)),
+                reinterpret_cast<const void*>(static_cast<uintptr_t>(context->Rbx)),
+                reinterpret_cast<const void*>(static_cast<uintptr_t>(context->Rcx)),
+                reinterpret_cast<const void*>(static_cast<uintptr_t>(context->Rdx)),
+                reinterpret_cast<const void*>(static_cast<uintptr_t>(context->Rsi)),
+                reinterpret_cast<const void*>(static_cast<uintptr_t>(context->Rdi)));
+
+            AppendCrashLine(registers);
+        }
+
+        AppendCrashFrames(info, 12);
+
         char dumpPath[MAX_PATH]{};
         if (WriteCrashDump(info, dumpPath, sizeof(dumpPath)))
         {
@@ -729,6 +837,49 @@ namespace
     {
         return code == 0x406D1388ul || code == 0xE06D7363ul ||
                code == 0x80000003ul || code == 0x80000004ul;
+    }
+
+    // Reads one pointer without faulting the handler itself. The first-chance
+    // filter runs on the thread that faulted, and that thread's stack is exactly
+    // what may be corrupt.
+    bool ReadFaultPointer(uintptr_t address, uintptr_t& value)
+    {
+        __try
+        {
+            value = *reinterpret_cast<uintptr_t*>(address);
+            return true;
+        }
+        __except (EXCEPTION_EXECUTE_HANDLER)
+        {
+            return false;
+        }
+    }
+
+    // "module.dll+0xoffset" for an address inside a loaded module.
+    bool ModuleOffsetText(uintptr_t address, char* out, size_t size)
+    {
+        if (!address || !out || size == 0)
+            return false;
+
+        HMODULE module = nullptr;
+
+        if (!GetModuleHandleExA(
+                GET_MODULE_HANDLE_EX_FLAG_FROM_ADDRESS |
+                GET_MODULE_HANDLE_EX_FLAG_UNCHANGED_REFCOUNT,
+                reinterpret_cast<LPCSTR>(address), &module) || !module)
+            return false;
+
+        char path[MAX_PATH]{};
+        GetModuleFileNameA(module, path, MAX_PATH);
+
+        const char* name = std::strrchr(path, '\\');
+        name = name ? name + 1 : path;
+
+        sprintf_s(out, size, "%s+0x%llX", name,
+            static_cast<unsigned long long>(
+                address - reinterpret_cast<uintptr_t>(module)));
+
+        return true;
     }
 
     LONG WINAPI FirstChanceFilter(EXCEPTION_POINTERS* info)
@@ -794,6 +945,159 @@ namespace
                 CurrentActivity());
 
             AppendCrashLine(line);
+
+            // The registers and the frames behind an access violation are
+            // recorded whatever the faulting address belongs to.
+            //
+            // They used to be collected only for a fault inside a game module.
+            // The 2026-11-25 00:55 session died on "execute of 0x0" - a null
+            // function pointer or vtable - which belongs to no module, so it
+            // left a dump and not a single frame, the same blind spot the
+            // 2026-11-24 crashes had. The frames are the only thing that can be
+            // acted on, so they are written for both cases now.
+            if (code == 0xC0000005ul && info->ContextRecord)
+            {
+                if (info->ExceptionRecord->NumberParameters >= 2)
+                {
+                    const ULONG_PTR operation =
+                        info->ExceptionRecord->ExceptionInformation[0];
+                    const ULONG_PTR target =
+                        info->ExceptionRecord->ExceptionInformation[1];
+
+                    char access[192]{};
+
+                    sprintf_s(access, sizeof(access),
+                        "[crash] fault access: %s of %p\n",
+                        operation == 0 ? "read" :
+                        operation == 1 ? "write" :
+                        operation == 8 ? "execute" : "operation",
+                        reinterpret_cast<void*>(target));
+
+                    AppendCrashLine(access);
+                }
+
+                // r8-r15 too: the 2026-11-25 22:01 fault in Attachments::Read was
+                // only resolvable to an instruction after disassembling the DLL,
+                // because the index register (r10) was not logged.
+                char regs[720]{};
+
+                sprintf_s(regs, sizeof(regs),
+                    "[crash] fault registers: rip=%p rsp=%p rbp=%p rax=%p rcx=%p rdx=%p "
+                    "r8=%p r9=%p r10=%p r11=%p r12=%p r13=%p r14=%p r15=%p rbx=%p rsi=%p rdi=%p\n",
+                    reinterpret_cast<void*>(info->ContextRecord->Rip),
+                    reinterpret_cast<void*>(info->ContextRecord->Rsp),
+                    reinterpret_cast<void*>(info->ContextRecord->Rbp),
+                    reinterpret_cast<void*>(info->ContextRecord->Rax),
+                    reinterpret_cast<void*>(info->ContextRecord->Rcx),
+                    reinterpret_cast<void*>(info->ContextRecord->Rdx),
+                    reinterpret_cast<void*>(info->ContextRecord->R8),
+                    reinterpret_cast<void*>(info->ContextRecord->R9),
+                    reinterpret_cast<void*>(info->ContextRecord->R10),
+                    reinterpret_cast<void*>(info->ContextRecord->R11),
+                    reinterpret_cast<void*>(info->ContextRecord->R12),
+                    reinterpret_cast<void*>(info->ContextRecord->R13),
+                    reinterpret_cast<void*>(info->ContextRecord->R14),
+                    reinterpret_cast<void*>(info->ContextRecord->R15),
+                    reinterpret_cast<void*>(info->ContextRecord->Rbx),
+                    reinterpret_cast<void*>(info->ContextRecord->Rsi),
+                    reinterpret_cast<void*>(info->ContextRecord->Rdi));
+
+                AppendCrashLine(regs);
+
+                const uintptr_t stackPointer =
+                    static_cast<uintptr_t>(info->ContextRecord->Rsp);
+
+                if (stackPointer)
+                {
+                    char chain[1600]{};
+                    size_t used = 0;
+                    int frames = 0;
+
+                    // RSP's first words are the faulting frame's return address
+                    // and its callers. Slots that are locals or arguments are
+                    // skipped by the module test.
+                    for (int depth = 0; depth < 64 && frames < 14; ++depth)
+                    {
+                        uintptr_t ret = 0;
+
+                        if (!ReadFaultPointer(
+                                stackPointer + static_cast<size_t>(depth) * 8,
+                                ret) || ret < 0x10000)
+                            continue;
+
+                        char text[160]{};
+
+                        if (!ModuleOffsetText(ret, text, sizeof(text)))
+                            continue;
+
+                        const int written = snprintf(chain + used,
+                            sizeof(chain) - used, "%s%s",
+                            used > 0 ? " " : "", text);
+
+                        if (written <= 0)
+                            break;
+
+                        used += static_cast<size_t>(written);
+                        ++frames;
+                    }
+
+                    if (chain[0])
+                    {
+                        char note[1664]{};
+
+                        sprintf_s(note, sizeof(note),
+                            "[crash] fault stack: %s\n", chain);
+
+                        AppendCrashLine(note);
+                    }
+                }
+            }
+
+            // A fault inside the game, not inside this DLL, is the shape of the
+            // 2026-11-24 crashes: two sessions ended on client.dll+0xAA9E3C at
+            // the moment the pawn died, each leaving one line and no stack, which
+            // is nothing to fix against. For those, write the return addresses
+            // that led there and one minidump. A fault in our own DLL is a
+            // guarded probe (every native call is wrapped in __except) and needs
+            // neither.
+            if (module && code == 0xC0000005ul)
+            {
+                static HMODULE selfModule = nullptr;
+                static bool selfResolved = false;
+
+                if (!selfResolved)
+                {
+                    selfResolved = true;
+
+                    HMODULE self = nullptr;
+
+                    if (GetModuleHandleExA(
+                            GET_MODULE_HANDLE_EX_FLAG_FROM_ADDRESS |
+                            GET_MODULE_HANDLE_EX_FLAG_UNCHANGED_REFCOUNT,
+                            reinterpret_cast<LPCSTR>(&FirstChanceFilter), &self) && self)
+                        selfModule = self;
+                }
+
+                if (selfModule && module != selfModule)
+                {
+                    static bool dumpedForeignFault = false;
+                    char dumpPath[MAX_PATH]{};
+
+                    if (!dumpedForeignFault &&
+                        WriteCrashDump(info, dumpPath, sizeof(dumpPath)))
+                    {
+                        dumpedForeignFault = true;
+
+                        char note[MAX_PATH + 96]{};
+
+                        sprintf_s(note, sizeof(note),
+                            "[crash] game-module fault: minidump written: %s\n",
+                            dumpPath);
+
+                        AppendCrashLine(note);
+                    }
+                }
+            }
 
             // A fault whose instruction pointer is not inside any loaded module
             // is not a signature that moved: the process is running a heap or

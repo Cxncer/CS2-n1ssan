@@ -586,17 +586,12 @@ namespace
         if (previousBlend) previousBlend->Release();
     }
 
-    // The pill's light travels one full turn in this long, and the bitmap behind
-    // it is redrawn at PILL_ANIM_INTERVAL_MS while the counter is on screen.
-    //
-    // The recompose is CPU work on a ~200x41 pixmap, so it is deliberately slow
-    // (about twelve a second, not one a frame): the light reads as moving at
-    // that rate, and a percentage of one core is all it may cost a game that is
-    // already using the frame.
-    constexpr ULONGLONG PILL_ANIM_PERIOD_MS = 3400;
-    constexpr ULONGLONG PILL_ANIM_INTERVAL_MS = 80;
-
-    ULONGLONG g_pillComposedMs = 0;
+    // The counter's pill does not animate: no light travels its outline, so the
+    // bitmap is composed only when the number, the frame time, the scale or the
+    // spike tint changes - once a second at most, instead of five times a
+    // second. Every compose is 4-6 ms of GDI+ work on the thread that presents
+    // (947 ms for the first one), and a pill that is already static has nothing
+    // to redraw for.
 
     void DrawPill(Renderer& r, float scale)
     {
@@ -607,19 +602,15 @@ namespace
         // a tinted pill never collides with a plain one in the cache key.
         const int key = g_fps * 1000 + (int)(scale * 100.0f) + (spike ? 1000000 : 0);
 
-        const bool stale =
-            !r.pill.view || r.pill.key != key ||
-            now - g_pillComposedMs >= PILL_ANIM_INTERVAL_MS;
+        const bool stale = !r.pill.view || r.pill.key != key;
 
         if (stale)
         {
-            const float phase = (float)((double)(now % PILL_ANIM_PERIOD_MS) /
-                (double)PILL_ANIM_PERIOD_MS);
-
             const ULONGLONG composeStartMs = NowMs();
 
+            // phase < 0: the static shell, without the travelling light.
             if (!PillArt::Compose(g_fps, (float)g_frameAvgMs, scale, r.pill.pixels,
-                    spike, phase))
+                    spike, -1.0f))
                 return;
 
             const ULONGLONG composeMs = NowMs() - composeStartMs;
@@ -640,8 +631,6 @@ namespace
 
             if (!UploadArt(r, r.pill, key, true))
                 return;
-
-            g_pillComposedMs = now;
         }
 
         const float pillWidth = (float)r.pill.pixels.width;

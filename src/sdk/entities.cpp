@@ -249,22 +249,154 @@ void LogWorldKeychainEntities(uintptr_t weapon)
         static_cast<unsigned long long>(sceneParentOffset));
 }
 
-// Lootline's RemoveWorldKeychains: every keychain_module entity owned by, or
-// hung under, this weapon is removed through CS2's own remover. The charm the
-// player sees hanging and swinging is the HUD weapon's "keychain" addon, which
-// this never touches - so a weapon keeps exactly one charm.
+// ── charm entity collection (Lootline's CollectWorldKeychains) ──
+//
+// One snapshot of every charm entity on this gun, and the removals work down
+// that snapshot afterwards. Lootline never removes during the walk, and that is
+// the whole difference: the client this replaced removed each module inside the
+// same loop it was walking, so the engine's identity table shifted under the
+// iteration and the same module came back at the next slot. Handing a module
+// CS2 has already detached to its remover again is the use-after-free behind
+// both 2026-11-25 crashes (animationsystem.dll reading null+0x18, an execute of
+// address 0).
+//
+// A snapshot is only as good as the slots it reads, so a slot's own handle has
+// to name that slot - Lootline's `(handle & 0x7FFF) == index` check in
+// entity_scan.h. A slot the engine has cleared can still hand back the old
+// entity pointer; that stale pointer was the second removal.
+namespace
+{
+    constexpr int MAX_KEYCHAINS = 16;   // Lootline's MAX_KEYCHAINS
+
+    // Owned by the gun, or hung under the gun's scene node (up to five parents,
+    // Lootline's UnderNode depth).
+    bool KeychainOnWeapon(uintptr_t entity, uintptr_t weapon,
+                          uintptr_t weaponSceneNode, uintptr_t ownerHandleOffset,
+                          uintptr_t sceneParentOffset)
+    {
+        uint32_t ownerHandle = 0;
+
+        if (ownerHandleOffset &&
+            SafeReadU32(entity + ownerHandleOffset, ownerHandle) &&
+            HandleValid(ownerHandle) &&
+            GetEntityByHandle(ownerHandle) == weapon)
+            return true;
+
+        if (!weaponSceneNode || !sceneParentOffset || !g_off.BE_GameSceneNode)
+            return false;
+
+        uintptr_t node = 0;
+
+        if (!SafeReadQword(entity + g_off.BE_GameSceneNode, node))
+            return false;
+
+        for (int depth = 0; node && node > 0x10000 && depth < 5; ++depth)
+        {
+            if (node == weaponSceneNode)
+                return true;
+
+            uintptr_t parent = 0;
+
+            if (!SafeReadQword(node + sceneParentOffset, parent))
+                return false;
+
+            node = parent;
+        }
+
+        return false;
+    }
+
+    int CollectKeychainsOn(uintptr_t weapon, uintptr_t (&out)[MAX_KEYCHAINS])
+    {
+        if (!weapon || !g_entityListGlobal)
+            return 0;
+
+        ModuleInfo client = GetClientModule();
+
+        if (!client.valid())
+            return 0;
+
+        static uintptr_t ownerHandleOffset = 0;
+        static uintptr_t sceneParentOffset = 0;
+
+        if (!ownerHandleOffset)
+            ResolveEngineSchemaField("C_BaseEntity", "m_hOwnerEntity", ownerHandleOffset);
+        if (!sceneParentOffset)
+            ResolveEngineSchemaField("CGameSceneNode", "m_pParent", sceneParentOffset);
+
+        uintptr_t weaponSceneNode = 0;
+
+        if (g_off.BE_GameSceneNode)
+            SafeReadQword(weapon + g_off.BE_GameSceneNode, weaponSceneNode);
+
+        const uint32_t maxIndex = LiveEntityLimit();
+        uintptr_t cachedChunk = 0;
+        uint32_t cachedChunkIndex = UINT32_MAX;
+        int count = 0;
+
+        for (uint32_t index = 1; index <= maxIndex && count < MAX_KEYCHAINS; ++index)
+        {
+            const uint32_t chunkIndex = index >> 9;
+
+            if (chunkIndex != cachedChunkIndex)
+            {
+                cachedChunk = 0;
+                SafeReadQword(g_entityListGlobal + (size_t)chunkIndex * 8 + 0x10, cachedChunk);
+                cachedChunkIndex = chunkIndex;
+            }
+
+            if (!cachedChunk)
+                continue;
+
+            uintptr_t entity = 0;
+
+            if (!SafeReadQword(cachedChunk + (size_t)(index & 0x1FF) * 0x70, entity) ||
+                !entity || entity == weapon)
+                continue;
+
+            uintptr_t vtable = 0;
+
+            if (!SafeReadQword(entity, vtable) || !client.inside(vtable))
+                continue;
+
+            uintptr_t identity = 0;
+
+            if (!SafeReadQword(entity + 0x10, identity) || identity < 0x10000)
+                continue;
+
+            uint32_t entityHandle = 0;
+
+            if (!SafeReadU32(identity + 0x10, entityHandle) ||
+                (entityHandle & 0x7FFF) != index)
+                continue;   // stale slot: this pointer is not this slot's entity
+
+            if (!IsDesignerName(entity, "keychain_module"))
+                continue;
+
+            if (!KeychainOnWeapon(entity, weapon, weaponSceneNode,
+                    ownerHandleOffset, sceneParentOffset))
+                continue;
+
+            out[count++] = entity;
+        }
+
+        return count;
+    }
+}
+
+// Lootline's RemoveWorldKeychains: every charm entity on this gun comes off
+// through CS2's own remover, once each, from the snapshot above.
 static int RemoveKeychainsOn(uintptr_t weapon)
 {
-    if (!weapon || !g_entityListGlobal)
+    if (!weapon)
         return 0;
 
     ModuleInfo client = GetClientModule();
+
     if (!client.valid())
         return 0;
 
-    // Resolved once. ScanPattern walks the whole client module, and this ran on
-    // every removal for every weapon - that is the freeze when a round starts and
-    // each gun's charm is repaired in the same sweep.
+    // Resolved once: ScanPattern walks the whole client module.
     static uintptr_t removeNow = 0;
     static bool looked = false;
 
@@ -282,90 +414,23 @@ static int RemoveKeychainsOn(uintptr_t weapon)
 
     using RemoveNowFn = void(__fastcall*)(void*);
 
-    static uintptr_t ownerHandleOffset = 0;
-    static uintptr_t sceneParentOffset = 0;
-    if (!ownerHandleOffset)
-        ResolveEngineSchemaField("C_BaseEntity", "m_hOwnerEntity", ownerHandleOffset);
-    if (!sceneParentOffset)
-        ResolveEngineSchemaField("CGameSceneNode", "m_pParent", sceneParentOffset);
-
-    uintptr_t weaponSceneNode = 0;
-    if (g_off.BE_GameSceneNode)
-        SafeReadQword(weapon + g_off.BE_GameSceneNode, weaponSceneNode);
-
-    const uint32_t maxIndex = LiveEntityLimit();
-    uintptr_t cachedChunk = 0;
-    uint32_t cachedChunkIndex = UINT32_MAX;
+    uintptr_t found[MAX_KEYCHAINS]{};
+    const int count = CollectKeychainsOn(weapon, found);
     int removed = 0;
 
-    for (uint32_t index = 1; index <= maxIndex; ++index)
+    for (int i = 0; i < count; ++i)
     {
-        const uint32_t chunkIndex = index >> 9;
-        if (chunkIndex != cachedChunkIndex)
-        {
-            cachedChunk = 0;
-            SafeReadQword(g_entityListGlobal + (size_t)chunkIndex * 8 + 0x10, cachedChunk);
-            cachedChunkIndex = chunkIndex;
-        }
-
-        if (!cachedChunk)
-            continue;
-
-        uintptr_t entity = 0;
-        if (!SafeReadQword(cachedChunk + (size_t)(index & 0x1FF) * 0x70, entity) || !entity)
-            continue;
-
-        uintptr_t vtable = 0;
-        if (!SafeReadQword(entity, vtable) || !client.inside(vtable))
-            continue;
-
-        if (!IsDesignerName(entity, "keychain_module"))
-            continue;
-
-        bool ownedByWeapon = false;
-        uint32_t ownerHandle = 0;
-        if (ownerHandleOffset &&
-            SafeReadU32(entity + ownerHandleOffset, ownerHandle) &&
-            HandleValid(ownerHandle))
-        {
-            ownedByWeapon = GetEntityByHandle(ownerHandle) == weapon;
-        }
-
-        bool parentedToWeapon = false;
-        if (weaponSceneNode && sceneParentOffset && g_off.BE_GameSceneNode)
-        {
-            uintptr_t node = 0;
-            if (SafeReadQword(entity + g_off.BE_GameSceneNode, node))
-            {
-                for (int depth = 0; node && node > 0x10000 && depth < 5; ++depth)
-                {
-                    if (node == weaponSceneNode)
-                    {
-                        parentedToWeapon = true;
-                        break;
-                    }
-
-                    uintptr_t parent = 0;
-                    if (!SafeReadQword(node + sceneParentOffset, parent))
-                        break;
-                    node = parent;
-                }
-            }
-        }
-
-        if (!ownedByWeapon && !parentedToWeapon)
-            continue;
-
         __try
         {
-            reinterpret_cast<RemoveNowFn>(removeNow)(reinterpret_cast<void*>(entity));
+            reinterpret_cast<RemoveNowFn>(removeNow)(reinterpret_cast<void*>(found[i]));
             ++removed;
-            Log("[charm-clean] removed world keychain index=%u entity=%p",
-                index, (void*)entity);
+
+            Log("[charm-clean] removed world keychain entity=%p (%d/%d)",
+                (void*)found[i], removed, count);
         }
         __except (EXCEPTION_EXECUTE_HANDLER)
         {
-            Log("[charm-clean] removal threw index=%u entity=%p", index, (void*)entity);
+            Log("[charm-clean] removal threw entity=%p", (void*)found[i]);
         }
     }
 
@@ -379,102 +444,128 @@ int RemoveWorldKeychainEntities(uintptr_t weapon)
     return RemoveKeychainsOn(weapon);
 }
 
-// Every charm entity hanging on the first-person weapon. Those are the static
-// copies a keychain addon owns: remove them and only the gun's simulated
-// keychain entity is left on screen.
+// Every charm entity hanging on the first-person weapon.
 int RemoveHudKeychainEntities(uintptr_t hudWeapon)
 {
     return RemoveKeychainsOn(hudWeapon);
 }
 
-// Same scan as the remover, read-only: how many world keychain entities this
-// weapon currently carries. Lootline's upkeep checks "anything other than
-// exactly the picked charm" once a second; this is that check.
-int CountWorldKeychainEntities(uintptr_t weapon)
+// Lootline's WorldKeychains: how many charm entities this weapon carries, and
+// the keychain definition of the first one (0 when it cannot be read). The
+// upkeep's once-a-second check is `count != 1 || (hanging != 0 && hanging !=
+// wanted)`.
+int CountWorldKeychainEntities(uintptr_t weapon, int* firstKit)
 {
-    if (!weapon || !g_entityListGlobal)
+    if (firstKit)
+        *firstKit = 0;
+
+    if (!weapon)
         return 0;
 
-    ModuleInfo client = GetClientModule();
-    if (!client.valid())
-        return 0;
+    uintptr_t found[MAX_KEYCHAINS]{};
+    const int count = CollectKeychainsOn(weapon, found);
 
-    static uintptr_t ownerHandleOffset = 0;
-    static uintptr_t sceneParentOffset = 0;
-    if (!ownerHandleOffset)
-        ResolveEngineSchemaField("C_BaseEntity", "m_hOwnerEntity", ownerHandleOffset);
-    if (!sceneParentOffset)
-        ResolveEngineSchemaField("CGameSceneNode", "m_pParent", sceneParentOffset);
-
-    uintptr_t weaponSceneNode = 0;
-    if (g_off.BE_GameSceneNode)
-        SafeReadQword(weapon + g_off.BE_GameSceneNode, weaponSceneNode);
-
-    const uint32_t maxIndex = LiveEntityLimit();
-    uintptr_t cachedChunk = 0;
-    uint32_t cachedChunkIndex = UINT32_MAX;
-    int count = 0;
-
-    for (uint32_t index = 1; index <= maxIndex; ++index)
+    if (count > 0 && firstKit)
     {
-        const uint32_t chunkIndex = index >> 9;
-        if (chunkIndex != cachedChunkIndex)
-        {
-            cachedChunk = 0;
-            SafeReadQword(g_entityListGlobal + (size_t)chunkIndex * 8 + 0x10, cachedChunk);
-            cachedChunkIndex = chunkIndex;
-        }
+        static uintptr_t definitionOffset = 0;
 
-        if (!cachedChunk)
-            continue;
+        if (!definitionOffset)
+            ResolveEngineSchemaField("C_KeychainModule", "m_nKeychainDefID", definitionOffset);
 
-        uintptr_t entity = 0;
-        if (!SafeReadQword(cachedChunk + (size_t)(index & 0x1FF) * 0x70, entity) || !entity)
-            continue;
+        uint32_t definition = 0;
 
-        uintptr_t vtable = 0;
-        if (!SafeReadQword(entity, vtable) || !client.inside(vtable))
-            continue;
-
-        if (!IsDesignerName(entity, "keychain_module"))
-            continue;
-
-        bool ownedByWeapon = false;
-        uint32_t ownerHandle = 0;
-        if (ownerHandleOffset &&
-            SafeReadU32(entity + ownerHandleOffset, ownerHandle) &&
-            HandleValid(ownerHandle))
-        {
-            ownedByWeapon = GetEntityByHandle(ownerHandle) == weapon;
-        }
-
-        bool parentedToWeapon = false;
-        if (weaponSceneNode && sceneParentOffset && g_off.BE_GameSceneNode)
-        {
-            uintptr_t node = 0;
-            if (SafeReadQword(entity + g_off.BE_GameSceneNode, node))
-            {
-                for (int depth = 0; node && node > 0x10000 && depth < 5; ++depth)
-                {
-                    if (node == weaponSceneNode)
-                    {
-                        parentedToWeapon = true;
-                        break;
-                    }
-
-                    uintptr_t parent = 0;
-                    if (!SafeReadQword(node + sceneParentOffset, parent))
-                        break;
-                    node = parent;
-                }
-            }
-        }
-
-        if (ownedByWeapon || parentedToWeapon)
-            ++count;
+        if (definitionOffset && SafeReadU32(found[0] + definitionOffset, definition))
+            *firstKit = static_cast<int>(definition);
     }
 
     return count;
+}
+
+// ── entity table walk (Lootline's EntityScan::ForEach) ──
+//
+// For the passes that need every entity rather than the charm entities of one
+// gun. Chunks of 512 identities are read straight from the entity system, empty
+// chunks are skipped whole, and a slot is only taken when its own handle names
+// it - the same `(handle & 0x7FFF) == index` check as the charm walk above, so a
+// cleared slot cannot hand back an entity the engine has already released.
+// SEH around the walk: the visitor calls into the game.
+int ForEachEntity(uintptr_t firstIndex, uintptr_t lastIndex, EntityVisit visit,
+                  void* context)
+{
+    if (!g_entityListGlobal || !visit)
+        return 0;
+
+    ModuleInfo client = GetClientModule();
+
+    if (!client.valid())
+        return 0;
+
+    const uint32_t maxIndex = LiveEntityLimit();
+    const uint32_t first = firstIndex < 1 ? 1 : static_cast<uint32_t>(firstIndex);
+    const uint32_t last =
+        lastIndex > maxIndex ? maxIndex : static_cast<uint32_t>(lastIndex);
+
+    int visited = 0;
+    uintptr_t cachedChunk = 0;
+    uint32_t cachedChunkIndex = UINT32_MAX;
+
+    __try
+    {
+        for (uint32_t index = first; index <= last; ++index)
+        {
+            const uint32_t chunkIndex = index >> 9;
+
+            if (chunkIndex != cachedChunkIndex)
+            {
+                cachedChunk = 0;
+                SafeReadQword(g_entityListGlobal + (size_t)chunkIndex * 8 + 0x10,
+                    cachedChunk);
+                cachedChunkIndex = chunkIndex;
+            }
+
+            if (!cachedChunk)
+                continue;
+
+            uintptr_t entity = 0;
+
+            if (!SafeReadQword(cachedChunk + (size_t)(index & 0x1FF) * 0x70, entity) ||
+                !entity)
+                continue;
+
+            uintptr_t vtable = 0;
+
+            if (!SafeReadQword(entity, vtable) || !client.inside(vtable))
+                continue;
+
+            uintptr_t identity = 0;
+
+            if (!SafeReadQword(entity + 0x10, identity) || identity < 0x10000)
+                continue;
+
+            uint32_t entityHandle = 0;
+
+            if (!SafeReadU32(identity + 0x10, entityHandle) ||
+                (entityHandle & 0x7FFF) != index)
+                continue;
+
+            uintptr_t nameAddress = 0;
+            SafeReadQword(identity + 0x20, nameAddress);
+
+            ++visited;
+
+            if (!visit(entity, index,
+                    nameAddress >= 0x10000
+                        ? reinterpret_cast<const char*>(nameAddress)
+                        : nullptr,
+                    context))
+                break;
+        }
+    }
+    __except (EXCEPTION_EXECUTE_HANDLER)
+    {
+    }
+
+    return visited;
 }
 
 // Lootline's C_CSWeaponBase::AddKeyChainEntity: CS2 builds the gun's keychain
@@ -576,6 +667,106 @@ namespace
     constexpr size_t HUD_KEYCHAIN_STATE_OFFSET = HUD_ADDONS_OFFSET + 0x10 + 0x20;
     constexpr uint32_t KEYCHAIN_ADDON_HASH = 0x0AA5272A;   // native hash of "keychain"
     constexpr uint32_t INVALID_HANDLE = 0xFFFFFFFFu;
+    constexpr uint32_t HUD_ADDON_MAX_CAPACITY = 64;
+
+    // The addon's designer name, read in place. Bounded; a name longer than the
+    // buffer still compares as far as it was read.
+    bool ReadDesignerName(uintptr_t entity, char* out, size_t capacity)
+    {
+        if (!out || capacity == 0)
+            return false;
+
+        out[0] = '\0';
+
+        uintptr_t identity = 0;
+        uintptr_t name = 0;
+
+        if (!SafeReadQword(entity + 0x10, identity) || identity < 0x10000 ||
+            !SafeReadQword(identity + 0x20, name) || name < 0x10000)
+            return false;
+
+        size_t length = 0;
+
+        for (; length + 1 < capacity; ++length)
+        {
+            uint8_t ch = 0;
+
+            if (!SafeReadU8(name + length, ch))
+                break;
+
+            out[length] = static_cast<char>(ch);
+
+            if (ch == 0)
+                break;
+        }
+
+        out[length] = '\0';
+        return true;
+    }
+
+    // Removes the addon one entry of the HUD weapon's dictionary names.
+    //
+    // Returns 1 only when an entity was actually handed to CS2's remover. A slot
+    // that does not resolve is not "already removed": it is an entry this build
+    // does not understand, and the caller has to say so and look further. The
+    // name is checked before anything is removed, so a stale index can never take
+    // off an unrelated addon.
+    int RemoveHudAddonAt(void(__fastcall* remove)(uintptr_t), uintptr_t entries,
+                         uint32_t index, const char* how, uintptr_t hudWeapon)
+    {
+        if (!remove || !entries)
+            return 0;
+
+        const uintptr_t handleAddress =
+            entries + static_cast<size_t>(index) * HUD_ADDON_ENTRY_SIZE +
+            HUD_ADDON_HANDLE_OFFSET;
+
+        uint32_t handle = 0;
+
+        if (!SafeReadU32(handleAddress, handle) || !HandleValid(handle))
+        {
+            DebugLog("[charm-pass] hud=%p addon slot %u (%s): no valid handle",
+                (void*)hudWeapon, index, how);
+            return 0;
+        }
+
+        const uintptr_t addon = GetEntityByHandle(handle);
+
+        if (!addon)
+        {
+            DebugLog("[charm-pass] hud=%p addon slot %u (%s) handle=0x%08X did not resolve",
+                (void*)hudWeapon, index, how, handle);
+            return 0;
+        }
+
+        char name[64]{};
+        ReadDesignerName(addon, name, sizeof(name));
+
+        if (!std::strstr(name, "keychain"))
+        {
+            DebugLog("[charm-pass] hud=%p addon slot %u (%s) entity=%p name=\"%s\" is not the keychain addon",
+                (void*)hudWeapon, index, how, (void*)addon, name);
+            return 0;
+        }
+
+        __try
+        {
+            remove(addon);
+        }
+        __except (EXCEPTION_EXECUTE_HANDLER)
+        {
+            Log("[charm-pass] hud=%p addon slot %u (%s) entity=%p name=\"%s\" removal threw",
+                (void*)hudWeapon, index, how, (void*)addon, name);
+            return 0;
+        }
+
+        SafeWriteU32(handleAddress, INVALID_HANDLE);
+
+        Log("[charm-pass] removed hud keychain addon hud=%p slot=%u (%s) entity=%p name=\"%s\"",
+            (void*)hudWeapon, index, how, (void*)addon, name);
+
+        return 1;
+    }
 }
 
 bool RebuildHudKeychainAddon(uintptr_t weapon, uintptr_t hudWeapon, bool requestRebuild)
@@ -622,51 +813,128 @@ bool RebuildHudKeychainAddon(uintptr_t weapon, uintptr_t hudWeapon, bool request
         return false;
     }
 
-    DebugLog("[charm-pass] HUD addon lookup hud=%p index=0x%08X", (void*)hudWeapon, addonIndex);
+    uint32_t allocationFlags = 0;
+    uintptr_t entries = 0;
 
-    if (addonIndex == INVALID_HANDLE)
-        DebugLog("[charm-pass] no keychain addon entry on hud=%p", (void*)hudWeapon);
+    SafeReadU32(dictionary + 4, allocationFlags);
+    SafeReadQword(dictionary + 8, entries);
 
-    if (addonIndex != INVALID_HANDLE)
+    const uint32_t capacity = allocationFlags & 0x7FFFFFFFu;
+
+    // The dictionary's own lookup is the first answer, but it is not trusted on
+    // its own any more: the 2026-11-24 session logged `addonCall=1` on a gun whose
+    // charm stayed on screen, because a lookup that returns nothing still made
+    // this function report success. The entry table is therefore scanned for the
+    // entity whose designer name is the keychain addon, and every entry that is
+    // examined is named in the log - so a moved layout says so instead of
+    // silently doing nothing.
+    int removed = 0;
+
+    const bool looksLikeVector =
+        entries >= 0x10000 && capacity > 0 && capacity <= HUD_ADDON_MAX_CAPACITY;
+
+    // Debug by default: the caller retries a few times per selection, and this
+    // runs for every gun that wants no charm. A table that does not look like
+    // the addon vector is the case worth a session-log line, throttled per
+    // viewmodel so a retry cannot flood the log.
+    DebugLog("[charm-pass] hud=%p index=0x%08X entries=%p capacity=%u vector=%d",
+        (void*)hudWeapon, addonIndex, (void*)entries, capacity, looksLikeVector ? 1 : 0);
+
+    if (!looksLikeVector)
     {
-        uint32_t allocationFlags = 0;
-        uintptr_t entries = 0;
+        static uintptr_t lastHeaderHud = 0;
+        static ULONGLONG lastHeaderTick = 0;
 
-        SafeReadU32(dictionary + 4, allocationFlags);
-        SafeReadQword(dictionary + 8, entries);
+        const ULONGLONG now = GetTickCount64();
 
-        const uint32_t capacity = allocationFlags & 0x7FFFFFFFu;
-
-        if (entries && addonIndex < capacity)
+        if (lastHeaderHud != hudWeapon || now - lastHeaderTick >= 10000)
         {
-            const uintptr_t handleAddress =
-                entries + (size_t)addonIndex * HUD_ADDON_ENTRY_SIZE +
-                HUD_ADDON_HANDLE_OFFSET;
+            lastHeaderHud = hudWeapon;
+            lastHeaderTick = now;
 
-            uint32_t handle = 0;
+            Log("[charm-pass] hud=%p addon dictionary does not look like a vector (index=0x%08X entries=%p capacity=%u); the layout moved in this build",
+                (void*)hudWeapon, addonIndex, (void*)entries, capacity);
+        }
+    }
 
-            DebugLog("[charm-pass] HUD addon slot entries=%p capacity=%u handleAddress=%p",
-                (void*)entries, capacity, (void*)handleAddress);
+    if (looksLikeVector)
+    {
+        if (addonIndex != INVALID_HANDLE && addonIndex < capacity)
+        {
+            removed += RemoveHudAddonAt(
+                reinterpret_cast<RemoveAddonFn>(removeAddonAddress),
+                entries, addonIndex, "dictionary index", hudWeapon);
+        }
 
-            if (SafeReadU32(handleAddress, handle) && HandleValid(handle))
+        // A dictionary whose index did not name an addon still holds the entry:
+        // resolve every slot and take the one whose designer name is the keychain
+        // addon. `keychain_module` is the world entity name; the HUD addon this
+        // removes is the "keychain" addon the viewmodel hangs.
+        if (removed == 0)
+        {
+            for (uint32_t i = 0; i < capacity; ++i)
             {
-                const uintptr_t addon = GetEntityByHandle(handle);
+                if (i == addonIndex)
+                    continue;
 
-                if (addon)
-                {
-                    __try
-                    {
-                        reinterpret_cast<RemoveAddonFn>(removeAddonAddress)(addon);
-                        DebugLog("[charm-pass] removed HUD keychain addon entity=%p", (void*)addon);
-                    }
-                    __except (EXCEPTION_EXECUTE_HANDLER)
-                    {
-                        DebugLog("[charm-pass] HUD addon removal threw entity=%p", (void*)addon);
-                    }
-                }
+                removed += RemoveHudAddonAt(
+                    reinterpret_cast<RemoveAddonFn>(removeAddonAddress),
+                    entries, i, "name scan", hudWeapon);
+
+                if (removed > 0)
+                    break;
+            }
+        }
+
+        // Nothing came off: name every slot once, so the next session says whether
+        // the entries hold different entities, unresolved handles or no names at
+        // all. The per-slot detail is debug-only, and the user's session log does
+        // not run with the debug flag.
+        if (removed == 0)
+        {
+            char list[1024]{};
+            size_t used = 0;
+
+            for (uint32_t i = 0; i < capacity && used + 48 < sizeof(list); ++i)
+            {
+                const uintptr_t handleAddress =
+                    entries + static_cast<size_t>(i) * HUD_ADDON_ENTRY_SIZE +
+                    HUD_ADDON_HANDLE_OFFSET;
+
+                uint32_t handle = 0;
+
+                if (!SafeReadU32(handleAddress, handle) || !HandleValid(handle))
+                    continue;
+
+                const uintptr_t entryEntity = GetEntityByHandle(handle);
+                char entryName[32]{};
+
+                if (entryEntity)
+                    ReadDesignerName(entryEntity, entryName, sizeof(entryName));
+
+                const int written = snprintf(list + used, sizeof(list) - used,
+                    "%s%u=0x%08X:%s", used > 0 ? " " : "", i, handle,
+                    entryName[0] ? entryName : "-");
+
+                if (written <= 0)
+                    break;
+
+                used += static_cast<size_t>(written);
             }
 
-            SafeWriteU32(handleAddress, INVALID_HANDLE);
+            static uintptr_t lastListHud = 0;
+            static ULONGLONG lastListTick = 0;
+
+            const ULONGLONG now = GetTickCount64();
+
+            if (lastListHud != hudWeapon || now - lastListTick >= 10000)
+            {
+                lastListHud = hudWeapon;
+                lastListTick = now;
+
+                Log("[charm-pass] hud=%p no keychain addon removed; addon slots: %s",
+                    (void*)hudWeapon, list[0] ? list : "(none)");
+            }
         }
     }
 
@@ -678,5 +946,8 @@ bool RebuildHudKeychainAddon(uintptr_t weapon, uintptr_t hudWeapon, bool request
     if (requestRebuild)
         SafeWriteU8(hudWeapon + HUD_KEYCHAIN_STATE_OFFSET, 0xFF);
 
-    return true;
+    // True only when the addon really came off (or a rebuild was asked for on
+    // purpose). The previous `return true` made a lookup that found nothing look
+    // like a completed removal, and the caller latched that as done.
+    return removed > 0 || requestRebuild;
 }

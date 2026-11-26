@@ -33,6 +33,7 @@ namespace
     std::uint8_t g_lastTeam = 0xFF;
     float g_lastSpawnTime = -1.0f;
     std::uint16_t g_lastDefinition = 0;
+    std::string g_lastModel;
 
     void LogAgent(
         AgentLogState state,
@@ -125,14 +126,22 @@ void Agents::Run(std::uintptr_t pawn)
         pawn == g_lastPawn &&
         team == g_lastTeam &&
         spawnTime == g_lastSpawnTime &&
-        target.defIndex == g_lastDefinition;
+        target.defIndex == g_lastDefinition &&
+        target.modelPath == g_lastModel;
 
     if (alreadyApplied)
         return;
 
     std::string model;
 
-    if (!ResolveDefinitionModelName(target.defIndex, model) || model.empty())
+    // Phase 6: the Armory can name a model path of its own for an agent. It is
+    // used as given, and a model CS2 does not have mounted fails to load here
+    // exactly like a definition with no model - the pawn keeps its own.
+    const bool customModel = !target.modelPath.empty();
+
+    if (customModel)
+        model = target.modelPath;
+    else if (!ResolveDefinitionModelName(target.defIndex, model) || model.empty())
     {
         g_lastPawn = 0;
         g_lastDefinition = 0;
@@ -155,6 +164,7 @@ void Agents::Run(std::uintptr_t pawn)
     g_lastTeam = team;
     g_lastSpawnTime = spawnTime;
     g_lastDefinition = target.defIndex;
+    g_lastModel = target.modelPath;
 
     LogAgent(AgentLogState::Applied, team, target.defIndex, model);
 }

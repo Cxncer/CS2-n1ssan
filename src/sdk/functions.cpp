@@ -7,6 +7,7 @@
 #include "sdk/entities.h"
 #include "config/offsets.h"
 #include "diagnostics/log.h"
+#include "inventory/engine_schema_diagnostic.h"
 #include "memory/access.h"
 #include "memory/scanner.h"
 #include <Windows.h>
@@ -130,8 +131,61 @@ bool ResolveFunctions()
 
     g_off_CSkeleton_modelState = 0x140;
     g_off_CModelState_hModel = 0xA0;
-    Log("[resolve] CSkeletonInstance->m_modelState = 0x%X (hardcoded)", g_off_CSkeleton_modelState);
-    Log("[resolve] CModelState->m_hModel = 0x%X (hardcoded)", g_off_CModelState_hModel);
+
+    // Both members are resolved by name now, with the old constants as the
+    // fallback. They were the last hardcoded members on the model path, and
+    // the 2026-11-24 session read the mesh group mask as
+    // 0xFFFFFFFFFFFFFFFF on a knife whose mask is 1 - a read through a member
+    // that moved, not a mask. The same update moved C_BaseEntity::m_nSubclassID
+    // (0x38C -> 0x380), and a wrong m_modelState is also a *write* into the
+    // skeleton: the mask is set through it. The glove path already reads these
+    // two by name, which is why it kept working while the mesh path did not.
+    {
+        uintptr_t resolved = 0;
+
+        if (ResolveEngineSchemaField("CSkeletonInstance", "m_modelState", resolved) &&
+            resolved > 0 && resolved < 0x1000)
+        {
+            if (resolved != g_off_CSkeleton_modelState)
+            {
+                Log("[resolve] CSkeletonInstance->m_modelState schema override: 0x%X -> 0x%X",
+                    static_cast<unsigned int>(g_off_CSkeleton_modelState),
+                    static_cast<unsigned int>(resolved));
+            }
+
+            g_off_CSkeleton_modelState = resolved;
+        }
+        else
+        {
+            Log("[resolve] CSkeletonInstance->m_modelState not in the schema; keeping 0x%X",
+                static_cast<unsigned int>(g_off_CSkeleton_modelState));
+        }
+
+        resolved = 0;
+
+        if (ResolveEngineSchemaField("CModelState", "m_hModel", resolved) &&
+            resolved > 0 && resolved < 0x1000)
+        {
+            if (resolved != g_off_CModelState_hModel)
+            {
+                Log("[resolve] CModelState->m_hModel schema override: 0x%X -> 0x%X",
+                    static_cast<unsigned int>(g_off_CModelState_hModel),
+                    static_cast<unsigned int>(resolved));
+            }
+
+            g_off_CModelState_hModel = resolved;
+        }
+        else
+        {
+            Log("[resolve] CModelState->m_hModel not in the schema; keeping 0x%X",
+                static_cast<unsigned int>(g_off_CModelState_hModel));
+        }
+    }
+
+    Log("[resolve] CSkeletonInstance->m_modelState = 0x%X",
+        static_cast<unsigned int>(g_off_CSkeleton_modelState));
+    Log("[resolve] CModelState->m_hModel = 0x%X",
+        static_cast<unsigned int>(g_off_CModelState_hModel));
 
     uintptr_t elAddr = RVA_ENTITY_LIST;
     uintptr_t el = 0;

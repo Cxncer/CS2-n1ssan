@@ -38,7 +38,9 @@
 #include "inventory/attachments.h"
 #include "inventory/charm.h"
 #include "inventory/native_apply.h"
+#include "inventory/tools.h"
 #include "inventory/runtime_mode.h"
+#include "online/online.h"
 #include "skin/apply.h"
 #include "sdk/scene_node.h"
 #include "skin/glove_model_refresh.h"
@@ -110,20 +112,27 @@ static bool TeamModelWorkHeld(uintptr_t pawn, uint64_t now)
             g_teamSettleUntilMs = now + TEAM_SETTLE_MS;
             g_teamSettlePending = true;
 
-            Log("[team-switch] team %d -> %d: model work held for %llu ms",
-                static_cast<int>(g_lastTeamNum), static_cast<int>(team),
-                static_cast<unsigned long long>(TEAM_SETTLE_MS));
+            Log("[team-switch] team %d -> %d: no hold, applying at once",
+                static_cast<int>(g_lastTeamNum), static_cast<int>(team));
         }
 
         g_lastTeamNum = static_cast<int32_t>(team);
     }
 
-    return now < g_teamSettleUntilMs;
+    // Lootline has no hold here: its Run() writes the new side's gloves and
+    // weapons on the first frame it sees the new pawn, and that is why a side
+    // that starts the half never comes up bare. The switch is still logged
+    // above (the crash reports need it), but nothing is held back any more.
+    (void)now;
+    return false;
 }
 
 bool TeamSwitchSettling()
 {
-    return GetTickCount64() < g_teamSettleUntilMs;
+    // The hold this reported is gone (see above). The agent changer asks this
+    // before it renames the player model; Lootline's RunAgentChanger has no
+    // such gate.
+    return false;
 }
 
 // ---- menu / match flag ---------------------------------------------------
@@ -162,12 +171,19 @@ static constexpr uint64_t EAGER_WINDOW_MS = 4000;
 
 // A full sweep is expected to finish inside the eager window, so it may spend far
 // longer per pass while the map or the round is loading.
-static constexpr uint64_t APPLY_PASS_BUDGET_EAGER_MS = 40;
+//
+// 40 ms was too long to hold the game thread for: during a round start this runs
+// every 150 ms, i.e. more than a quarter of the main thread spent in the pass at
+// the exact moment CS2 is also settling the new round and the net channel needs
+// that thread. The sweep is not lost by being cheaper - the cursor carries the
+// remaining weapons into the next pass - so the budget is now 15 ms and the eager
+// cadence 200 ms, which is the same writes spread over a few more frames.
+static constexpr uint64_t APPLY_PASS_BUDGET_EAGER_MS = 15;
 
 // Faster than the normal cadence, but not every frame: the two minutes of freeze
 // time a round gives are enough to sweep everything without paying a 40 ms pass
 // on each of several hundred frames.
-static constexpr uint64_t SKIN_APPLY_EAGER_INTERVAL_MS = 150;
+static constexpr uint64_t SKIN_APPLY_EAGER_INTERVAL_MS = 200;
 static uint64_t g_eagerUntilMs = 0;
 static uint64_t g_deadSinceMs = 0;
 
@@ -450,6 +466,10 @@ static void ObserveGloveState(uintptr_t pawn)
     }
 }
 
+// The stage-7 skin stage (Lootline's SkinChanger::Run). Defined below the
+// detour; called from it before the game's own net-update call.
+static void RunSkinStage(uint64_t now, bool gloveUpdate);
+
 // ---- FSN detour ----
 static void __fastcall FsnDetour(void* pClient, int stage)
 {
@@ -530,9 +550,62 @@ static void __fastcall FsnDetour(void* pClient, int stage)
     }
 
     // A lineup character's gloves are rebuilt by us (its own update never runs
-    // the glove routine) - also on the screens outside a match.
-    if (stage == 7)
+    // the glove routine) - on the screens outside a match.
+    //
+    // Menus only now. The lineup builder hangs panorama model panels and asks
+    // the animation system for their skeletons, and the 2026-11-25 11:43 crash
+    // is exactly that path (animationsystem.dll+0x44871D, read of null+0x18,
+    // called from panorama.dll). During a match the lineup screens are not on
+    // screen, so their tick has no reason to run inside the round-start and
+    // death frames where that crash lands.
+    if (stage == 7 && g_matchState != MatchState::IN_MATCH)
         Lineup::FrameTick();
+
+    // Lootline's order, exactly: at FRAME_NET_UPDATE_END the skin changer runs
+    // *before* the game's own net-update call, and only the keychain work runs
+    // after it (hooks.cpp:1011 `SkinChanger::Run()` ... `original(...)` ...
+    // `ProcessPendingKeychains()`). The glove burst and the weapon writes below
+    // therefore land on the tick the game is about to sync, not on top of what it
+    // has just synced - and the charm pass stays after the original, as the
+    // reference has it.
+    //
+    // The glove/model invalidation signal belongs to this pass: consuming it here
+    // means the sweep that follows a glove identity change is the same tick's
+    // pass, not the next one.
+    if (stage == 7)
+    {
+        gloveUpdate = g_gloveUpdatePending;
+        g_gloveUpdatePending = false;
+
+        if (gloveUpdate)
+            InvalidateWeaponModelCache();
+
+        RunSkinStage(NowMs(), gloveUpdate);
+
+        // Phase 7: n1ssan Online. Its own 1 s scan / 250 ms cadence lives inside
+        // Tick, so calling it on every stage-7 call costs a check per frame. It
+        // does not write any item view yet: it keeps the peer table and the
+        // Steam sessions, which the next slice applies from.
+        if (Online::Enabled())
+        {
+            __try
+            {
+                Online::Tick(MatchdetectGetPawn(),
+                             g_matchState == MatchState::IN_MATCH);
+            }
+            __except (EXCEPTION_EXECUTE_HANDLER)
+            {
+                static uint64_t lastOnlineFaultMs = 0;
+                const uint64_t faultNow = NowMs();
+
+                if (faultNow - lastOnlineFaultMs >= 5000)
+                {
+                    lastOnlineFaultMs = faultNow;
+                    Log("[online] tick faulted; the next frame retries");
+                }
+            }
+        }
+    }
 
     // Preserve exactly one original FrameStageNotify call.
     if (g_origFsn)
@@ -546,14 +619,40 @@ static void __fastcall FsnDetour(void* pClient, int stage)
         }
     }
 
-    // GloveSetBodyGroup ran at stage 7 and can invalidate HUD/weapon model
-    // references. Consume that signal before the stage-6 weapon/knife pass.
-    if (stage == 6)
+    // Lootline's ProcessPendingKeychains: FRAME_NET_UPDATE_END, AFTER the game's
+    // own net-update call, so the keychain entities are created / destroyed on
+    // top of what CS2 has already done this tick instead of under it. Lootline's
+    // order in hooks.cpp is exact: SkinChanger::Run() before the original call,
+    // ProcessPendingKeychains() after it.
+    //
+    // The gun in your hands only (IsActiveWeapon there): a charm made on a
+    // holstered gun is not hidden with it and hangs frozen next to the gun you
+    // hold. A pending operation on a holstered gun simply waits.
+    if (stage == 7 && g_matchState == MatchState::IN_MATCH)
     {
-        gloveUpdate = g_gloveUpdatePending;
-        g_gloveUpdatePending = false;
-        if (gloveUpdate)
-            InvalidateWeaponModelCache();
+        const uintptr_t charmPawn = MatchdetectGetPawn();
+        int32_t charmHp = 0;
+
+        if (charmPawn > 0x10000 &&
+            SafeReadI32(charmPawn + PAWN_OFF_HEALTH, charmHp) && charmHp > 0 &&
+            !TeamModelWorkHeld(charmPawn, NowMs()))
+        {
+            uintptr_t weaponServices = 0;
+            uint32_t activeHandle = 0;
+            uintptr_t activeWeapon = 0;
+
+            if (SafeReadQword(charmPawn + g_off.PAWN_WeaponServices, weaponServices) &&
+                weaponServices > 0x10000 &&
+                SafeReadU32(weaponServices + g_off.WS_ActiveWeapon, activeHandle) &&
+                HandleValid(activeHandle))
+                activeWeapon = GetEntityByHandle(activeHandle);
+
+            Charm::ProcessPending(activeWeapon, charmPawn);
+
+            // Lootline's ProcessWorldGuns: the guns of yours that are no longer
+            // in your hands keep your skin. Its own 0.5 s scan, bounded per pass.
+            ProcessDroppedWeapons(charmPawn);
+        }
     }
 
     InterlockedIncrement(&g_fsnCount);
@@ -575,8 +674,22 @@ static void __fastcall FsnDetour(void* pClient, int stage)
     if (stage == 6 || stage == 7)
         KnifeAnimation::FrameStage(stage);
 
-    if (stage != 6) return;
+}
 
+// ---- stage-7 skin stage ----
+//
+// Everything the old inline tail of the detour did, unchanged: match state,
+// work that is only safe outside a match, and the weapon/knife apply pass. It
+// is a function now only so it can be called *before* `g_origFsn` - Lootline's
+// order at FRAME_NET_UPDATE_END (hooks.cpp:1011), where the skin changer runs
+// before the game's own net-update call and the keychain pass after it.
+//
+// It is also why the pass no longer lives at render end (stage 6): a
+// BuildModernSkin / knife SetModel there landed on the model the current frame
+// was drawn from, and both 2026-11-25 crashes (the round-start death screen and
+// the animationsystem fault two lines after a knife SetModel) were on that path.
+static void RunSkinStage(uint64_t now, bool gloveUpdate)
+{
     const RuntimeMode runtimeMode = RuntimeModeState::Current();
     const bool loadoutMode = runtimeMode == RuntimeMode::Loadout;
 
@@ -839,6 +952,11 @@ static void __fastcall FsnDetour(void* pClient, int stage)
         !inMatch && g_matchState == MatchState::IN_MATCH &&
         pawnAliveKnown && pawnIsAlive == 0 && pawn > 0x10000;
 
+    // A queued sticker or charm apply was built from an item view read before
+    // the death and would run on panorama's frame while CS2 tears the round
+    // down. Held here, resumed by the same call with false.
+    NativeApply::SetLoadoutQuiet(deadButStillInMatch);
+
     {
         static bool loggedDeathGuard = false;
 
@@ -872,6 +990,7 @@ static void __fastcall FsnDetour(void* pClient, int stage)
             NativeEquipment::Tick();
             Attachments::ObserveAndPersist();
             NativeApply::Tick();
+            Tools::Tick();
         }
     }
 
@@ -924,6 +1043,12 @@ static void __fastcall FsnDetour(void* pClient, int stage)
     // that on entities that are being destroyed is what the client did not
     // survive. While the pawn is dead the charm is left exactly as it is; the
     // first live pass after the respawn starts every gun over.
+    // The settle window that a death and a respawn arm is deliberately NOT part
+    // of this any more. It was added when the charm work itself was unsafe (it
+    // removed entities from inside the entity-list walk); Lootline does its
+    // keychain work 0.6 s after a spawn with the safe order below, and the
+    // settle window only kept every charm off the gun for the first five
+    // seconds of a round.
     Charm::SetPaused(deadButStillInMatch || !inMatch);
 
     // The state machine keeps IN_MATCH for a short grace period after the

@@ -40,6 +40,9 @@
     <Filter Include="src\overlay">
       <UniqueIdentifier>{6d1d3f0b-6a4e-4d05-9a51-1c5f0d7c2a41}</UniqueIdentifier>
     </Filter>
+    <Filter Include="src\online">
+      <UniqueIdentifier>{2c7b9a54-3f18-4d2e-9b61-8a0f5e1d7c93}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="dllmain.cpp">
@@ -131,6 +134,9 @@
     </ClCompile>
     <ClCompile Include="src\overlay\pill_art.cpp">
       <Filter>src\overlay</Filter>
+    </ClCompile>
+    <ClCompile Include="src\online\online.cpp">
+      <Filter>src\online</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

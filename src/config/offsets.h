@@ -30,6 +30,11 @@ static constexpr uintptr_t FB_EIV_RestoreCustom = 0x1B8;
 static constexpr uintptr_t FB_EIV_AttributeList = 0x208;
 static constexpr uintptr_t FB_EIV_NetworkedAttrs = 0x280;
 static constexpr uintptr_t FB_EIV_CustomName = 0x2F8;
+// The view's name override. CS2's C_EconItemView::GetCustomName reads it before
+// m_szCustomName, so a name written into the plain field alone never showed on
+// an item that came from the inventory. No stable constant: resolved by schema
+// name, 0 leaves it alone.
+static constexpr uintptr_t FB_EIV_CustomNameOverride = 0x0;
 
 // ---- C_AttributeContainer ----
 static constexpr uintptr_t FB_AC_Item = 0x50;
@@ -94,6 +99,7 @@ struct Offsets
     uintptr_t EIV_AttributeList = 0;
     uintptr_t EIV_NetworkedAttrs = 0;
     uintptr_t EIV_CustomName = 0;
+    uintptr_t EIV_CustomNameOverride = 0;
 
     uintptr_t AC_Item = 0;
 

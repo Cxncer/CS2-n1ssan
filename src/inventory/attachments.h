@@ -106,6 +106,14 @@ namespace Attachments
     // sees the real kit. Pass the CEconItemView, not its CAttributeList.
     int SetCharmIdInPlace(void* itemView, int kit);
 
+    // Zeros "keychain slot 0 id" on both attribute lists of a live
+    // CEconItemView, in place: no schema setter (every one of them faults on a
+    // live view on this client), no allocation. This is how a charm is removed:
+    // the attribute is what CS2 rebuilds the charm from, so a removal that only
+    // took the entities off came back on the next model build. Returns how many
+    // entries were changed.
+    int ClearCharmInPlace(void* itemView);
+
     // Drops the real item's paint, charm and StatTrak entries from the networked
     // attribute list of a live CEconItemView, in place: no setter, no
     // allocation. Every other entry in that list is kept, because the stickers

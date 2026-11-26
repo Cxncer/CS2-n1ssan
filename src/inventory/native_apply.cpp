@@ -34,6 +34,7 @@
 #include "inventory/loot_patterns.h"
 #include "inventory/loot_socache.h"
 #include "inventory/runtime_mode.h"
+#include "inventory/tools.h"
 #include "memory/scanner.h"
 
 #define NOMINMAX
@@ -77,6 +78,10 @@ namespace NativeApply
         std::atomic<uint64_t> g_hookCalls{ 0 };
         std::atomic_bool g_inHook{ false };
         std::atomic_bool g_inJobs{ false };
+        // Set while the local pawn is dead inside a match. A queued apply was
+        // built from an item view read before the death; the entity and view it
+        // names can be gone by the time the job runs.
+        std::atomic_bool g_loadoutQuiet{ false };
         std::atomic<uint64_t> g_lastAttemptMs{ 0 };
         int g_attempts = 0;
         char g_lastError[160]{};
@@ -138,16 +143,25 @@ namespace NativeApply
             return out.count > 0;
         }
 
-        // A zero-terminated name in the module's initialized data.
-        uintptr_t FindModuleString(const ModuleInfo& module, const char* name)
+        // Every standalone zero-terminated copy of `name` in the module's
+        // initialized data. Standalone means a NUL starts it: a copy that ends
+        // at the same NUL but starts inside a longer string ("...RemoveKeychain")
+        // is a different address, nothing loads it, and taking it for the name
+        // left the registration scan with no reference at all (2026-11-25: the
+        // RemoveKeychain hook was reported missing for exactly that reason).
+        int FindModuleStrings(const ModuleInfo& module, const char* name, uintptr_t* out, int max)
         {
+            if (!out || max <= 0)
+                return 0;
+
             SectionList sections;
             if (!EnumerateSections(module, sections))
                 return 0;
 
             const size_t length = std::strlen(name) + 1;
+            int found = 0;
 
-            for (int index = 0; index < sections.count; ++index)
+            for (int index = 0; index < sections.count && found < max; ++index)
             {
                 const Section& section = sections.entries[index];
                 if (section.executable || section.size < length)
@@ -155,12 +169,16 @@ namespace NativeApply
 
                 __try
                 {
-                    for (size_t i = 0; i + length <= section.size; ++i)
+                    for (size_t i = 0; i + length <= section.size && found < max; ++i)
                     {
                         if (section.start[i] != static_cast<uint8_t>(name[0]))
                             continue;
-                        if (std::memcmp(section.start + i, name, length) == 0)
-                            return reinterpret_cast<uintptr_t>(section.start + i);
+                        if (std::memcmp(section.start + i, name, length) != 0)
+                            continue;
+                        if (i > 0 && section.start[i - 1] != 0)
+                            continue;   // the tail of a longer string, not the name
+
+                        out[found++] = reinterpret_cast<uintptr_t>(section.start + i);
                     }
                 }
                 __except (EXCEPTION_EXECUTE_HANDLER)
@@ -169,21 +187,23 @@ namespace NativeApply
                 }
             }
 
-            return 0;
+            return found;
+        }
+
+        // The first copy, for the callers that only need one.
+        uintptr_t FindModuleString(const ModuleInfo& module, const char* name)
+        {
+            uintptr_t first = 0;
+            return FindModuleStrings(module, name, &first, 1) > 0 ? first : 0;
         }
 
         // A Panorama script API function by its registered name. The client
         // registers each one as "lea rdx, [function] ; lea rcx, [name]".
-        uintptr_t ResolveScriptFunction(const ModuleInfo& client, const char* name)
+        // The function one registered name address loads, the way the client
+        // registers an InventoryAPI native: "lea rdx, [function] ; lea rcx, [name]".
+        uintptr_t ResolveRegistration(const ModuleInfo& client, const SectionList& sections,
+            uintptr_t text)
         {
-            const uintptr_t text = FindModuleString(client, name);
-            if (!text)
-                return 0;
-
-            SectionList sections;
-            if (!EnumerateSections(client, sections))
-                return 0;
-
             for (int index = 0; index < sections.count; ++index)
             {
                 const Section& section = sections.entries[index];
@@ -225,6 +245,123 @@ namespace NativeApply
             }
 
             return 0;
+        }
+
+        uintptr_t ResolveScriptFunction(const ModuleInfo& client, const char* name)
+        {
+            uintptr_t names[8]{};
+            const int count = FindModuleStrings(client, name, names, 8);
+            if (!count)
+                return 0;
+
+            SectionList sections;
+            if (!EnumerateSections(client, sections))
+                return 0;
+
+            for (int n = 0; n < count; ++n)
+            {
+                const uintptr_t function = ResolveRegistration(client, sections, names[n]);
+                if (function)
+                    return function;
+            }
+
+            return 0;
+        }
+
+        // A wider net than ResolveScriptFunction, for the functions whose
+        // registration does not put "lea rdx" seven bytes before "lea rcx":
+        // every rip-relative load of the name in client.dll's code is paired
+        // with the nearest rip-relative load of a code address just before it.
+        uintptr_t ResolveScriptFunctionLoose(const ModuleInfo& client, const char* name)
+        {
+            uintptr_t names[8]{};
+            const int nameTotal = FindModuleStrings(client, name, names, 8);
+            if (!nameTotal)
+                return 0;
+
+            SectionList sections;
+            if (!EnumerateSections(client, sections))
+                return 0;
+
+            struct CodeRef { uintptr_t at; uintptr_t target; };
+            CodeRef codeRefs[128]{};
+            int codeCount = 0;
+            uintptr_t nameRefs[32]{};
+            int nameCount = 0;
+
+            for (int index = 0; index < sections.count && nameCount < 32; ++index)
+            {
+                const Section& section = sections.entries[index];
+                if (!section.executable || section.size < 16)
+                    continue;
+
+                __try
+                {
+                    for (size_t i = 0; i + 7 <= section.size; ++i)
+                    {
+                        const uint8_t* p = section.start + i;
+                        if (p[0] != 0x48 || p[1] != 0x8D)
+                            continue;
+                        if ((p[2] & 0xC7) != 0x05)   // mod=00, rm=101: rip-relative
+                            continue;
+
+                        int32_t displacement = 0;
+                        std::memcpy(&displacement, p + 3, sizeof(displacement));
+                        const uintptr_t target =
+                            reinterpret_cast<uintptr_t>(p + 7 + displacement);
+
+                        bool isName = false;
+                        for (int n = 0; n < nameTotal; ++n)
+                        {
+                            if (target == names[n])
+                            {
+                                isName = true;
+                                break;
+                            }
+                        }
+
+                        if (isName)
+                        {
+                            if (nameCount < 32)
+                                nameRefs[nameCount++] = reinterpret_cast<uintptr_t>(p);
+                            continue;
+                        }
+
+                        if (client.inside(target) && codeCount < 128)
+                            codeRefs[codeCount++] = { reinterpret_cast<uintptr_t>(p), target };
+                    }
+                }
+                __except (EXCEPTION_EXECUTE_HANDLER)
+                {
+                    continue;
+                }
+            }
+
+            uintptr_t best = 0;
+            uintptr_t bestDistance = 0;
+
+            for (int n = 0; n < nameCount; ++n)
+            {
+                for (int c = 0; c < codeCount; ++c)
+                {
+                    // A registration loads the function, then the name.
+                    if (codeRefs[c].at >= nameRefs[n] || nameRefs[n] - codeRefs[c].at > 0x40)
+                        continue;
+
+                    const uintptr_t distance = nameRefs[n] - codeRefs[c].at;
+                    if (!best || distance < bestDistance)
+                    {
+                        best = codeRefs[c].target;
+                        bestDistance = distance;
+                    }
+                }
+            }
+
+            if (!best)
+                Log("[use-tool] %s: loose registration scan found no code pointer (copies=%d, name loads=%d, code loads=%d)",
+                    name, nameTotal, nameCount, codeCount);
+
+            return best;
         }
 
         // ---- the popup's placement ----
@@ -599,7 +736,20 @@ namespace NativeApply
                 g_notifier.setString(event + 0x18, idText);
 
                 void* eventPointer = event;
-                return dispatch(engine, &eventPointer);
+                const bool handled = dispatch(engine, &eventPointer);
+
+                // Lootline's own contract (unboxer.cpp NotifyItemCustomization):
+                // the event counts as sent once the engine has it - an event
+                // nobody "handles" still reaches RegisterForUnhandledEvent.
+                // `handled` gets its own line, because a popup that never hears
+                // the answer keeps its spinner for ever.
+                if (!handled)
+                {
+                    Log("[use-tool] popup notification sent (type %d \"%s\", item %llu): CS2 handled it = no",
+                        type, typeName, static_cast<unsigned long long>(itemId));
+                }
+
+                return true;
             }
             __except (EXCEPTION_EXECUTE_HANDLER)
             {
@@ -620,12 +770,75 @@ namespace NativeApply
         // in this very frame.
         void __fastcall HkRunFrame(void* engine)
         {
-            if (!g_inJobs.load())
-                ProcessJobs();
+            // This is a vfunc of panorama's UI engine: whatever it does not
+            // catch is unhandled by anyone, and the client goes down with it.
+            // The 2026-11-23 21:17 session died on a call through a null
+            // function pointer after a death, with the work below as the only
+            // code of ours running on that thread at the time.
+            //
+            // No reentrancy check here: ProcessJobs already takes the flag with
+            // an exchange, and a second check in front of it only turned a fault
+            // into a queue that never drains again (the flag stays set, so the
+            // guard below skips the pass forever, silently).
+            if (!g_loadoutQuiet.load())
+            {
+                __try
+                {
+                    ProcessJobs();
+                }
+                __except (EXCEPTION_EXECUTE_HANDLER)
+                {
+                    // The pass owns the flag and only clears it on the way out,
+                    // so it has to be given back here or nothing runs again.
+                    g_inJobs.store(false);
+
+                    static uint64_t lastFaultLogMs = 0;
+                    const uint64_t nowMs = NowMs();
+
+                    if (nowMs - lastFaultLogMs >= 5000)
+                    {
+                        lastFaultLogMs = nowMs;
+                        Log("[use-tool] job pass faulted; the queue continues");
+                    }
+                }
+            }
 
             // The Armory's own graffiti: the decals this runtime placed are kept
             // on the walls (and taken down when they fade) from the same frame.
-            LocalSpray::MainThreadTick();
+            __try
+            {
+                LocalSpray::MainThreadTick();
+            }
+            __except (EXCEPTION_EXECUTE_HANDLER)
+            {
+                static uint64_t lastSprayFaultMs = 0;
+                const uint64_t nowMs = NowMs();
+
+                if (nowMs - lastSprayFaultMs >= 5000)
+                {
+                    lastSprayFaultMs = nowMs;
+                    Log("[spray] frame tick faulted; decals stay where they are");
+                }
+            }
+
+            // The Storage Unit and charm popups only accept their answer from
+            // this thread. Lootline sends casket_added / casket_removed /
+            // keychain_remove from CUIEngine::RunFrame for the same reason.
+            __try
+            {
+                Tools::MainThreadTick();
+            }
+            __except (EXCEPTION_EXECUTE_HANDLER)
+            {
+                static uint64_t lastToolsFaultMs = 0;
+                const uint64_t nowMs = NowMs();
+
+                if (nowMs - lastToolsFaultMs >= 5000)
+                {
+                    lastToolsFaultMs = nowMs;
+                    Log("[tools] frame tick faulted; the queue continues");
+                }
+            }
 
             if (g_originalRunFrame)
                 g_originalRunFrame(engine);
@@ -989,8 +1202,14 @@ namespace NativeApply
                 Log("[use-tool] consumed charm item %016llX removal=%s",
                     static_cast<unsigned long long>(job.toolId), toolRemoved ? "SUCCESS" : "FAILED");
                 if (toolRemoved) RememberConsumed(job.toolId);
+                // A charm is not spent by hanging it on a weapon: CS2 gives it
+                // back when it is detached, and so does Lootline (unboxer.cpp
+                // FinishCharmJobs creates the charm item again rather than
+                // deleting it). The instance therefore stays in the Armory
+                // profile - no consumedToolInstanceId - while its object leaves
+                // the inventory grid; taking it off makes the object again.
                 Attachments::RecordApplied(
-                    job.targetId, next, job.toolInstanceId, true, -1, toolRemoved);
+                    job.targetId, next, nullptr, true, -1, false);
             }
 
             const bool notified = written &&
@@ -1062,13 +1281,36 @@ namespace NativeApply
             if (RuntimeModeState::Current() != RuntimeMode::Armory)
                 return false;
 
-            if (!toolIdText || !itemIdText || !*toolIdText || !*itemIdText)
+            if (!toolIdText || !*toolIdText)
                 return false;
 
             const uint64_t toolId = _strtoui64(toolIdText, nullptr, 10);
+
+            if (!toolId)
+                return false;
+
+            // Tools that are USED rather than applied (the Charm Detachment
+            // Pack hands CS2 three detachments) come before the sticker/charm
+            // checks: Lootline handles them in the same UseTool hook,
+            // unboxer.cpp FinishToolJobs.
+            if (Tools::HandleUseTool(toolId))
+            {
+                Log("[use-tool] tool %llu handled by the tools module",
+                    static_cast<unsigned long long>(toolId));
+                return true;
+            }
+
+            // A used tool comes with no item id at all: Lootline takes the Charm
+            // Detachment Pack in this same hook as `UseTool(tool, "")`
+            // (unboxer.cpp OnUseTool -> QueueToolUse). The empty id is the
+            // request, not a malformed one, and CS2's unpack popup has no answer
+            // of its own for our pack.
+            if (!itemIdText || !*itemIdText)
+                return false;
+
             const uint64_t targetId = _strtoui64(itemIdText, nullptr, 10);
 
-            if (!toolId || !targetId || toolId == targetId)
+            if (!targetId || toolId == targetId)
                 return false;
 
             if (RecentlyConsumed(toolId))
@@ -1192,10 +1434,13 @@ namespace NativeApply
             const bool trace = call <= 32 || (call % 128) == 0;
             if (trace)
             {
-                Log("[use-tool] hook-entry #%llu mode=%d api=%p toolArg=%p targetArg=%p original=%p",
+                Log("[use-tool] hook-entry #%llu mode=%d api=%p toolArg=%p(\"%.40s\") "
+                    "targetArg=%p(\"%.40s\") original=%p",
                     static_cast<unsigned long long>(call),
                     static_cast<int>(RuntimeModeState::Current()),
-                    api, toolId, itemId, reinterpret_cast<void*>(g_originalUseTool));
+                    api, toolId, toolId ? toolId : "",
+                    itemId, itemId ? itemId : "",
+                    reinterpret_cast<void*>(g_originalUseTool));
             }
 
             if (g_inHook.exchange(true))
@@ -1239,6 +1484,17 @@ namespace NativeApply
     bool Ready()
     {
         return g_installed.load();
+    }
+
+    void SetLoadoutQuiet(bool quiet)
+    {
+        const bool previous = g_loadoutQuiet.exchange(quiet);
+
+        if (previous == quiet)
+            return;
+
+        Log("[use-tool] queued applies %s",
+            quiet ? "held until the pawn is back" : "resume");
     }
 
     const char* LastError()
@@ -1360,8 +1616,30 @@ namespace NativeApply
 
         // Without panorama's frame hook the item still changes, but the popup's
         // event would be sent from a thread panorama drops it on. FrameStageNotify
-        // is only this stand-in.
-        if (!g_runFrameHooked.load())
+        // is only this stand-in - and it is still an apply, so it honours the same
+        // death gate the frame hook does.
+        if (!g_runFrameHooked.load() && !g_loadoutQuiet.load())
             ProcessJobs();
+    }
+
+    uintptr_t ResolveInventoryFunction(const char* name)
+    {
+        if (!name || !*name)
+            return 0;
+
+        const ModuleInfo client = GetClientModule();
+        if (!client.valid())
+            return 0;
+
+        const uintptr_t strict = ResolveScriptFunction(client, name);
+        if (strict)
+            return strict;
+
+        return ResolveScriptFunctionLoose(client, name);
+    }
+
+    bool NotifyCustomization(int type, const char* typeName, uint64_t itemId)
+    {
+        return DispatchCustomization(type, typeName, itemId);
     }
 }

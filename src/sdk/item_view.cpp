@@ -221,23 +221,35 @@ uintptr_t GetWeaponItem(uintptr_t weaponEnt)
 
 void SetCustomName(uintptr_t item, const std::string& name)
 {
-    char* p = reinterpret_cast<char*>(item + g_off.EIV_CustomName);
-    if (!p) return;
+    if (!item) return;
 
-    // 161 bytes written straight into the item view at a layout offset. On a
-    // build whose schema moves that member, this is a blind 161-byte write into
-    // whatever the view really holds there - which does not fault at the write,
-    // it corrupts a string the game owns and crashes somewhere later. A fault in
-    // the write is caught here, so a wrong offset costs the custom name and
-    // nothing else.
+    // Both name fields of the view. CS2's C_EconItemView::GetCustomName reads
+    // m_szCustomNameOverride first and only falls back to m_szCustomName when
+    // the view has no inventory item behind it; an Armory item always has one,
+    // so a name written into the plain field alone never reached the card
+    // (Lootline's own 2026-11-06 log: it read back "").
+    //
+    // 161 bytes written straight into the view at a layout offset. On a build
+    // whose schema moves that member, this is a blind write into whatever the
+    // view really holds there - which does not fault at the write, it corrupts
+    // a string the game owns and crashes somewhere later. A fault in the write
+    // is caught here, so a wrong offset costs the custom name and nothing else.
+    const uintptr_t fields[2] = { g_off.EIV_CustomNameOverride, g_off.EIV_CustomName };
+
     __try
     {
-        if (name.empty())
+        for (uintptr_t offset : fields)
         {
-            p[0] = '\0';
-            return;
+            if (!offset)
+                continue;
+
+            char* p = reinterpret_cast<char*>(item + offset);
+
+            if (name.empty())
+                p[0] = '\0';
+            else
+                strncpy_s(p, 161, name.c_str(), _TRUNCATE);
         }
-        strncpy_s(p, 161, name.c_str(), _TRUNCATE);
     }
     __except (EXCEPTION_EXECUTE_HANDLER)
     {

@@ -17,40 +17,6 @@
 
 namespace
 {
-    using KnifeInspectFn = __int64(__fastcall*)(__int64 thisptr);
-    using KnifeReflectFn = __int64(__fastcall*)(__int64 thisptr, __int64 a2, __int64 a3);
-
-    KnifeInspectFn oKnifeInspect = nullptr;
-    KnifeReflectFn oKnifeReflect = nullptr;
-
-    __int64 __fastcall HkKnifeInspect(__int64 thisptr)
-    {
-        KnifeAnimation::InspectContext ctx{};
-        __try { ctx = KnifeAnimation::BeforeInspect((std::uintptr_t)thisptr); }
-        __except (EXCEPTION_EXECUTE_HANDLER) {}
-
-        const __int64 result = oKnifeInspect ? oKnifeInspect(thisptr) : 0;
-
-        __try { KnifeAnimation::AfterInspect((std::uintptr_t)thisptr, ctx, (char)result); }
-        __except (EXCEPTION_EXECUTE_HANDLER) {}
-
-        return result;
-    }
-
-    __int64 __fastcall HkKnifeReflect(__int64 thisptr, __int64 a2, __int64 a3)
-    {
-        KnifeAnimation::ReflectionContext ctx{};
-        __try { ctx = KnifeAnimation::BeforeReflection((std::uintptr_t)thisptr, 0); }
-        __except (EXCEPTION_EXECUTE_HANDLER) {}
-
-        const __int64 result = oKnifeReflect ? oKnifeReflect(thisptr, a2, a3) : 0;
-
-        __try { KnifeAnimation::AfterReflection((std::uintptr_t)thisptr, 0, ctx); }
-        __except (EXCEPTION_EXECUTE_HANDLER) {}
-
-        return result;
-    }
-
     constexpr int Inspecting = 1000;
     constexpr int InspectOutro = 1001;
     constexpr int InspectIntroPhase = 1;
@@ -390,48 +356,22 @@ void KnifeAnimation::Initialize()
     g_p.HudModelArms = g_off.PAWN_hHudModelArms;
     g_p.Controller = g_off.PAWN_hController;
 
-    g_ready.store(pBuildModernSkin != nullptr, std::memory_order_release);
+    // The inspect / reflect hooks are NOT installed.
+    //
+    // Lootline's own session log on this build says so twice:
+    //   "knife inspect fix: NOT installed (signature)"
+    //   "signature KnifeReflect (client.dll) wasn't found"
+    // and it played a whole match that way. This runtime's patterns did match,
+    // so it hooked both and wrote animation-graph parameter nodes through
+    // build-specific offsets (weapon +0x19A8, controller +0xC0 / +0xD8 / +0x270)
+    // that were never verified on this client. Every crash report from this
+    // runtime ends in animationsystem.dll, and the round-start / death screen
+    // path draws through that system. Left off, exactly as the reference has it.
+    g_ready.store(false, std::memory_order_release);
 
-    Log("[knife-anim] initialized (State=0x%X Action=0x%X Reset=0x%X Extra=0x%X)",
-        (uint32_t)g_w.State, (uint32_t)g_off_Ctrl_Action,
-        (uint32_t)g_off_Ctrl_Reset, (uint32_t)g_off_Ctrl_Extra);
+    Log("[knife-anim] inspect/reflect fix NOT installed "
+        "(offsets unverified on this build; Lootline leaves it off too)");
 
-    ModuleInfo client = GetClientModule();
-    if (!client.valid()) { Log("[knife-anim] client module not ready — hooks not installed"); return; }
-
-    // --- Hook KnifeInspect ---
-    {
-        const uintptr_t addr = ScanPattern(client,
-            "40 53 48 83 EC 40 48 8B 01 48 8B D9 FF 90 F0 0C 00 00 84 C0 75 ? 48 83 C4 40 5B C3");
-        if (addr)
-        {
-            if (MH_CreateHook_p && MH_EnableHook_p &&
-                MH_CreateHook_p((void*)addr, (void*)&HkKnifeInspect, (void**)&oKnifeInspect) == 0)
-            {
-                MH_EnableHook_p((void*)addr);
-                Log("[knife-anim] KnifeInspect @ 0x%p HOOKED", (void*)addr);
-            }
-            else Log("[knife-anim] KnifeInspect @ 0x%p CREATE FAILED (ptr=%p)", (void*)addr, (void*)MH_CreateHook_p);
-        }
-        else Log("[knife-anim] KnifeInspect pattern not found");
-    }
-
-    // --- Hook KnifeReflect ---
-    {
-        const uintptr_t addr = ScanPattern(client,
-            "40 55 53 56 57 41 57 48 8D 6C 24 C9 48 81 EC A0 00 00 00 48 8D 05 ? ? ? ? 48 C7 45 CF B5 00 00 00 48 89 45 C7 4C 8D 45 E7 0F 10 45 C7 48 8D 05 ? ? ? ?");
-        if (addr)
-        {
-            if (MH_CreateHook_p && MH_EnableHook_p &&
-                MH_CreateHook_p((void*)addr, (void*)&HkKnifeReflect, (void**)&oKnifeReflect) == 0)
-            {
-                MH_EnableHook_p((void*)addr);
-                Log("[knife-anim] KnifeReflect @ 0x%p HOOKED", (void*)addr);
-            }
-            else Log("[knife-anim] KnifeReflect @ 0x%p CREATE FAILED (ptr=%p)", (void*)addr, (void*)MH_CreateHook_p);
-        }
-        else Log("[knife-anim] KnifeReflect pattern not found");
-    }
 }
 
 KnifeAnimation::InspectContext KnifeAnimation::BeforeInspect(std::uintptr_t weapon)

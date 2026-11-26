@@ -2,11 +2,12 @@
 
 // n1ssan-dll / src/overlay/pill_art.h
 //
-// The Armory's capsules, drawn with GDI+ into a small BGRA pixmap: an almost
-// black stadium with white text and one band of purple light running its rim.
+// The Armory's capsules, drawn with GDI+ into a small BGRA pixmap: a stadium
+// filled with a purple gradient, a soft halo, a glassy highlight and white text.
 // The frame-rate pill and the loading pill are the same artwork with different
-// contents. Kept apart from the swap chain code so the look can be rendered and
-// checked on its own.
+// contents; only the loading pill keeps the travelling light on its rim. Kept
+// apart from the swap chain code so the look can be rendered and checked on its
+// own.
 #include <cstdint>
 #include <vector>
 

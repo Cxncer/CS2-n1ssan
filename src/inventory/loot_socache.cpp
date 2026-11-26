@@ -6,6 +6,10 @@
 #include "memory/access.h"
 #include "memory/scanner.h"
 
+// sdk/item_view.h carries the global ATTR_* attribute ids, which collide with
+// the ids this file keeps locally, so only the one helper is named here.
+void SetCustomName(uintptr_t item, const std::string& name);
+
 #include <windows.h>
 #include <cstdint>
 #include <cstring>
@@ -43,6 +47,8 @@ namespace
     constexpr int VFUNC_SO_CREATED = 0;
     constexpr int VFUNC_SO_UPDATED = 1;
     constexpr int VFUNC_SO_DESTROYED = 2;
+    // An item's position carries this bit until CS2 acknowledges it ("NEW").
+    constexpr uint32_t NEW_ITEM_FLAG = 0x40000000u;
     constexpr int VFUNC_TYPECACHE_REMOVE = 3;
     constexpr int VFUNC_ITEM_DESTRUCT = 1;
     constexpr int SO_EVENT_INCREMENTAL = 4;
@@ -52,10 +58,25 @@ namespace
     constexpr int ATTR_PAINT_WEAR = 8;
     constexpr int ATTR_KILL_EATER = 80;
     constexpr int ATTR_KILL_EATER_TYPE = 81;
+    // 75 "Tradable After": an item CS2 will not trade before this unix time.
+    constexpr int ATTR_TRADABLE_AFTER = 75;
     // An unsealed graffiti's charges ("sprays remaining") and colour variant
     // ("spray tint id", 1-19), both stored as integers.
     constexpr int ATTR_SPRAYS_REMAINING = 232;
     constexpr int ATTR_SPRAY_TINT = 233;
+    // A Storage Unit (casket, definition 1201) and a Charm Detachment Pack both
+    // show "items count"; a named unit also carries its label date.
+    constexpr int ATTR_ITEMS_COUNT = 270;
+    constexpr int ATTR_MODIFICATION_DATE = 271;
+    constexpr uint16_t DEF_CASKET = 1201;
+    // The container an item sits in ("casket item id low/high"): its unit's id,
+    // low and high 32 bits.
+    constexpr int ATTR_CASKET_ID_LOW = 272;
+    constexpr int ATTR_CASKET_ID_HIGH = 273;
+    // How an item arrived, in the low bits of a NEW position (Lootline
+    // PICKUP_PURCHASED). CS2 reads the position as "bit 30 + pickup method", so
+    // a plain slot number there is not a valid pickup.
+    constexpr uint32_t PICKUP_PURCHASED = 4;
 
     CreateTypeCacheFn g_createTypeCache = nullptr;
     uint32_t g_soCacheOffset = 0;
@@ -284,6 +305,104 @@ namespace
         // traversal is required before absence can be trusted.
         return item != nullptr || completed;
     }
+
+    // What CS2 itself answers for an item's name, and the object it answers it
+    // from. Lootline writes a name into the view the inventory hands out by id
+    // (game_inventory.cpp SetViewName -> g_itemViewById), not into the object it
+    // created, and reads it back through C_EconItemView::GetCustomName (vfunc
+    // 26). Doing the same here is what makes a label the card actually shows.
+    using ItemViewByIdFn = void* (__fastcall*)(uint64_t id);
+    using CustomNameFn = const char* (__fastcall*)(void* view, int stage);
+    constexpr int VFUNC_ITEM_CUSTOM_NAME = 26;
+
+    ItemViewByIdFn g_itemViewById = nullptr;
+    bool g_itemViewLookupTried = false;
+
+    void* ViewLookup(uint64_t id)
+    {
+        if (!g_itemViewById && !g_itemViewLookupTried)
+        {
+            g_itemViewLookupTried = true;
+
+            const ModuleInfo client = GetClientModule();
+
+            if (client.valid())
+            {
+                const uintptr_t address = ScanPattern(client, LootPatterns::ItemViewById);
+
+                if (address)
+                {
+                    g_itemViewById = reinterpret_cast<ItemViewByIdFn>(address);
+                    Log("[socache] Lootline ItemViewById @ %p",
+                        reinterpret_cast<void*>(address));
+                }
+                else
+                {
+                    Log("[socache] Lootline ItemViewById signature not found - names fall back to the cache object");
+                }
+            }
+        }
+
+        if (!g_itemViewById || !id)
+            return nullptr;
+
+        void* view = nullptr;
+
+        __try { view = g_itemViewById(id); }
+        __except (EXCEPTION_EXECUTE_HANDLER) { view = nullptr; }
+
+        return (view && reinterpret_cast<uintptr_t>(view) > 0x10000) ? view : nullptr;
+    }
+
+    // SEH only, no unwinding objects (C2712).
+    bool ReadViewNameAt(uintptr_t view, char (&buffer)[161])
+    {
+        buffer[0] = 0;
+
+        if (!view)
+            return false;
+
+        __try
+        {
+            void** vtable = *reinterpret_cast<void***>(view);
+            if (!vtable)
+                return false;
+
+            auto getName = reinterpret_cast<CustomNameFn>(vtable[VFUNC_ITEM_CUSTOM_NAME]);
+            const char* name = getName ? getName(reinterpret_cast<void*>(view), -1) : nullptr;
+
+            if (!name)
+                return false;
+
+            for (int i = 0; i < 160; ++i)
+            {
+                buffer[i] = name[i];
+
+                if (!name[i])
+                    break;
+            }
+
+            buffer[160] = 0;
+            return true;
+        }
+        __except (EXCEPTION_EXECUTE_HANDLER)
+        {
+            buffer[0] = 0;
+            return false;
+        }
+    }
+
+    // The object whose name field CS2 reads for `id`: the view the inventory
+    // hands out, else the cache object itself.
+    uintptr_t NameTarget(uint64_t id, void*& cached)
+    {
+        cached = LootSOCache::Find(id);
+
+        if (void* view = ViewLookup(id))
+            return reinterpret_cast<uintptr_t>(view);
+
+        return reinterpret_cast<uintptr_t>(cached);
+    }
 }
 
 namespace LootSOCache
@@ -393,6 +512,27 @@ namespace LootSOCache
         // charm. `clearMissing` also covers the inconclusive-read case, where
         // `current` alone would leave the real attachments behind.
         return Attachments::Write(item, attachments, known ? &current : nullptr, true, true);
+    }
+
+    bool SetCasketInfo(uint64_t id, int itemsCount, uint32_t modificationDate)
+    {
+        void* item = Find(id);
+        if (!item) return false;
+
+        // Zero is a real answer here (an emptied unit), so it is written rather
+        // than skipped: a stale count is the one thing the card must not show.
+        bool ok = LootSchema::SetAttributeInt(item, ATTR_ITEMS_COUNT,
+            itemsCount > 0 ? itemsCount : 0);
+
+        if (modificationDate > 0 &&
+            !LootSchema::SetAttributeInt(item, ATTR_MODIFICATION_DATE,
+                static_cast<int>(modificationDate)))
+            ok = false;
+
+        if (ok)
+            NotifyUpdated(id);
+
+        return ok;
     }
 
     bool NotifyUpdated(uint64_t id)
@@ -524,6 +664,287 @@ namespace LootSOCache
         return true;
     }
 
+    bool Acknowledge(uint64_t id, bool& wasNew)
+    {
+        wasNew = false;
+
+        void* item = Find(id);
+        if (!item)
+            return false;
+
+        EconItem* found = static_cast<EconItem*>(item);
+
+        __try
+        {
+            const uint32_t position = found->inventory;
+
+            // Already acknowledged: nothing to tell CS2 (Lootline returns true
+            // with wasNew = false here, so the popup closes without a redraw).
+            if (position != 0 && (position & NEW_ITEM_FLAG) == 0)
+                return true;
+
+            found->inventory = NextPosition();
+            wasNew = true;
+        }
+        __except (EXCEPTION_EXECUTE_HANDLER)
+        {
+            Log("[socache] acknowledge threw for id=%llu",
+                static_cast<unsigned long long>(id));
+            return false;
+        }
+
+        if (wasNew)
+            NotifyUpdated(id);
+
+        return true;
+    }
+
+    // Kept apart from the __try below: a function holding a std::string may not
+    // also carry SEH (C2712), and this one has to build the empty name.
+    static void WriteEmptyName(uintptr_t item)
+    {
+        SetCustomName(item, std::string());
+    }
+
+    // SEH and an unwinding object can't share a function (C2712), so the field is
+    // copied out first.
+    static bool CopyNameFieldAt(uintptr_t item, uintptr_t offset, char (&buffer)[161])
+    {
+        __try
+        {
+            const char* raw = reinterpret_cast<const char*>(item + offset);
+
+            for (int i = 0; i < 161; ++i)
+                buffer[i] = raw[i];
+
+            buffer[160] = 0;
+            return true;
+        }
+        __except (EXCEPTION_EXECUTE_HANDLER)
+        {
+            buffer[0] = 0;
+            return false;
+        }
+    }
+
+    bool ReadCustomName(uint64_t id, std::string& out)
+    {
+        out.clear();
+
+        void* item = Find(id);
+        if (!item)
+            return false;
+
+        // What CS2 answers for the name is what the card draws, so it is asked
+        // first: a field only this runtime can see is not a label the player has.
+        {
+            char shown[161]{};
+
+            if (ReadViewNameAt(reinterpret_cast<uintptr_t>(ViewLookup(id)), shown) && shown[0])
+            {
+                std::string text;
+                bool clean = true;
+
+                for (size_t i = 0; i < 160 && shown[i]; ++i)
+                {
+                    const unsigned char c = static_cast<unsigned char>(shown[i]);
+
+                    if (c < 0x20 || c > 0x7E || text.size() >= 64)
+                    {
+                        clean = false;
+                        break;
+                    }
+
+                    text.push_back(static_cast<char>(c));
+                }
+
+                if (clean && !text.empty())
+                {
+                    out = text;
+                    return true;
+                }
+            }
+        }
+
+        if (!g_off.EIV_CustomName && !g_off.EIV_CustomNameOverride)
+            return false;
+
+        // The override is what CS2 reads first; the plain field is the fallback
+        // and what an older build of this runtime wrote.
+        const uintptr_t fields[2] = { g_off.EIV_CustomNameOverride, g_off.EIV_CustomName };
+        char buffer[161]{};
+        bool copied = false;
+
+        for (uintptr_t offset : fields)
+        {
+            if (!offset)
+                continue;
+
+            if (!CopyNameFieldAt(reinterpret_cast<uintptr_t>(item), offset, buffer))
+                continue;
+
+            copied = true;
+
+            if (buffer[0])
+                break;
+        }
+
+        if (!copied)
+            return false;
+
+        const char* raw = buffer;
+
+        // Only something that reads as a name counts. The field is a fixed
+        // 161-byte buffer inside the item; on a build whose schema moved it (or
+        // right after CS2 rebuilt the object) it holds whatever was there, and
+        // treating that as a label is how a unit got the modification date
+        // CS2 needs before it offers "put in" - after which the transaction
+        // was refused and CS2 waited for an answer that never came.
+        std::string text;
+
+        for (size_t i = 0; i < 160; ++i)
+        {
+            const unsigned char c = static_cast<unsigned char>(raw[i]);
+
+            if (c == 0)
+                break;
+
+            if (c < 0x20 || c > 0x7E || text.size() >= 64)
+            {
+                out.clear();
+                return false;
+            }
+
+            text.push_back(static_cast<char>(c));
+        }
+
+        // Leading/trailing blanks are not part of a label.
+        const size_t first = text.find_first_not_of(' ');
+        const size_t last = text.find_last_not_of(' ');
+        if (first == std::string::npos)
+            return false;
+
+        out = text.substr(first, last - first + 1);
+
+        if (out.empty())
+            return false;
+
+        return true;
+    }
+
+    // A label can only be written once CS2 has the item in its cache: a write at
+    // creation is reset when the object is added, which is why a unit could show
+    // a name in the log and an empty tile in the game.
+    // SEH may not share a function with an object that needs unwinding (C2712),
+    // so the write itself takes a plain pointer.
+    static bool WriteNameAt(uintptr_t item, const char* name)
+    {
+        __try
+        {
+            size_t length = 0;
+            if (name)
+            {
+                while (name[length] && length < 160)
+                    ++length;
+            }
+
+            // Both fields: CS2's GetCustomName reads the override first, the
+            // plain field is the fallback (and what CS2's own nametag writes).
+            const uintptr_t fields[2] = { g_off.EIV_CustomNameOverride, g_off.EIV_CustomName };
+
+            for (uintptr_t offset : fields)
+            {
+                if (!offset)
+                    continue;
+
+                char* field = reinterpret_cast<char*>(item + offset);
+                if (!field)
+                    continue;
+
+                if (length)
+                    std::memcpy(field, name, length);
+
+                field[length] = 0;
+            }
+
+            return true;
+        }
+        __except (EXCEPTION_EXECUTE_HANDLER)
+        {
+            return false;
+        }
+    }
+
+    bool SetCustomNameById(uint64_t id, const std::string& name)
+    {
+        void* cached = nullptr;
+        const uintptr_t target = NameTarget(id, cached);
+
+        if (!target)
+            return false;
+
+        // The view by id is Lootline's target and the one the card reads. The
+        // cache object is only a fallback: it is written when the view write
+        // failed, never on top of a successful one. v7.10 also wrote it whenever
+        // the two pointers differed, which put 161 raw bytes at the view's name
+        // offsets inside an object whose real layout is not proven - a write that
+        // does not fault at the time and shows up later as a corrupted string in
+        // whatever the game owns there (a fault inside networksystem while the
+        // item is re-serialized).
+        bool written = WriteNameAt(target, name.c_str());
+
+        if (!written && cached && reinterpret_cast<uintptr_t>(cached) != target)
+            written = WriteNameAt(reinterpret_cast<uintptr_t>(cached), name.c_str());
+
+        if (!written)
+            return false;
+
+        char shown[161]{};
+        const bool readable = ReadViewNameAt(target, shown);
+
+        static uint64_t writes = 0;
+        const uint64_t count = ++writes;
+
+        if (count <= 12 || (count % 32) == 0)
+        {
+            Log("[socache] name \"%s\" written to %llu at %p (cache object %p): CS2 reads \"%s\"%s",
+                name.c_str(), static_cast<unsigned long long>(id),
+                reinterpret_cast<void*>(target), cached,
+                readable ? shown : "", readable ? "" : " (no read-back)");
+        }
+
+        NotifyUpdated(id);
+        return true;
+    }
+
+    bool ClearCustomName(uint64_t id)
+    {
+        void* item = Find(id);
+        if (!item)
+            return false;
+
+        bool written = false;
+
+        __try
+        {
+            WriteEmptyName(reinterpret_cast<uintptr_t>(item));
+            written = true;
+        }
+        __except (EXCEPTION_EXECUTE_HANDLER)
+        {
+            written = false;
+        }
+
+        if (!written)
+        {
+            Log("[socache] clearing the name threw for id=%llu",
+                static_cast<unsigned long long>(id));
+            return false;
+        }
+
+        return NotifyUpdated(id);
+    }
+
     uint32_t NextPosition()
     {
         // Walk existing items, find highest slot number (low 30 bits), return +1.
@@ -549,7 +970,9 @@ namespace LootSOCache
         it->id = req.id;
         it->originalId = req.id;
         it->accountId = static_cast<uint32_t>(owner.id & 0xFFFFFFFFull);
-        it->inventory = NextPosition();
+        // Lootline's rule: an item added now arrives NEW (its position carries
+        // the bit CS2 reads), a re-created one does not.
+        it->inventory = req.asNew ? (NEW_ITEM_FLAG | PICKUP_PURCHASED) : NextPosition();
         it->definition = req.definition;
         it->origin = 0;
         it->quality = static_cast<uint16_t>(req.quality & 0xF);
@@ -623,9 +1046,74 @@ namespace LootSOCache
                 req.stickerKit, req.sprayTint, req.spraysRemaining, req.definition);
         }
 
+        // "Tradable After" (75): the date a dropped item is tradable. Not
+        // fatal - an item without it is simply tradable at once.
+        if (req.tradableAfter > 0)
+        {
+            if (!LootSchema::SetAttributeInt(item, ATTR_TRADABLE_AFTER,
+                    static_cast<int32_t>(req.tradableAfter)))
+                Log("[socache] tradable after=%u not written (attribute not in this schema)",
+                    req.tradableAfter);
+        }
+
         if (req.definition == 1314)
         {
             Log("[socache] music kit id=%d def=%u", req.musicKit, req.definition);
+        }
+
+        // A Storage Unit draws its item count from this attribute; CS2 does not
+        // recount the children itself.
+        if (req.itemsCount > 0)
+        {
+            if (!LootSchema::SetAttributeInt(item, ATTR_ITEMS_COUNT, req.itemsCount))
+                Log("[socache] items count=%d not written (attribute not in this schema)",
+                    req.itemsCount);
+        }
+
+        if (req.modificationDate > 0)
+        {
+            if (!LootSchema::SetAttributeInt(item, ATTR_MODIFICATION_DATE,
+                    static_cast<int>(req.modificationDate)))
+                Log("[socache] modification date not written (attribute not in this schema)");
+        }
+
+        // The unit an item is inside. CS2 lists such an item inside that unit
+        // instead of the inventory grid; without it a stored item stayed on the
+        // grid for ever and the unit looked empty.
+        if (req.casketId)
+        {
+            if (!LootSchema::SetAttributeInt(item, ATTR_CASKET_ID_LOW,
+                    static_cast<int32_t>(req.casketId & 0xFFFFFFFFull)) ||
+                !LootSchema::SetAttributeInt(item, ATTR_CASKET_ID_HIGH,
+                    static_cast<int32_t>(req.casketId >> 32)))
+            {
+                Log("[socache] casket id=%llu not written (attribute not in this schema)",
+                    static_cast<unsigned long long>(req.casketId));
+            }
+        }
+
+        if (req.definition == DEF_CASKET)
+        {
+            // A Storage Unit's label is its custom name: CS2 draws the unit's
+            // name from it and nothing else. The Armory owns the label, so it is
+            // written as the item is created; an unlabelled unit is also the state
+            // CS2's own rename flow never leaves.
+            Log("[socache] storage unit items=%d def=%u name=\"%s\"",
+                req.itemsCount, req.definition, req.customName.c_str());
+        }
+
+        // A name belongs on every item that carries one, not only on a unit.
+        if (!req.customName.empty())
+        {
+            if (g_off.EIV_CustomName || g_off.EIV_CustomNameOverride)
+            {
+                SetCustomName(reinterpret_cast<uintptr_t>(item), req.customName);
+            }
+            else
+            {
+                Log("[socache] custom name \"%s\" not written for %llu (no C_EconItemView name field resolved)",
+                    req.customName.c_str(), static_cast<unsigned long long>(req.id));
+            }
         }
 
         // Same for the charm: the pair of attributes is what makes the keychain
@@ -701,6 +1189,27 @@ namespace LootSOCache
             listener(inv, &owner, item, SO_EVENT_INCREMENTAL);
         }
         __except (EXCEPTION_EXECUTE_HANDLER) {}
+
+        // CS2 fills part of the view while the object enters the cache, which is
+        // how a name written before AddObject disappeared. Everything CS2 reads
+        // for this item is written again now that it is in the cache.
+        if (req.casketId)
+        {
+            const bool low = LootSchema::SetAttributeInt(item, ATTR_CASKET_ID_LOW,
+                static_cast<int32_t>(req.casketId & 0xFFFFFFFFull));
+            const bool high = LootSchema::SetAttributeInt(item, ATTR_CASKET_ID_HIGH,
+                static_cast<int32_t>(req.casketId >> 32));
+
+            Log("[socache] casket id=%llu in the cache: low %s, high %s",
+                static_cast<unsigned long long>(req.casketId),
+                low ? "written" : "NOT written", high ? "written" : "NOT written");
+        }
+
+        if (!req.customName.empty() &&
+            (g_off.EIV_CustomName || g_off.EIV_CustomNameOverride))
+        {
+            SetCustomName(reinterpret_cast<uintptr_t>(item), req.customName);
+        }
 
         return CreateResult::Ok;
     }

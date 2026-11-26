@@ -365,8 +365,36 @@ namespace
         const uint64_t worldMask = ReadMeshGroupMask(weaponEnt);
         const uint64_t hudMask = hudWeapon ? ReadMeshGroupMask(hudWeapon) : 0;
 
-        const bool fitWorld = worldMask != 0 && worldMask != mask;
-        const bool fitHud = hudMask != 0 && hudMask != mask;
+        // All ones is not a mask, it is an unreadable field. 0 is the documented
+        // "could not read" answer, but a member that moved - or a model state
+        // caught mid-rebuild - answers with the sentinel instead. The
+        // 2026-11-24 session reads `mesh was 18446744073709551615/0` on a knife
+        // whose mask is 1 and wrote the mesh on top of it; the write goes through
+        // the same broken member, so this is the case where not writing is the
+        // only safe answer.
+        constexpr uint64_t kUnreadableMask = ~0ull;
+
+        const bool worldKnown = worldMask != 0 && worldMask != kUnreadableMask;
+        const bool hudKnown = hudMask != 0 && hudMask != kUnreadableMask;
+
+        if ((worldMask == kUnreadableMask) || (hudMask == kUnreadableMask))
+        {
+            static uint64_t lastUnreadableLogMs = 0;
+            const uint64_t nowMs = NowMs();
+
+            if (nowMs - lastUnreadableLogMs >= 5000)
+            {
+                lastUnreadableLogMs = nowMs;
+
+                Log("[mesh-fit] weapon=%p unreadable mask (world=%llu hud=%llu); left as it is",
+                    (void*)weaponEnt,
+                    static_cast<unsigned long long>(worldMask),
+                    static_cast<unsigned long long>(hudMask));
+            }
+        }
+
+        const bool fitWorld = worldKnown && worldMask != mask;
+        const bool fitHud = hudKnown && hudMask != mask;
 
         if (fitWorld)
             SetMeshGroup(weaponEnt, mask);
@@ -924,6 +952,24 @@ namespace
         return true;
     }
 
+    // The quality CS2 must read on the view for this target: 12 = Souvenir
+    // (Lootline's ITEM_QUALITY_TOURNAMENT, skin_application.cpp:39, applied to
+    // weapons only at :121), 9 = StatTrak, 3 = knife, 0 = plain. Every pass
+    // used to derive this from StatTrak alone, so an Armory Souvenir was
+    // written to CS2's inventory as quality 12 and painted on the gun as
+    // quality 0: the toggle showed the item as a Souvenir in the Armory and
+    // did nothing to the skin in game.
+    int WantQuality(const TargetSkin& t)
+    {
+        if (IsKnifeDefinition(t.defIndex))
+            return 3;
+
+        if (t.souvenir)
+            return 12;
+
+        return t.statTrak ? 9 : 0;
+    }
+
     bool IsAlreadyApplied(uintptr_t weaponEnt, uintptr_t view, const TargetSkin& t)
     {
         // The game put its own item back on this view; nothing below can say
@@ -943,7 +989,7 @@ namespace
         if (!SafeReadI32(weaponEnt + g_off.EE_FallbackStatTrak, curStatTrak)) return false;
         if (!SafeReadI32(view + g_off.EIV_EntityQuality, curQuality))   return false;
 
-        const int wantQuality = IsKnifeDefinition(t.defIndex) ? 3 : (t.statTrak ? 9 : 0);
+        const int wantQuality = WantQuality(t);
 
         // StatTrak is identity (present or not), never the saved count: the game
         // increments the counter while the skin is equipped, so comparing counts
@@ -1107,6 +1153,16 @@ namespace
     // its HUD work and the static charm stays on the gun.
     std::unordered_map<uintptr_t, uintptr_t> g_lastHudWeapon;
 
+    // The knife model last written on a first-person weapon, and when. CS2 keeps
+    // re-syncing a knife's item view, so the world half's own guard (its def index
+    // has to differ) is what stops it repeating - but the HUD half had no guard
+    // at all: the 23:20 session set the same butterfly model on the viewmodel 17
+    // times, and the fault that ended it was inside animationsystem.dll two lines
+    // after the last one. A rename of a model CS2 is already drawing is exactly
+    // the skeleton rebuild it does not survive being asked for twice.
+    std::unordered_map<uintptr_t, std::pair<std::string, uint64_t>> g_hudKnifeModel;
+    constexpr uint64_t HUD_KNIFE_REFRESH_MS = 10000;
+
     // Only trust a remembered HUD weapon while its owner handle still resolves
     // back to the same world weapon; a respawn or weapon switch frees it.
     bool HudWeaponStillOwned(uintptr_t hudWeapon, uintptr_t weaponEnt)
@@ -1206,6 +1262,7 @@ void InvalidateWeaponModelCache()
     g_foreignCleared.clear();
     g_networkedCleared.clear();
     g_lastHudWeapon.clear();
+    g_hudKnifeModel.clear();
     Charm::ForgetAll();
 
     Log("[apply-cache] weapon model cache invalidated");
@@ -1228,6 +1285,23 @@ bool ApplyWeaponSkin(uintptr_t weaponEnt, uintptr_t pawn, const TargetSkin& t,
     if (!view)
         return false;
 
+    // The weapon handle has to name a live entity before anything below reads the
+    // item view it embeds. A handle from a list built before the death still
+    // resolves through a stale slot, and the view lives inside that entity: every
+    // read of its attribute list is then a read of freed memory. That is the
+    // "unmapped-address fault" the crash filter wrote down on both 2026-11-24
+    // dumps, one line after the pawn died. A live C_BaseEntity's vtable is inside
+    // client.dll - the same test the entity resolvers use.
+    {
+        uintptr_t entityVtable = 0;
+        const ModuleInfo client = GetClientModule();
+
+        if (!client.valid() ||
+            !SafeReadQword(weaponEnt, entityVtable) ||
+            !client.inside(entityVtable))
+            return false;
+    }
+
     // The pawn died: CS2 is tearing the round's weapons, the first-person model
     // and the keychain entities down, so this pass must not free, allocate or
     // call into the item schema. The one thing it still does is keep the view's
@@ -1242,8 +1316,7 @@ bool ApplyWeaponSkin(uintptr_t weaponEnt, uintptr_t pawn, const TargetSkin& t,
     // without them it only exists in the inventory UI. The duplicate seen in
     // game is a second keychain entity created by the world-model build; it is
     // removed after the rebuild below (see RemoveWorldKeychainEntities).
-    const int wantQuality =
-        IsKnifeDefinition(t.defIndex) ? 3 : (t.statTrak ? 9 : 0);
+    const int wantQuality = WantQuality(t);
 
     // Kills continue from the saved instance: EconAttr_Create writes this into
     // "kill eater", and the game increments it from there.
@@ -1255,8 +1328,9 @@ bool ApplyWeaponSkin(uintptr_t weaponEnt, uintptr_t pawn, const TargetSkin& t,
 
     // The charm is written once, inside the view write below, and never cleared:
     // the keychain setters fault on this client after a model build (the 07:52
-    // session lost every charm that way), so the attribute stays and Charm::Upkeep
-    // removes the extra entities and rebuilds the HUD addon instead.
+    // session lost every charm that way), so the attribute stays and
+    // Charm::ProcessPending removes the extra entities and rebuilds the HUD addon
+    // instead.
     const Attachments::Set* buildAttachments = attachments;
 
     // One dump per weapon and view, only for StatTrak items.
@@ -1432,8 +1506,44 @@ bool ApplyWeaponSkin(uintptr_t weaponEnt, uintptr_t pawn, const TargetSkin& t,
 
         if ((!readable || current != desired) && !rewriteHeld)
         {
-            if (Attachments::WriteItemView(view, desired,
-                    readable ? &current : nullptr, true))
+            // A charm that was removed: CS2's keychain setters fault on a live
+            // view on this client ("CallSetAttribute: threw"), so the write below
+            // cannot clear "keychain slot 0 id" - the attribute stayed, the next
+            // model build hung the charm again, and an Armory removal looked like
+            // it did nothing at all. The entry is zeroed in place instead, on
+            // both lists, which is the removal without a setter.
+            bool charmCleared = false;
+
+            if (!desired.charm.present)
+            {
+                const int cleared = Attachments::ClearCharmInPlace(
+                    reinterpret_cast<void*>(view));
+
+                charmCleared = cleared > 0;
+
+                if (charmCleared)
+                    Log("[attach-view] charm cleared in place on weapon=%p (%d entries)",
+                        (void*)weaponEnt, cleared);
+            }
+
+            // Only the charm changed: the removal is already done, so the setter
+            // path (which would raise once per keychain attribute) is skipped
+            // entirely. The charm entry is part of `current` and not of `desired`,
+            // so it is taken out before the two are compared.
+            bool stickersDiffer = !readable;
+
+            if (readable)
+            {
+                Attachments::Set withoutCharm = current;
+                withoutCharm.charm = Attachments::Charm{};
+                stickersDiffer = withoutCharm != desired;
+            }
+
+            const bool stickerWrite = stickersDiffer ?
+                Attachments::WriteItemView(view, desired,
+                    readable ? &current : nullptr, true) : false;
+
+            if (stickerWrite || charmCleared)
             {
                 written.view = view;
                 written.set = desired;
@@ -1638,29 +1748,15 @@ bool ApplyWeaponSkin(uintptr_t weaponEnt, uintptr_t pawn, const TargetSkin& t,
         // the other weapons needed (the report of a few guns staying default for
         // the round: Tec-9, Glock). The lookup matters only when a HUD model
         // exists.
-        if (needHud && IsKnifeDefinition(t.defIndex))
-        {
-            std::string modelName;
-
-            if (GetKnifeModelName(t.defIndex, modelName))
-            {
-                TraceSwitch("knife HUD SetModel");
-
-                hudModelReady =
-                    CallSetModel(hudWeapon, modelName.c_str());
-
-                if (hudModelReady)
-                    Log("[knife] HUD SetModel (schema): %s",
-                        modelName.c_str());
-            }
-            else
-            {
-                hudModelReady = false;
-
-                Log("[knife] schema model missing for def=%u",
-                    t.defIndex);
-            }
-        }
+        // Lootline renames the world knife only (KnifeModelChanger::Apply ->
+        // SetModel + m_nSubclassID + UpdateSubclass); the first-person copy is
+        // CS2's own child of that weapon and takes the model with it. This
+        // runtime also renamed the HUD entity directly, and its own note on that
+        // path records what it did: a butterfly model set 17 times in one
+        // session and "the fault that ended it was inside animationsystem.dll
+        // two lines after the last one". A rename of the viewmodel skeleton is a
+        // rebuild CS2 is already doing; asking for it a second time is the
+        // crash. No HUD rename, like the reference.
 
         if (needHud && hudModelReady)
         {
@@ -1817,14 +1913,16 @@ bool ApplyWeaponSkin(uintptr_t weaponEnt, uintptr_t pawn, const TargetSkin& t,
             g_nameTagCache.erase(weaponEnt);
     }
 
-    // Charm: Lootline's upkeep. CS2 builds the first-person charm from the
-    // item's keychain attribute (written with the view above) as a simulated
-    // "keychain" addon on the viewmodel. The rigid keychain_module copies the
-    // world build hangs are what gets removed, so exactly one charm is left and
-    // it is the one that reacts to movement.
-    TraceSwitch("charm upkeep");
+    // Charm: Lootline's split. This pass only records what the gun should
+    // carry; the keychain entity work runs at FRAME_NET_UPDATE_END after the
+    // game's own net-update call, for the gun in your hands (Charm::
+    // ProcessPending). Nothing here walks the entity list, creates or removes an
+    // entity, or calls into CS2's keychain natives: doing that for every gun on
+    // the roster, holstered ones included, from inside this pass is what stalled
+    // the game thread and what crashed the client inside animationsystem.dll.
+    TraceSwitch("charm request");
 
-    Charm::Upkeep(weaponEnt, hudWeapon, attachments, modelBuiltThisPass);
+    Charm::Request(weaponEnt, Charm::DesiredKit(attachments), modelBuiltThisPass);
 
     // StatTrak: the counter the game keeps lives on the weapon, not on the saved
     // instance. Hand it back to the Armory instance so loading the same skin
@@ -2010,7 +2108,35 @@ bool KnifeApply(uintptr_t weaponEnt, uintptr_t view, uint16_t targetDef)
         !SafeWriteU16(view + g_off.EIV_ItemDefIndex, targetDef))
         return false;
 
-    Log("[knife] SetModel (schema): %s", modelName.c_str());
+    // The entity already carries this knife's subclass, so its world model is
+    // the Armory knife and only the item view was re-synced: CS2 puts its own
+    // item back on the view (the same re-sync that resets m_iItemIDHigh) while
+    // the entity itself is untouched. Calling SetModel here would tear the
+    // weapon model and its animation graph down and build them again for
+    // nothing - and that rebuild is what the 23:20 and 22:36 sessions faulted
+    // on (animationsystem.dll+0x44871D, immediately after this call; the 23:20
+    // log sets the same butterfly model three times in one second this way).
+    // The view's definition is restored above. A respawn, drop or pickup that
+    // really replaces the knife resets the subclass with the model, so the
+    // swap below still runs whenever the game actually rebuilt the weapon.
+    if (subclassRead && static_cast<uint32_t>(curSub) == targetSub)
+    {
+        static uint64_t lastViewOnlyLogMs = 0;
+        const uint64_t nowMs = GetTickCount64();
+
+        if (nowMs - lastViewOnlyLogMs >= 5000)
+        {
+            lastViewOnlyLogMs = nowMs;
+            Log("[knife] def=%u view restored; the entity already has the model, no rebuild",
+                targetDef);
+        }
+
+        return true;
+    }
+
+    Log("[knife] SetModel (schema): %s (view def %u -> %u, subclass %d -> %u)",
+        modelName.c_str(), static_cast<unsigned>(curDef), static_cast<unsigned>(targetDef),
+        curSub, targetSub);
 
     if (!CallSetModel(weaponEnt, modelName.c_str()))
         return false;
@@ -2075,9 +2201,7 @@ bool DressItemView(uintptr_t view, const TargetSkin& t,
     if (wearNudge > 0.0f)
         wear = wear + wearNudge <= 1.0f ? wear + wearNudge : wear - wearNudge;
 
-    const int wantQuality = quality >= 0
-        ? quality
-        : IsKnifeDefinition(t.defIndex) ? 3 : (t.statTrak ? 9 : 0);
+    const int wantQuality = quality >= 0 ? quality : WantQuality(t);
     const int wantStatTrak =
         t.statTrak ? (t.statTrakKills > 0 ? t.statTrakKills : 0) : -1;
 

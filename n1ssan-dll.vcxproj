@@ -185,6 +185,7 @@
     <ClCompile Include="src\inventory\auto_accept.cpp" />
     <ClCompile Include="src\inventory\native_apply.cpp" />
     <ClCompile Include="src\inventory\native_equipment.cpp" />
+    <ClCompile Include="src\inventory\tools.cpp" />
     <ClCompile Include="src\inventory\hde64.c" />
     <ClCompile Include="src\inventory\runtime_mode.cpp" />
     <ClCompile Include="src\inventory\plan_a.cpp" />
@@ -235,6 +236,7 @@
     <ClCompile Include="src\overlay\accept_watch.cpp" />
     <ClCompile Include="src\overlay\fps_counter.cpp" />
     <ClCompile Include="src\overlay\pill_art.cpp" />
+    <ClCompile Include="src\online\online.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
@@ -265,12 +267,14 @@
     <ClInclude Include="src\sdk\functions.h" />
     <ClInclude Include="src\sdk\handles.h" />
     <ClInclude Include="src\sdk\item_view.h" />
+    <ClInclude Include="src\online\online.h" />
     <ClInclude Include="src\sdk\scene_node.h" />
     <ClInclude Include="src\skin\apply.h" />
     <ClInclude Include="src\skin\dispatch.h" />
     <ClInclude Include="src\skin\gloves.h" />
     <ClInclude Include="src\inventory\loadout_api.h" />
     <ClInclude Include="src\inventory\native_equipment.h" />
+    <ClInclude Include="src\inventory\tools.h" />
     <ClInclude Include="src\skin\agents.h" />
     <ClInclude Include="src\skin\glove_model_refresh.h" />
     <ClInclude Include="src\skin\glove_attribute_manager.h" />

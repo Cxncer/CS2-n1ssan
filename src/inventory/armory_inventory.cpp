@@ -10,6 +10,8 @@
 #include "inventory/native_equipment.h"
 #include "diagnostics/armory_status.h"
 #include "inventory/loot_socache.h"
+#include "config/offsets.h"
+#include "sdk/item_view.h"
 
 #include <windows.h>
 
@@ -27,6 +29,7 @@
 #include <string>
 #include <thread>
 #include <unordered_map>
+#include <unordered_set>
 #include <vector>
 
 namespace
@@ -34,6 +37,11 @@ namespace
     struct ArmoryItem
     {
         std::string instanceId;
+        // When the Armory added this instance, in milliseconds. The projected id
+        // carries it (StableIdFor), because CS2 lists the inventory by item id:
+        // this is what keeps every Armory item above Valve's own and the newest
+        // of them first, the way Lootline's ID_BASE ids do.
+        uint64_t    createdAtMs = 0;
         uint64_t    id = 0;
         uint16_t    definition = 0;
         int         quality = 4;
@@ -53,6 +61,17 @@ namespace
         int         keychain = 0;
         int         keychainSeed = 0;
         int         keychainSticker = 0;   // a Slab's sealed sticker
+        // Lootline's tools: a Charm Detachment Pack carries how many
+        // detachments it gives (CS2's "items count") and a named Storage Unit
+        // carries its label date, so CS2 offers "put in" straight away instead
+        // of asking for a name first. Neither is part of StableIdFor: they must
+        // not recreate the item.
+        int         itemsCount = 0;
+        uint32_t    modificationDate = 0;
+        // A container drop's "Tradable After" date (attribute 75); 0 = none.
+        uint32_t    tradableAfter = 0;
+        // An agent's model path from the Armory; empty keeps its own model.
+        std::string modelPath;
         // Sticker and charm state carried by the projection. Deliberately not
         // part of StableIdFor: an attachment change must not recreate the item,
         // because the in-game Loadout keeps referring to its id.
@@ -84,6 +103,7 @@ namespace
     std::vector<ArmoryItem> g_staged;
     std::vector<ArmoryItem> g_inventoryItems;
     std::atomic<bool> g_pending{ false };
+    std::atomic<uint64_t> g_adoptionGeneration{ 0 };
     std::string g_path;
     std::string g_profileId;
     int         g_inventoryRevision = 0;
@@ -108,12 +128,12 @@ namespace
         }
     }
 
-    uint64_t StableIdFor(const ArmoryItem& item)
+    // The id the projection had before v7.11: a hash of the instance and its
+    // shape, with no notion of order. Kept only to recognise the items CS2 was
+    // already given under it, so the delivered record and the Storage Units can
+    // be carried across the change instead of being lost.
+    uint64_t LegacyIdFor(const ArmoryItem& item)
     {
-        // The projected SOCache ID must survive watcher re-reads of an
-        // unchanged profile. Regenerating IDs on every file timestamp change
-        // invalidates CS2's native equipment references and breaks exact
-        // equipped-item matching in the live weapon EconItemView.
         uint64_t hash = 1469598103934665603ull;
         HashBytes(hash, item.instanceId.data(), item.instanceId.size());
 
@@ -138,6 +158,30 @@ namespace
         HashBytes(hash, &item.keychainSticker, sizeof(item.keychainSticker));
 
         return 0x9000000000000000ull | (hash & 0x0FFFFFFFFFFFFFFFull);
+    }
+
+    // CS2's inventory is a list ordered by item id, newest first - which is why
+    // every Valve item's id grows over time, and why Lootline projects its items
+    // with `ID_BASE 0x7000000000000000` and a timestamp in the high bits
+    // ("every id from ID_BASE up is Lootline's (Valve's are far below)",
+    // unboxer.cpp:56, :1251). Without that, an Armory item landed wherever its
+    // hash said: the group was at the top, but a newly added item could appear
+    // anywhere inside it.
+    //
+    // The id is still stable for an unchanged profile - the instance's creation
+    // time and its shape never change - so CS2's equipment references and the
+    // Support/Storage bookkeeping stay valid. Bits 12..53 are the creation
+    // millisecond, the low 12 bits keep two items added in the same millisecond
+    // apart, and bits 60/63 keep every Armory id above Valve's range.
+    uint64_t StableIdFor(const ArmoryItem& item)
+    {
+        const uint64_t hash = LegacyIdFor(item) & 0xFFFull;
+
+        if (item.createdAtMs == 0)
+            return 0x9000000000000000ull | hash;   // no date: the hash alone, as before
+
+        const uint64_t created = item.createdAtMs & 0x000FFFFFFFFFFFFull;
+        return 0x9000000000000000ull | (created << 12) | hash;
     }
 
     bool ExtractString(const std::string& object, const char* key, std::string& out)
@@ -342,6 +386,9 @@ namespace
 
             item.definition = static_cast<uint16_t>(number);
 
+            if (ExtractNumber(object, "createdAtMs", number) && number > 0.0)
+                item.createdAtMs = static_cast<uint64_t>(number);
+
             if (ExtractNumber(object, "quality", number)) item.quality = static_cast<int>(number);
             if (ExtractNumber(object, "rarity", number)) item.rarity = static_cast<int>(number);
             if (ExtractNumber(object, "paintKit", number)) item.paintKit = static_cast<int>(number);
@@ -354,6 +401,13 @@ namespace
             if (ExtractNumber(object, "keychain", number)) item.keychain = static_cast<int>(number);
             if (ExtractNumber(object, "keychainSeed", number)) item.keychainSeed = static_cast<int>(number);
             if (ExtractNumber(object, "keychainSticker", number)) item.keychainSticker = static_cast<int>(number);
+            if (ExtractNumber(object, "itemsCount", number)) item.itemsCount = static_cast<int>(number);
+            if (ExtractNumber(object, "modificationDate", number) && number > 0.0)
+                item.modificationDate = static_cast<uint32_t>(number);
+            if (ExtractNumber(object, "tradableAfter", number) && number > 0.0)
+                item.tradableAfter = static_cast<uint32_t>(number);
+
+            ExtractString(object, "modelPath", item.modelPath);
 
             ParseAttachments(object, item);
 
@@ -579,6 +633,11 @@ namespace
         target.wear = item.wear;
         target.statTrak = item.statTrak >= 0;
         target.statTrakKills = item.statTrak > 0 ? item.statTrak : 0;
+        // The Bridge projects a Souvenir as quality 12 (armory-inventory.ts).
+        // Carry it into the live target: the apply passes write the view's
+        // quality from this, and without the flag every Souvenir gun was
+        // painted as quality 0 in game.
+        target.souvenir = item.quality == 12;
         target.defIndex = item.definition;
         target.instanceId = item.instanceId;
         target.customName = item.customName;
@@ -823,6 +882,144 @@ namespace ArmoryInventory
         return g_pending.load(std::memory_order_acquire);
     }
 
+    // True when a sticker or charm tool already carries the kit its projection
+    // names. CS2 draws the tool's card from that attribute, so re-creating such
+    // an item changes nothing - and re-creating every one of them was ~60 item
+    // creations on the game thread each time the Bridge re-projected the
+    // inventory (the quarter-second freeze every few minutes). Read-only.
+    static bool ToolCarriesProjection(const ArmoryItem& item)
+    {
+        Attachments::Set current;
+        if (!LootSOCache::ReadAttachments(item.id, current))
+            return false;
+
+        if (item.definition == 1209)
+        {
+            return item.stickerKit > 0 && current.stickers[0].present &&
+                current.stickers[0].kit == item.stickerKit;
+        }
+
+        if (item.definition == 1355)
+        {
+            if (item.keychain <= 0 || !current.charm.present ||
+                current.charm.kit != item.keychain)
+                return false;
+
+            return item.keychainSticker <= 0 ||
+                (current.charm.hasSticker &&
+                 current.charm.sticker == item.keychainSticker);
+        }
+
+        return false;
+    }
+
+    // ---- items CS2 has already been given ----
+
+    // An item is "new" only the first time it reaches CS2. The projection is
+    // rebuilt on every Apply and on every start, so the answer has to outlive
+    // the process: without this file each rebuild marked the whole profile NEW
+    // again and the inventory came back covered in badges.
+    struct DeliveredIds
+    {
+        bool loaded = false;
+        bool dirty = false;
+        std::unordered_set<uint64_t> ids;
+    };
+
+    DeliveredIds g_delivered;
+
+    std::string DeliveredPath()
+    {
+        if (g_bridgeDirectory.empty())
+            return "armory-new-items.json";
+
+        const char last = g_bridgeDirectory.back();
+
+        return (last == '\\' || last == '/')
+            ? g_bridgeDirectory + "armory-new-items.json"
+            : g_bridgeDirectory + "\\armory-new-items.json";
+    }
+
+    void LoadDelivered()
+    {
+        if (g_delivered.loaded)
+            return;
+
+        g_delivered.loaded = true;
+
+        std::ifstream file(DeliveredPath(), std::ios::binary);
+        if (!file)
+        {
+            Log("[armory-inventory] no delivered-item record yet - this profile's items arrive without NEW badges");
+            return;
+        }
+
+        std::string text;
+        char buffer[512];
+
+        while (file.read(buffer, sizeof(buffer)) || file.gcount() > 0)
+            text.append(buffer, static_cast<size_t>(file.gcount()));
+
+        for (size_t i = 0; i < text.size();)
+        {
+            if (text[i] >= '0' && text[i] <= '9')
+            {
+                uint64_t value = 0;
+
+                while (i < text.size() && text[i] >= '0' && text[i] <= '9')
+                    value = value * 10 + static_cast<uint64_t>(text[i++] - '0');
+
+                if (value)
+                    g_delivered.ids.insert(value);
+            }
+            else
+            {
+                ++i;
+            }
+        }
+
+        Log("[armory-inventory] %zu item(s) have already reached CS2", g_delivered.ids.size());
+    }
+
+    void SaveDelivered()
+    {
+        if (!g_delivered.dirty)
+            return;
+
+        g_delivered.dirty = false;
+
+        const std::string path = DeliveredPath();
+        const std::string temporary = path + ".tmp";
+
+        {
+            std::ofstream file(temporary, std::ios::binary | std::ios::trunc);
+
+            if (!file)
+            {
+                Log("[armory-inventory] cannot write %s", temporary.c_str());
+                return;
+            }
+
+            file << "{\n  \"source\": \"n1ssan-dll\",\n  \"ids\": [";
+
+            bool first = true;
+
+            for (uint64_t id : g_delivered.ids)
+            {
+                file << (first ? "\n    " : ",\n    ") << id;
+                first = false;
+            }
+
+            file << (first ? "]\n}\n" : "\n  ]\n}\n");
+        }
+
+        if (!MoveFileExA(temporary.c_str(), path.c_str(), MOVEFILE_REPLACE_EXISTING))
+        {
+            Log("[armory-inventory] cannot replace %s (error %lu)", path.c_str(), GetLastError());
+            DeleteFileA(temporary.c_str());
+        }
+    }
+
     void AdoptPending()
     {
         if (!g_pending.load(std::memory_order_acquire))
@@ -853,6 +1050,52 @@ namespace ArmoryInventory
         std::vector<uint64_t> desiredIds;
         desiredIds.reserve(g_staged.size());
 
+        // Lootline marks an item NEW only when it is a normal addition; a whole
+        // import at once arrives without the popup for every single item
+        // ("not NEW (too many at once)", unboxer.cpp AddItem). The same rule
+        // here, per item and against the delivered record: an item CS2 has been
+        // given before is never new again, however often the projection is
+        // rebuilt (a first start records everything without badges).
+        LoadDelivered();
+
+        // v7.11 gave the ids an order (StableIdFor). An item CS2 was already
+        // given under the old hash id is the same item, so the delivered record
+        // is carried over: without this the whole profile comes back covered in
+        // NEW badges once, which is exactly what the record exists to prevent.
+        for (const ArmoryItem& item : g_staged)
+        {
+            const uint64_t legacy = LegacyIdFor(item);
+
+            if (legacy != item.id && g_delivered.ids.count(legacy) != 0 &&
+                g_delivered.ids.count(item.id) == 0)
+            {
+                g_delivered.ids.insert(item.id);
+                g_delivered.dirty = true;
+            }
+        }
+
+        int missing = 0;
+        int unknown = 0;
+
+        for (const ArmoryItem& item : g_staged)
+        {
+            if (!LootSOCache::HasItem(item.id))
+                ++missing;
+
+            if (g_delivered.ids.count(item.id) == 0)
+                ++unknown;
+        }
+
+        constexpr int MAX_NEW_AT_ONCE = 16;
+        const bool allowNew = unknown > 0 && unknown <= MAX_NEW_AT_ONCE;
+
+        Log("[armory-inventory] %d item(s) missing from the cache, %d never delivered before, arrives as new: %s",
+            missing, unknown,
+            allowNew ? "yes" : (unknown > MAX_NEW_AT_ONCE ? "no (too many at once)" : "no"));
+
+        // Each item is created from its own projection. Nothing is linked: a
+        // Storage Unit holds nothing on this side, because CS2 keeps what the
+        // player puts inside it, so no item has to wait for another one.
         for (const ArmoryItem& item : g_staged)
         {
             desiredIds.push_back(item.id);
@@ -868,7 +1111,16 @@ namespace ArmoryInventory
             // are replaced instead, which hands CS2 a fresh item carrying its kit
             // from the start - the same result as removing one in the Armory and
             // adding it again.
-            if (LootSOCache::HasItem(item.id) &&
+            // A sticker or charm tool that already carries its projected kit is
+            // left in the cache: removing and re-creating it only costs the game
+            // thread, and the card it draws is the same either way. A graffiti or
+            // music kit is still replaced, because its tint, charges and anthem
+            // live in attributes this check does not read.
+            const bool toolIdentityKept =
+                (item.definition == 1209 || item.definition == 1355) &&
+                LootSOCache::HasItem(item.id) && ToolCarriesProjection(item);
+
+            if (LootSOCache::HasItem(item.id) && !toolIdentityKept &&
                 (item.definition == 1209 || item.definition == 1355 ||
                  item.definition == 1349 || item.definition == 1314))
             {
@@ -888,6 +1140,63 @@ namespace ArmoryInventory
             {
                 Log("[armory-inventory] retained item id=%016llX def=%u",
                     static_cast<unsigned long long>(item.id), item.definition);
+
+                // The tool already carries the kit its projection names: there is
+                // nothing to write, and the attachment sync below must not run on
+                // it (the tool's kit lives in the very slot that sync clears).
+                if (toolIdentityKept)
+                    continue;
+
+                // A Storage Unit keeps its id, so its count is rewritten in place
+                // instead of the unit being recreated (which would drop the
+                // container reference every stored item holds).
+                // The name goes on before the item is told it changed: the
+                // notify inside the write is what rebuilds the card, and writing
+                // the name after telling CS2 about an item that still carried the
+                // old label left the card drawing the name it was created with,
+                // so an Armory rename never showed in game.
+                //
+                // Every retained item, not only a Storage Unit: a retained item
+                // is never re-created, so the name written when it first arrived
+                // stayed the only one CS2 ever had, and a skin or knife renamed
+                // in the Armory kept the name (or the empty one) it was added
+                // with. The write goes through LootSOCache, which resolves the
+                // view CS2 reads a name from and notifies the inventory after.
+                //
+                // An empty Armory label must not wipe a name the player gave the
+                // item in CS2 itself (Lootline's own hint: "give it a name on the
+                // right, or name it in CS2"). Only a label the Armory has is
+                // written.
+                if (!item.customName.empty())
+                {
+                    std::string onItem;
+
+                    if (!LootSOCache::ReadCustomName(item.id, onItem) || onItem != item.customName)
+                    {
+                        if (LootSOCache::SetCustomNameById(item.id, item.customName))
+                        {
+                            Log("[armory-inventory] name \"%s\" written on retained id=%016llX",
+                                item.customName.c_str(),
+                                static_cast<unsigned long long>(item.id));
+                        }
+                        else
+                        {
+                            Log("[armory-inventory] name \"%s\" could not be written on retained id=%016llX",
+                                item.customName.c_str(),
+                                static_cast<unsigned long long>(item.id));
+                        }
+                    }
+                }
+
+                if (item.definition == 1201)
+                {
+                    LootSOCache::SetCasketInfo(item.id, item.itemsCount,
+                        item.modificationDate);
+
+                    Log("[socache] storage unit retained id=%016llX items=%d name=\"%s\"",
+                        static_cast<unsigned long long>(item.id), item.itemsCount,
+                        item.customName.c_str());
+                }
 
                 // Stickers and the charm can change without the item id moving,
                 // so a retained item still has to match the projection.
@@ -912,6 +1221,7 @@ namespace ArmoryInventory
             }
 
             LootSOCache::NewItem request{};
+            request.asNew = allowNew && g_delivered.ids.count(item.id) == 0;
             request.id = item.id;
             request.definition = item.definition;
             request.quality = item.quality;
@@ -927,7 +1237,11 @@ namespace ArmoryInventory
             request.keychain = item.keychain;
             request.keychainSeed = item.keychainSeed;
             request.keychainSticker = item.keychainSticker;
+            request.itemsCount = item.itemsCount;
+            request.modificationDate = item.modificationDate;
+            request.tradableAfter = item.tradableAfter;
             request.attachments = item.attachments;
+            request.customName = item.customName;
 
             switch (LootSOCache::Create(request))
             {
@@ -987,6 +1301,7 @@ namespace ArmoryInventory
         // objects have been reconciled. This prevents a staged profile from
         // being used to resolve live entities before its SOCache commit.
         g_inventoryItems = g_staged;
+        g_adoptionGeneration.fetch_add(1);
 
         // Equipment assignments resolve against the committed inventory, so
         // both derived indexes are rebuilt together with it.
@@ -995,6 +1310,16 @@ namespace ArmoryInventory
         Log("[armory-inventory] replacement committed: desired=%zu created=%zu retained=%zu removed=%d removeFailed=%d",
             desiredIds.size(), createdIds.size(), desiredIds.size() - createdIds.size(),
             removed, removeFailed);
+
+        // Everything the committed projection carries has now reached CS2: the
+        // next Apply or start must not call it new again.
+        for (uint64_t id : desiredIds)
+        {
+            if (g_delivered.ids.insert(id).second)
+                g_delivered.dirty = true;
+        }
+
+        SaveDelivered();
 
         g_staged.clear();
         g_pending.store(false, std::memory_order_release);
@@ -1017,8 +1342,16 @@ namespace ArmoryInventory
         {
             ManagedItem managed;
             managed.id = item.id;
+            managed.legacyId = LegacyIdFor(item);
             managed.instanceId = item.instanceId;
             managed.definition = item.definition;
+            managed.quality = item.quality;
+            managed.rarity = item.rarity;
+            managed.paintKit = item.paintKit;
+            managed.seed = item.seed;
+            managed.statTrak = item.statTrak;
+            managed.musicKit = item.musicKit;
+            managed.spraysRemaining = item.spraysRemaining;
             managed.stickerKit = item.stickerKit;
             managed.sprayTint = item.sprayTint;
             managed.keychain = item.keychain;
@@ -1026,10 +1359,110 @@ namespace ArmoryInventory
             managed.keychainSticker = item.keychainSticker;
             managed.wear = item.wear;
             managed.attachments = item.attachments;
+            managed.customName = item.customName;
+            managed.tradableAfter = item.tradableAfter;
+            managed.modelPath = item.modelPath;
             out.push_back(std::move(managed));
         }
 
         return true;
+    }
+
+    bool FindManaged(uint64_t itemId, ManagedItem& out)
+    {
+        if (!itemId) return false;
+
+        std::lock_guard<std::mutex> lock(g_mutex);
+
+        for (const auto& item : g_inventoryItems)
+        {
+            if (item.id != itemId) continue;
+
+            out = ManagedItem{};
+            out.id = item.id;
+            out.legacyId = LegacyIdFor(item);
+            out.instanceId = item.instanceId;
+            out.definition = item.definition;
+            out.quality = item.quality;
+            out.rarity = item.rarity;
+            out.paintKit = item.paintKit;
+            out.seed = item.seed;
+            out.statTrak = item.statTrak;
+            out.musicKit = item.musicKit;
+            out.spraysRemaining = item.spraysRemaining;
+            out.stickerKit = item.stickerKit;
+            out.sprayTint = item.sprayTint;
+            out.keychain = item.keychain;
+            out.keychainSeed = item.keychainSeed;
+            out.keychainSticker = item.keychainSticker;
+            out.wear = item.wear;
+            out.attachments = item.attachments;
+            out.customName = item.customName;
+            out.tradableAfter = item.tradableAfter;
+            out.modelPath = item.modelPath;
+            return true;
+        }
+
+        return false;
+    }
+
+    // The projected item that carried `legacyId` before v7.11's id change.
+    // Callers that persisted an id (a Storage Unit's membership, an acknowledgement
+    // record) use this to find the same item again instead of losing it.
+    bool FindManagedByLegacyId(uint64_t legacyId, ManagedItem& out)
+    {
+        if (!legacyId) return false;
+
+        std::lock_guard<std::mutex> lock(g_mutex);
+
+        for (const auto& item : g_inventoryItems)
+        {
+            if (LegacyIdFor(item) != legacyId) continue;
+
+            out = ManagedItem{};
+            out.id = item.id;
+            out.legacyId = legacyId;
+            out.instanceId = item.instanceId;
+            out.definition = item.definition;
+            out.quality = item.quality;
+            out.rarity = item.rarity;
+            out.paintKit = item.paintKit;
+            out.seed = item.seed;
+            out.statTrak = item.statTrak;
+            out.musicKit = item.musicKit;
+            out.spraysRemaining = item.spraysRemaining;
+            out.stickerKit = item.stickerKit;
+            out.sprayTint = item.sprayTint;
+            out.keychain = item.keychain;
+            out.keychainSeed = item.keychainSeed;
+            out.keychainSticker = item.keychainSticker;
+            out.wear = item.wear;
+            out.attachments = item.attachments;
+            out.customName = item.customName;
+            out.tradableAfter = item.tradableAfter;
+            out.modelPath = item.modelPath;
+            return true;
+        }
+
+        return false;
+    }
+
+    int CountManagedByDefinition(uint16_t definition)
+    {
+        std::lock_guard<std::mutex> lock(g_mutex);
+
+        int count = 0;
+        for (const auto& item : g_inventoryItems)
+        {
+            if (item.definition == definition) ++count;
+        }
+
+        return count;
+    }
+
+    uint64_t AdoptionGeneration()
+    {
+        return g_adoptionGeneration.load();
     }
 
     bool SessionInfo(std::string& profileId, int& inventoryRevision)
@@ -1060,6 +1493,7 @@ namespace ArmoryInventory
             target.wear = item.wear;
             target.statTrak = item.statTrak >= 0;
             target.statTrakKills = item.statTrak > 0 ? item.statTrak : 0;
+            target.souvenir = item.quality == 12;
             target.defIndex = item.definition;
             target.instanceId = item.instanceId;
             target.customName = item.customName;
@@ -1287,6 +1721,9 @@ namespace ArmoryInventory
         }
 
         FillTarget(*item, target);
+        // An agent the Armory gave a model path of its own: the apply reads it
+        // from here and leaves the agent alone when the model does not load.
+        target.modelPath = item->modelPath;
         char why[160]{};
         snprintf(why, sizeof(why), "%s %s instance %016llX",
             fromSaved ? "saved armory selection" : "native item",

@@ -1,15 +1,16 @@
 // n1ssan-dll / src/overlay/pill_art.cpp
 //
-// Draws the Armory's capsules with GDI+. The reference is one shape: an almost
-// black stadium, white text in the middle, and a single band of white-hot purple
-// light running around its edge. The frame-rate pill puts the n1ssan mark, the
-// frame rate and the frame time on that shape; the loading pill puts one centred
-// word on it. Same artwork, so the game and the web UI read as one object.
+// Draws the Armory's capsules with GDI+. The reference is one shape: a stadium
+// filled with a saturated gradient, a soft halo around it, a glassy highlight and
+// white text. The frame-rate pill puts the n1ssan mark, the frame rate and the
+// frame time on that shape in purple; the loading pill puts one centred word on it
+// and keeps the travelling light. Same artwork, so the game and the web UI read as
+// one object.
 //
-// The light is drawn as a bright blob swept along the stadium's perimeter and
-// clipped to the rim band. GDI+ has no conic gradient, so a soft ellipse gradient
-// that follows the outline is how the travelling band is made here; the bitmap is
-// recomposed a few times a second by the caller, never per frame.
+// The counter's pill is static: no band runs around its outline, and its bitmap is
+// rebuilt only when the number or the frame time changes. A moving outline in the
+// corner of the eye for a whole session is noise, and every recompose is a redraw
+// on the render thread.
 
 #include "overlay/pill_art.h"
 
@@ -173,23 +174,96 @@ namespace
         g.FillPath(&brush, &blob);
     }
 
-    // The capsule itself: a near-black translucent body, faint hairline, and the
-    // running light both as a wide bloom and as a band clipped to the rim.
+    // The capsule itself: a purple gradient body, a soft purple glow around it,
+    // a white sheen on the top half and a hairline rim.
+    //
+    // It used to be a near-black body with a band of light travelling its rim,
+    // recomposed five times a second. The frame-rate counter must not do that:
+    // the pill sits in the corner for a whole session, and a moving outline in
+    // the corner of the eye is noise. `phase` below 0 selects the static look -
+    // one image, rebuilt only when the number changes - while the loading
+    // capsule, which is on screen for five seconds, still passes a phase and
+    // keeps its light.
     void PaintShell(Graphics& g, const RectF& frame, float scale, float phase)
     {
+        const bool animated = phase >= 0.0f;
+
         GraphicsPath shell;
         AddCapsule(shell, frame);
 
-        // Almost black, lifted only a little at the top so the capsule still has a
-        // top and a bottom instead of reading as a flat cut-out.
-        // Slightly translucent: the menu behind it stays readable through the
-        // capsule, which is what makes it sit on the screen instead of on top
-        // of it. The rim and the light stay opaque, so the edge still holds.
+        // Glow: one larger capsule of purple that fades to nothing at its edge,
+        // so the pill lifts off whatever is behind it instead of being pasted
+        // on. This is the reference's halo, in the counter's colour.
+        {
+            const float spread = 4.0f * scale < 2.0f ? 2.0f : 4.0f * scale;
+
+            RectF glowFrame(frame.X - spread, frame.Y - spread,
+                frame.Width + spread * 2.0f, frame.Height + spread * 2.0f);
+
+            GraphicsPath glowPath;
+            AddCapsule(glowPath, glowFrame);
+
+            PathGradientBrush glow(&glowPath);
+            glow.SetCenterColor(Color(130, 124, 58, 237));
+            Color glowEdge[1] = { Color(0, 124, 58, 237) };
+            INT glowCount = 1;
+            glow.SetSurroundColors(glowEdge, &glowCount);
+            g.FillPath(&glow, &glowPath);
+        }
+
+        // Body: violet at the top, deep purple at the bottom. Translucent, so the
+        // game still reads through the capsule.
         LinearGradientBrush body(frame,
-            Color(212, 26, 25, 30),
-            Color(228, 6, 6, 8),
+            Color(240, 167, 139, 250),
+            Color(242, 109, 40, 217),
             LinearGradientModeVertical);
         g.FillPath(&body, &shell);
+
+        // A wide, soft highlight on the left third: the reference capsule is lit
+        // from one end rather than evenly, which is what makes it read as glass
+        // and not as a flat chip.
+        {
+            g.SetClip(&shell);
+
+            GraphicsPath highlightPath;
+            highlightPath.AddEllipse(frame.X - frame.Width * 0.15f,
+                frame.Y - frame.Height * 0.55f,
+                frame.Width * 0.85f, frame.Height * 1.9f);
+
+            PathGradientBrush highlight(&highlightPath);
+            highlight.SetCenterColor(Color(44, 255, 235, 255));
+            Color highlightEdge[1] = { Color(0, 255, 235, 255) };
+            INT highlightCount = 1;
+            highlight.SetSurroundColors(highlightEdge, &highlightCount);
+            g.FillPath(&highlight, &highlightPath);
+
+            g.ResetClip();
+        }
+
+        // Glass: one white sheen brightest at the top edge and gone by the middle.
+        {
+            const RectF sheenFrame(frame.X + 1.0f, frame.Y + 1.0f,
+                frame.Width - 2.0f, frame.Height * 0.46f);
+
+            GraphicsPath sheenPath;
+            AddCapsule(sheenPath, sheenFrame);
+
+            g.SetClip(&shell);
+            LinearGradientBrush sheen(sheenFrame,
+                Color(26, 255, 255, 255),
+                Color(0, 255, 255, 255),
+                LinearGradientModeVertical);
+            g.FillPath(&sheen, &sheenPath);
+            g.ResetClip();
+        }
+
+        // Rim: a hairline in light lavender, so the edge holds on a bright wall
+        // without drawing a second visible line.
+        Pen rim(Color(190, 216, 190, 255), 1.0f);
+        g.DrawPath(&rim, &shell);
+
+        if (!animated)
+            return;
 
         const float radius = frame.Height / 2.0f;
         float straight = frame.Width - frame.Height;
@@ -206,9 +280,9 @@ namespace
         const float bandThickness = 0.5f * frame.Height;
 
         // A small halo around the light only: enough to lift it off the body,
-        // small enough that the capsule stays black everywhere else. Clipped to a
-        // slightly larger capsule so the glow follows the shape instead of being
-        // cut square by the bitmap's edge.
+        // small enough that the capsule stays readable everywhere else. Clipped
+        // to a slightly larger capsule so the glow follows the shape instead of
+        // being cut square by the bitmap's edge.
         {
             const float spread = 6.0f * scale < 3.0f ? 3.0f : 6.0f * scale;
 
@@ -221,39 +295,14 @@ namespace
             g.SetClip(&haloPath);
 
             FillLight(g, light, tangent, bandLength * 0.9f, bandThickness * 1.05f,
-                Color(56, 140, 96, 255), Color(0, 112, 66, 255));
+                Color(56, 214, 168, 255), Color(0, 158, 104, 255));
 
             g.ResetClip();
         }
 
-        // Glass: one white sheen brightest at the top edge and gone by the middle.
+        // The light itself, clipped to the rim band: everything inside the band
+        // is the capsule's edge, so the gradient lands exactly on the outline.
         {
-            const RectF sheenFrame(frame.X + 1.0f, frame.Y + 1.0f,
-                frame.Width - 2.0f, frame.Height * 0.46f);
-
-            GraphicsPath sheenPath;
-            AddCapsule(sheenPath, sheenFrame);
-
-            g.SetClip(&shell);
-            LinearGradientBrush sheen(sheenFrame,
-                Color(6, 255, 255, 255),
-                Color(0, 255, 255, 255),
-                LinearGradientModeVertical);
-            g.FillPath(&sheen, &sheenPath);
-            g.ResetClip();
-        }
-
-        // Hairline: barely there, so the shape holds on a bright background without
-        // drawing a second visual line around the light.
-        Pen rim(Color(30, 255, 255, 255), 1.0f);
-        g.DrawPath(&rim, &shell);
-
-        // The light itself, clipped to the rim band: everything inside the band is
-        // the capsule's edge, so the gradient lands exactly on the outline.
-        {
-            // A hairline band: the light is a thin line on the edge, not a glow
-            // sitting in the body. Anything wider covers the capsule's top with
-            // a lavender wash.
             const float inset = 1.8f * scale < 1.0f ? 1.0f : 1.8f * scale;
 
             RectF innerFrame(frame.X + inset, frame.Y + inset,
@@ -270,7 +319,7 @@ namespace
             g.ExcludeClip(&innerRegion);
 
             FillLight(g, light, tangent, bandLength, bandThickness * 0.62f,
-                Color(255, 252, 248, 255), Color(0, 158, 104, 255));
+                Color(255, 248, 236, 255), Color(0, 196, 150, 255));
 
             g.ResetClip();
         }
@@ -368,14 +417,14 @@ namespace PillArt
 
         swprintf_s(timeLabel, L"~%dms", (int)std::lround(frameMs));
 
-        const float padLeft = 13.0f * scale;
-        const float padRight = 14.0f * scale;
-        const float gapMark = 8.0f * scale;
-        const float gapTime = 9.0f * scale;
-        const float markSide = 19.0f * scale;
-        const float height = 38.0f * scale;
-        const float numberSize = 18.0f * scale;
-        const float timeSize = 10.0f * scale;
+        const float padLeft = 10.0f * scale;
+        const float padRight = 11.0f * scale;
+        const float gapMark = 6.0f * scale;
+        const float gapTime = 7.0f * scale;
+        const float markSide = 15.0f * scale;
+        const float height = 30.0f * scale;
+        const float numberSize = 14.0f * scale;
+        const float timeSize = 8.5f * scale;
 
         std::unique_ptr<Font> font = MakeFont(numberSize, true);
         std::unique_ptr<Font> timeFont = MakeFont(timeSize, false);
@@ -398,9 +447,9 @@ namespace PillArt
         if (contentPx < 8 || heightPx < 8)
             return false;
 
-        // Room around the capsule for the bloom to fade into. The extra pixels are
+        // Room around the capsule for the halo to fade into. The extra pixels are
         // transparent, so the caller only has to keep them on screen.
-        const int margin = (int)std::ceil(13.0f * scale);
+        const int margin = (int)std::ceil(10.0f * scale);
         const int width = contentPx + margin * 2;
 
         out.width = width;
@@ -445,7 +494,7 @@ namespace PillArt
 
             {
                 // The frame time is secondary: dim grey, small, after the number.
-                SolidBrush dim(Color(170, 176, 168, 190));
+                SolidBrush dim(Color(205, 226, 214, 255));
 
                 const RectF box(cursor, frame.Y, timeWidth + 2.0f, frame.Height);
                 g.DrawString(timeLabel, -1, timeFont.get(), box, &format, &dim);

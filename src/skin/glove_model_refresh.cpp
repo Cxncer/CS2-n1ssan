@@ -1016,6 +1016,18 @@ namespace GloveModelRefresh
         return SetAgentModel(pawn, modelName);
     }
 
+    bool PawnModelName(void* pawn, std::string& modelName)
+    {
+        modelName.clear();
+
+        if (!pawn)
+            return false;
+
+        InitializeFunctions();
+
+        return ReadCurrentModel(pawn, modelName);
+    }
+
     void OnRenderEnd(void* pawn)
     {
         InitializeFunctions();

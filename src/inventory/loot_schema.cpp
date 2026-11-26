@@ -206,23 +206,62 @@ namespace
         case 8:  return "set item texture wear";
         case 80: return "kill eater";
         case 81: return "kill eater score type";
+        case 272: return "casket item id low";
+        case 273: return "casket item id high";
         default: return nullptr;
+        }
+    }
+
+    // An attribute's definition by its index in the schema, the way the game
+    // itself asks for one: the econ item schema's vtable slot 27
+    // (Lootline game_inventory.cpp:406/600, VFUNC_ATTRIBUTE_DEFINITION). The name
+    // lookup above only covers the attributes this build spells out by name;
+    // "items count" (270) and "modification date" (271) - the pair a Storage Unit
+    // is only usable with - are only reachable this way.
+    using GetAttrDefByIndexFn = void* (__fastcall*)(void* schema, int index);
+    constexpr int VFUNC_ATTRIBUTE_DEFINITION = 27;
+
+    void* AttrDefByIndex(int idx)
+    {
+        if (!g_esResolved) return nullptr;
+
+        uintptr_t schema = 0;
+        if (!SafeReadQword(g_esResolved + 0x08, schema) || schema < 0x10000) return nullptr;
+
+        __try
+        {
+            const auto get = reinterpret_cast<GetAttrDefByIndexFn>(
+                (*reinterpret_cast<void***>(schema))[VFUNC_ATTRIBUTE_DEFINITION]);
+            if (!get) return nullptr;
+            return get(reinterpret_cast<void*>(schema), idx);
+        }
+        __except (EXCEPTION_EXECUTE_HANDLER)
+        {
+            return nullptr;
         }
     }
 
     // One-time lookup of the definition by name, cached per attribute slot.
     void* GetCachedAttrDef(int idx)
     {
-        static void* s_cache[5] = { nullptr, nullptr, nullptr, nullptr, nullptr }; // [6,7,8,80,81]
+        static void* s_cache[9] = { nullptr, nullptr, nullptr, nullptr, nullptr,
+                                    nullptr, nullptr, nullptr, nullptr };
+                                    // [6,7,8,80,81,270,271,272,273]
         int slot = -1;
         switch (idx) {
         case 6: slot = 0; break; case 7: slot = 1; break; case 8: slot = 2; break;
-        case 80: slot = 3; break; case 81: slot = 4; break; default: return nullptr;
+        case 80: slot = 3; break; case 81: slot = 4; break;
+        case 270: slot = 5; break; case 271: slot = 6; break;
+        // "casket item id low / high": the container an item is inside. A stored
+        // item CS2 cannot place in its unit is a unit that looks empty, so these
+        // two have to be reachable by index like the count and the date.
+        case 272: slot = 7; break; case 273: slot = 8; break;
+        default: return nullptr;
         }
         if (s_cache[slot]) return s_cache[slot];
         const char* name = AttrNameFromIndex(idx);
-        if (!name) return nullptr;
-        void* def = LootSchema::GetAttrDefByName(name);
+        void* def = name ? LootSchema::GetAttrDefByName(name) : nullptr;
+        if (!def) def = AttrDefByIndex(idx);
         if (def) { s_cache[slot] = def; Log("[loot-schema] attr '%s' (idx %d) -> 0x%p", name, idx, def); }
         else { Log("[loot-schema] attr '%s' (idx %d) -> NOT FOUND", name, idx); }
         return def;

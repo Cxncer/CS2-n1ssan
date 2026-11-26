@@ -142,6 +142,38 @@ namespace Attachments
             return true;
         }
 
+        // Is the array behind an attribute vector usable?
+        //
+        // On 2026-11-25 22:01 a live item view had `size > 0` and
+        // `data == (void*)-1`. The old check here only rejected a low address
+        // (`data < 0x10000`), and -1 is above it, so the read went ahead and
+        // faulted at n1ssan-dll+0x18484 inside Attachments::Read (read of
+        // 0x2F = -1 + sizeof(EconItemAttribute_t) - 1). CS2 survived it because
+        // the read sits in __try, and the item was then reported as "did not
+        // read back its saved attachments" - so a vector nobody can read looked
+        // exactly like an item with no stickers.
+        bool AttributeArrayUsable(const AttributeVector_t* vector)
+        {
+            if (!vector)
+                return false;
+
+            if (vector->size < 0 || vector->size > MAX_ATTRIBUTES)
+                return false;
+
+            if (vector->size == 0)
+                return true;
+
+            const uintptr_t data = vector->data;
+
+            // Below the first committable page, above the user-mode limit, or not
+            // 8-byte aligned: not an array of EconItemAttribute_t.
+            if (data < 0x10000u || data > 0x00007FFFFFFEFFFFull || (data & 7) != 0)
+                return false;
+
+            return true;
+        }
+
+
         void SetFloatAttr(EconItemAttribute_t& attribute, uint16_t def, float value)
         {
             attribute.defIndex = def;
@@ -605,8 +637,15 @@ namespace Attachments
 
         AttributeVector_t* vector = GetAttributeVector(reinterpret_cast<uintptr_t>(econItem));
         if (!vector) return false;
-        if (vector->size < 0 || vector->size > MAX_ATTRIBUTES) return false;
-        if (vector->size > 0 && vector->data < 0x10000u) return false;
+
+        if (!AttributeArrayUsable(vector))
+        {
+            if (vector->size > 0)
+                DebugLog("[attach] attribute vector rejected: size=%d data=%p",
+                    vector->size, vector->data);
+
+            return false;
+        }
 
         uint16_t defs[MAX_ATTRIBUTES]{};
         float values[MAX_ATTRIBUTES]{};
@@ -865,8 +904,7 @@ namespace Attachments
             GetAttributeVector(reinterpret_cast<uintptr_t>(itemView));
 
         if (!vector) return 0;
-        if (vector->size <= 0 || vector->size > MAX_ATTRIBUTES) return 0;
-        if (!vector->data || vector->data < 0x10000u) return 0;
+        if (vector->size <= 0 || !AttributeArrayUsable(vector)) return 0;
 
         const float raw = BitsFromInt(kit);
         int changed = 0;
@@ -896,6 +934,51 @@ namespace Attachments
         return changed;
     }
 
+    // Zeroes every "keychain slot 0 id" entry of one attribute list. Plain
+    // storage only, so it may sit inside __try.
+    static int ClearCharmOnVector(AttributeVector_t* vector)
+    {
+        if (!vector) return 0;
+        if (vector->size <= 0 || !AttributeArrayUsable(vector)) return 0;
+
+        int changed = 0;
+
+        __try
+        {
+            auto* attributes =
+                reinterpret_cast<EconItemAttribute_t*>(vector->data);
+
+            for (int i = 0; i < vector->size; ++i)
+            {
+                if (attributes[i].defIndex != ATTR_CHARM_ID) continue;
+                if (attributes[i].value == 0.0f) continue;
+
+                attributes[i].value = 0.0f;
+                attributes[i].initialValue = 0.0f;
+                ++changed;
+            }
+        }
+        __except (EXCEPTION_EXECUTE_HANDLER)
+        {
+            return changed;
+        }
+
+        return changed;
+    }
+
+    int ClearCharmInPlace(void* itemView)
+    {
+        if (!itemView) return 0;
+
+        const uintptr_t item = reinterpret_cast<uintptr_t>(itemView);
+
+        // Both lists: CS2 builds a charm entity from every list that carries the
+        // id, so clearing one of them leaves the other's copy hanging.
+        int changed = ClearCharmOnVector(GetAttributeVector(item));
+        changed += ClearCharmOnVector(GetNetworkedVector(item));
+        return changed;
+    }
+
     // The real item's charm and StatTrak entries live in the item view's
     // networked list, and CS2 refills that list from the equipped item. Those
     // definitions are dropped here in place, keeping everything else (the
@@ -909,8 +992,7 @@ namespace Attachments
             GetNetworkedVector(reinterpret_cast<uintptr_t>(itemView));
 
         if (!vector) return 0;
-        if (vector->size <= 0 || vector->size > MAX_ATTRIBUTES) return 0;
-        if (!vector->data || vector->data < 0x10000u) return 0;
+        if (vector->size <= 0 || !AttributeArrayUsable(vector)) return 0;
 
         int removed = 0;
 
